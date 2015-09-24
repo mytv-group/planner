@@ -1,0 +1,7 @@
+input {
+	max-width:415px;
+}
+
+.buttons input {
+	max-width:215px;
+}

@@ -1,0 +1,11 @@
+.form {
+	margin: 10px auto;
+}
+
+.form .form-control {
+	max-width:415px;
+}
+
+.buttons input.form-control {
+	max-width:245px;
+}

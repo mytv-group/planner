@@ -1,0 +1,32 @@
+.row > .btn {
+	width:245px;
+}
+
+.TVshceduleFromDatetime, .TVshceduleToDatetime {
+	width:245px;
+	display:inline-block;
+}
+
+.btn-group{
+	margin-bottom:2px;
+}
+
+#dialog, #widget-dialog {
+	display:none;
+}
+
+.PointPlaylistsInView {
+	padding:10px;
+}
+
+input {
+	max-width:415px;
+}
+
+select {
+	max-width:615px;
+}
+
+.buttons input {
+	max-width:215px;
+}

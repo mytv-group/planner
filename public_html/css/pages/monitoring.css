@@ -1,0 +1,33 @@
+.ScreenShotBox {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	display: none;
+	width: 330px;
+	height: 290px;
+	padding: 5px;
+	border: 1px solid #eee;
+}
+
+.ScreenShotBoxBgLoading {
+	background-image: url(/images/loading.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #fff; 
+}
+
+.ScreenShotBoxBgUnavaliable {
+	background-image: url(/images/whiteNoice.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #111; 
+}
+
+
+
+.ScreenShotImg {
+	width: 320px;
+	height: 280px;
+	border: none;
+}
+

@@ -1,0 +1,23 @@
+http://nws.rtvgroup.com.ua
+
+ftp://nws@olivia.rtvgroup.com.ua
+passwd: D5vri7Ob
+
+http://olivia.rtvgroup.com.ua/phpmyadmin
+username: nws
+password: gs4kZMo8
+database: nws
+
+http://planner.rtvgroup.com.ua
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ftp://olivia.rtvgroup.com.ua
+user: planner
+pass: 3LfYCvcwTTVZA3Fh
+
+mysql:
+host: localhost
+user: planner
+pass: f47QwKYuw3e4txZx
+db:   planner

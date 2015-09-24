@@ -1,0 +1,72 @@
+#progress{
+	width:465px;
+	margin-top:15px;
+	margin-bottom:15px;
+}
+
+.Options {
+	border:none; 
+	width: 100%;	
+}
+
+.Tree {
+	width:255px;
+	float:left;
+	overflow:auto; 
+	/*border:1px solid silver;*/ 
+	height:470px;
+}
+
+.SubTree {
+	width:100%;
+	overflow:auto; 
+	border:1px solid silver; 
+	height:234px;
+}
+
+.Heap {
+	overflow:auto; 
+	border:none; 
+	float:left;
+	display:inline;
+	border:1px solid silver; 
+	height:470px;
+	margin-left:5px;
+	width: calc(100% - 260px - 10px);	
+}
+
+#dropzoneHeap {
+	padding:10px;
+    background: rgb(255, 255, 255);
+}
+#dropzoneHeap.in {
+    background: rgb(152, 232, 251);
+}
+#dropzoneHeap.hover {
+    background: rgb(152, 187, 251);
+}
+#dropzoneHeap.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
+}
+
+.HeapItem {
+	padding:5px;
+	width: 100%;
+	border-bottom:solid 1px darkgrey;	
+}
+
+.HeapItemFolder {
+	padding:5px;
+	width: 100%;
+	border-bottom:solid 1px darkgrey;	
+	background-color:#fce667;	
+}
+
+.HeapItem:hover, .HeapItemFolder:hover  {
+	background-color:#b7e4ff;		
+}

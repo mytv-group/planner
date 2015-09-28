@@ -90,7 +90,7 @@ class Screen extends CActiveRecord
 		
 		if(Yii::app()->user->name != 'admin')
 		{
-			$criteria->compare('authorId',Yii::app()->user->id);
+			$criteria->compare('user_id',Yii::app()->user->id);
 		}
 
 		return new CActiveDataProvider($this, array(

@@ -109,7 +109,7 @@ class Playlists extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		
-		if(Yii::app()->user->name != 'admin')
+		if(Yii::app()->user->name != User::ROLE_ADMIN)
 		{
 			$criteria->compare('author',Yii::app()->user->name);
 		}

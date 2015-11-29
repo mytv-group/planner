@@ -1,21 +1,19 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors','On');
-date_default_timezone_set('Europe/Kiev');
-ini_set('error_log','php_errors.log');
-define('SPOOL_PATH', dirname($_SERVER["DOCUMENT_ROOT"])."/public_html/spool/");
-define ('ADMIN', 'admin');
+//TODO rewrite defines via config option params attributes
 
+define('SPOOL_PATH', dirname($_SERVER["DOCUMENT_ROOT"])."/public_html/spool/");
 define('FILE_TO_FOLDER', "fileToFolder");
 
-define('SYMLINK', "1");
-define('HTTP_REQUEST_TO_POINT', "1");
-//define('SOCKET_REQUEST_TO_POINT', "1");
+if(APPLICATION_ENV == 'dev') {
+	error_reporting(E_ALL);
+	ini_set('display_errors','On');
+	ini_set('error_log','php_errors.log');
+} else if(APPLICATION_ENV == 'production'){
+	define('SYMLINK', "1");
+	define('HTTP_REQUEST_TO_POINT', "1");
+	//define('SOCKET_REQUEST_TO_POINT', "1");
+}
 
-//Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
-
-// uncomment the following to define a path alias
-// Yii::setPathOfAlias('local','path/to/local-folder');
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.

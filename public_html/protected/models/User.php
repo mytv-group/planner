@@ -13,7 +13,7 @@
  */
 class User extends CActiveRecord
 {
-// 	const ROLE_ADMIN = 'administrator';
+ 	const ROLE_ADMIN = 'admin';
 // 	const ROLE_MODER = 'moderator';
 // 	const ROLE_USER = 'user';
 // 	const ROLE_BANNED = 'banned';

@@ -34,9 +34,9 @@ class Point extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, username, password, ip, screen_id', 'required'),
+			array('name, username, ip, screen_id', 'required'),
 			array('volume, TV, screen_id', 'numerical', 'integerOnly'=>true),
-			array('name, username, password', 'length', 'max'=>255),
+			array('name, username', 'length', 'max'=>255),
 			array('sync', 'boolean'),
 			array('update_time','default',
 					'value'=>new CDbExpression('NOW()'),
@@ -107,7 +107,7 @@ class Point extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 		
-		if(Yii::app()->user->username != ADMIN)
+		if(Yii::app()->user->username != User::ROLE_ADMIN)
 		{
 			$criteria->compare('username',Yii::app()->user->name);
 		}

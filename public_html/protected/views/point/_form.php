@@ -51,12 +51,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
-		<?php echo $form->error($model,'password'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'volume'); ?>
 		<?php echo $form->hiddenField($model,'volume'); ?>
 		

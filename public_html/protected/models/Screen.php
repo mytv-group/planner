@@ -88,7 +88,7 @@ class Screen extends CActiveRecord
 		$criteria->compare('width',$this->width);
 		$criteria->compare('height',$this->height);
 		
-		if(Yii::app()->user->name != 'admin')
+		if(Yii::app()->user->name != User::ROLE_ADMIN)
 		{
 			$criteria->compare('user_id',Yii::app()->user->id);
 		}

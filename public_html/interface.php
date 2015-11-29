@@ -333,7 +333,7 @@
 		}
 		else 
 		{
-			echo $messages['emptyTVRes'];
+			echo "00:00:00 1 off";
 		}
 	}
 	

@@ -31,13 +31,18 @@
 
 
 <div class='row Jumbotron'> 
+	
 	<div class='col-sm-12 LogoStrip'>      
 		<div class='col-sm-2'>
 			<div class='LogoBlock'></div>
 		</div>
 		
-		<div class='col-sm-8 LogoAppName'>
+		<div class='col-sm-4 LogoAppName'>
 			<?php echo CHtml::encode(Yii::app()->name); ?>
+		</div>
+		
+		<div class='col-sm-4'>
+			<?= 'Support: 044 364 12 65' ?>
 		</div>
 		
 		<div class='col-sm-2'>

@@ -41,7 +41,8 @@ class Playlists extends CActiveRecord
 			array('name, fromDatetime, toDatetime, type, author', 'required'),
 			array('name', 'length', 'max'=>100),
 			array('author', 'length', 'max'=>255),
-			array('type, sun, mon, tue, wed, thu, fri, sat', 'boolean'),
+			array('sun, mon, tue, wed, thu, fri, sat', 'boolean'),
+			array('type','in','range'=>array('0','1','2'),'allowEmpty'=>false),
 			array('fromDatetime, toDatetime', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm:ss'),
 			array('fromTime, toTime, every', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm:ss'),
 			// The following rule is used by search().
@@ -55,9 +56,8 @@ class Playlists extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
+			'stream' => array(self::HAS_MANY, 'Stream', 'playlist_id'),
 		);
 	}
 

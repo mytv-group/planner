@@ -10,7 +10,7 @@ class ContentManager {
 		$pointDate = new DateTime($pointDatetimeStr);
 		$pointDateStr = date_format ( $pointDate, "Y-m-d" );
 		
-		$sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`,`toTime` FROM `channel` AS `t1` " . 
+		$sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`,`toTime` FROM `channel` AS `t1` " . 
 			"JOIN `playlist_to_channel` AS `t2` " . 
 			"JOIN `playlists` AS `t3` " . 
 			"ON `t1`.`id` = `t2`.`channelId` " . 
@@ -20,13 +20,14 @@ class ContentManager {
 			"AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " . 
 			"AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " . 
 			"AND `t3`.`" . $weekDay . "` = '1' " . 
-			"AND `t3`.`type` = '0' " . 
+			"AND (`t3`.`type` = '0'  OR `t3`.`type` = '2')" . 
 			"ORDER BY `fromTime`;";
 		
 		$result = $link->query ( $sql );
 		
 		$blocksArr = array ();
 		while ( $row = $result->fetch_array () ) {
+
 			$fromDatetime = date_create ( $row ['fromDatetime'] );
 			$toDatetime = date_create ( $row ['toDatetime'] );
 			
@@ -34,6 +35,8 @@ class ContentManager {
 			$toTime = $row ['toTime'];
 			
 			$files = $row ['files'];
+			$type = $row ['type'];
+			$playlistId = $row ['id'];
 			
 			/* if today starts showing check broadcasting is later showing begin */
 			if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
@@ -43,7 +46,9 @@ class ContentManager {
 							'to' => $toTime,
 							'fromDateTime' => new DateTime ( $fromTime ),
 							'toDateTime' => new DateTime ( $toTime ),
-							'files' => $files 
+							'files' => $files,
+							'type' => $type,
+							'playlistId' => $playlistId
 					);
 				}
 			}
@@ -52,25 +57,46 @@ class ContentManager {
 		if (count ( $blocksArr ) > 0) {
 			$filesList = '';
 			foreach ( $blocksArr as &$block ) {
-				$files = implode ( "','", explode ( ",", $block ['files'] ) );
-				$from = $block ['from'];
-				
-				$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
-				$result = $link->query ( $sql );
-				
-				$duration = 0;
-				$block ["filesWithDuration"] = array ();
-				while ( $row = $result->fetch_array () ) {
-					$duration += $row ['duration'];
-					$block ["filesWithDuration"] [] = array (
-							$row ['duration'],
-							$row ['name'],
-							$row ['duration'] . " " . $row ['name'] . "" . PHP_EOL /*ready to output str*/
-					);
+				if($block ['type'] == 2) {
+					$files = implode ( "','", explode ( ",", $block ['files'] ) );
+					$from = $block ['from'];
+					
+					$sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
+					$result = $link->query ( $sql );
+					
+					if($result) {
+						$duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;
+						$block ["filesWithDuration"] = array ();
+						if ( $row = $result->fetch_array () ) {
+							$block ["filesWithDuration"] [] = array (
+									$duration + 5, //5 seconds above just not to have mute between turns
+									$row ['url'],
+									$duration . " " . $row ['url'] . "" . PHP_EOL /*ready to output str*/
+							);
+						}
+						
+						$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
+					}
+				} else {
+					$sql = "SELECT `duration`, `name` FROM `stream` WHERE `id` IN ('" . $files . "');";
+					$result = $link->query ( $sql );
+					
+					if($result) {
+						$duration = 0;
+						$block ["filesWithDuration"] = array ();
+						while ( $row = $result->fetch_array () ) {
+							$duration += $row ['duration'];
+							$block ["filesWithDuration"] [] = array (
+									$row ['duration'],
+									$row ['name'],
+									$row ['duration'] . " " . $row ['name'] . "" . PHP_EOL /*ready to output str*/
+							);
+						}
+							
+						$block ["duration"] = $duration;
+						$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
+					}
 				}
-				
-				$block ["duration"] = $duration;
-				$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
 			}
 		}
 		

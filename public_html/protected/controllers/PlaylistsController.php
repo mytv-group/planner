@@ -68,7 +68,9 @@ class PlaylistsController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Playlists;
+		$model=new Playlists();
+		$model->type = 0; // for radioButtonList default value
+		$stream = new Stream();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -76,12 +78,24 @@ class PlaylistsController extends Controller
 		if(isset($_POST['Playlists']))
 		{
 			$model->attributes=$_POST['Playlists'];
-			if($model->save())
+			if($model->save()) {
+				if(isset($_POST['Stream']['url']) && 
+						($_POST['Playlists']['type'] == 2)) { //2 - stream
+					$stream->attributes = array(
+						'playlist_id' => $model->id,
+						'url' => $_POST['Stream']['url']
+					);
+					$stream->save();
+					$this->redirect(array('view','id'=>$model->id));
+				}
+				
 				$this->redirect(array('update','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+			'stream'=>$stream
 		));
 	}
 
@@ -93,20 +107,37 @@ class PlaylistsController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
+		$stream = new Stream();
+		
 		if(isset($_POST['Playlists']))
 		{
 			$model->attributes=$_POST['Playlists'];
 			
+			if(isset($_POST['Stream']['url']) && 
+					($_POST['Playlists']['type'] == 2)) { //2 - stream
+				$stream->attributes = array(
+					'playlist_id' => $id,
+					'url' => $_POST['Stream']['url']
+				);
+				$stream->save();
+			} else {
+				$stream->deleteAll(
+					 "`playlist_id` = :playlist_id",
+					array('playlist_id' => $id)
+				);
+			}
+			
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
+		}
+		
+		if(count($model->stream) > 0) {
+			$stream = $model->stream[0];
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+			'stream'=>$stream,
 		));
 	}
 

@@ -17,6 +17,7 @@
 	include_once '_DatabaseConnector.php';
 	include_once '_ContentManager.php';
 
+	// /interface.php?id=21&ch=1&date=20160406
 	if(isset($_GET['id']) && isset($_GET['ch']) && isset($_GET['date']))
 	{
 		

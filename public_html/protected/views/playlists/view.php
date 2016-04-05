@@ -31,13 +31,26 @@ $this->menu=array(
 		array(
 			'label' => 'Type',
 			'type' => 'raw',
-			'value' => $model->type ? "advertising" : "background"
+			'value' => function($data) {
+				if($data->type == 0) {
+					return "background";
+				} else if($data->type == 1) {
+					return "advertising";
+				} else if($data->type == 2) {
+					return "stream";
+				}			 	 
+			}
 		),
 		array(
-				'label' => $model->type ? "Repeating every" : "Broadcasting perion",
+				'label' => 'Periodicity',
 				'type' => 'raw',
-				'value' => $model->type ? ($model->every) : 
-					($model->fromTime . " - " . $model->toTime)
+				'value' => function($data) {
+					if(($data->type == 0) || ($data->type == 2)) {
+						return $data->fromTime . " - " . $data->toTime;
+					} else if($data->type == 1) {
+						return 'every ' . $data->every;
+					}			 	 
+				}
 		)
 // 		'sun',
 // 		'mon',

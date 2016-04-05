@@ -48,9 +48,15 @@
 	</table>
 	</div>
 	
-	<div class="row">
+	<div class="row" style='padding-bottom:1em;'>
 		<?php echo $form->labelEx($model,'type'); ?>
-		<?php echo $form->checkbox($model,'type'); ?>
+		<?php echo $form->radioButtonList($model,'type', 
+			array('0'=>'Background','1'=>'Advertising','2'=>'Stream'),
+			array('class'=>"type-control",
+				'separator'=>' &nbsp; ',
+				'labelOptions'=>array('style'=>'display:inline;')
+			)
+		); ?>
 		<?php echo $form->error($model,'type'); ?>
 	</div>
 	
@@ -77,6 +83,12 @@
 			<td><?php echo $form->error($model,'toTime'); ?></td>
 		</tr>
 	</table>
+	</div>
+	
+	<div id="stream-url-block" class="row" >
+		<?php echo $form->labelEx($stream,'url'); ?>
+		<?php echo $form->textField($stream,'url', array('class'=>"form-control")); ?>
+		<?php echo $form->error($stream,'url'); ?>
 	</div>
 	
 	<div class="row">

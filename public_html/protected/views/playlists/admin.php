@@ -53,7 +53,7 @@ $('.search-form form').submit(function(){
 		array(
 				'name' => 'fromTime',
 				'value' => function($data,$row){
-					if($data->type == 0) //0 - bg, 1- adv
+					if(($data->type == 0) || ($data->type == 2)) //0 - bg, 1- adv
 						return $data->fromTime;
 					else
 						return ''; 
@@ -63,7 +63,7 @@ $('.search-form form').submit(function(){
 		array(
 				'name' => 'toTime',
 				'value' => function($data,$row){
-					if($data->type == 0)
+					if(($data->type == 0) || ($data->type == 2))
 						return $data->toTime;
 					else
 						return '';

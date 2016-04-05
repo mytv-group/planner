@@ -7,7 +7,8 @@ table{
 	padding-right: 15px;
 }
 
-#Playlists_name {
+#Playlists_name,
+#Stream_url {
 	max-width:415px;
 }
 

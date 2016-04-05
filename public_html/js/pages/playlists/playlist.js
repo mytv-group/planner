@@ -33,40 +33,35 @@ $(document).ready(function(e){
 		datepicker:false,
 	});
 	
-	var typeBlock = $("#Playlists_type"),
-		type = (function(typeBlock){
-			if(typeBlock.attr("checked"))
-				return true;
-			else
-				return false;
-		})(typeBlock),
+	var typeBlock = $(".type-control"),
+		type = $(".type-control:checked").val(),
+		streamUrlBlock = $('#stream-url-block'),
+		fileManager = $('#file-manager'),
 		everyBlock = $("#everyBlock"),
 		periodBlock = $("#periodBlock");
-	
-	
-	if(type){
-		everyBlock.css("display", "block");
-		periodBlock.css("display", "none");
-	} else {
-		everyBlock.css("display", "none");
-		periodBlock.css("display", "block");
-	}
 
-	typeBlock.bootstrapSwitch({
-		state: type,
-		size: 'normal',
-		onText: 'advertising',
-		offText: 'background',
-		onColor: 'success',
-		offColor: 'info',
-		onSwitchChange: function(e, state){
-			if(state){
-				periodBlock.slideUp();
-				everyBlock.slideDown();
-			} else {
-				everyBlock.slideUp();
-				periodBlock.slideDown();
-			}
+	var hideFunctionality = function(type, animationTime) {
+		if(type == 0){
+			everyBlock.slideUp(animationTime);
+			periodBlock.slideDown(animationTime);
+			streamUrlBlock.slideUp(animationTime);
+			fileManager.slideDown(animationTime);
+		} else if(type == 1){
+			periodBlock.slideUp(animationTime);
+			everyBlock.slideDown(animationTime);
+			streamUrlBlock.slideUp(animationTime);
+			fileManager.slideDown(animationTime);
+		} else if(type == 2){
+			everyBlock.slideUp(animationTime);
+			periodBlock.slideDown(animationTime);
+			streamUrlBlock.slideDown(animationTime);
+			fileManager.slideUp(animationTime);
 		}
+	}
+	
+	hideFunctionality(type, 0);
+	
+	typeBlock.on('change', function(e) {
+		hideFunctionality($(e.target).val(), 200);
 	});
 });

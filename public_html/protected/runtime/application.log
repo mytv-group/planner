@@ -4094,3 +4094,12 @@ Stack trace:
 #9 D:\xampp\htdocs\rtvgroup\public_html\framework\base\CApplication.php(180): CWebApplication->processRequest()
 #10 D:\xampp\htdocs\rtvgroup\public_html\index.php(33): CWebApplication->run()
 REQUEST_URI=/playlists/create
+2016/04/06 23:49:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in D:\xampp\htdocs\rtvgroup\public_html\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\xampp\htdocs\rtvgroup\public_html\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\xampp\htdocs\rtvgroup\public_html\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\xampp\htdocs\rtvgroup\public_html\index.php(33): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+HTTP_REFERER=http://rtvgroup.com/playlists/update/20
+---

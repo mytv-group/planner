@@ -55,7 +55,6 @@ class ContentManager {
 		}
 		
 		if (count ( $blocksArr ) > 0) {
-			$filesList = '';
 			foreach ( $blocksArr as &$block ) {
 				if($block ['type'] == 2) {
 					$files = implode ( "','", explode ( ",", $block ['files'] ) );
@@ -78,7 +77,7 @@ class ContentManager {
 						$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
 					}
 				} else {
-					$sql = "SELECT `duration`, `name` FROM `stream` WHERE `id` IN ('" . $files . "');";
+					$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
 					$result = $link->query ( $sql );
 					
 					if($result) {
@@ -99,6 +98,8 @@ class ContentManager {
 				}
 			}
 		}
+		
+
 		
 		return $blocksArr;
 	}

@@ -56,14 +56,10 @@ class ContentManager {
 		
 		if (count ( $blocksArr ) > 0) {
 			foreach ( $blocksArr as &$block ) {
-				if($block ['type'] == 2) {
-					$files = implode ( "','", explode ( ",", $block ['files'] ) );
-					$from = $block ['from'];
-					
+				if($block ['type'] == 2) {					
 					$sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
-					$result = $link->query ( $sql );
-					
-					if($result) {
+
+					if($result = $link->query ( $sql )) {
 						$duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;
 						$block ["filesWithDuration"] = array ();
 						if ( $row = $result->fetch_array () ) {
@@ -74,27 +70,33 @@ class ContentManager {
 							);
 						}
 						
-						$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
-					}
-				} else {
-					$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
-					$result = $link->query ( $sql );
-					
-					if($result) {
-						$duration = 0;
-						$block ["filesWithDuration"] = array ();
-						while ( $row = $result->fetch_array () ) {
-							$duration += $row ['duration'];
-							$block ["filesWithDuration"] [] = array (
-									$row ['duration'],
-									$row ['name'],
-									$row ['duration'] . " " . $row ['name'] . "" . PHP_EOL /*ready to output str*/
-							);
-						}
-							
 						$block ["duration"] = $duration;
 						$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
 					}
+				} else {
+					$files = implode ( "','", explode ( ",", $block ['files'] ) );
+					$from = $block ['from'];
+					
+					$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
+					$result = $link->query ( $sql );
+					
+					$duration = 0;
+					$block ["filesWithDuration"] = array ();
+					while ( $row = $result->fetch_array () ) {
+						$duration += $row ['duration'];
+						$block ["filesWithDuration"] [] = array (
+								$row ['duration'],
+								$row ['name'],
+								$row ['duration'] . " " . $row ['name'] . "" . PHP_EOL /*ready to output str*/
+						);
+					}
+					
+					$block ["duration"] = $duration;
+					$block ["contentEndTime"] = date_format ( 
+						$block ["fromDateTime"]->modify ( 
+								'+' . intval ( $duration ) . ' seconds' 
+						), "h:i:s"
+					);
 				}
 			}
 		}

@@ -115,6 +115,10 @@ class PlaylistsController extends Controller
 			
 			if(isset($_POST['Stream']['url']) && 
 					($_POST['Playlists']['type'] == 2)) { //2 - stream
+				$stream = Stream::model()->findByAttributes(
+					array('playlist_id' => $id)
+				);
+				
 				$stream->attributes = array(
 					'playlist_id' => $id,
 					'url' => $_POST['Stream']['url']

@@ -40,6 +40,7 @@ class Playlists extends CActiveRecord
 		return array(
 			array('name, fromDatetime, toDatetime, type, author', 'required'),
 			array('name', 'length', 'max'=>100),
+			array('files', 'length', 'max'=>65000),
 			array('author', 'length', 'max'=>255),
 			array('sun, mon, tue, wed, thu, fri, sat', 'boolean'),
 			array('type','in','range'=>array('0','1','2'),'allowEmpty'=>false),

@@ -110,27 +110,32 @@ class PlaylistsController extends Controller
 		$stream = new Stream();
 		
 		if(isset($_POST['Playlists']))
-		{
-			$model->attributes=$_POST['Playlists'];
-			
+		{	
+			$playlists = $_POST['Playlists'];
 			if(isset($_POST['Stream']['url']) && 
-					($_POST['Playlists']['type'] == 2)) { //2 - stream
-				$stream = Stream::model()->findByAttributes(
+					($playlists['type'] == 2)) { //2 - stream
+				
+				$exitstStream = Stream::model()->findByAttributes(
 					array('playlist_id' => $id)
 				);
+				
+				if(!empty($exitstStream)) {
+					$stream = $exitstStream;
+				}
 				
 				$stream->attributes = array(
 					'playlist_id' => $id,
 					'url' => $_POST['Stream']['url']
 				);
 				$stream->save();
+				$playlists['files'] = '';
 			} else {
 				$stream->deleteAll(
 					 "`playlist_id` = :playlist_id",
 					array('playlist_id' => $id)
 				);
 			}
-			
+			$model->attributes=$playlists;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

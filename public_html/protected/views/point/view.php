@@ -19,7 +19,11 @@ $this->menu=array(
 
 <?php 
 
-//$channelNames = $this->ChangePointPlaylistIdsToNames($model);
+
+function getPointSpaceInfo ($ip) {
+	$spaceInfo = Yii::app()->pointInfo->getSpaceInfo($ip);
+	return isset($spaceInfo['free']) ? $spaceInfo['free'] : '';
+}
 
 $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -32,6 +36,11 @@ $this->widget('zii.widgets.CDetailView', array(
 		'sync',
 		'sync_time',
 		'update_time',
+		array(
+			'name' => 'free_space',
+			'value' => getPointSpaceInfo($model->ip),
+			'type'  => 'raw',
+		),
 		/*array(
 				'name'  => 'channel1',
 				'value' => $model->channel1 ? CHtml::link($channelNames[1], Yii::app()->

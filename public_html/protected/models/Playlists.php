@@ -142,7 +142,9 @@ class Playlists extends CActiveRecord
 		
 		if(strlen($avaliableFiles) > 0)
 		{
-			$sql = "SELECT `id`, `name`, `mime`, `link` FROM `file` WHERE `id` IN (".$avaliableFiles.");";
+			$sql = "SELECT `id`, `name`, `mime`, `link`".
+				"FROM `file` WHERE `id` IN (".$avaliableFiles.")".
+				"ORDER BY FIELD(`id`,".$avaliableFiles.");";
 		
 			$command = $connection->createCommand($sql);
 			$dataReader=$command->query();

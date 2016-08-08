@@ -36,7 +36,7 @@ class PlaylistsController extends Controller
 				'roles'=>array('playlistViewUser'),
 			),
 			array('allow', 
-				'actions'=>array('create','upload','addfilefromheap','update','upload'),
+				'actions'=>array('create','upload','addfilefromheap','setFileOrder', 'update','upload'),
 				'users'=>array('@'),
 				'roles'=>array('playlistEditUser'),
 			),
@@ -601,6 +601,34 @@ class PlaylistsController extends Controller
 		}
 		echo(json_encode($answ));
 	}
+	
+	public function actionSetFileOrder()
+	{
+		$answ = [];
+		$answ['status'] = 'err';
+		if(isset($_POST['files']) && isset($_POST['playlistId']))
+		{
+			$playlistId = $_POST['playlistId'];
+			$files = $_POST['files'];
+			
+			$model = $this->loadModel($playlistId);
+			$model->files = implode(',', $files);
+			
+			if($model->validate()){
+				$model->save();
+				if($model->save())
+				{
+					$answ['status'] = 'ok';
+				}
+			}
+			else
+			{
+				error_log(json_encode(CHtml::errorSummary($model)));
+			}
+			
+		}
+		echo(json_encode($answ));
+	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -651,6 +679,7 @@ class PlaylistsController extends Controller
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
 			
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlist.js' );
+			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistOrder.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistFileUpload.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistHeapAndPreview.js' );
 	

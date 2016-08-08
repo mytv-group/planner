@@ -51,10 +51,12 @@ $this->menu=array(
 	<?php 
 		$filesToPreview = $model->GetFilesInPlaylist($model->id);
 		
-		printf("<table>");
+		printf("<ul id='sortable' class='unstyled list-unstyled'>");
 		
+		$ii = 0;
 		foreach($filesToPreview as $key => $val)
 		{
+			$ii++;
 			$fileid = $val['id'];
 			$mime = $val['mime'];
 			$link = $val['link'];
@@ -62,7 +64,25 @@ $this->menu=array(
 			$mimeType = $val['mimeType'];
 			$mimeFormat = $val['mimeFormat'];
 		
-			printf("<tr data-fileid='%s'>", $fileid);
+			printf("<li data-fileid='%s'>", $fileid);
+		
+			printf('<span class="num" data-fileid="%s" data-plid="%s">' .
+					'<button type="button" class="btn btn-default btn-num disabled">'. 
+					'<span aria-hidden="true" class="btn-num-label">'.$ii.'</span>'. 
+					'</button>' .
+					'</span>', $fileid, $model->id);
+			
+			printf('<span class="moveup">' .
+					'<button type="button" class="btn btn-default">'.
+					'<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>'.
+					'</button>' .
+					'</span>');
+			
+			printf('<span class="movedown">' .
+					'<buttontype="button" class="btn btn-default">'.
+					'<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>'.
+					'</button>' .
+					'</span>');
 		
 			if(($mimeType == 'video') &&
 				(($mimeFormat == 'mp4') ||
@@ -70,13 +90,13 @@ $this->menu=array(
 				($mimeFormat == 'ogg') ||
 				($mimeFormat == 'webm')))
 			{
-				printf('<td>' .
+				printf('<span>' .
 						'<button id="preplayAudioItemButt" type="button" class="btn btn-default PreviewBtn" data-type="%s" data-mime="%s" data-link="%s">'.
 							'<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>'.
 						'</button>' .
-						'</td>', $mimeType, $mimeFormat, $link);
+						'</span>', $mimeType, $mimeFormat, $link);
 					
-				printf("<td class='PreviewContentMiddleCell'>");
+				printf("<span class='PreviewContentMiddleCell'>");
 				PrintLinkContainer($link, $name);
 			}
 			else if(($mimeType == 'audio') &&
@@ -84,39 +104,43 @@ $this->menu=array(
 							($mimeFormat == 'mpeg') ||
 							($mimeFormat == 'ogg')))
 			{
-				printf('<td>' .
+				printf('<span>' .
 						'<button id="preplayAudioItemButt" type="button" class="btn btn-default PreviewBtn" data-type="%s" data-mime="%s" data-link="%s">'.
 							'<span class="glyphicon glyphicon-music" aria-hidden="true"></span>'.
 						'</button>' .
-	    				'</td>', $mimeType, $mimeFormat, $link);
+	    				'</span>', $mimeType, $mimeFormat, $link);
 					
-				printf("<td class='PreviewContentMiddleCell'>");
+				printf("<span class='PreviewContentMiddleCell'>");
 				PrintLinkContainer($link, $name);
 			}
 			else if($mimeType == 'image')
 			{
-				printf("<td style='vertical-align:middle;'></td>");
-				printf("<td data-index='%s' data-mime='%s' data-link='%s' class='PreviewContentRow'>",
+				printf("<span style='vertical-align:middle;'></span>");
+				printf("<span data-index='%s' data-mime='%s' data-link='%s' class='PreviewContentRow'>",
 					$key, $mimeFormat, $link);
 				PrintImageContainer($link);
 			}
 			else
 			{
-				printf("<td style='vertical-align:middle;'></td>");
-				printf("<td data-index='%s' data-mime='%s' data-link='%s' class='PreviewContentMiddleCell'>",
+				printf("<span style='vertical-align:middle;'></span>");
+				printf("<span data-index='%s' data-mime='%s' data-link='%s' class='PreviewContentMiddleCell'>",
 					$key, $mimeFormat, $link);
 				PrintLinkContainer($link, $name);
 			}
 			
-			printf('</td><td class="DeleteItemCell">' .
+			printf('</span>');
+			
+			printf('<span class="DeleteItemCell">' .
 					'<button id="delItemButt" data-fileid="%s" type="button" class="btn btn-default alert alert-danger" data-plid="%s" role="alert">'.
 						'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'.
-					'</button>', $fileid, $model->id);
-			printf("</td></tr>");
+					'</button>' .
+					'</span>', $fileid, $model->id);
+			
+			printf("</li>");
 		
 		}
 		
-		printf("</table>");
+		printf("</ul>");
 		
 		printf('<div id="dialogVideoPreview" title="Video preview" style="display:none">' .
 				'<p></p>'.

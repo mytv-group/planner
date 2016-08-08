@@ -76,9 +76,20 @@ table{
 }
 
 .LinkButton {
-	width: 500px;
+	width: 450px;
 	height: 28px;
 	margin: 1px;
+	line-height: 14px;
+    overflow: hidden;	
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+    
+.btn-num {
+	min-width: 35px;
+	height: 28px;
+	margin: 1px;
+	line-height: 14px;
 }
 
 .ImgInPreviewTable {
@@ -138,6 +149,10 @@ table{
 
 .heapitemnode {
 	margin-right:5px !important;
+}
+
+#sortable {
+	
 }
 
 /*preview*/

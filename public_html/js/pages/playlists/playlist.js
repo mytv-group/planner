@@ -64,4 +64,5 @@ $(document).ready(function(e){
 	typeBlock.on('change', function(e) {
 		hideFunctionality($(e.target).val(), 200);
 	});
+
 });

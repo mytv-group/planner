@@ -36,49 +36,18 @@ return array(
                 'bootstrap.gii',
             ),
 		),
-
-        /*'rbac'=>array(
-            'class'=>'application.modules.rbacui.RbacuiModule',
-            'userClass' => 'User',
-            'userIdColumn' => 'id',
-            'userNameColumn' => 'username',
-            'rbacUiAdmin' => true,
-            'rbacUiAssign' => true,
-        )*/
-
-        /*'rbac' => array(
-            'layout' => 'main',
-            'debug' => false,
-            'disabledScanFrontend' => false,
-            'disabledScanModules' => array('gii', 'auth', 'rbac'),
-            'userTable' => 'User',
-            'userTableId' => 'LoginName',
-            'userTableName' => 'Name',
-            'pageSize' => 20,
-            'language' => 'zh_CN',
-            'notAuthorizedView' => null,
-        ),*/
-
 	),
 
 	// application components
 	'components'=>array(
 		'user'=>array(
             'class' => 'WebUser',
-			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
-
         'authManager' => array(
             'class' => 'PhpAuthManager',
             'defaultRoles' => array('guest'),
         ),
-		
-        /*'bootstrap'=>array(
-            'class'=>'bootstrap.components.Bootstrap',
-        ),*/
-		// uncomment the following to enable URLs in path-format
-		
 		'urlManager'=>array(
             'urlFormat'=>'path',
             'showScriptName'=>false,
@@ -90,12 +59,6 @@ return array(
                 'admin/user/<id>' => 'admin/user',
 			),
 		),
-		/*
-		'db'=>array(
-			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
-		),*/
-		// uncomment the following to use a MySQL database
-
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=planner',
 			'emulatePrepare' => true,
@@ -103,9 +66,10 @@ return array(
 			'password' => 'f47QwKYuw3e4txZx',
 			'charset' => 'utf8',
 		),
-
+		'pointInfo'=>array(
+			'class'=>'PointInfoRequester',
+		),
 		'errorHandler'=>array(
-			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
 		'log'=>array(
@@ -115,12 +79,6 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
 			),
 		),
 	),

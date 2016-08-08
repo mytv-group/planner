@@ -80,6 +80,7 @@ class Point extends CActiveRecord
 			'sync_time' => 'Last Success Sync Time',
 			'update_time' => 'Last Update Time',
 			'volume' => 'Volume',
+			'free_space' => 'Free Space',
 			'TV' => 'TV hardware turning',
 			'TVschedule' => 'TV turn on Schedule',
 			'channels' => 'Channels',

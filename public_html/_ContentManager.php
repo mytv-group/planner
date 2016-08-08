@@ -77,7 +77,10 @@ class ContentManager {
 					$files = implode ( "','", explode ( ",", $block ['files'] ) );
 					$from = $block ['from'];
 					
-					$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
+					$sql = "SELECT `duration`, `name` ".
+							"FROM `file` WHERE `id` IN ('" . $files . "') ".
+							"ORDER BY FIELD(`id`,'".$files."');";
+					
 					$result = $link->query ( $sql );
 					
 					$duration = 0;
@@ -134,7 +137,9 @@ class ContentManager {
 			$db2 = new DataBaseConnector ();
 			$link2 = $db2->Connect ();
 			
-			$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
+			$sql = "SELECT `duration`, `name` ".
+				"FROM `file` WHERE `id` IN ('" . $files . "') ".
+				"ORDER BY FIELD(`id`,'".$files."');";
 			$result2 = $link2->query ( $sql );
 			
 			$duration = 0;

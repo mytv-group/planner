@@ -352,13 +352,13 @@ $(document).ready(function(e){
     					if(data[i]['type'] == 'folder'){
     						dropzoneHeap.append("<div class='HeapItemFolder'" +
     								"data-path='"+data[i]['id']+"' " +
-    								"data-type='"+data[i]['type']+"' >" + 
+    								"data-type='"+data[i]['type']+"' >" + (i+1) + '. ' + 
     								data[i]['text'] + "<div>");
     					} else if(data[i]['type'] == 'file'){
     						dropzoneHeap.append("<div class='HeapItem'" +
     								"data-mime='"+data[i]['mime']+"' " +
     								"data-link='"+data[i]['link']+"' " +
-    								"data-type='"+data[i]['type']+"' >" + 
+    								"data-type='"+data[i]['type']+"' >" + (i+1) + '. ' + 
     								data[i]['text'] + "<div>");
     					}
     				}

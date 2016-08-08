@@ -57,7 +57,10 @@
 .HeapItem {
 	padding:5px;
 	width: 100%;
-	border-bottom:solid 1px darkgrey;	
+	border-bottom:solid 1px darkgrey;
+    overflow: hidden;	
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .HeapItemFolder {

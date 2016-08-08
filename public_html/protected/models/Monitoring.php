@@ -56,6 +56,7 @@ class Monitoring extends CModel
 			'ip' => 'Ip',
 			'sync_time' => 'Sync Time',
 			'update_time' => 'Update Time',
+			'free_space' => 'Free Space',
 			'volume' => 'Volume',
 			'status' => 'Status',
 			'screen' => 'Screen',

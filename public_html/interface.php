@@ -334,7 +334,10 @@
 		}
 		else 
 		{
-			echo "00:00:00 1 off";
+			$onOffList .= "00:00:00" . PHP_EOL;
+			$onOffList .= '1 off';
+			$onOffList .= PHP_EOL. PHP_EOL;
+			echo $onOffList;
 		}
 	}
 	

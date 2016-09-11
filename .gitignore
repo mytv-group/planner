@@ -30,4 +30,13 @@ phpunit.phar
 /log
 
 #spool
-/public_html/spool
+/spool
+/assets/*
+
+#db config
+/protected/config/db.php
+
+#dev content
+/_dev
+
+

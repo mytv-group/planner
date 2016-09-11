@@ -225,4 +225,78 @@ class InterfaceController extends Controller
 			exit;
  		}
 	}
+	
+	public function actionGetTVschedulee($id, $date, $tv)
+	{
+		$pointId = intval($_GET['id']);
+		$pointDate = intval($_GET['date']);
+		
+		$year = substr((string)$pointDate, 0, 4);
+		$month = substr((string)$pointDate, 4, 2);
+		$day = substr((string)$pointDate, 6, 2);
+		
+		$pointDate = $year . "-" . $month . "-" . $day;
+		
+		$db = new DataBaseConnector();
+		$link = $db->Connect();
+			
+		$sql = "SELECT `from`, `to` FROM `tvschedule` WHERE `point_id` IN ('".$pointId."') " .
+				"AND (`from` <= '" . $pointDate . "') ".
+				"AND (`to` >= '" . $pointDate . "') " .
+				"ORDER BY `from` DESC;";
+		
+		
+		$result = $link->query($sql);
+		
+		$onOffArr = array();
+		while($row = $result->fetch_array())
+		{
+			$fromFull = explode(" ", $row['from']);
+			$from = $fromFull[1];
+				
+			$toFull = explode(" ", $row['to']);
+			$to = $toFull[1];
+				
+			/* if prev 'to' gather current 'from' change prev 'to' to current */
+			if((count($onOffArr) > 0) &&
+					(date($onOffArr[count($onOffArr) - 1][1]) > date($from)) &&
+					(date($onOffArr[count($onOffArr) - 1][1]) < date($to)))
+			{
+				$onOffArr[count($onOffArr) - 1][1] = $to;
+			} else {
+				$onOffArr[] = array($from, $to);
+			}
+		}
+		
+		if(count($onOffArr) > 0)
+		{
+			$onOffList = '';
+			foreach ($onOffArr as $item)
+			{
+				$onOffList .= $item[0] . PHP_EOL;
+				$onOffList .= '1 on';
+				$onOffList .= PHP_EOL. PHP_EOL;
+				$onOffList .= $item[1] . PHP_EOL;
+				$onOffList .= '1 off';
+				$onOffList .= PHP_EOL. PHP_EOL;
+			}
+		
+			$pointDir = "spool/points/" . $pointId;
+			$pointDir = PrepareSpoolPath($pointDir);
+				
+			$handle = fopen($pointDir . "/tv.txt", "w");
+			fwrite($handle, $onOffList);
+			fclose($handle);
+		
+			echo $onOffList;
+		}
+		else
+		{
+			$onOffList .= "00:00:00" . PHP_EOL;
+			$onOffList .= '1 off';
+			$onOffList .= PHP_EOL. PHP_EOL;
+			echo $onOffList;
+		}
+	}
+	 
 }

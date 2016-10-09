@@ -12,7 +12,7 @@ class InterfaceController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('getPointSchedule', 'getChannels'),
+				'actions'=>array('getPointSchedule', 'getChannels', 'getTVschedule', 'setSync'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -226,7 +226,7 @@ class InterfaceController extends Controller
  		}
 	}
 	
-	public function actionGetTVschedulee($id, $date, $tv)
+	public function actionGetTVschedule($id, $date, $tv)
 	{
 		$pointId = intval($_GET['id']);
 		$pointDate = intval($_GET['date']);
@@ -298,5 +298,19 @@ class InterfaceController extends Controller
 			echo $onOffList;
 		}
 	}
-	 
+	
+	public function setSync($id, $sync)
+	{		
+		if($sync == 1){
+			$db = new DataBaseConnector();
+			$link = $db->Connect();
+		
+			$sql = "UPDATE `point` SET `sync` = 1, `sync_time` = NOW() WHERE `id` = " . $pointId . ";";
+			$link->query($sql);
+				
+		}
+		
+		echo 'ok';
+		exit;
+	}
 }

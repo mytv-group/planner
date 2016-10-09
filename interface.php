@@ -38,19 +38,17 @@
 	/* SYNC */
 	if(isset($_GET['id']) && isset($_GET['sync']))
 	{
-		$pointId = intval($_GET['id']);
-		$sync = intval($_GET['sync']);
-	
-		if($sync == 1){
-			$db = new DataBaseConnector();
-			$link = $db->Connect();
-				
-			$sql = "UPDATE `point` SET `sync` = 1, `sync_time` = NOW() WHERE `id` = " . $pointId . ";";
-			$link->query($sql);
-			
-		}
-
-		echo "ok";
+		$url = 'http://' . $_SERVER['SERVER_NAME'] . '/interface/setSync';
+		$options = array(
+				'http' => array(
+						'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+						'method'  => 'GET',
+						'content' => http_build_query($_GET)
+				)
+		);
+		$context  = stream_context_create($options);
+		$result = file_get_contents($url, false, $context);
+		echo $result;
 	}
 		
 	

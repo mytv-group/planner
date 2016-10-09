@@ -32,7 +32,12 @@ $(document).ready(function(e){
 		format: 'H:i:s', 
 		datepicker:false,
 	});
-	
+
+	$("#Playlists_midnightOffset").datetimepicker({
+		format: 'H:i:s', 
+		datepicker:false,
+	});
+
 	var typeBlock = $(".type-control"),
 		type = $(".type-control:checked").val(),
 		streamUrlBlock = $('#stream-url-block'),

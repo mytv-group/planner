@@ -38,16 +38,14 @@ class Playlists extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, fromDatetime, toDatetime, type, author', 'required'),
+			array('name, fromDatetime, toDatetime, midnightOffset, type, author', 'required'),
 			array('name', 'length', 'max'=>100),
 			array('files', 'length', 'max'=>65000),
 			array('author', 'length', 'max'=>255),
 			array('sun, mon, tue, wed, thu, fri, sat', 'boolean'),
 			array('type','in','range'=>array('0','1','2'),'allowEmpty'=>false),
 			array('fromDatetime, toDatetime', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm:ss'),
-			array('fromTime, toTime, every', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm:ss'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+			array('fromTime, toTime, every, midnightOffset', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm:ss'),
 			array('name', 'safe', 'on'=>'search'),
 		);
 	}
@@ -74,9 +72,10 @@ class Playlists extends CActiveRecord
 			'fromDatetime' => 'From Datetime',
 			'toDatetime' => 'To Datetime',
 			'type' => 'Type',
-			'fromTime' => 'Start broadcasting',
-			'toTime' => 'End broadcasting',
+			'fromTime' => 'Start Broadcasting',
+			'toTime' => 'End Broadcasting',
 			'every' => 'Every',
+			'midnightOffset' => 'Midnight Offset',
 			'sun' => 'Sun',
 			'mon' => 'Mon',
 			'tue' => 'Tue',
@@ -85,7 +84,7 @@ class Playlists extends CActiveRecord
 			'fri' => 'Fri',
 			'sat' => 'Sat',
 			'author' => 'Author',
-			'weekDays' => 'Week days',
+			'weekDays' => 'Week Days',
 			'ctrl' => 'Controls'
 		);
 	}

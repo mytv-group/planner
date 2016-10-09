@@ -25,12 +25,6 @@
 		<?php echo $form->error($model,'name'); ?>
 	</div>
 
-<!-- 	<div class="row"> -->
-		<?php //echo $form->labelEx($model,'files'); ?>
-		<?php //echo $form->textArea($model,'files',array('rows'=>6, 'cols'=>50)); ?>
-		<?php //echo $form->error($model,'files'); ?>
-<!-- 	</div> -->
-
 	<div class="row">
 	<table>
 		<tr style="text-align:left">
@@ -47,7 +41,21 @@
 		</tr>
 	</table>
 	</div>
-	
+
+	<div class="row">
+	<table>
+		<tr style="text-align:left">
+			<td><?php echo $form->labelEx($model,'midnightOffset'); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo $form->textField($model,'midnightOffset', array('class'=>"form-control")); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo $form->error($model,'midnightOffset'); ?></td>
+		</tr>
+	</table>
+	</div>
+		
 	<div class="row" style='padding-bottom:1em;'>
 		<?php echo $form->labelEx($model,'type'); ?>
 		<?php echo $form->radioButtonList($model,'type', 

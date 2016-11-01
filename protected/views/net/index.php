@@ -29,23 +29,6 @@ $('.search-form form').submit(function(){
 )); ?>
 </div><!-- search-form -->
 
-<?php 
-// echo "<br><br>";
-// $modelData = $model->findAll();
-// foreach ($modelData as $key => $val)
-// {
-// 	echo "<br><br>";
-// 	foreach ($val as $key1 => $val1)
-// 	{
-// 	echo "<br><br>";
-// 	var_dump($key1);
-// 	var_dump($val1);
-// 	echo "<br><br>";
-// 	}
-// }
-// exit();
-?>
-
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'net-grid',
 	'dataProvider'=>$model->search(),
@@ -61,7 +44,7 @@ $('.search-form form').submit(function(){
 		),
 		array(
 			'name' => 'pointsattached',
-			'value' => function($model) { 
+			'value' => function($model) {
 				$attacjedPoints = array();
 				foreach ($model->pointsattached as $attached)
 				{

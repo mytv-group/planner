@@ -16,7 +16,7 @@ if(APPLICATION_ENV == 'dev') {
 	error_reporting(E_ALL);
 	ini_set('display_errors','On');
 	ini_set('error_log','php_errors.log');
-	
+
 	// remove the following lines when in production mode
 	defined('YII_DEBUG') or define('YII_DEBUG',true);
 	// specify how many levels of call stack should be shown in each log message
@@ -26,8 +26,8 @@ if(APPLICATION_ENV == 'dev') {
 if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 	define('SYMLINK', "1");
 	define('HTTP_REQUEST_TO_POINT', "1");
-	//define('SOCKET_REQUEST_TO_POINT', "1");
 }
 
 require_once($yii);
+
 Yii::createWebApplication($config)->run();

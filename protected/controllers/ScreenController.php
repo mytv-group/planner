@@ -70,7 +70,7 @@ class ScreenController extends Controller
 		if(isset($_POST['Screen']))
 		{
 			$attributes = $_POST['Screen'];
-			$attributes['user_id'] = Yii::app()->user->getId(); 
+			$attributes['user_id'] = Yii::app()->user->getId();
 
 			$model->attributes=$attributes;
 			if($model->save())
@@ -101,8 +101,7 @@ class ScreenController extends Controller
 				if(isset($_POST['Blocks'])){
 					$blocks = $_POST['Blocks'];
 					Window::model()->deleteAllByAttributes(array('screen_id'=>$model->id));
-					
-					//var_dump($_POST['Blocks']);die;
+
 					foreach ($blocks as $name => $block)
 					{
 						$windowModel = new Window;
@@ -122,7 +121,7 @@ class ScreenController extends Controller
 				}
 				$this->redirect(array('view','id'=>$model->id));
 			}
-				
+
 		}
 
 		$windows = Window::model()->findAllByAttributes(array('screen_id'=>$model->id));
@@ -188,33 +187,33 @@ class ScreenController extends Controller
 			Yii::app()->end();
 		}
 	}
-	
+
 	public function beforeAction($action) {
 		if( parent::beforeAction($action) ) {
 			/* @var $cs CClientScript */
 			$cs = Yii::app()->clientScript;
 			//$cs->registerPackage('jquery');
 			//$cs->registerPackage('history');
-	
+
 			//Yii::app()->clientScript->registerCoreScript('jquery');
-				
+
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-1.11.0.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-			
+
 			//$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/underscore/underscore-min.js' );
 			//$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/backbonejs/backbone-min.js' );
 
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-				
+
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/screen/screen.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/screen/screenBlockProto.js' );
-	
+
 			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
 			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-				
+
 			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/screen.css');
-	
+
 			return true;
 		}
 		return false;

@@ -5469,3 +5469,893 @@ Stack trace:
 REQUEST_URI=/favicon.ico
 HTTP_REFERER=http://rtvgroup.com/admin/index
 ---
+2016/11/01 14:31:17 [error] [exception.CException] CException: CAssetManager.basePath "/var/www/rtvgroup/assets" is invalid. Please make sure the directory exists and is writable by the Web server process. in /var/www/rtvgroup/framework/web/CAssetManager.php:138
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CAssetManager.php(123): CAssetManager->setBasePath('/var/www/rtvgro...')
+#1 /var/www/rtvgroup/framework/web/CAssetManager.php(217): CAssetManager->getBasePath()
+#2 /var/www/rtvgroup/framework/zii/widgets/grid/CGridView.php(350): CAssetManager->publish('/var/www/rtvgro...')
+#3 /var/www/rtvgroup/framework/web/CBaseController.php(147): CGridView->init()
+#4 /var/www/rtvgroup/framework/web/CBaseController.php(172): CBaseController->createWidget('zii.widgets.gri...', Array)
+#5 /var/www/rtvgroup/protected/views/monitoring/index.php(127): CBaseController->widget('zii.widgets.gri...', Array)
+#6 /var/www/rtvgroup/framework/web/CBaseController.php(126): require('/var/www/rtvgro...')
+#7 /var/www/rtvgroup/framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/rtvgro...', Array, true)
+#8 /var/www/rtvgroup/framework/web/CController.php(869): CBaseController->renderFile('/var/www/rtvgro...', Array, true)
+#9 /var/www/rtvgroup/framework/web/CController.php(782): CController->renderPartial('index', Array, true)
+#10 /var/www/rtvgroup/protected/controllers/MonitoringController.php(84): CController->render('index', Array)
+#11 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(49): MonitoringController->actionIndex()
+#12 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#13 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#15 /var/www/rtvgroup/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#16 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#17 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#18 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#19 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('')
+#21 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('monitoring')
+#22 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#23 /var/www/rtvgroup/index.php(34): CApplication->run()
+#24 {main}
+REQUEST_URI=/monitoring
+HTTP_REFERER=http://rtvgroup.com/site/login
+---
+2016/11/01 14:33:29 [error] [exception.CException] CException: Property "Playlists.midnightOffset" is not defined. in /var/www/rtvgroup/framework/base/CComponent.php:130
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(145): CComponent->__get('midnightOffset')
+#1 /var/www/rtvgroup/framework/web/helpers/CHtml.php(2529): CActiveRecord->__get('midnightOffset')
+#2 /var/www/rtvgroup/framework/web/helpers/CHtml.php(2252): CHtml::resolveValue(Object(Playlists), 'midnightOffset')
+#3 /var/www/rtvgroup/framework/web/helpers/CHtml.php(1434): CHtml::activeInputField('text', Object(Playlists), 'midnightOffset', Array)
+#4 /var/www/rtvgroup/framework/web/widgets/CActiveForm.php(725): CHtml::activeTextField(Object(Playlists), 'midnightOffset', Array)
+#5 /var/www/rtvgroup/protected/views/playlists/_form.php(51): CActiveForm->textField(Object(Playlists), 'midnightOffset', Array)
+#6 /var/www/rtvgroup/framework/web/CBaseController.php(126): require('/var/www/rtvgro...')
+#7 /var/www/rtvgroup/framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/rtvgro...', Array, true)
+#8 /var/www/rtvgroup/framework/web/CController.php(869): CBaseController->renderFile('/var/www/rtvgro...', Array, true)
+#9 /var/www/rtvgroup/protected/views/playlists/create.php(18): CController->renderPartial('_form', Array)
+#10 /var/www/rtvgroup/framework/web/CBaseController.php(126): require('/var/www/rtvgro...')
+#11 /var/www/rtvgroup/framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/rtvgro...', Array, true)
+#12 /var/www/rtvgroup/framework/web/CController.php(869): CBaseController->renderFile('/var/www/rtvgro...', Array, true)
+#13 /var/www/rtvgroup/framework/web/CController.php(782): CController->renderPartial('create', Array, true)
+#14 /var/www/rtvgroup/protected/controllers/PlaylistsController.php(98): CController->render('create', Array)
+#15 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(49): PlaylistsController->actionCreate()
+#16 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#17 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#18 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#19 /var/www/rtvgroup/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#20 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#21 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#22 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#23 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#24 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('create')
+#25 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('playlists/creat...')
+#26 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#27 /var/www/rtvgroup/index.php(34): CApplication->run()
+#28 {main}
+REQUEST_URI=/playlists/create
+HTTP_REFERER=http://rtvgroup.com/playlists
+---
+2016/11/01 14:40:47 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[HY000]: General error: 1364 Field 'files' doesn't have a default value. The SQL statement executed was: INSERT INTO `playlists` (`midnightOffset`, `type`, `name`, `fromDatetime`, `toDatetime`, `every`, `fromTime`, `toTime`, `sun`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `author`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8, :yp9, :yp10, :yp11, :yp12, :yp13, :yp14, :yp15).
+in /var/www/rtvgroup/protected/controllers/PlaylistsController.php (81)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 14:40:47 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[HY000]: General error: 1364 Field 'files' doesn't have a default value. The SQL statement executed was: INSERT INTO `playlists` (`midnightOffset`, `type`, `name`, `fromDatetime`, `toDatetime`, `every`, `fromTime`, `toTime`, `sun`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `author`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8, :yp9, :yp10, :yp11, :yp12, :yp13, :yp14, :yp15) in /var/www/rtvgroup/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1077): CDbCommand->execute()
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(806): CActiveRecord->insert(NULL)
+#2 /var/www/rtvgroup/protected/controllers/PlaylistsController.php(81): CActiveRecord->save()
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(49): PlaylistsController->actionCreate()
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#5 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#7 /var/www/rtvgroup/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#11 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('create')
+#13 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('playlists/creat...')
+#14 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#15 /var/www/rtvgroup/index.php(34): CApplication->run()
+#16 {main}
+REQUEST_URI=/playlists/create
+HTTP_REFERER=http://rtvgroup.com/playlists/create
+---
+2016/11/01 14:43:19 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[HY000]: General error: 1364 Field 'files' doesn't have a default value. The SQL statement executed was: INSERT INTO `playlists` (`midnightOffset`, `type`, `name`, `fromDatetime`, `toDatetime`, `every`, `fromTime`, `toTime`, `sun`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `author`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8, :yp9, :yp10, :yp11, :yp12, :yp13, :yp14, :yp15).
+in /var/www/rtvgroup/protected/controllers/PlaylistsController.php (81)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 14:43:19 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[HY000]: General error: 1364 Field 'files' doesn't have a default value. The SQL statement executed was: INSERT INTO `playlists` (`midnightOffset`, `type`, `name`, `fromDatetime`, `toDatetime`, `every`, `fromTime`, `toTime`, `sun`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `author`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8, :yp9, :yp10, :yp11, :yp12, :yp13, :yp14, :yp15) in /var/www/rtvgroup/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1077): CDbCommand->execute()
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(806): CActiveRecord->insert(NULL)
+#2 /var/www/rtvgroup/protected/controllers/PlaylistsController.php(81): CActiveRecord->save()
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(49): PlaylistsController->actionCreate()
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#5 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#7 /var/www/rtvgroup/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#11 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('create')
+#13 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('playlists/creat...')
+#14 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#15 /var/www/rtvgroup/index.php(34): CApplication->run()
+#16 {main}
+REQUEST_URI=/playlists/create
+HTTP_REFERER=http://rtvgroup.com/playlists/create
+---
+2016/11/01 15:15:15 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:15:15 [error] [php] Use of undefined constant CURLOPT_HTTPGET - assumed 'CURLOPT_HTTPGET' (/var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php:926)
+Stack trace:
+#0 /var/www/rtvgroup/protected/controllers/PointController.php(293): Point->SendRequestForUpdate()
+#1 unknown(0): PointController->actionUpdate()
+#2 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): PointController->runAction()
+#6 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#7 /var/www/rtvgroup/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#8 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): PointController->filterAccessControl()
+#9 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#10 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#11 /var/www/rtvgroup/framework/web/CController.php(265): PointController->runActionWithFilters()
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(282): PointController->run()
+#13 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#14 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#15 /var/www/rtvgroup/index.php(34): CWebApplication->run()
+REQUEST_URI=/point/update/156
+in /var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php (926)
+in /var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php (1022)
+in /var/www/rtvgroup/protected/models/Point.php (230)
+2016/11/01 15:22:24 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:22:24 [error] [php] Use of undefined constant CURLOPT_HTTPGET - assumed 'CURLOPT_HTTPGET' (/var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php:926)
+Stack trace:
+#0 /var/www/rtvgroup/protected/controllers/PointController.php(293): Point->SendRequestForUpdate()
+#1 unknown(0): PointController->actionUpdate()
+#2 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): PointController->runAction()
+#6 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#7 /var/www/rtvgroup/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#8 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): PointController->filterAccessControl()
+#9 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#10 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#11 /var/www/rtvgroup/framework/web/CController.php(265): PointController->runActionWithFilters()
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(282): PointController->run()
+#13 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#14 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#15 /var/www/rtvgroup/index.php(34): CWebApplication->run()
+REQUEST_URI=/point/update/156
+in /var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php (926)
+in /var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php (1022)
+in /var/www/rtvgroup/protected/models/Point.php (230)
+2016/11/01 15:29:47 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:29:48 [error] [php] Use of undefined constant CURLOPT_HTTPGET - assumed 'CURLOPT_HTTPGET' (/var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php:926)
+Stack trace:
+#0 /var/www/rtvgroup/protected/controllers/PointController.php(293): Point->SendRequestForUpdate()
+#1 unknown(0): PointController->actionUpdate()
+#2 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(133): PointController->runAction()
+#6 /var/www/rtvgroup/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#7 /var/www/rtvgroup/framework/web/CController.php(1145): CAccessControlFilter->filter()
+#8 /var/www/rtvgroup/framework/web/filters/CInlineFilter.php(58): PointController->filterAccessControl()
+#9 /var/www/rtvgroup/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#10 /var/www/rtvgroup/framework/web/CController.php(291): CFilterChain->run()
+#11 /var/www/rtvgroup/framework/web/CController.php(265): PointController->runActionWithFilters()
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(282): PointController->run()
+#13 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#14 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#15 /var/www/rtvgroup/index.php(34): CWebApplication->run()
+REQUEST_URI=/point/update/156
+in /var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php (926)
+in /var/www/rtvgroup/protected/extensions/EHttpClient/EHttpClient.php (1022)
+in /var/www/rtvgroup/protected/models/Point.php (230)
+2016/11/01 15:32:11 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:32:17 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:32:28 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:32:40 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:36:12 [warning] [application] Failed to set unsafe attribute "tv_schedule_blocks" of "Point".
+in /var/www/rtvgroup/protected/controllers/PointController.php (275)
+in /var/www/rtvgroup/index.php (34)
+2016/11/01 15:40:38 [error] [php] include(DataBaseConnector.php): failed to open stream: No such file or directory (/var/www/rtvgroup/framework/YiiBase.php:427)
+Stack trace:
+#0 /var/www/rtvgroup/protected/controllers/InterfaceController.php(240): spl_autoload_call()
+#1 unknown(0): InterfaceController->actionGetTVschedule()
+#2 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#6 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#8 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#9 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (240)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 15:52:53 [error] [exception.CHttpException.404] CHttpException: Unable to find the code you requested. in /var/www/rtvgroup/framework/gii/CCodeGenerator.php:90
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(49): CCodeGenerator->actionCode()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#2 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#3 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('code')
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('gii/model/code/...')
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CApplication->run()
+#8 {main}
+REQUEST_URI=/gii/model/code/id/0
+HTTP_REFERER=http://rtvgroup.com/gii/model/index
+---
+2016/11/01 16:58:44 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "favicon.ico". in /var/www/rtvgroup/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/rtvgroup/index.php(33): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+HTTP_REFERER=http://rtvgroup.com/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:07:50 [error] [exception.ParseError] ParseError: syntax error, unexpected ')', expecting ']' in /var/www/rtvgroup/protected/controllers/InterfaceController.php:250
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CWebApplication.php(276): CWebApplication->createController('getTVschedule/i...')
+#1 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#2 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#3 /var/www/rtvgroup/index.php(33): CApplication->run()
+#4 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:17:19 [error] [exception.ParseError] ParseError: syntax error, unexpected ']', expecting ',' or ')' in /var/www/rtvgroup/protected/controllers/InterfaceController.php:252
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CWebApplication.php(276): CWebApplication->createController('getTVschedule/i...')
+#1 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#2 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#3 /var/www/rtvgroup/index.php(33): CApplication->run()
+#4 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:17:37 [error] [exception.ParseError] ParseError: syntax error, unexpected ';' in /var/www/rtvgroup/protected/controllers/InterfaceController.php:252
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CWebApplication.php(276): CWebApplication->createController('getTVschedule/i...')
+#1 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#2 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#3 /var/www/rtvgroup/index.php(33): CApplication->run()
+#4 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:18:03 [error] [php] reset() expects parameter 1 to be array, integer given (/var/www/rtvgroup/framework/db/schema/CDbCriteria.php:280)
+Stack trace:
+#0 unknown(0): InterfaceController->actionGetTVschedule()
+#1 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#2 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#3 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#4 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#5 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#8 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#9 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (241)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:26:22 [error] [php] reset() expects parameter 1 to be array, integer given (/var/www/rtvgroup/framework/db/schema/CDbCriteria.php:280)
+Stack trace:
+#0 unknown(0): InterfaceController->actionGetTVschedule()
+#1 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#2 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#3 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#4 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#5 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#8 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#9 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (241)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:26:43 [error] [php] reset() expects parameter 1 to be array, integer given (/var/www/rtvgroup/framework/db/schema/CDbCriteria.php:280)
+Stack trace:
+#0 unknown(0): InterfaceController->actionGetTVschedule()
+#1 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#2 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#3 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#4 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#5 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#8 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#9 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (241)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:27:22 [error] [php] Array to string conversion (/var/www/rtvgroup/framework/db/schema/CDbCriteria.php:229)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#1 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#3 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#4 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#7 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#8 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (242)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:29:32 [error] [php] Array to string conversion (/var/www/rtvgroup/framework/db/schema/CDbCriteria.php:229)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#1 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#3 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#4 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#7 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#8 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (242)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:32:22 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from <= '2016-11-01')) AND (to => '2016-11-01') ORDER BY from DESC' at line 1. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE ((point_id = :point_id) AND (from <= :from)) AND (to => :to) ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (250)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:32:22 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from <= '2016-11-01')) AND (to => '2016-11-01') ORDER BY from DESC' at line 1. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE ((point_id = :point_id) AND (from <= :from)) AND (to => :to) ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(250): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:33:01 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from <= '2016-11-01')) AND (to => '2016-11-01') ORDER BY from DESC' at line 1. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE ((point_id = :point_id) AND (from <= :from)) AND (to => :to) ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (250)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:33:01 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from <= '2016-11-01')) AND (to => '2016-11-01') ORDER BY from DESC' at line 1. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE ((point_id = :point_id) AND (from <= :from)) AND (to => :to) ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(250): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:33:40 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE ((point_id = :point_id) AND (from <= :from)) AND (to => :to) ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (254)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:33:40 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE ((point_id = :point_id) AND (from <= :from)) AND (to => :to) ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(254): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:35:32 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from <= '2016-11-01' AND to => '2016-11-01' ORDER BY from DESC' at line 1. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE point_id = :point_id AND from <= :from AND to => :to ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (248)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:35:32 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from <= '2016-11-01' AND to => '2016-11-01' ORDER BY from DESC' at line 1. The SQL statement executed was: SELECT * FROM `tvschedule` `t` WHERE point_id = :point_id AND from <= :from AND to => :to ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(248): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:37:22 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= '2016-11-01' AND ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = :point_id AND from <= :from AND to => :to ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (249)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:37:22 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= '2016-11-01' AND ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = :point_id AND from <= :from AND to => :to ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(249): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:38:05 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = {$point_id} AND from <= {$from} ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = {$point_id} AND from <= {$from} AND to => {$to} ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (244)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:38:05 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = {$point_id} AND from <= {$from} ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = {$point_id} AND from <= {$from} AND to => {$to} ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(244): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:38:25 [error] [php] Undefined variable: point_id (/var/www/rtvgroup/protected/controllers/InterfaceController.php:242)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#2 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#3 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (242)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:38:47 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to => 2016-11-01 ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (244)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:38:47 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to => 2016-11-01 ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(244): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:39:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= '2016-11-01' AND ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= '2016-11-01' AND to => '2016-11-01' ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (244)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:39:06 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= '2016-11-01' AND ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= '2016-11-01' AND to => '2016-11-01' ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(244): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:40:52 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE `point_id` = 31 AND `from` <= '2016-11-01' ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE `point_id` = 31 AND `from` <= '2016-11-01' AND `to` => '2016-11-01' ORDER BY `from` DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (244)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:40:52 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE `point_id` = 31 AND `from` <= '2016-11-01' ' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE `point_id` = 31 AND `from` <= '2016-11-01' AND `to` => '2016-11-01' ORDER BY `from` DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(244): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:41:10 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=> '2016-11-01' ORDER BY `from` DESC' at line 1. The SQL statement executed was: SELECT `from`, `to` FROM `tvschedule` `t` WHERE `point_id` = 31 AND `from` <= '2016-11-01' AND `to` => '2016-11-01' ORDER BY `from` DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (244)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:41:10 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=> '2016-11-01' ORDER BY `from` DESC' at line 1. The SQL statement executed was: SELECT `from`, `to` FROM `tvschedule` `t` WHERE `point_id` = 31 AND `from` <= '2016-11-01' AND `to` => '2016-11-01' ORDER BY `from` DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(244): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:42:51 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to >= 2016-11-01 ORDER BY from DESC.
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (244)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:42:51 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to' at line 1. The SQL statement executed was: SELECT from, to FROM `tvschedule` `t` WHERE point_id = 31 AND from <= 2016-11-01 AND to >= 2016-11-01 ORDER BY from DESC in /var/www/rtvgroup/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /var/www/rtvgroup/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /var/www/rtvgroup/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /var/www/rtvgroup/protected/controllers/InterfaceController.php(244): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: InterfaceController->actionGetTVschedule('31', '20161101', '1')
+#5 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#6 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#7 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#12 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /var/www/rtvgroup/index.php(33): CApplication->run()
+#14 {main}
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+---
+2016/11/01 17:43:18 [error] [php] Undefined variable: onOffList (/var/www/rtvgroup/protected/controllers/InterfaceController.php:291)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#2 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#3 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/31/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (291)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:44:17 [error] [php] Undefined variable: onOffList (/var/www/rtvgroup/protected/controllers/InterfaceController.php:290)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#2 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#3 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/156/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (290)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:47:04 [error] [exception.Error] Error: Call to undefined function PrepareSpoolPath() in /var/www/rtvgroup/protected/controllers/InterfaceController.php:280
+Stack trace:
+#0 [internal function]: InterfaceController->actionGetTVschedule('156', '20161101', '1')
+#1 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#2 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#3 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#5 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getTVschedule')
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getTV...')
+#8 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#9 /var/www/rtvgroup/index.php(33): CApplication->run()
+#10 {main}
+REQUEST_URI=/interface/getTVschedule/id/156/tv/1/date/20161101
+---
+2016/11/01 17:47:56 [error] [php] Undefined variable: CM (/var/www/rtvgroup/protected/controllers/InterfaceController.php:280)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#2 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#3 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/156/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (280)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:49:34 [error] [php] fopen(/var/www/rtvgroup/spool/points/156//tv.txt): failed to open stream: Permission denied (/var/www/rtvgroup/protected/controllers/InterfaceController.php:283)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#1 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#3 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#4 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#7 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#8 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getTVschedule/id/156/tv/1/date/20161101
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (283)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 17:55:48 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "setSync". in /var/www/rtvgroup/framework/web/CController.php:483
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CController.php(270): CController->missingAction('setSync')
+#1 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('setSync')
+#2 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/setSy...')
+#3 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/rtvgroup/index.php(33): CApplication->run()
+#5 {main}
+REQUEST_URI=/interface/setSync/id/156/sync/1
+---
+2016/11/01 17:55:48 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "setSync". in /var/www/rtvgroup/framework/web/CController.php:483
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/CController.php(270): CController->missingAction('setSync')
+#1 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('setSync')
+#2 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/setSy...')
+#3 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/rtvgroup/index.php(33): CApplication->run()
+#5 {main}
+REQUEST_URI=/interface/setSync/images/Logo_RTV_middle.png
+HTTP_REFERER=http://rtvgroup.com/interface/setSync/id/156/sync/1
+---
+2016/11/01 17:57:07 [error] [php] Undefined variable: user (/var/www/rtvgroup/protected/controllers/InterfaceController.php:303)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#2 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#3 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/setSync/id/156/sync/1
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (303)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 18:16:24 [error] [exception.ParseError] ParseError: syntax error, unexpected '}' in /var/www/rtvgroup/protected/components/ContentManager.php:207
+Stack trace:
+#0 /var/www/rtvgroup/framework/YiiBase.php(302): YiiBase::autoload('ContentManager')
+#1 /var/www/rtvgroup/framework/YiiBase.php(196): YiiBase::import('ContentManager', true)
+#2 /var/www/rtvgroup/framework/base/CModule.php(386): YiiBase::createComponent(Array)
+#3 /var/www/rtvgroup/framework/base/CModule.php(103): CModule->getComponent('contentManager')
+#4 /var/www/rtvgroup/protected/controllers/InterfaceController.php(56): CModule->__get('contentManager')
+#5 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#6 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#7 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#10 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#13 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/rtvgroup/index.php(33): CApplication->run()
+#15 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:20:17 [error] [exception.ParseError] ParseError: syntax error, unexpected '}' in /var/www/rtvgroup/protected/components/ContentManager.php:207
+Stack trace:
+#0 /var/www/rtvgroup/framework/YiiBase.php(302): YiiBase::autoload('ContentManager')
+#1 /var/www/rtvgroup/framework/YiiBase.php(196): YiiBase::import('ContentManager', true)
+#2 /var/www/rtvgroup/framework/base/CModule.php(386): YiiBase::createComponent(Array)
+#3 /var/www/rtvgroup/framework/base/CModule.php(103): CModule->getComponent('contentManager')
+#4 /var/www/rtvgroup/protected/controllers/InterfaceController.php(56): CModule->__get('contentManager')
+#5 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#6 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#7 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#10 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#13 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/rtvgroup/index.php(33): CApplication->run()
+#15 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:20:49 [error] [exception.ParseError] ParseError: syntax error, unexpected '}' in /var/www/rtvgroup/protected/components/ContentManager.php:207
+Stack trace:
+#0 /var/www/rtvgroup/framework/YiiBase.php(302): YiiBase::autoload('ContentManager')
+#1 /var/www/rtvgroup/framework/YiiBase.php(196): YiiBase::import('ContentManager', true)
+#2 /var/www/rtvgroup/framework/base/CModule.php(386): YiiBase::createComponent(Array)
+#3 /var/www/rtvgroup/framework/base/CModule.php(103): CModule->getComponent('contentManager')
+#4 /var/www/rtvgroup/protected/controllers/InterfaceController.php(56): CModule->__get('contentManager')
+#5 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#6 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#7 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#10 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#13 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/rtvgroup/index.php(33): CApplication->run()
+#15 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:21:27 [error] [exception.ParseError] ParseError: syntax error, unexpected '}' in /var/www/rtvgroup/protected/components/ContentManager.php:207
+Stack trace:
+#0 /var/www/rtvgroup/framework/YiiBase.php(302): YiiBase::autoload('ContentManager')
+#1 /var/www/rtvgroup/framework/YiiBase.php(196): YiiBase::import('ContentManager', true)
+#2 /var/www/rtvgroup/framework/base/CModule.php(386): YiiBase::createComponent(Array)
+#3 /var/www/rtvgroup/framework/base/CModule.php(103): CModule->getComponent('contentManager')
+#4 /var/www/rtvgroup/protected/controllers/InterfaceController.php(56): CModule->__get('contentManager')
+#5 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#6 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#7 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#10 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#13 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/rtvgroup/index.php(33): CApplication->run()
+#15 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:24:08 [error] [php] Undefined variable: CM (/var/www/rtvgroup/protected/controllers/InterfaceController.php:71)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#2 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#3 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#4 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#6 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#7 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (71)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 18:24:14 [error] [exception.ParseError] ParseError: syntax error, unexpected '}' in /var/www/rtvgroup/protected/components/ContentManager.php:207
+Stack trace:
+#0 /var/www/rtvgroup/framework/YiiBase.php(302): YiiBase::autoload('ContentManager')
+#1 /var/www/rtvgroup/framework/YiiBase.php(196): YiiBase::import('ContentManager', true)
+#2 /var/www/rtvgroup/framework/base/CModule.php(386): YiiBase::createComponent(Array)
+#3 /var/www/rtvgroup/framework/base/CModule.php(103): CModule->getComponent('contentManager')
+#4 /var/www/rtvgroup/protected/controllers/InterfaceController.php(56): CModule->__get('contentManager')
+#5 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#6 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#7 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#8 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#10 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#12 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#13 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/rtvgroup/index.php(33): CApplication->run()
+#15 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:26:36 [error] [php] Trying to get property of non-object (/var/www/rtvgroup/protected/components/ContentManager.php:139)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#1 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#3 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#4 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#7 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#8 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+in /var/www/rtvgroup/protected/components/ContentManager.php (139)
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (72)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 18:30:05 [error] [php] Trying to get property of non-object (/var/www/rtvgroup/protected/components/ContentManager.php:183)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#1 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#3 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#4 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#7 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#8 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+in /var/www/rtvgroup/protected/components/ContentManager.php (183)
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (72)
+in /var/www/rtvgroup/index.php (33)
+2016/11/01 18:30:23 [error] [exception.Error] Error: Call to undefined function DateTime() in /var/www/rtvgroup/protected/components/ContentManager.php:205
+Stack trace:
+#0 /var/www/rtvgroup/protected/controllers/InterfaceController.php(72): ContentManager->GetAdvContentArr(156, 1, '2016-10-01 23:5...', 'sat')
+#1 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#2 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#5 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#6 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#8 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#9 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/rtvgroup/index.php(33): CApplication->run()
+#11 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:35:45 [error] [exception.Error] Error: Call to a member function add() on string in /var/www/rtvgroup/protected/components/ContentManager.php:184
+Stack trace:
+#0 /var/www/rtvgroup/protected/controllers/InterfaceController.php(72): ContentManager->GetAdvContentArr(156, 1, '2016-10-01 23:5...', 'sat')
+#1 [internal function]: InterfaceController->actionGetPointSchedule('156', '1', '20161001')
+#2 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(InterfaceController), Array)
+#3 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(InterfaceController), Object(ReflectionMethod), Array)
+#4 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#5 /var/www/rtvgroup/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#6 /var/www/rtvgroup/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/rtvgroup/framework/web/CWebApplication.php(282): CController->run('getPointSchedul...')
+#8 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController('interface/getPo...')
+#9 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#10 /var/www/rtvgroup/index.php(33): CApplication->run()
+#11 {main}
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+---
+2016/11/01 18:40:28 [error] [php] Undefined index: midnightOffset (/var/www/rtvgroup/protected/components/ContentManager.php:35)
+Stack trace:
+#0 /var/www/rtvgroup/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs()
+#1 /var/www/rtvgroup/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 /var/www/rtvgroup/framework/web/CController.php(308): CInlineAction->runWithParams()
+#3 /var/www/rtvgroup/framework/web/CController.php(286): InterfaceController->runAction()
+#4 /var/www/rtvgroup/framework/web/CController.php(265): InterfaceController->runActionWithFilters()
+#5 /var/www/rtvgroup/framework/web/CWebApplication.php(282): InterfaceController->run()
+#6 /var/www/rtvgroup/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#7 /var/www/rtvgroup/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#8 /var/www/rtvgroup/index.php(33): CWebApplication->run()
+REQUEST_URI=/interface/getPointSchedule/id/156/ch/1/date/20161001
+in /var/www/rtvgroup/protected/components/ContentManager.php (35)
+in /var/www/rtvgroup/protected/controllers/InterfaceController.php (71)
+in /var/www/rtvgroup/index.php (33)

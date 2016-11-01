@@ -1,7 +1,7 @@
 <?php
 	// REMOVE THIS FILE AFTER POINTS MOVED TO REST INTERFACE
 	// THIS FILE JUST TEMPORARY FALLBACK
-	
+
 	// interface.php?id=31&ch=1&date=20160612
 	// interface/getPointSchedule/id/31/ch/1/date/20160612
 	if(isset($_GET['id']) && isset($_GET['ch']) && isset($_GET['date']))
@@ -18,8 +18,10 @@
 		$result = file_get_contents($url, false, $context);
 		echo $result;
 	}
-	
+
 	/* TV */
+	// interface.php?id=31&tv=1&date=20160612
+	// interface/getTVschedule/id/31/tv/1/date/20160612
 	if(isset($_GET['id']) && isset($_GET['date']) && isset($_GET['tv']))
 	{
 		$url = 'http://' . $_SERVER['SERVER_NAME'] . '/interface/getTVschedule';
@@ -34,8 +36,10 @@
 		$result = file_get_contents($url, false, $context);
 		echo $result;
 	}
-	
+
 	/* SYNC */
+	// interface.php?id=31&sync=1
+	// interface/setSync/id/31/sync/1
 	if(isset($_GET['id']) && isset($_GET['sync']))
 	{
 		$url = 'http://' . $_SERVER['SERVER_NAME'] . '/interface/setSync';
@@ -50,6 +54,3 @@
 		$result = file_get_contents($url, false, $context);
 		echo $result;
 	}
-		
-	
-?>

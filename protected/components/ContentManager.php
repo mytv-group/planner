@@ -92,7 +92,6 @@ class ContentManager extends CApplicationComponent
 					}
 
 					$block ["duration"] = $duration;
-					$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
 				}
 			} else {
 				$files = implode ( "','", explode ( ",", $block ['files'] ) );
@@ -117,11 +116,6 @@ class ContentManager extends CApplicationComponent
 				}
 
 				$block ["duration"] = $duration;
-				$block ["contentEndTime"] = date_format (
-					$block ["fromDateTime"]->modify (
-							'+' . intval ( $duration ) . ' seconds'
-					), "h:i:s"
-				);
 			}
 		}
 
@@ -208,9 +202,23 @@ class ContentManager extends CApplicationComponent
 						"filesWithDuration" => $filesWithDuration
 				);
 
-				$curTime->add ( new DateInterval ( 'PT' . $duration . 'S' ) );
 				$curTime->add ( new DateInterval ( 'PT' . $repeating . 'S' ) );
 			}
+		}
+
+		$size = count($advArr) - 1;
+		for ($ii = $size; $ii >= 0; $ii--) {
+				for ($jj = 0; $jj <= ($ii-1); $jj++) {
+						$first = new DateTime ($advArr[$jj]['from']);
+						$next = new DateTime ($advArr[$jj+1]['from']);
+
+						if ($first > $next) {
+
+								$tmp = $advArr[$jj];
+								$advArr[$jj] = $advArr[$jj+1];
+								$advArr[$jj+1] = $tmp;
+						}
+				}
 		}
 
 		return $advArr;

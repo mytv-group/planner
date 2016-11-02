@@ -42,37 +42,27 @@ $('.search-form form').submit(function(){
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'playlists-grid',
-	'dataProvider'=>$model->search(),
-	/*'filter'=>$model,*/
+	'dataProvider' => $model->search(),
 	'columns'=>array(
-		/*'id',*/
 		'name',
-		/*'files',*/
+		array(
+				'name' => 'type',
+				'value' => function($data, $row) {
+					if (Playlists::$types[$data->type]) {
+							return Playlists::$types[$data->type];
+					}
+
+					return 'unknown';
+				},
+				'type'  => 'raw',
+		),
 		'fromDatetime',
 		'toDatetime',
-		array(
-				'name' => 'fromTime',
-				'value' => function($data,$row){
-					if(($data->type == 0) || ($data->type == 2)) //0 - bg, 1- adv
-						return $data->fromTime;
-					else
-						return ''; 
-				},
-				'type'  => 'raw',
-		),
-		array(
-				'name' => 'toTime',
-				'value' => function($data,$row){
-					if(($data->type == 0) || ($data->type == 2))
-						return $data->toTime;
-					else
-						return '';
-				},
-				'type'  => 'raw',
-		),
+		'fromTime',
+		'toTime',
 		array(
 				'name' => 'every',
-				'value' => function($data,$row){
+				'value' => function($data, $row) {
 					if($data->type == 1) //0 - bg, 1- adv
 						return $data->every;
 					else
@@ -80,15 +70,6 @@ $('.search-form form').submit(function(){
 				},
 				'type'  => 'raw',
 		),
-		/*'sun',
-		'mon',
-		'tue',
-		'wed',
-		'thu',
-		'fri',
-		'sat',
-		'author',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

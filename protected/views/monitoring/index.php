@@ -1,42 +1,12 @@
 <?php
 /* @var $this MonitoringController */
 /* @var $model Monitoring */
-
-// $this->menu=array(
-// 	array('label'=>'List Monitoring', 'url'=>array('index')),
-// 	array('label'=>'Create Monitoring', 'url'=>array('create')),
-// );
-
-// Yii::app()->clientScript->registerScript('search', "
-// $('.search-button').click(function(){
-// 	$('.search-form').toggle();
-// 	return false;
-// });
-// $('.search-form form').submit(function(){
-// 	$('#monitoring-grid').yiiGridView('update', {
-// 		data: $(this).serialize()
-// 	});
-// 	return false;
-// });
-// ");
 ?>
 
 <h1>Monitorings</h1>
 
-<!-- <p> -->
-<!-- You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b> -->
-<!-- or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done. -->
-<!-- </p> -->
 
-<?php //echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display: none">
-<?php //$this->renderPartial('_search',array(
-	//'model'=>$model,
-//)); ?>
-</div>
-<!-- search-form -->
-
-<?php 
+<?php
 
 function isPointOnline ($ip){
 	$monitoringModel = new Monitoring();
@@ -73,7 +43,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 							$isOnline = isPointOnline($data->ip);
 							$glyphicon = $isOnline ? 'glyphicon-globe' : 'glyphicon-eye-close';
 							$btnType = $isOnline ? 'btn-success' : 'btn-danger';
-							
+
 							return '<button type="button" class="btn '.$btnType.' btn-sm" disabled>
 								  <span class="glyphicon '.$glyphicon.'" aria-hidden="true"></span>
 								</button>';
@@ -85,7 +55,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 					'value' => function($data, $row){
 						return '<button type="button" class="btn btn-default btn-sm ShowPointScreenBut" ' .
 									'data-id="'.$data->id.'" data-ip="'.$data->ip.'">
-								  <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> 
+								  <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
 								</button>';
 					},
 					'type'  => 'raw',
@@ -109,53 +79,46 @@ $this->widget('zii.widgets.grid.CGridView', array(
 											  '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>'.
 											'</button>'.
 										'</form>';
-							
-							$editBut = '<form action="/point/update/' . $data->id . '" type="post" class="btn-group">' . 
-											'<button type="submit" class="btn btn-default btn-sm">' . 
-												'<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>' . 
-											'</button>' . 
+
+							$editBut = '<form action="/point/update/' . $data->id . '" type="post" class="btn-group">' .
+											'<button type="submit" class="btn btn-default btn-sm">' .
+												'<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>' .
+											'</button>' .
 										'</form>';
-							
-							$delBut = '<form action="/point/delete/' . $data->id . '" type="post" class="btn-group">' . 
-											'<button type="submit" class="btn btn-danger btn-sm">' . 
-												'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' . 
-											'</button>' . 
+
+							$delBut = '<form action="/point/delete/' . $data->id . '" type="post" class="btn-group">' .
+											'<button type="submit" class="btn btn-danger btn-sm">' .
+												'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' .
+											'</button>' .
 										'</form>';
-							
+
 							return $viewBut . $editBut . $delBut;
 						},
 						'type'  => 'raw',
 				),
 		),
-)); 
+));
 
 $this->widget('zii.widgets.grid.CGridView', array(
 		'id'=>'playlists-grid',
 		'dataProvider'=>$playlistModel,
 		'columns'=>array(
 				'name',
+				array(
+						'name' => 'type',
+						'value' => function($data, $row) {
+							if (Playlists::$types[$data->type]) {
+									return Playlists::$types[$data->type];
+							}
+
+							return 'unknown';
+						},
+						'type'  => 'raw',
+				),
 				'fromDatetime',
 				'toDatetime',
-				array(
-					'name' => 'fromTime',
-					'value' => function($data,$row){
-						if($data->type == 0) //0 - bg, 1- adv
-							return $data->fromTime;
-						else
-							return '';
-					},
-					'type'  => 'raw',
-				),
-				array(
-					'name' => 'toTime',
-					'value' => function($data,$row){
-						if($data->type == 0)
-							return $data->toTime;
-						else
-							return '';
-					},
-					'type'  => 'raw',
-				),
+				'fromTime',
+				'toTime',
 				array(
 					'name' => 'every',
 					'value' => function($data,$row){
@@ -174,19 +137,19 @@ $this->widget('zii.widgets.grid.CGridView', array(
 											  '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>'.
 											'</button>'.
 										'</form>';
-							
-							$editBut = '<form action="/playlists/update/' . $data->id . '" type="post" class="btn-group">' . 
-										'<button type="submit" class="btn btn-default btn-sm">' . 
-										'<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>' . 
-										'</button>' . 
+
+							$editBut = '<form action="/playlists/update/' . $data->id . '" type="post" class="btn-group">' .
+										'<button type="submit" class="btn btn-default btn-sm">' .
+										'<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>' .
+										'</button>' .
 										'</form>';
-							
-							$delBut = '<form action="/playlists/delete/' . $data->id . '" type="post" class="btn-group">' . 
-										'<button type="submit" class="btn btn-danger btn-sm">' . 
-										'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' . 
-										'</button>' . 
+
+							$delBut = '<form action="/playlists/delete/' . $data->id . '" type="post" class="btn-group">' .
+										'<button type="submit" class="btn btn-danger btn-sm">' .
+										'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' .
+										'</button>' .
 										'</form>';
-							
+
 							return $viewBut . $editBut . $delBut;
 						},
 						'type'  => 'raw',
@@ -206,7 +169,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 // 			'class'=>'CButtonColumn',
 // 		),
 // 	),
-// )); 
+// ));
 
 // $this->widget('zii.widgets.grid.CGridView', array(
 // 		'id'=>'playlistsBg-grid',

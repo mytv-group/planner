@@ -234,21 +234,6 @@ class PlaylistsController extends Controller
 	}
 
 	/**
-	 * Manages all models.
-	 */
-	/*public function actionAdmin()
-	{
-		$model=new Playlists('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Playlists']))
-			$model->attributes=$_GET['Playlists'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}*/
-
-	/**
 	 * Proccessing uploaded file
 	 */
 	public function actionUpload()

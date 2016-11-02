@@ -22,6 +22,9 @@
  */
 class Playlists extends CActiveRecord
 {
+
+	public static $types = ['Background', 'Advertising', 'Stream'];
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -38,14 +41,14 @@ class Playlists extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, fromDatetime, toDatetime, midnightOffset, type, author', 'required'),
+			array('name, fromDatetime, toDatetime, type, author', 'required'),
 			array('name', 'length', 'max'=>100),
 			array('files', 'length', 'max'=>65000),
 			array('author', 'length', 'max'=>255),
 			array('sun, mon, tue, wed, thu, fri, sat', 'boolean'),
 			array('type','in','range'=>array('0','1','2'),'allowEmpty'=>false),
-			array('fromDatetime, toDatetime', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm:ss'),
-			array('fromTime, toTime, every, midnightOffset', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm:ss'),
+			array('fromDatetime, toDatetime', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd'),
+			array('fromTime, toTime, every', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm:ss'),
 			array('name', 'safe', 'on'=>'search'),
 		);
 	}
@@ -69,13 +72,12 @@ class Playlists extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Name',
 			'files' => 'Files',
-			'fromDatetime' => 'From Datetime',
-			'toDatetime' => 'To Datetime',
+			'fromDatetime' => 'From Date',
+			'toDatetime' => 'To Date',
 			'type' => 'Type',
 			'fromTime' => 'Start Broadcasting',
 			'toTime' => 'End Broadcasting',
 			'every' => 'Every',
-			'midnightOffset' => 'Midnight Offset',
 			'sun' => 'Sun',
 			'mon' => 'Mon',
 			'tue' => 'Tue',
@@ -108,7 +110,7 @@ class Playlists extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		
+
 		if(Yii::app()->user->name != User::ROLE_ADMIN)
 		{
 			$criteria->compare('author',Yii::app()->user->name);
@@ -129,22 +131,22 @@ class Playlists extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	
+
 	public function GetFilesInPlaylist($id)
 	{
 		$model = self::model()->findByPk($id);
 		$connection = Yii::app()->db;
 		$connection->active=true;
-		
+
 		$avaliableFiles = $model->files;
 		$filesToPreview = array();
-		
+
 		if(strlen($avaliableFiles) > 0)
 		{
 			$sql = "SELECT `id`, `name`, `mime`, `link`".
 				"FROM `file` WHERE `id` IN (".$avaliableFiles.")".
 				"ORDER BY FIELD(`id`,".$avaliableFiles.");";
-		
+
 			$command = $connection->createCommand($sql);
 			$dataReader=$command->query();
 			while(($row=$dataReader->read())!==false)
@@ -161,16 +163,16 @@ class Playlists extends CActiveRecord
 				);
 			}
 		}
-		
+
 		$connection->active=false;
 		return $filesToPreview;
 	}
-	
-	public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay) 
+
+	public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
 	{
 		$connection = Yii::app()->db;
 		$connection->active=true;
-		
+
 		$pointDate = new DateTime($pointDatetimeStr);
 		$pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
@@ -186,7 +188,7 @@ class Playlists extends CActiveRecord
 				"AND `t3`.`" . $weekDay . "` = '1' " .
 				"AND `t3`.`type` = '0' " .
 				"ORDER BY `fromTime`;";
-	
+
 		$command = $connection->createCommand($sql);
 		$dataReader = $command->query();
 
@@ -194,21 +196,21 @@ class Playlists extends CActiveRecord
 		while (($row=$dataReader->read()) != false) {
 			$fromDatetime = date_create ( $row ['fromDatetime'] );
 			$toDatetime = date_create ( $row ['toDatetime'] );
-	
+
 			$fromTime = $row ['fromTime'];
 			$toTime = $row ['toTime'];
-	
+
 			$files = $row ['files'];
-	
+
 			/* if today starts showing check broadcasting is later showing begin */
 			if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
-				if (((date_format ( $fromDatetime, "Y-m-d" ) != $pointDateStr) && 
-						(date_format ( $toDatetime, "Y-m-d" ) != $pointDateStr)) || 
-						((date_format ( $fromDatetime, "Y-m-d" ) == $pointDateStr) && 
-								(strtotime ( date_format ( $fromDatetime, "h:i:s" ) ) <  strtotime ( $fromTime ))) || 
-						((date_format ( $toDatetime, "Y-m-d" ) == $pointDateStr) && 
+				if (((date_format ( $fromDatetime, "Y-m-d" ) != $pointDateStr) &&
+						(date_format ( $toDatetime, "Y-m-d" ) != $pointDateStr)) ||
+						((date_format ( $fromDatetime, "Y-m-d" ) == $pointDateStr) &&
+								(strtotime ( date_format ( $fromDatetime, "h:i:s" ) ) <  strtotime ( $fromTime ))) ||
+						((date_format ( $toDatetime, "Y-m-d" ) == $pointDateStr) &&
 								(strtotime ( date_format ( $toDatetime, "h:i:s" ) ) >  strtotime ( $toTime )))) {
-											
+
 					$blocksArr [] = array (
 							'from' => $fromTime,
 							'to' => $toTime,
@@ -219,18 +221,18 @@ class Playlists extends CActiveRecord
 				}
 			}
 		}
-	
+
 		if (count ( $blocksArr ) > 0) {
 			$filesList = '';
 			foreach ( $blocksArr as &$block ) {
 				$files = implode ( "','", explode ( ",", $block ['files'] ) );
 				$from = $block ['from'];
-	
+
 				$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
 
 				$command = $connection->createCommand($sql);
 				$dataReader = $command->query();
-						
+
 				$duration = 0;
 				$block ["filesWithDuration"] = array ();
 				while (($row=$dataReader->read()) != false) {
@@ -241,19 +243,19 @@ class Playlists extends CActiveRecord
 							$row ['duration'] . " " . $row ['name'] . "" . PHP_EOL /*ready to output str*/
 					);
 				}
-	
+
 				$block ["duration"] = $duration;
 				$block ["contentEndTime"] = date_format ( $block ["fromDateTime"]->modify ( '+' . intval ( $duration ) . ' seconds' ), "h:i:s" );
 			}
 		}
-	
+
 		return $blocksArr;
 	}
-	
+
 	public function GetAdvContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay) {
 		$connection = Yii::app()->db;
 		$connection->active=true;
-	
+
 		$sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `every` FROM `channel` AS `t1` " .
 				"JOIN `playlist_to_channel` AS `t2` " .
 				"JOIN `playlists` AS `t3` " .
@@ -264,25 +266,25 @@ class Playlists extends CActiveRecord
 				"AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
 				"AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
 				"AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '1';";
-	
-	
+
+
 		$command = $connection->createCommand($sql);
 		$dataReader = $command->query();
-			
+
 		$advArr = array ();
-				
+
 		while (($row=$dataReader->read()) != false) {
 			$fromDatetime = date_create ( $row ['fromDatetime'] );
 			$toDatetime = date_create ( $row ['toDatetime'] );
-		
+
 			$every = $row ['every'];
 			$files = $row ['files'];
 			$files = implode ( "','", explode ( ",", $files ) );
-	
+
 			$sql = "SELECT `duration`, `name` FROM `file` WHERE `id` IN ('" . $files . "');";
 			$command = $connection->createCommand($sql);
 			$dataReader2 = $command->query();
-	
+
 			$duration = 0;
 			$filesWithDuration = array ();
 			while (($row2=$dataReader2->read()) != false) {
@@ -293,24 +295,24 @@ class Playlists extends CActiveRecord
 						$row2 ['duration'] . " " . $row2 ['name'] . "" . PHP_EOL /*ready to output str*/
 				);
 			}
-	
+
 			$duration = intval ( $duration );
-	
+
 			$repeating = explode ( ":", $every );
 			$repeating = $repeating [0] * 60 * 60 + $repeating [1] * 60 + $repeating [0];
-	
+
 			$startTime = new DateTime ( '00:00:01' );
 			$endTime = new DateTime ( '23:59:59' );
-	
+
 			$curTime = clone $startTime;
-	
+
 			while ( $curTime < $endTime ) {
 				$endBlockTime = clone $curTime;
 				$endBlockTime->add ( new DateInterval ( 'PT' . $duration . 'S' ) );
-	
+
 				$fromTime = $curTime->format ( 'H:i:s' );
 				$toTime = $endBlockTime->format ( 'H:i:s' );
-	
+
 				if (isset($advArr [0]) && ($endBlockTime < $advArr [0] ['fromDateTime'])) {
 					self::array_insert ( $advArr, array (
 						'from' => $fromTime,
@@ -330,28 +332,28 @@ class Playlists extends CActiveRecord
 						'files' => $files,
 						'duration' => $duration,
 						"filesWithDuration" => $filesWithDuration
-					); 
+					);
 				}
-	
+
 				$curTime->add ( new DateInterval ( 'PT' . $duration . 'S' ) );
 				$curTime->add ( new DateInterval ( 'PT' . $repeating . 'S' ) );
 			}
 		}
 		return $advArr;
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 */
 	public function buildBlockStructedContent($bg, $adv)
 	{
 		$blockStructedContent = array();
-		
+
 		$lastBlock = array();
 		$lastFrom = '';
 		$lastBlockEndTime = new DateTime();
-		
+
 		if ((count ( $bg ) > 0) && (count ( $adv ) > 0)) {
 			$ii = 0;
 			while ( (new DateTime ( $bg [$ii] ['from'] ) < new DateTime ( $adv [0] ['from'] )) && $ii < count ( $bg ) ) {
@@ -360,53 +362,53 @@ class Playlists extends CActiveRecord
 				$from = $bgBlock ["from"];
 				$lastFrom = $from;
 				$lastBlockEndTime = new DateTime($from);
-		
+
 				$blockStructedContent[$from] = array();
-		
+
 				foreach ( $bgBlock ['filesWithDuration'] as $files ) {
 					$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 					$blockStructedContent[$from][] = $files [2];
 				}
 				$lastBlock = $bgBlock ['filesWithDuration'];
 			}
-				
+
 			for($jj = 0; $jj < count ( $adv ); $jj ++) {
 				if (($ii > 0) && (new DateTime ( $bg [$ii - 1] ['from'] ) < new DateTime ( $adv [$jj - 1] ['from'] )) && (new DateTime ( $bg [$ii - 1] ['to'] ) > new DateTime ( $adv [$jj - 1] ['to'] ))) {
 					$bgBlock = $bg [$ii - 1];
 					$from = $adv [$jj - 1] ['to'];
 					$lastFrom = $from;
 					$lastBlockEndTime = new DateTime($from);
-						
+
 					$blockStructedContent[$from] = array();
-						
+
 					foreach ( $bgBlock ['filesWithDuration'] as $files ) {
 						$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 						$blockStructedContent[$from][] = $files [2];
 					}
 					$lastBlock = $bgBlock ['filesWithDuration'];
 				}
-		
+
 				$advBlock = $adv [$jj];
 				$from = $advBlock ["from"];
 				$lastFrom = $from;
 				$lastBlockEndTime = new DateTime($from);
-		
+
 				$blockStructedContent[$from] = array();
-		
+
 				foreach ( $advBlock ['filesWithDuration'] as $files ) {
 					$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 					$blockStructedContent[$from][] = $files [2];
 				}
-		
+
 				if (($jj < count ( $adv ) - 1) && ($ii < count ( $bg )) && (new DateTime ( $bg [$ii] ['from'] ) < new DateTime ( $adv [$jj + 1] ['from'] ))) {
 					$bgBlock = $bg [$ii];
 					$ii ++;
 					$from = $bgBlock ["from"];
 					$lastFrom = $from;
 					$lastBlockEndTime = new DateTime($from);
-						
+
 					$blockStructedContent[$from] = array();
-						
+
 					foreach ( $bgBlock ['filesWithDuration'] as $files ) {
 						$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 						$blockStructedContent[$from][] = $files [2];
@@ -418,44 +420,44 @@ class Playlists extends CActiveRecord
 					$from = $advBlock ["from"];
 					$lastFrom = $from;
 					$lastBlockEndTime = new DateTime($from);
-						
+
 					$blockStructedContent[$from] = array();
-						
+
 					foreach ( $advBlock ['filesWithDuration'] as $files ) {
 						$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 						$blockStructedContent[$from][] = $files [2];
 					}
 				}
 			}
-				
+
 		} else if ((count ( $bg ) == 0) && (count ( $adv ) > 0)) {
 			foreach ( $adv as $advBlock ) {
 				$from = $advBlock ["from"];
 				$lastFrom = $from;
 				$lastBlockEndTime = new DateTime($from);
 				$blockStructedContent[$from] = array();
-		
+
 				foreach ( $advBlock ['filesWithDuration'] as $files ) {
 					$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 					$blockStructedContent[$from][] = $files [2];
 				}
 				$lastBlock = $bgBlock ['filesWithDuration'];
 			}
-				
-		} else if ((count ( $bg ) > 0) && (count ( $adv ) == 0)) {						
+
+		} else if ((count ( $bg ) > 0) && (count ( $adv ) == 0)) {
 			foreach ( $bg as $bgBlock ) {
 				$from = $bgBlock ["from"];
 				$lastFrom = $from;
 				$lastBlockEndTime = new DateTime($from);
 				$blockStructedContent[$from] = array();
-		
+
 				foreach ( $bgBlock ['filesWithDuration'] as $files ) {
 					$lastBlockEndTime->add(new DateInterval('PT'.ceil($files[0]).'S'));
 					$blockStructedContent[$from][] = $files [2];
 				}
 				$lastBlock = $bgBlock ['filesWithDuration'];
 			}
-			
+
 			$midnight = new DateTime("23:59:59");
 			while($lastBlockEndTime < $midnight){
 				foreach ($lastBlock as $files ) {
@@ -464,17 +466,17 @@ class Playlists extends CActiveRecord
 				}
 			}
 		}
-					
+
 		return $blockStructedContent;
 	}
-	
+
 	public function ConverBlockStructedToStraightTimeContent($blockContent)
 	{
 		$prevBlockFilesAndDurations = array();
 		$straightTimeContent = array();
-		
+
 		foreach ($blockContent as $time => $block) {
-			
+
 			//check do we need cut or prolong previous block
 			if(count($prevBlockFilesAndDurations) > 0) {
 				//cut all movies if time gather than next block start time
@@ -486,59 +488,59 @@ class Playlists extends CActiveRecord
 					$ii--;
 					$lastKey = key( array_slice( $straightTimeContent, $ii, 1, TRUE ) );
 				}
-				
+
 				//prolong previous block
 				$ii = 0;
 				$lastKey = key( array_slice( $straightTimeContent, -1, 1, TRUE ) );
 				$lenght = $prevBlockFilesAndDurations[$ii][0];
 				$file = $prevBlockFilesAndDurations[$ii][1];
-							
+
 				$possibleTime = new DateTime($lastKey);
 				$possibleTime->add (new DateInterval ( 'PT' . ceil($length) . 'S' ));
 				$possibleTime = $possibleTime->format('H:i:s');
-				
+
 				while((date($lastKey) < date($time)) && (date($possibleTime) < date($time))) {
 					$straightTimeContent[$possibleTime] = $file;
-					
+
 					if($ii >= (count($prevBlockFilesAndDurations) - 1)) {
 						$ii = 0;
 					} else {
 						$ii++;
-					}				
-					
+					}
+
 					$lastKey = key( array_slice( $straightTimeContent, -1, 1, TRUE ) );
 					$lenght = $prevBlockFilesAndDurations[$ii][0];
 					$file = $prevBlockFilesAndDurations[$ii][1];
-					
+
 					$possibleTime = new DateTime($lastKey);
 					$possibleTime->add (new DateInterval ( 'PT' . ceil($length) . 'S' ));
 					$possibleTime = $possibleTime->format('H:i:s');
 				}
 			}
-			
+
 			$straightTimeContent[$time] = '';
-				
+
 			$prevBlockFilesAndDurations = array();
 			foreach ($block as $moovies) {
 				$lenghtPath = explode(" ", $moovies);
 				if(count($lenghtPath) > 0) {
 					$length = $lenghtPath[0];
 					$path = $lenghtPath[1];
-						
+
 					$straightTimeContent[$time] = $path;
 					$prevBlockFilesAndDurations[] = $lenghtPath;
-						
+
 					$time = new DateTime($time);
 					$time->add (new DateInterval ( 'PT' . floor($length) . 'S' ));
 					$time = $time->format('H:i:s');
 				}
 			}
 		}
-		
+
 		return $straightTimeContent;
 	}
-	
-	private static function array_insert(&$array,$element,$position=null) 
+
+	private static function array_insert(&$array,$element,$position=null)
 	{
 		if (count($array) == 0) {
 			$array[] = $element;

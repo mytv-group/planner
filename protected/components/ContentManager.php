@@ -2,277 +2,287 @@
 
 class ContentManager extends CApplicationComponent
 {
-	private $eol = YII_DEBUG ? '<br>' : PHP_EOL;
+    private $eol = YII_DEBUG ? '<br>' : PHP_EOL;
 
-	public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
-	{
-		$connection = Yii::app()->db;
+    public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
+    {
+        $playlistsType = 0;
+        if ($pointChannel === 3) {
+            $playlistsType = 2;
+        }
 
-		$pointDate = new DateTime($pointDatetimeStr);
-		$pointDateStr = date_format ( $pointDate, "Y-m-d" );
+        $connection = Yii::app()->db;
 
-		$sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `midnightOffset` FROM `channel` AS `t1` " .
-			"JOIN `playlist_to_channel` AS `t2` " .
-			"JOIN `playlists` AS `t3` " .
-			"ON `t1`.`id` = `t2`.`channelId` " .
-			"AND `t2`.`playlistId` = `t3`.`id` " .
-			"AND `t1`.`id_point` = '" . $pointId . "' " .
-			"AND `t1`.`internalId` = '" . $pointChannel . "' " .
-			"AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
-			"AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
-			"AND `t3`.`" . $weekDay . "` = '1' " .
-			"AND (`t3`.`type` = '0'  OR `t3`.`type` = '2')" .
-			"ORDER BY `fromTime`;";
+        $pointDate = new DateTime($pointDatetimeStr);
+        $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
-		$command=$connection->createCommand($sql);
-		$rows=$command->queryAll();
+        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `playlistId` FROM `channel` AS `t1` " .
+            "JOIN `playlist_to_channel` AS `t2` " .
+            "JOIN `playlists` AS `t3` " .
+            "ON `t1`.`id` = `t2`.`channelId` " .
+            "AND `t2`.`playlistId` = `t3`.`id` " .
+            "AND `t1`.`id_point` = '" . $pointId . "' " .
+            "AND `t1`.`internalId` = '" . $pointChannel . "' " .
+            "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
+            "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
+            "AND `t3`.`" . $weekDay . "` = '1' " .
+            "AND (`t3`.`type` = '" . $playlistsType . "')" .
+            "ORDER BY `fromTime`;";
 
-		$blocksArr = array ();
-		foreach ($rows as $row) {
-			$fromDatetime = date_create ( $row['fromDatetime'] );
-			$toDatetime = date_create ( $row['toDatetime'] );
+        $command=$connection->createCommand($sql);
+        $rows=$command->queryAll();
 
-			$fromTime = $row['fromTime'];
-			$toTime = $row['toTime'];
+        $blocksArr = array ();
+        foreach ($rows as $row) {
+            $fromDatetime = date_create ( $row['fromDatetime'] );
+            $toDatetime = date_create ( $row['toDatetime'] );
 
-			$files = $row['files'];
-			$type = $row['type'];
-			$playlistId = $row['id'];
+            $fromTime = $row['fromTime'];
+            $toTime = $row['toTime'];
 
-			/* if today starts showing check broadcasting is later showing begin */
-			if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
-				if (((date_format ( $fromDatetime, "Y-m-d" ) != $pointDateStr)
-					&& (date_format ( $toDatetime, "Y-m-d" ) != $pointDateStr))
-					|| ((date_format ( $fromDatetime, "Y-m-d" ) == $pointDateStr)
-					&& (strtotime ( date_format ( $fromDatetime, "h:i:s" ) ) < strtotime ( $fromTime )))
-					|| ((date_format ( $toDatetime, "Y-m-d" ) == $pointDateStr)
-					&& (strtotime ( date_format ( $toDatetime, "h:i:s" ) ) > strtotime ( $toTime )))
-				) {
+            $files = $row['files'];
+            $type = $row['type'];
+            $playlistId = $row['id'];
 
-					$midnightOffset = explode (":", $row['midnightOffset']);
-					$midnightOffset = $midnightOffset [0] * 60 * 60 + $midnightOffset [1] * 60 + $midnightOffset [2];
+            /* if today starts showing check broadcasting is later showing begin */
+            if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
+                if (((date_format ( $fromDatetime, "Y-m-d" ) != $pointDateStr)
+                    && (date_format ( $toDatetime, "Y-m-d" ) != $pointDateStr))
+                    || ((date_format ( $fromDatetime, "Y-m-d" ) == $pointDateStr)
+                    && (strtotime ( date_format ( $fromDatetime, "h:i:s" ) ) < strtotime ( $fromTime )))
+                    || ((date_format ( $toDatetime, "Y-m-d" ) == $pointDateStr)
+                    && (strtotime ( date_format ( $toDatetime, "h:i:s" ) ) > strtotime ( $toTime )))
+                ) {
+                    $blocksArr [] = array (
+                            'from' => $fromTime,
+                            'to' => $toTime,
+                            'fromDateTime' => new DateTime ( $fromTime ),
+                            'toDateTime' => new DateTime ( $toTime ),
+                            'files' => $files,
+                            'type' => $type,
+                            'playlistId' => $playlistId
+                    );
+                }
+            }
+        }
 
-					$fromTime = new DateTime ($fromTime);
-					$fromTime = $fromTime->add ( new DateInterval ( 'PT' . $midnightOffset . 'S' ) );
-					$fromTime = $fromTime->format ( 'H:i:s' );
+        foreach ( $blocksArr as &$block ) {
+            if($block ['type'] == 2) {
+                $sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
 
-					$toTime = new DateTime ($toTime);
-					$toTime = $toTime->add ( new DateInterval ( 'PT' . $midnightOffset . 'S' ) );
-					$toTime = $toTime->format ( 'H:i:s' );
+                $command=$connection->createCommand($sql);
+                $rows=$command->queryAll();
 
-					$blocksArr [] = array (
-							'from' => $fromTime,
-							'to' => $toTime,
-							'fromDateTime' => new DateTime ( $fromTime ),
-							'toDateTime' => new DateTime ( $toTime ),
-							'files' => $files,
-							'type' => $type,
-							'playlistId' => $playlistId
-					);
-				}
-			}
-		}
+                if($rows) {
+                    $duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;
+                    $block ["filesWithDuration"] = array ();
+                    foreach ($rows as $row) {
+                        $block ["filesWithDuration"] [] = array (
+                                $duration + 5, //5 seconds above just not to have mute between turns
+                                $row['url'],
+                                $duration . " " . $row['url'] . " " . "pl:" . $block['playlistId'] . "" . $this->eol /*ready to output str*/
+                        );
+                    }
 
-		foreach ( $blocksArr as &$block ) {
-			if($block ['type'] == 2) {
-				$sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
+                    $block ["duration"] = $duration;
+                }
+            } else {
+                $files = implode ( "','", explode ( ",", $block ['files'] ) );
+                $from = $block ['from'];
 
-				$command=$connection->createCommand($sql);
-				$rows=$command->queryAll();
+                $sql = "SELECT `duration`, `name` ".
+                        "FROM `file` WHERE `id` IN ('" . $files . "') ".
+                        "ORDER BY FIELD(`id`,'".$files."');";
 
-				if($rows) {
-					$duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;
-					$block ["filesWithDuration"] = array ();
-					foreach ($rows as $row) {
-						$block ["filesWithDuration"] [] = array (
-								$duration + 5, //5 seconds above just not to have mute between turns
-								$row['url'],
-								$duration . " " . $row['url'] . "" . $this->eol /*ready to output str*/
-						);
-					}
+                $command=$connection->createCommand($sql);
+                $rows=$command->queryAll();
 
-					$block ["duration"] = $duration;
-				}
-			} else {
-				$files = implode ( "','", explode ( ",", $block ['files'] ) );
-				$from = $block ['from'];
+                $duration = 0;
+                $block ["filesWithDuration"] = array ();
+                foreach($rows as $row) {
+                    $duration += $row['duration'];
+                    $block ["filesWithDuration"] [] = array (
+                            $row['duration'],
+                            $row['name'],
+                            $row['duration'] . " " . $row['name'] . " " . "pl:" . $block['playlistId'] . "" . $this->eol /*ready to output str*/
+                    );
+                }
 
-				$sql = "SELECT `duration`, `name` ".
-						"FROM `file` WHERE `id` IN ('" . $files . "') ".
-						"ORDER BY FIELD(`id`,'".$files."');";
+                $block ["duration"] = $duration;
+            }
+        }
 
-				$command=$connection->createCommand($sql);
-				$rows=$command->queryAll();
+        return $blocksArr;
+    }
 
-				$duration = 0;
-				$block ["filesWithDuration"] = array ();
-				foreach($rows as $row) {
-					$duration += $row['duration'];
-					$block ["filesWithDuration"] [] = array (
-							$row['duration'],
-							$row['name'],
-							$row['duration'] . " " . $row['name'] . "" . $this->eol /*ready to output str*/
-					);
-				}
+    public function GetAdvContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
+    {
+        $connection = Yii::app()->db;
 
-				$block ["duration"] = $duration;
-			}
-		}
+        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `every`, `playlistId` FROM `channel` AS `t1` " .
+            "JOIN `playlist_to_channel` AS `t2` " .
+            "JOIN `playlists` AS `t3` " .
+            "ON `t1`.`id` = `t2`.`channelId` " .
+            "AND `t2`.`playlistId` = `t3`.`id` " .
+            "AND `t1`.`id_point` = '" . $pointId . "' " .
+            "AND `t1`.`internalId` = '" . $pointChannel . "' " .
+            "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
+            "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
+            "AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '1';";
 
-		return $blocksArr;
-	}
+        $command=$connection->createCommand($sql);
+        $rows=$command->queryAll();
 
-	public function GetAdvContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
-	{
-		$connection = Yii::app()->db;
+        $advArr = array ();
+        foreach ($rows as $row) {
+            $fromDatetime = date_create ( $row['fromDatetime']);
+            $toDatetime = date_create ( $row['toDatetime']);
 
-		$sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `every`, `midnightOffset` FROM `channel` AS `t1` " .
-			"JOIN `playlist_to_channel` AS `t2` " .
-			"JOIN `playlists` AS `t3` " .
-			"ON `t1`.`id` = `t2`.`channelId` " .
-			"AND `t2`.`playlistId` = `t3`.`id` " .
-			"AND `t1`.`id_point` = '" . $pointId . "' " .
-			"AND `t1`.`internalId` = '" . $pointChannel . "' " .
-			"AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
-			"AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
-			"AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '1';";
+            $every = $row['every'];
+            $files = $row['files'];
+            $files = implode ( "','", explode ( ",", $files ) );
 
-		$command=$connection->createCommand($sql);
-		$rows=$command->queryAll();
+            $sql = "SELECT `duration`, `name` ".
+                "FROM `file` WHERE `id` IN ('" . $files . "') ".
+                "ORDER BY FIELD(`id`,'".$files."');";
 
-		$advArr = array ();
-		foreach ($rows as $row) {
-			$fromDatetime = date_create ( $row['fromDatetime']);
-			$toDatetime = date_create ( $row['toDatetime']);
+            $command=$connection->createCommand($sql);
+            $rows2=$command->queryAll();
 
-			$every = $row['every'];
-			$files = $row['files'];
-			$files = implode ( "','", explode ( ",", $files ) );
+            $duration = 0;
+            $filesWithDuration = array ();
+            foreach ($rows2 as $row2) {
+                $duration += $row2 ['duration'];
+                $filesWithDuration [] = array (
+                        $row2['duration'],
+                        $row2['name'],
+                        $row2['duration'] . " " . $row2['name'] . " " . "pl:" . $row['playlistId'] . "" .  $this->eol /*ready to output str*/
+                );
+            }
 
-			$sql = "SELECT `duration`, `name` ".
-				"FROM `file` WHERE `id` IN ('" . $files . "') ".
-				"ORDER BY FIELD(`id`,'".$files."');";
+            $duration = intval ( $duration );
 
-			$command=$connection->createCommand($sql);
-			$rows2=$command->queryAll();
+            $repeating = explode ( ":", $every );
+            $repeating = $repeating [0] * 60 * 60 + $repeating [1] * 60 + $repeating [2];
 
-			$duration = 0;
-			$filesWithDuration = array ();
-			foreach ($rows2 as $row2) {
-				$duration += $row2 ['duration'];
-				$filesWithDuration [] = array (
-						$row2['duration'],
-						$row2['name'],
-						$row2['duration'] . " " . $row2['name'] . "" . $this->eol /*ready to output str*/
-				);
-			}
+            $startTime = new DateTime ( '00:00:01' );
+            $endTime = new DateTime ( '23:59:59' );
 
-			$duration = intval ( $duration );
+            $curTime = clone $startTime;
 
-			$repeating = explode ( ":", $every );
-			$repeating = $repeating [0] * 60 * 60 + $repeating [1] * 60 + $repeating [2];
+            while ( $curTime < $endTime ) {
+                $endBlockTime = clone $curTime;
+                $endBlockTime->add ( new DateInterval ( 'PT' . $duration . 'S' ) );
 
-			$startTime = new DateTime ( '00:00:01' );
-			$endTime = new DateTime ( '23:59:59' );
+                $fromTime = clone $curTime;
+                $fromTime = $fromTime->format ( 'H:i:s' );
 
-			$curTime = clone $startTime;
+                $toTime  = clone $endBlockTime;
+                $toTime = $toTime->format ( 'H:i:s' );
 
-			while ( $curTime < $endTime ) {
-				$endBlockTime = clone $curTime;
-				$endBlockTime->add ( new DateInterval ( 'PT' . $duration . 'S' ) );
+                $advArr [] = array (
+                    'from' => $fromTime,
+                    'to' => $toTime,
+                    'fromDateTime' => clone $curTime,
+                    'toDateTime' => clone $endBlockTime,
+                    'files' => $files,
+                    'duration' => $duration,
+                    "filesWithDuration" => $filesWithDuration
+                );
 
-				$midnightOffset = explode (":", $row['midnightOffset']);
-				$midnightOffset = $midnightOffset [0] * 60 * 60 + $midnightOffset [1] * 60 + $midnightOffset [2];
+                $curTime->add ( new DateInterval ( 'PT' . $repeating . 'S' ) );
+            }
+        }
 
-				$fromTime = clone $curTime;
-				$fromTime = $fromTime->add ( new DateInterval ( 'PT' . $midnightOffset . 'S' ) );
-				$fromTime = $fromTime->format ( 'H:i:s' );
+        $size = count($advArr) - 1;
+        for ($ii = $size; $ii >= 0; $ii--) {
+            for ($jj = 0; $jj <= ($ii-1); $jj++) {
+                $first = new DateTime ($advArr[$jj]['from']);
+                $next = new DateTime ($advArr[$jj+1]['from']);
 
-				$toTime  = clone $endBlockTime;
-				$toTime = $toTime->add ( new DateInterval ( 'PT' . $midnightOffset . 'S' ) );
-				$toTime = $toTime->format ( 'H:i:s' );
+                if ($first > $next) {
 
-				$advArr [] = array (
-						'from' => $fromTime,
-						'to' => $toTime,
-						'fromDateTime' => clone $curTime,
-						'toDateTime' => clone $endBlockTime,
-						'files' => $files,
-						'duration' => $duration,
-						"filesWithDuration" => $filesWithDuration
-				);
+                        $tmp = $advArr[$jj];
+                        $advArr[$jj] = $advArr[$jj+1];
+                        $advArr[$jj+1] = $tmp;
+                }
+            }
+        }
 
-				$curTime->add ( new DateInterval ( 'PT' . $repeating . 'S' ) );
-			}
-		}
+        return $advArr;
+    }
 
-		$size = count($advArr) - 1;
-		for ($ii = $size; $ii >= 0; $ii--) {
-				for ($jj = 0; $jj <= ($ii-1); $jj++) {
-						$first = new DateTime ($advArr[$jj]['from']);
-						$next = new DateTime ($advArr[$jj+1]['from']);
+    public function GenerateContentBlock($block, $from = null)
+    {
+        $blockStr = '';
 
-						if ($first > $next) {
+        if (!isset($block["from"]) || !isset($block["filesWithDuration"])) {
+            return $blockStr;
+        }
 
-								$tmp = $advArr[$jj];
-								$advArr[$jj] = $advArr[$jj+1];
-								$advArr[$jj+1] = $tmp;
-						}
-				}
-		}
+        if ($from === null) {
+            $from = $block["from"];
+        }
 
-		return $advArr;
-	}
+        $blockStr .= $from . $this->eol;
+        foreach ($block['filesWithDuration'] as $files) {
+            if (isset($files[2])) {
+                $blockStr .= $files[2];
+            }
+        }
 
-	public function PrepareSpoolPath($pathAppendix)
-	{
-		$pathAppendix = explode("/", $pathAppendix);
+        return $blockStr . $this->eol;
+    }
 
-		$contentPath = $_SERVER["DOCUMENT_ROOT"];
+    public function PrepareSpoolPath($pathAppendix)
+    {
+        $pathAppendix = explode("/", $pathAppendix);
 
-		foreach($pathAppendix as $folder)
-		{
-			$contentPath .= "/" . $folder;
-			if (!file_exists($contentPath) && !is_dir($contentPath))
-			{
-				mkdir($contentPath);
-			}
-		}
+        $contentPath = $_SERVER["DOCUMENT_ROOT"];
 
-		$contentPath .= "/";
-		return $contentPath;
-	}
+        foreach($pathAppendix as $folder)
+        {
+            $contentPath .= "/" . $folder;
+            if (!file_exists($contentPath) && !is_dir($contentPath))
+            {
+                mkdir($contentPath);
+            }
+        }
 
-	private function arrayInsert(&$array,$element,$position=null)
-	{
-		if (count($array) == 0) {
-			$array[] = $element;
-		}
-		elseif (is_numeric($position) && $position < 0) {
-			if((count($array)+$position) < 0) {
-				$array = $this->arrayInsert($array,$element,0);
-			}
-			else {
-				$array[count($array)+$position] = $element;
-			}
-		}
-		elseif (is_numeric($position) && isset($array[$position])) {
-			$part1 = array_slice($array,0,$position,true);
-			$part2 = array_slice($array,$position,null,true);
-			$array = array_merge($part1,array($position=>$element),$part2);
-			foreach($array as $key=>$item) {
-				if (is_null($item)) {
-					unset($array[$key]);
-				}
-			}
-		}
-		elseif (is_null($position)) {
-			$array[] = $element;
-		}
-		elseif (!isset($array[$position])) {
-			$array[$position] = $element;
-		}
-		$array = array_merge($array);
-		return $array;
-	}
+        $contentPath .= "/";
+        return $contentPath;
+    }
+
+    private function arrayInsert(&$array,$element,$position=null)
+    {
+        if (count($array) == 0) {
+            $array[] = $element;
+        }
+        elseif (is_numeric($position) && $position < 0) {
+            if((count($array)+$position) < 0) {
+                $array = $this->arrayInsert($array,$element,0);
+            }
+            else {
+                $array[count($array)+$position] = $element;
+            }
+        }
+        elseif (is_numeric($position) && isset($array[$position])) {
+            $part1 = array_slice($array,0,$position,true);
+            $part2 = array_slice($array,$position,null,true);
+            $array = array_merge($part1,array($position=>$element),$part2);
+            foreach($array as $key=>$item) {
+                if (is_null($item)) {
+                    unset($array[$key]);
+                }
+            }
+        }
+        elseif (is_null($position)) {
+            $array[] = $element;
+        }
+        elseif (!isset($array[$position])) {
+            $array[$position] = $element;
+        }
+        $array = array_merge($array);
+        return $array;
+    }
 }

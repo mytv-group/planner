@@ -30,17 +30,14 @@ $(document).ready(function(e){
     var hideFunctionality = function(type, animationTime) {
         if(type == 0){
             everyBlock.slideUp(animationTime);
-            periodBlock.slideDown(animationTime);
             streamUrlBlock.slideUp(animationTime);
             fileManager.slideDown(animationTime);
         } else if(type == 1){
-            periodBlock.slideUp(animationTime);
             everyBlock.slideDown(animationTime);
             streamUrlBlock.slideUp(animationTime);
             fileManager.slideDown(animationTime);
         } else if(type == 2){
             everyBlock.slideUp(animationTime);
-            periodBlock.slideDown(animationTime);
             streamUrlBlock.slideDown(animationTime);
             fileManager.slideUp(animationTime);
         }

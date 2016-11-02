@@ -16,7 +16,7 @@ class ContentManager extends CApplicationComponent
         $pointDate = new DateTime($pointDatetimeStr);
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
-        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `playlistId` FROM `channel` AS `t1` " .
+        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `playlistId`, `t3`.`author` FROM `channel` AS `t1` " .
             "JOIN `playlist_to_channel` AS `t2` " .
             "JOIN `playlists` AS `t3` " .
             "ON `t1`.`id` = `t2`.`channelId` " .
@@ -43,6 +43,7 @@ class ContentManager extends CApplicationComponent
             $files = $row['files'];
             $type = $row['type'];
             $playlistId = $row['id'];
+            $author = $row['author'];
 
             /* if today starts showing check broadcasting is later showing begin */
             if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
@@ -60,7 +61,8 @@ class ContentManager extends CApplicationComponent
                             'toDateTime' => new DateTime ( $toTime ),
                             'files' => $files,
                             'type' => $type,
-                            'playlistId' => $playlistId
+                            'playlistId' => $playlistId,
+                            'author' => $author
                     );
                 }
             }
@@ -80,7 +82,10 @@ class ContentManager extends CApplicationComponent
                         $block ["filesWithDuration"] [] = array (
                                 $duration + 5, //5 seconds above just not to have mute between turns
                                 $row['url'],
-                                $duration . " " . $row['url'] . " " . "pl:" . $block['playlistId'] . "" . $this->eol /*ready to output str*/
+                                $duration . " " . $row['url'] . " "
+                                    . "pl:" . $block['playlistId'] . " "
+                                    . "author:" . $block['author'] . ""
+                                    . $this->eol /*ready to output str*/
                         );
                     }
 
@@ -119,7 +124,7 @@ class ContentManager extends CApplicationComponent
     {
         $connection = Yii::app()->db;
 
-        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `every`, `playlistId` FROM `channel` AS `t1` " .
+        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `every`, `playlistId`, `t3`.`author` FROM `channel` AS `t1` " .
             "JOIN `playlist_to_channel` AS `t2` " .
             "JOIN `playlists` AS `t3` " .
             "ON `t1`.`id` = `t2`.`channelId` " .
@@ -156,7 +161,10 @@ class ContentManager extends CApplicationComponent
                 $filesWithDuration [] = array (
                         $row2['duration'],
                         $row2['name'],
-                        $row2['duration'] . " " . $row2['name'] . " " . "pl:" . $row['playlistId'] . "" .  $this->eol /*ready to output str*/
+                        $row2['duration'] . " " . $row2['name'] . " "
+                            . "pl:" . $row['playlistId'] . " "
+                            . "author:" . $row['author'] . ""
+                            . $this->eol /*ready to output str*/
                 );
             }
 
@@ -165,8 +173,8 @@ class ContentManager extends CApplicationComponent
             $repeating = explode ( ":", $every );
             $repeating = $repeating [0] * 60 * 60 + $repeating [1] * 60 + $repeating [2];
 
-            $startTime = new DateTime ( '00:00:01' );
-            $endTime = new DateTime ( '23:59:59' );
+            $startTime = new DateTime ($row['fromTime']);
+            $endTime = new DateTime ($row['toTime']);
 
             $curTime = clone $startTime;
 

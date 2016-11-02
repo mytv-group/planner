@@ -42,6 +42,23 @@
     </table>
     </div>
 
+    <div class="row">
+        <table>
+            <tr style="text-align:left">
+                <td><?php echo $form->labelEx($model,'fromTime'); ?></td>
+                <td><?php echo $form->labelEx($model,'toTime'); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $form->textField($model,'fromTime', array('class'=>"form-control timepicker")); ?></td>
+                <td><?php echo $form->textField($model,'toTime', array('class'=>"form-control timepicker")); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $form->error($model,'fromTime'); ?></td>
+                <td><?php echo $form->error($model,'toTime'); ?></td>
+            </tr>
+        </table>
+    </div>
+
     <div class="row" style='padding-bottom:1em;'>
         <?php echo $form->labelEx($model,'type'); ?>
         <?php echo $form->radioButtonList($model,'type',
@@ -57,41 +74,17 @@
     <div id="everyBlock" class="row">
         <table>
             <tr style="text-align:left">
-                <td><?php echo $form->labelEx($model,'fromTime'); ?></td>
-                <td><?php echo $form->labelEx($model,'toTime'); ?></td>
                 <td><?php echo $form->labelEx($model,'every'); ?></td>
             </tr>
             <tr>
-                <td><?php echo $form->textField($model,'fromTime', array('class'=>"form-control timepicker")); ?></td>
-                <td><?php echo $form->textField($model,'toTime', array('class'=>"form-control timepicker")); ?></td>
                 <td>    <?php echo $form->textField($model,'every',array('class'=>"form-control timepicker",
                             'value'=>$model->isNewRecord ? "00:30:00" : $model->every)); ?>
                 </td>
             </tr>
             <tr>
-                <td><?php echo $form->error($model,'fromTime'); ?></td>
-                <td><?php echo $form->error($model,'toTime'); ?></td>
                 <td><?php echo $form->error($model,'every'); ?></td>
             </tr>
         </table>
-    </div>
-
-
-    <div id="periodBlock" class="row">
-    <table>
-        <tr style="text-align:left">
-            <td><?php echo $form->labelEx($model,'fromTime'); ?></td>
-            <td><?php echo $form->labelEx($model,'toTime'); ?></td>
-        </tr>
-        <tr>
-            <td><?php echo $form->textField($model,'fromTime', array('class'=>"form-control timepicker")); ?></td>
-            <td><?php echo $form->textField($model,'toTime', array('class'=>"form-control timepicker")); ?></td>
-        </tr>
-        <tr>
-            <td><?php echo $form->error($model,'fromTime'); ?></td>
-            <td><?php echo $form->error($model,'toTime'); ?></td>
-        </tr>
-    </table>
     </div>
 
     <div id="stream-url-block" class="row" >

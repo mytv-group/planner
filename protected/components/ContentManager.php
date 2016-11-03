@@ -16,10 +16,12 @@ class ContentManager extends CApplicationComponent
         $pointDate = new DateTime($pointDatetimeStr);
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
-        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `playlistId`, `t3`.`author` FROM `channel` AS `t1` " .
+        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `playlistId`, `t4`.`id` AS 'id-author' FROM `channel` AS `t1` " .
             "JOIN `playlist_to_channel` AS `t2` " .
             "JOIN `playlists` AS `t3` " .
+            "JOIN `user` AS `t4` " .
             "ON `t1`.`id` = `t2`.`channelId` " .
+            "AND `t3`.`author` = `t4`.`username` " .
             "AND `t2`.`playlistId` = `t3`.`id` " .
             "AND `t1`.`id_point` = '" . $pointId . "' " .
             "AND `t1`.`internalId` = '" . $pointChannel . "' " .
@@ -43,7 +45,7 @@ class ContentManager extends CApplicationComponent
             $files = $row['files'];
             $type = $row['type'];
             $playlistId = $row['id'];
-            $author = $row['author'];
+            $authorId = $row['id-author'];
 
             /* if today starts showing check broadcasting is later showing begin */
             if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
@@ -55,14 +57,14 @@ class ContentManager extends CApplicationComponent
                     && (strtotime ( date_format ( $toDatetime, "h:i:s" ) ) > strtotime ( $toTime )))
                 ) {
                     $blocksArr [] = array (
-                            'from' => $fromTime,
-                            'to' => $toTime,
-                            'fromDateTime' => new DateTime ( $fromTime ),
-                            'toDateTime' => new DateTime ( $toTime ),
-                            'files' => $files,
-                            'type' => $type,
-                            'playlistId' => $playlistId,
-                            'author' => $author
+                        'from' => $fromTime,
+                        'to' => $toTime,
+                        'fromDateTime' => new DateTime ( $fromTime ),
+                        'toDateTime' => new DateTime ( $toTime ),
+                        'files' => $files,
+                        'type' => $type,
+                        'playlistId' => $playlistId,
+                        'authorId' => $authorId
                     );
                 }
             }
@@ -84,7 +86,7 @@ class ContentManager extends CApplicationComponent
                                 $row['url'],
                                 $duration . " " . $row['url'] . " "
                                     . "pl:" . $block['playlistId'] . " "
-                                    . "author:" . $block['author'] . ""
+                                    . "author:" . $block['authorId'] . ""
                                     . $this->eol /*ready to output str*/
                         );
                     }
@@ -107,9 +109,13 @@ class ContentManager extends CApplicationComponent
                 foreach($rows as $row) {
                     $duration += $row['duration'];
                     $block ["filesWithDuration"] [] = array (
-                            $row['duration'],
-                            $row['name'],
-                            $row['duration'] . " " . $row['name'] . " " . "pl:" . $block['playlistId'] . "" . $this->eol /*ready to output str*/
+                        $row['duration'],
+                        $row['name'],
+                        $row['duration'] . " "
+                            . $row['name'] . " "
+                            . "pl:" . $block['playlistId'] . " "
+                            . "author:" . $block['authorId'] . " "
+                            . "" . $this->eol /*ready to output str*/
                     );
                 }
 
@@ -124,10 +130,12 @@ class ContentManager extends CApplicationComponent
     {
         $connection = Yii::app()->db;
 
-        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `every`, `playlistId`, `t3`.`author` FROM `channel` AS `t1` " .
+        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `every`, `playlistId`, `t4`.`id` AS 'id-author' FROM `channel` AS `t1` " .
             "JOIN `playlist_to_channel` AS `t2` " .
             "JOIN `playlists` AS `t3` " .
+            "JOIN `user` AS `t4` " .
             "ON `t1`.`id` = `t2`.`channelId` " .
+            "AND `t3`.`author` = `t4`.`username` " .
             "AND `t2`.`playlistId` = `t3`.`id` " .
             "AND `t1`.`id_point` = '" . $pointId . "' " .
             "AND `t1`.`internalId` = '" . $pointChannel . "' " .
@@ -159,12 +167,12 @@ class ContentManager extends CApplicationComponent
             foreach ($rows2 as $row2) {
                 $duration += $row2 ['duration'];
                 $filesWithDuration [] = array (
-                        $row2['duration'],
-                        $row2['name'],
-                        $row2['duration'] . " " . $row2['name'] . " "
-                            . "pl:" . $row['playlistId'] . " "
-                            . "author:" . $row['author'] . ""
-                            . $this->eol /*ready to output str*/
+                    $row2['duration'],
+                    $row2['name'],
+                    $row2['duration'] . " " . $row2['name'] . " "
+                        . "pl:" . $row['playlistId'] . " "
+                        . "author:" . $row['id-author'] . ""
+                        . $this->eol /*ready to output str*/
                 );
             }
 
@@ -209,7 +217,6 @@ class ContentManager extends CApplicationComponent
                 $next = new DateTime ($advArr[$jj+1]['from']);
 
                 if ($first > $next) {
-
                         $tmp = $advArr[$jj];
                         $advArr[$jj] = $advArr[$jj+1];
                         $advArr[$jj+1] = $tmp;

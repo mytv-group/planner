@@ -12,13 +12,20 @@ class InterfaceController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('getPointSchedule', 'getChannels', 'getTVschedule', 'setSync'),
+                'actions'=>array('getPointSchedule', 'getChannels', 'getTVschedule', 'setSync', 'postStatistics'),
                 'users'=>array('*'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
         );
+    }
+
+    public function filters()
+    {
+        return [
+            'postOnly + postStatistics',
+        ];
     }
 
     public function actionGetChannels($id)
@@ -225,5 +232,42 @@ class InterfaceController extends Controller
 
         echo 'ok';
         exit;
+    }
+
+    // interface/setSync/id/156/sync/1
+    public function actionPostStatistics()
+    {
+        $id = Yii::app()->request->getParam('id');
+        $data = Yii::app()->request->getParam('data');
+
+        if (($id === null) || !is_int(intval($id))) {
+            http_response_code(400);
+            echo "Incorrect id. Id: $id";
+            exit;
+        }
+
+        if (($data === null) || !is_string(strval($data))) {
+            http_response_code(400);
+            echo "Incorrect statistic data. Data: $data";
+            exit;
+        }
+
+        $pointId = intval($id);
+        $data = strval($data);
+
+        try {
+            $CM = Yii::app()->contentManager;
+            $pointDir = "spool/points/" . $pointId;
+            $pointDir = $CM->PrepareSpoolPath($pointDir);
+            $handle = fopen($pointDir . "/" . data('Y-m-d') . "/statistic.txt", "w");
+            fwrite($handle, $data);
+            fclose($handle);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo "Saving data error. Exc: ". json_encode($e);
+            exit;
+        }
+
+        echo 'ok';
     }
 }

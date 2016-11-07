@@ -1,31 +1,38 @@
-$(document).ready(function(e){
-    var url = document.location.origin + '/uploader/',
-        moveFileSrc = document.location.origin + '/playlists/upload/',
-        deleteFileSrc = document.location.origin + '/playlists/deletefilefrompl/',
-        addfilefromheapSrc = document.location.origin + '/playlists/addfilefromheap/',
-        folderSrc = document.location.origin + '/admin/getfoldercontent/',
-        viewSrc = document.location.origin + '/admin/view/',
-        Playlist_name = $("#Playlist_name"),
-        playlistIdTag = $("#playlistId"),
-        filesBlock = $("#filesBlock"),
-        selectedjsTreeNode = 0;
+/*jslint browser: true*/
+/*global $, jQuery*/
+
+$(document).ready(function () {
+    'use strict';
+
+    var origin = document.location.origin;
+
+    var url =  origin + '/uploader/';
+    var moveFileSrc = origin + '/playlists/upload/';
+    var deleteFileSrc = origin + '/playlists/deletefilefrompl/';
+    var addfilefromheapSrc = origin + '/playlists/addfilefromheap/';
+    var folderSrc = origin + '/admin/getfoldercontent/';
+    var viewSrc = origin + '/admin/view/';
+    var Playlist_name = $("#Playlist_name");
+    var playlistIdTag = $("#playlistId");
+    var filesBlock = $("#filesBlock");
+    var selectedjsTreeNode = 0;
 
     $(".datepicker").datetimepicker({
-        format:'Y-m-d',
-				timepicker:false,
+        format: 'Y-m-d',
+        timepicker: false
     });
 
     $(".timepicker").datetimepicker({
         format: 'H:i:s',
-        datepicker:false,
+        datepicker: false
     });
 
-    var typeBlock = $(".type-control"),
-        type = $(".type-control:checked").val(),
-        streamUrlBlock = $('#stream-url-block'),
-        fileManager = $('#file-manager'),
-        everyBlock = $("#everyBlock"),
-        periodBlock = $("#periodBlock");
+    var typeBlock = $(".type-control");
+    var type = $(".type-control:checked").val();
+    var streamUrlBlock = $('#stream-url-block');
+    var fileManager = $('#file-manager');
+    var everyBlock = $("#everyBlock");
+    var periodBlock = $("#periodBlock");
 
     var hideFunctionality = function(type, animationTime) {
         if(type == 0){

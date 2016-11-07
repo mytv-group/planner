@@ -270,4 +270,50 @@ class InterfaceController extends Controller
 
         echo 'ok';
     }
+
+    // interface/setSync/id/156/sync/1
+    public function actionGetWidgets($id)
+    {
+        $point = Point::model()->findByPk($id);
+
+        if (!isset($point)) {
+            http_response_code(404);
+            echo sprintf('Point with id %s does not exist.', $id);
+            exit;
+        }
+
+        if (!$point->screen) {
+            http_response_code(500);
+            echo 'Point screen haven\'t been configured.';
+            exit;
+        }
+
+        $responce = ['responce_version' => '1'];
+        $screen = $point->screen;
+        $responce['screen'] = $screen->getInfo();
+
+        $channels = $point->channels;
+        $responce['windows'] = [];
+        $responce['widgets'] = [];
+
+        foreach($channels as $channel) {
+            $widgetToChannel = $channel->widgetToChannel;
+            $window = $channel->window;
+
+            if ($widgetToChannel
+                && $window
+                && $widgetToChannel->widget
+            ) {
+                $widget = $widgetToChannel->widget;
+                $responce['windows'][] = $window->getInfo();
+                $responce['widgets'][] = [
+                    'config' => $widget->getInfo(),
+                    'content' => $widget->getWidgetInfo()
+                ];
+            }
+        }
+
+        echo json_encode($responce);
+        exit;
+    }
 }

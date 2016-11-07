@@ -1,53 +1,53 @@
-$(document).ready(function(e){	
-	
-	//Store frequently elements in variables
-	var slider  = $('#slider'),
-		tooltip = $('.tooltip'),
-		Point_volume = $("#Point_volume");
+$(document).ready(function(e){    
 
-	//Hide the Tooltip at first
-	tooltip.hide();
+    //Store frequently elements in variables
+    var slider  = $('#slider'),
+        tooltip = $('.tooltip'),
+        Point_volume = $("#Point_volume");
 
-	//Call the Slider
-	slider.slider({
-		//Config
-		range: "min",
-		min: 1,
-		value: 35,
+    //Hide the Tooltip at first
+    tooltip.hide();
 
-		start: function(event,ui) {
-		    tooltip.fadeIn('fast');
-		},
+    //Call the Slider
+    slider.slider({
+        //Config
+        range: "min",
+        min: 1,
+        value: 35,
 
-		//Slider Event
-		slide: function(event, ui) { //When the slider is sliding
+        start: function(event,ui) {
+            tooltip.fadeIn('fast');
+        },
 
-			var value  = slider.slider('value'),
-				volume = $('.volume');
-			
-			Point_volume.val(ui.value);
-			
-			tooltip.css('left', value).text(ui.value);  //Adjust the tooltip accordingly
+        //Slider Event
+        slide: function(event, ui) { //When the slider is sliding
 
-			if(value <= 5) { 
-				volume.css('background-position', '0 0');
-			} 
-			else if (value <= 25) {
-				volume.css('background-position', '0 -25px');
-			} 
-			else if (value <= 75) {
-				volume.css('background-position', '0 -50px');
-			} 
-			else {
-				volume.css('background-position', '0 -75px');
-			};
+            var value  = slider.slider('value'),
+                volume = $('.volume');
 
-		},
+            Point_volume.val(ui.value);
 
-		stop: function(event,ui) {
-		    tooltip.fadeOut('fast');
-		},
-	});
-	
-	$("#Point_volume").val();
+            tooltip.css('left', value).text(ui.value);  //Adjust the tooltip accordingly
+
+            if(value <= 5) {
+                volume.css('background-position', '0 0');
+            }
+            else if (value <= 25) {
+                volume.css('background-position', '0 -25px');
+            }
+            else if (value <= 75) {
+                volume.css('background-position', '0 -50px');
+            }
+            else {
+                volume.css('background-position', '0 -75px');
+            };
+
+        },
+
+        stop: function(event,ui) {
+            tooltip.fadeOut('fast');
+        },
+    });
+
+    $("#Point_volume").val();
 });

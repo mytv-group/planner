@@ -6,19 +6,17 @@
     // interface/getPointSchedule/id/31/ch/1/date/20160612
     if(isset($_GET['id']) && isset($_GET['ch']) && isset($_GET['date']))
     {
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/interface/getPointSchedule';
-        $options = array(
-                'http' => array(
-                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                        'method'  => 'GET',
-                        'content' => http_build_query($_GET)
-                )
-        );
+        $url = sprintf('%s://%s/interface/getPointSchedule/id/%s/ch/%s/date/%s',
+            'http', $_SERVER['SERVER_NAME'], $_GET['id'], $_GET['ch'], $_GET['date']);
 
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
+        if( $curl = curl_init() ) {
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+            echo curl_exec($curl);
+            curl_close($curl);
+        }
 
-        echo $result;
+        exit;
     }
 
     /* TV */

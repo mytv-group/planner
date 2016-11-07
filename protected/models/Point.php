@@ -57,12 +57,12 @@ class Point extends CActiveRecord
     public function relations()
     {
         return array(
-                'channels'=>array(self::HAS_MANY, 'Channel', 'id_point'),
-                'playlistToChannel'=>array(self::HAS_MANY,'PlaylistToChannel',array('id'=>'channelId'),'through'=>'channels'),
-                'playlists'=>array(self::HAS_MANY,'Playlists', array('playlistId'=>'id'),'through'=>'playlistToChannel'),
-                'pointtonet'=>array(self::HAS_MANY, 'PointToNetByUsers', 'point_id'),
-                'net'=>array(self::HAS_MANY, 'Net', array('netId'=>'id'),'through'=>'pointtonet'),
-                'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id')
+            'channels'=>array(self::HAS_MANY, 'Channel', 'id_point'),
+            'playlistToChannel'=>array(self::HAS_MANY,'PlaylistToChannel',array('id'=>'channelId'),'through'=>'channels'),
+            'playlists'=>array(self::HAS_MANY,'Playlists', array('playlistId'=>'id'),'through'=>'playlistToChannel'),
+            'pointtonet'=>array(self::HAS_MANY, 'PointToNetByUsers', 'point_id'),
+            'net'=>array(self::HAS_MANY, 'Net', array('netId'=>'id'),'through'=>'pointtonet'),
+            'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id')
         );
     }
 

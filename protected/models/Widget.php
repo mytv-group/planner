@@ -92,10 +92,10 @@ class Widget extends CActiveRecord
             ));
         }
 
-        return json_encode([
+        return [
             'show_duration' => $this->show_duration,
             'periodicity' => $this->periodicity
-        ]);
+        ];
     }
 
     public function getWidgetInfo()

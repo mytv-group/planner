@@ -223,8 +223,15 @@ class InterfaceController extends Controller
     // interface/setSync/id/156/sync/1
     public function actionSetSync($id, $sync)
     {
+        $point = Point::model()->findByPk($id);
+
+        if (!isset($point)) {
+            http_response_code(404);
+            echo sprintf('Point with id %s does not exist.', $id);
+            exit;
+        }
+
         if ($sync == 1) {
-            $point = Point::model()->findByPk($id);
             $point->sync_time = new CDbExpression("NOW()");
             $point->sync = 1;
             $point->update('sync', 'sync_time');

@@ -83,12 +83,12 @@ class Window extends CActiveRecord
             ));
         }
 
-        return json_encode([
+        return [
             'top' => $this->top,
             'left' => $this->left,
             'width' => $this->width,
             'height' => $this->height
-        ]);
+        ];
     }
 
     /**

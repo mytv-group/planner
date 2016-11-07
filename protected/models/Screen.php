@@ -74,10 +74,10 @@ class Screen extends CActiveRecord
             ));
         }
 
-        return json_encode([
+        return [
             'width' => $this->width,
             'height' => $this->height
-        ]);
+        ];
     }
 
     /**

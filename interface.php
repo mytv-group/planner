@@ -11,7 +11,7 @@
 
         if( $curl = curl_init() ) {
             curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             echo curl_exec($curl);
             curl_close($curl);
         }
@@ -24,17 +24,17 @@
     // interface/getTVschedule/id/31/tv/1/date/20160612
     if(isset($_GET['id']) && isset($_GET['date']) && isset($_GET['tv']))
     {
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/interface/getTVschedule';
-        $options = array(
-                'http' => array(
-                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                        'method'  => 'GET',
-                        'content' => http_build_query($_GET)
-                )
-        );
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        echo $result;
+        $url = sprintf('%s://%s/interface/getTVschedule/id/%s/tv/%s/date/%s',
+            'http', $_SERVER['SERVER_NAME'], $_GET['id'], 1, $_GET['date']);
+
+        if( $curl = curl_init() ) {
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            echo curl_exec($curl);
+            curl_close($curl);
+        }
+
+        exit;
     }
 
     /* SYNC */
@@ -42,15 +42,15 @@
     // interface/setSync/id/31/sync/1
     if(isset($_GET['id']) && isset($_GET['sync']))
     {
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/interface/setSync';
-        $options = array(
-                'http' => array(
-                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                        'method'  => 'GET',
-                        'content' => http_build_query($_GET)
-                )
-        );
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        echo $result;
+        $url = sprintf('%s://%s/interface/setSync/id/%s/sync/%s',
+            'http', $_SERVER['SERVER_NAME'], $_GET['id'], 1);
+
+        if( $curl = curl_init() ) {
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            echo curl_exec($curl);
+            curl_close($curl);
+        }
+
+        exit;
     }

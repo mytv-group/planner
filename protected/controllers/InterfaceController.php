@@ -293,7 +293,6 @@ class InterfaceController extends Controller
         $responce['screen'] = $screen->getInfo();
 
         $channels = $point->channels;
-        $responce['windows'] = [];
         $responce['widgets'] = [];
 
         foreach($channels as $channel) {
@@ -305,8 +304,8 @@ class InterfaceController extends Controller
                 && $widgetToChannel->widget
             ) {
                 $widget = $widgetToChannel->widget;
-                $responce['windows'][] = $window->getInfo();
                 $responce['widgets'][] = [
+                    'window' => $window->getInfo(),
                     'config' => $widget->getInfo(),
                     'content' => $widget->getWidgetInfo()
                 ];

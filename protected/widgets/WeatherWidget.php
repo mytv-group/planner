@@ -22,7 +22,7 @@ class WeatherWidget extends CWidget
 
     public function preview()
     {
-        echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather substrate"/>', $this->$img);
+        echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather substrate"/>', $this->img);
     }
 
     public function info()

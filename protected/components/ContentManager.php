@@ -85,7 +85,7 @@ class ContentManager extends CApplicationComponent
                                 $duration + 5, //5 seconds above just not to have mute between turns
                                 $row['url'],
                                 $duration . " " . $row['url'] . " "
-                                    . "pl:" . $block['playlistId'] . " "
+                                    . "pl:" . $block['playlistId'] . ";"
                                     . "author:" . $block['authorId'] . ""
                                     . $this->eol /*ready to output str*/
                         );
@@ -113,7 +113,7 @@ class ContentManager extends CApplicationComponent
                         $row['name'],
                         $row['duration'] . " "
                             . $row['name'] . " "
-                            . "pl:" . $block['playlistId'] . " "
+                            . "pl:" . $block['playlistId'] . ";"
                             . "author:" . $block['authorId'] . " "
                             . "" . $this->eol /*ready to output str*/
                     );
@@ -170,7 +170,7 @@ class ContentManager extends CApplicationComponent
                     $row2['duration'],
                     $row2['name'],
                     $row2['duration'] . " " . $row2['name'] . " "
-                        . "pl:" . $row['playlistId'] . " "
+                        . "pl:" . $row['playlistId'] . ";"
                         . "author:" . $row['id-author'] . ""
                         . $this->eol /*ready to output str*/
                 );

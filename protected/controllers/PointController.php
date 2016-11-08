@@ -33,8 +33,10 @@ class PointController extends Controller
                 'roles'=>array('pointViewUser'),
             ),
             array('allow',
-                'actions'=>array('create', /*'copySchedule',*/ 'receiveTVBlocks',
-                        'update', 'addChannel', 'removeChannel', 'attachScreen', 'addPlaylistToChannel', 'attachScreenToPoint'
+                'actions'=>array('create', 'receiveTVBlocks',
+                        'update', 'addChannel', 'removeChannel',
+                        'attachScreen', 'addPlaylistToChannel',
+                        'attachScreenToPoint'
                 ),
                 'users'=>array('@'),
                 'roles'=>array('pointEditUser'),
@@ -265,14 +267,15 @@ class PointController extends Controller
      */
     public function actionUpdate($id)
     {
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-        $model=$this->loadModel($id);
-        //$model->unsetAttributes();  // clear any default values
+        $model = $this->loadModel($id);
+        $author = $model->username;
 
         if(isset($_POST['Point']))
         {
             $model->attributes = $_POST['Point'];
+            if ($author) {
+                $model->username = $author;
+            }
 
             $TVshceduleFromDatetime = array();
             $TVshceduleToDatetime = array();
@@ -283,10 +286,8 @@ class PointController extends Controller
                 $TVshceduleToDatetime = $_POST['Point']['TVshceduleToDatetime'];
             }
 
-            if($model->validate())
-            {
-                if($model->save())
-                {
+            if($model->validate()) {
+                if($model->save()) {
                     $this->DeleteTVBlocks($id);
                     $this->CreateTVBlocks($id, $TVshceduleFromDatetime, $TVshceduleToDatetime);
 
@@ -296,24 +297,18 @@ class PointController extends Controller
                     $this->render('view',array(
                             'model'=>$model,
                     ));
-                }
-                else
-                {
+                } else {
                     $this->render('update',array(
                             'model'=>$model,
                     ));
                 }
-            }
-            else
-            {
+            } else {
                 $this->render('update',array(
                     'model'=>$model,
                 ));
             }
 
-        }
-        else
-        {
+        } else {
             $this->render('update',array(
                     'model'=>$model,
             ));

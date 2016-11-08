@@ -11,6 +11,8 @@ Allow from all
     RewriteRule . /index.php [L]
 </IfModule>
 
+#SetEnv APPLICATION_ENV "dev"
+
 php_value upload_max_filesize 2048M
 php_value post_max_size 2048M
 php_value short_open_tag 1

@@ -222,8 +222,8 @@ class Point extends CActiveRecord
             {
                 $client = new EHttpClient($requestAddr, array(
                         'maxredirects' => 3,
-                        'timeout'      => 10,
-                        'adapter'      => 'EHttpClientAdapterCurl'));
+                        'timeout' => 10,
+                        'adapter' => 'EHttpClientAdapterCurl'));
 
                 $client->setParameterGet($requestData);
 

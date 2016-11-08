@@ -85,6 +85,8 @@ class ContentManager extends CApplicationComponent
                                 $duration + 5, //5 seconds above just not to have mute between turns
                                 $row['url'],
                                 $duration . " " . $row['url'] . " "
+                                    . "duration:0;"
+                                    . "file:0;"
                                     . "pl:" . $block['playlistId'] . ";"
                                     . "author:" . $block['authorId'] . ""
                                     . $this->eol /*ready to output str*/
@@ -97,7 +99,7 @@ class ContentManager extends CApplicationComponent
                 $files = implode ( "','", explode ( ",", $block ['files'] ) );
                 $from = $block ['from'];
 
-                $sql = "SELECT `duration`, `name` ".
+                $sql = "SELECT `id`, `duration`, `name` ".
                         "FROM `file` WHERE `id` IN ('" . $files . "') ".
                         "ORDER BY FIELD(`id`,'".$files."');";
 
@@ -113,6 +115,8 @@ class ContentManager extends CApplicationComponent
                         $row['name'],
                         $row['duration'] . " "
                             . $row['name'] . " "
+                            . "duration:" . $row['duration'] . ";"
+                            . "file:" . $row['id'] . ";"
                             . "pl:" . $block['playlistId'] . ";"
                             . "author:" . $block['authorId'] . " "
                             . "" . $this->eol /*ready to output str*/
@@ -155,7 +159,7 @@ class ContentManager extends CApplicationComponent
             $files = $row['files'];
             $files = implode ( "','", explode ( ",", $files ) );
 
-            $sql = "SELECT `duration`, `name` ".
+            $sql = "SELECT `id`, `duration`, `name` ".
                 "FROM `file` WHERE `id` IN ('" . $files . "') ".
                 "ORDER BY FIELD(`id`,'".$files."');";
 
@@ -170,6 +174,8 @@ class ContentManager extends CApplicationComponent
                     $row2['duration'],
                     $row2['name'],
                     $row2['duration'] . " " . $row2['name'] . " "
+                        . "duration:" . $row2['duration'] . ";"
+                        . "file:" . $row2['id'] . ";"
                         . "pl:" . $row['playlistId'] . ";"
                         . "author:" . $row['id-author'] . ""
                         . $this->eol /*ready to output str*/
@@ -255,11 +261,9 @@ class ContentManager extends CApplicationComponent
 
         $contentPath = $_SERVER["DOCUMENT_ROOT"];
 
-        foreach($pathAppendix as $folder)
-        {
+        foreach($pathAppendix as $folder) {
             $contentPath .= "/" . $folder;
-            if (!file_exists($contentPath) && !is_dir($contentPath))
-            {
+            if (!file_exists($contentPath) && !is_dir($contentPath)) {
                 mkdir($contentPath);
             }
         }
@@ -272,12 +276,10 @@ class ContentManager extends CApplicationComponent
     {
         if (count($array) == 0) {
             $array[] = $element;
-        }
-        elseif (is_numeric($position) && $position < 0) {
+        } elseif (is_numeric($position) && $position < 0) {
             if((count($array)+$position) < 0) {
                 $array = $this->arrayInsert($array,$element,0);
-            }
-            else {
+            } else {
                 $array[count($array)+$position] = $element;
             }
         }

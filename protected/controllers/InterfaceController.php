@@ -48,7 +48,7 @@ class InterfaceController extends Controller
           }
 
           http_response_code(404);
-          echo "No channes attached to point $pointId, or point does not exist";
+          echo sprintf("No channes attached to point %s, or point does not exist", $pointId);
           exit;
         }
     }
@@ -74,15 +74,18 @@ class InterfaceController extends Controller
         if(!is_int($pointId) || !is_int($pointChannel) || !is_int($pointDate))
         {
             http_response_code(400);
-            echo "Some of params is incorrect (shound be integer)."
-                . "Received pointId: $pointId, pointChannel: $pointChannel, pointDate: $pointDate";
+            echo sprintf("Some of params is incorrect (shound be integer). "
+                ."Received pointId: %s, pointChannel: %s, pointDate: %s",
+                $pointId, $pointChannel, $pointDate
+            );
             exit;
         }
 
         if(($pointDate > 20250101) || ($pointDate < 20150101))
         {
             http_response_code(400);
-            echo "Incorrect date (shound be integer and formated as YYYY/mm/dd). Received pointDate: $pointDate";
+            echo sprintf("Incorrect date (shound be integer and formated as YYYY/mm/dd). Received pointDate: %s",
+                $pointDate);
             exit;
         }
 
@@ -94,8 +97,10 @@ class InterfaceController extends Controller
 
             if (count($bg) === 0) {
                 http_response_code(404);
-                echo "No avaliable content."
-                    . "Received pointId: $pointId, pointChannel: $pointChannel, pointDate: $pointDate";
+                echo sprintf("No avaliable content. "
+                    ."Received pointId: %s, pointChannel: %s, pointDate: %s",
+                    $pointId, $pointChannel, $pointDate
+                );
                 exit;
             }
 
@@ -114,13 +119,14 @@ class InterfaceController extends Controller
 
             if (count($adv) === 0) {
                 http_response_code(404);
-                echo "No avaliable content."
-                    . "Received pointId: $pointId, pointChannel: $pointChannel, pointDate: $pointDate";
+                echo sprintf("No avaliable content. "
+                    ."Received pointId: %s, pointChannel: %s, pointDate: %s",
+                    $pointId, $pointChannel, $pointDate
+                );
                 exit;
             }
 
-            for ($ii = 0; $ii < count($adv); $ii++)
-            {
+            for ($ii = 0; $ii < count($adv); $ii++) {
                 $completeSrt .= $CM->GenerateContentBlock($adv[$ii]);
 
                 if (($ii < count($adv) - 1)
@@ -132,7 +138,7 @@ class InterfaceController extends Controller
             }
         } else {
             http_response_code(400);
-            echo "Incorrect channel. PointChannel: $pointChannel";
+            echo sprintf("Incorrect channel. PointChannel: %s", $pointChannel);
             exit;
         }
 
@@ -242,6 +248,19 @@ class InterfaceController extends Controller
     }
 
     // interface/setSync/id/156/sync/1
+    /*
+    * $_POST['data'] has following structure
+    * [
+    *     {
+    *         "channel": 1,
+    *         "file": "xxxxxx.mp4",
+    *         "date": "20161107",
+    *         "time": "18:23",
+    *         "meta": "YourMetaData"
+    *     },
+    *     ...
+    * ]
+    */
     public function actionPostStatistics()
     {
         $id = Yii::app()->request->getParam('id');
@@ -249,30 +268,138 @@ class InterfaceController extends Controller
 
         if (($id === null) || !is_int(intval($id))) {
             http_response_code(400);
-            echo "Incorrect id. Id: $id";
+            echo sprintf("Incorrect id. Id: %s", $id);
             exit;
         }
 
         if (($data === null) || !is_string(strval($data))) {
             http_response_code(400);
-            echo "Incorrect statistic data. Data: $data";
+            echo sprintf("Incorrect statistic data. Data: %s", $data);
             exit;
         }
 
         $pointId = intval($id);
-        $data = strval($data);
+        $decodedData = json_decode(strval($data));
 
-        try {
-            $CM = Yii::app()->contentManager;
-            $pointDir = "spool/points/" . $pointId;
-            $pointDir = $CM->PrepareSpoolPath($pointDir);
-            $handle = fopen($pointDir . "/" . data('Y-m-d') . "/statistic.txt", "w");
-            fwrite($handle, $data);
-            fclose($handle);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo "Saving data error. Exc: ". json_encode($e);
+        if ($decodedData === null) {
+            try {
+                $CM = Yii::app()->contentManager;
+                $pointDir = "spool/points/" . $pointId;
+                $pointDir = $CM->PrepareSpoolPath($pointDir);
+                $handle = fopen($pointDir . "/" . data('Y-m-d') . "/statistic.txt", "w");
+                fwrite($handle, $data);
+                fclose($handle);
+            } catch (Exception $e) {
+                http_response_code(500);
+                echo sprintf("Saving data error. Exc: %s", json_encode($e));
+
+                exit;
+            }
+
+            http_response_code(400);
+            echo sprintf("Incorrect statistic data format. JSON decoding error. Data: %s", $data);
+
             exit;
+        }
+
+        foreach ($decodedData as $value) {
+            if (!$value['meta']) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Empty meta in row %s. Data: %s", json_encode($value), $data);
+                exit;
+            }
+
+            $explodedMeta = explode(';', $value['meta']);
+
+            if (count($explodedMeta) !== 4) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Broken meta in row %s. Data: %s", json_encode($value), $data);
+                exit;
+            }
+
+            $duration = explode(':', $explodedMeta[0]);
+            if (!isset($duration[0])
+                || !isset($duration[1])
+                || !is_float(floatval($duration[1]))
+                || ($duration[0] !== 'duration')
+            ) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Broken meta in row %s. No duration set. Data: %s", json_encode($value), $data);
+                exit;
+            }
+            $duration = floatval($duration[1]);
+
+            $idFile = explode(':', $explodedMeta[1]);
+            if (!isset($idFile[0])
+                || !isset($idFile[1])
+                || !is_int(intval($idFile[1]))
+                || ($idFile[0] !== 'file')
+            ) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Broken meta in row %s. No file id. Data: %s", json_encode($value), $data);
+                exit;
+            }
+            $idFile = intval($idFile[1]);
+
+            $idPlaylist = explode(':', $explodedMeta[2]);
+            if (!isset($idPlaylist[0])
+                || !isset($idPlaylist[1])
+                || !is_int(intval($idPlaylist[1]))
+                || ($idPlaylist[0] !== 'pl')
+            ) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Broken meta in row %s. No playlist id. Data: %s", json_encode($value), $data);
+                exit;
+            }
+            $idPlaylist = intval($idPlaylist[1]);
+
+            $idAuthor = explode(':', $explodedMeta[3]);
+            if (!isset($idAuthor[0])
+                || !isset($idAuthor[1])
+                || !is_int(intval($idAuthor[1]))
+                || ($idAuthor[0] !== 'author')
+            ) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Broken meta in row %s. No author id. Data: %s", json_encode($value), $data);
+                exit;
+            }
+            $idAuthor = intval($idAuthor[1]);
+
+            if (!$value['channel']
+                || !$value['file']
+                || !$value['date']
+                || !$value['time']
+                || !is_int(intval($value['channel']))
+                || !is_string(strval($value['file']))
+                || !is_string(strval($value['date']))
+                || !is_string(strval($value['time']))
+            ) {
+                http_response_code(400);
+                echo sprintf("Incorrect statistic data format. Broken row structure %s. Data: %s", json_encode($value), $data);
+                exit;
+            }
+
+            $channel = intval($value['channel']);
+            $fileName = strval($value['file']);
+            $date = strval($value['date']);
+            $time = strval($value['time']);
+
+            $year = substr((string)$date, 0, 4);
+            $month = substr((string)$date, 4, 2);
+            $day = substr((string)$date, 6, 2);
+
+            $hours = substr((string)$time, 0, 2);
+            $minutes = substr((string)$time, 0, 3);
+
+            $statistic = new Statistic();
+            $statistic->dt_playback = $year . '-' . $month . '-' . $day . ' ' . $hours . ':' . $minutes . ':' . '00';
+            $statistic->duration = $duration;
+            $statistic->file_name = substr($fileName, 0, 255);
+            $statistic->channel = $channel;
+            $statistic->id_file = $idFile;
+            $statistic->id_playlist = $idPlaylist;
+            $statistic->id_author = $idAuthor;
+            $statistic->save();
         }
 
         echo 'ok';

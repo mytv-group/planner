@@ -17,11 +17,6 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 	
-    <!--<link rel="stylesheet" type="text/css" href="<?php //echo Yii::app()->request->baseUrl; ?>/css/jquery.dataTables.css" />
-    <link rel="stylesheet" type="text/css" href="<?php //echo Yii::app()->request->baseUrl; ?>/css/multi-select.css" />
-    <link rel="stylesheet" type="text/css" href="<?php //echo Yii::app()->request->baseUrl; ?>/css/clndr.css" />
-    <link rel="stylesheet" type="text/css" href="<?php //echo Yii::app()->request->baseUrl; ?>/css/jquery.mCustomScrollbar.css" />-->
-	
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
@@ -30,21 +25,21 @@
 <body>
 
 
-<div class='row Jumbotron'> 
-	
-	<div class='col-sm-12 LogoStrip'>      
+<div class='row Jumbotron'>
+
+	<div class='col-sm-12 LogoStrip'>
 		<div class='col-sm-2'>
 			<div class='LogoBlock'></div>
 		</div>
-		
+
 		<div class='col-sm-4 LogoAppName'>
 			<?php echo CHtml::encode(Yii::app()->name); ?>
 		</div>
-		
+
 		<div class='col-sm-4'>
 			<?= 'Support: 044 364 12 65' ?>
 		</div>
-		
+
 		<div class='col-sm-2'>
 			<a href='/site/logout'>Logout (<?= Yii::app ()->user->name ?>)</a>
 		</div>
@@ -55,12 +50,12 @@
 	<div class='col-sm-4 col-md-2 MainMenu'>
 		<?php $this->renderPartial("/site/menu"); ?>
 	</div>
-	
+
 	<div class='col-sm-8 col-md-10 MainContent'>
 		<?php echo $content; ?>
 	</div>
 </div>
-	
+
 <div id="footer" class='row col-sm-12'>
 	<div><center>
 		<p>Copyright &copy; <?php echo date('Y'); ?> by RTV group.</br>

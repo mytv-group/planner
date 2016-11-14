@@ -5,235 +5,306 @@ return array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Guest',
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'heapViewUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Heap user',
-		'children' => array(
-			'guest', 
-		),
-		'bizRule' => null,
-		'data' => null
-	),
-	'heapEditUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Heap user',
-		'children' => array(
-			'heapViewUser',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'heapViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Heap user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'heapEditUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Heap user',
+        'children' => array(
+            'heapViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
     'heapUser' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Heap user',
         'children' => array(
-        	'heapEditUser'
+            'heapEditUser'
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'playlistViewUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Playlist user',
-		'children' => array(
-			'guest',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
-	'playlistEditUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Playlist user',
-		'children' => array(
-			'playlistViewUser'
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'playlistViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Playlist user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'playlistEditUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Playlist user',
+        'children' => array(
+            'playlistViewUser'
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
     'playlistUser' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Playlist user',
         'children' => array(
-            'playlistEditUser'          
+            'playlistEditUser'
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'netViewUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Net user',
-		'children' => array(
-			'guest',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
-	'netEditUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Net user',
-		'children' => array(
-			'netViewUser',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'netViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Net user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'netEditUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Net user',
+        'children' => array(
+            'netViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
     'netUser' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Net user',
         'children' => array(
-            'netEditUser',          
+            'netEditUser',
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'pointViewUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Point user',
-		'children' => array(
-			'guest',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
-	'pointEditUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Point user',
-		'children' => array(
-			'pointViewUser',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'pointViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Point user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'pointEditUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Point user',
+        'children' => array(
+            'pointViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
     'pointUser' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Point user',
         'children' => array(
-            'pointEditUser',          
+            'pointEditUser',
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'screenViewUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Screen user',
-		'children' => array(
-			'guest',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
-	'screenEditUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Screen user',
-		'children' => array(
-			'screenViewUser',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'screenViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Screen user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'screenEditUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Screen user',
+        'children' => array(
+            'screenViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
     'screenUser' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Screen user',
         'children' => array(
-            'screenEditUser',          
+            'screenEditUser',
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'widgetViewUser' => array(
-			'type' => CAuthItem::TYPE_ROLE,
-			'description' => 'Widget user',
-			'children' => array(
-					'guest',
-			),
-			'bizRule' => null,
-			'data' => null
-	),
-	'widgetEditUser' => array(
-			'type' => CAuthItem::TYPE_ROLE,
-			'description' => 'Widget user',
-			'children' => array(
-					'widgetViewUser',
-			),
-			'bizRule' => null,
-			'data' => null
-	),
-	'widgetUser' => array(
-			'type' => CAuthItem::TYPE_ROLE,
-			'description' => 'Widget user',
-			'children' => array(
-					'widgetEditUser',
-			),
-			'bizRule' => null,
-			'data' => null
-	),
-	'userViewUser' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'User editor user',
-		'children' => array(
-			'guest',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'widgetViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Widget user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'widgetEditUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Widget user',
+        'children' => array(
+            'widgetViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'widgetUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Widget user',
+        'children' => array(
+            'widgetEditUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'statisticsViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Statistics user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'statisticsUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Statistics user',
+        'children' => array(
+            'statisticsViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
+    'userViewUser' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'User editor user',
+        'children' => array(
+            'guest',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => false,
+        ],
+    ),
     'userEditorUser' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'User editor user',
         'children' => array(
-            'userViewUser',          
+            'userViewUser',
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => false,
+        ],
     ),
-	'halfDemo' => array(
-			'type' => CAuthItem::TYPE_ROLE,
-			'description' => 'Demo',
-			'children' => array(
-					'heapUser',
-					'playlistUser',
-					'pointUser',
-			),
-			'bizRule' => null,
-			'data' => null
-	),
-	'demo' => array(
-		'type' => CAuthItem::TYPE_ROLE,
-		'description' => 'Demo',
-		'children' => array(
-			'heapViewUser',
-			'playlistViewUser',
-			'netViewUser',
-			'pointViewUser',
-			'screenViewUser',
-			'widgetViewUser',
-		),
-		'bizRule' => null,
-		'data' => null
-	),
+    'halfDemo' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Demo',
+        'children' => array(
+            'heapUser',
+            'playlistUser',
+            'pointUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => true,
+        ],
+    ),
+    'demo' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Demo',
+        'children' => array(
+            'heapViewUser',
+            'playlistViewUser',
+            'netViewUser',
+            'pointViewUser',
+            'screenViewUser',
+            'widgetViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => true,
+        ],
+    ),
    'moderator' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Moderator',
         'children' => array(
-            'heapUser', 
+            'heapUser',
             'playlistUser',
-            'netUser',  
-            'pointUser', 
-        	'widgetUser',   
-            'screenUser'   
+            'netUser',
+            'pointUser',
+            'screenUser'
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => true,
+        ],
     ),
     'admin' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Administrator',
         'children' => array(
             'moderator',
-            'userEditorUser'         
+            'userEditorUser'
         ),
         'bizRule' => null,
-        'data' => null
+        'data' => [
+            'avaliable' => true,
+        ],
     ),
 );

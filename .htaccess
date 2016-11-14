@@ -1,23 +1,18 @@
 AddDefaultCharset utf-8
-#RewriteEngine on
 
-# if a directory or a file exists, use it directly
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
+DirectoryIndex index.php
+Allow from all
 
-# otherwise forward it to index.php
-#RewriteRule . index.php
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+</IfModule>
 
-
-RewriteEngine On
-RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php [L,QSA]
-
-allow from all
+#SetEnv APPLICATION_ENV "dev"
 
 php_value upload_max_filesize 2048M
 php_value post_max_size 2048M
 php_value short_open_tag 1
-

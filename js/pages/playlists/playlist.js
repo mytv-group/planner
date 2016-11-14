@@ -1,73 +1,59 @@
-$(document).ready(function(e){
-	var url = document.location.origin + '/uploader/',
-		moveFileSrc = document.location.origin + '/playlists/upload/',
-		deleteFileSrc = document.location.origin + '/playlists/deletefilefrompl/',
-		addfilefromheapSrc = document.location.origin + '/playlists/addfilefromheap/',
-		folderSrc = document.location.origin + '/admin/getfoldercontent/',
-		viewSrc = document.location.origin + '/admin/view/',
-		Playlist_name = $("#Playlist_name"),
-		playlistIdTag = $("#playlistId"),
-		filesBlock = $("#filesBlock"),
-		selectedjsTreeNode = 0;
-	
-	$("#Playlists_fromDatetime").datetimepicker({
-		format:'Y-m-d H:i:s'
-	});
-	
-	$("#Playlists_toDatetime").datetimepicker({
-		format:'Y-m-d H:i:s'
-	});
-	
-	$("#Playlists_fromTime").datetimepicker({
-		format: 'H:i:s', 
-		datepicker:false,
-	});
-	
-	$("#Playlists_toTime").datetimepicker({
-		format: 'H:i:s', 
-		datepicker:false,
-	});
-	
-	$("#Playlists_every").datetimepicker({
-		format: 'H:i:s', 
-		datepicker:false,
-	});
+/*jslint browser: true*/
+/*global $, jQuery*/
 
-	$("#Playlists_midnightOffset").datetimepicker({
-		format: 'H:i:s', 
-		datepicker:false,
-	});
+$(document).ready(function () {
+    'use strict';
 
-	var typeBlock = $(".type-control"),
-		type = $(".type-control:checked").val(),
-		streamUrlBlock = $('#stream-url-block'),
-		fileManager = $('#file-manager'),
-		everyBlock = $("#everyBlock"),
-		periodBlock = $("#periodBlock");
+    var origin = document.location.origin;
 
-	var hideFunctionality = function(type, animationTime) {
-		if(type == 0){
-			everyBlock.slideUp(animationTime);
-			periodBlock.slideDown(animationTime);
-			streamUrlBlock.slideUp(animationTime);
-			fileManager.slideDown(animationTime);
-		} else if(type == 1){
-			periodBlock.slideUp(animationTime);
-			everyBlock.slideDown(animationTime);
-			streamUrlBlock.slideUp(animationTime);
-			fileManager.slideDown(animationTime);
-		} else if(type == 2){
-			everyBlock.slideUp(animationTime);
-			periodBlock.slideDown(animationTime);
-			streamUrlBlock.slideDown(animationTime);
-			fileManager.slideUp(animationTime);
-		}
-	}
-	
-	hideFunctionality(type, 0);
-	
-	typeBlock.on('change', function(e) {
-		hideFunctionality($(e.target).val(), 200);
-	});
+    var url =  origin + '/uploader/';
+    var moveFileSrc = origin + '/playlists/upload/';
+    var deleteFileSrc = origin + '/playlists/deletefilefrompl/';
+    var addfilefromheapSrc = origin + '/playlists/addfilefromheap/';
+    var folderSrc = origin + '/admin/getfoldercontent/';
+    var viewSrc = origin + '/admin/view/';
+    var Playlist_name = $("#Playlist_name");
+    var playlistIdTag = $("#playlistId");
+    var filesBlock = $("#filesBlock");
+    var selectedjsTreeNode = 0;
+
+    $(".datepicker").datetimepicker({
+        format: 'Y-m-d',
+        timepicker: false
+    });
+
+    $(".timepicker").datetimepicker({
+        format: 'H:i:s',
+        datepicker: false
+    });
+
+    var typeBlock = $(".type-control");
+    var type = $(".type-control:checked").val();
+    var streamUrlBlock = $('#stream-url-block');
+    var fileManager = $('#file-manager');
+    var everyBlock = $("#everyBlock");
+    var periodBlock = $("#periodBlock");
+
+    var hideFunctionality = function(type, animationTime) {
+        if(type == 0){
+            everyBlock.slideUp(animationTime);
+            streamUrlBlock.slideUp(animationTime);
+            fileManager.slideDown(animationTime);
+        } else if(type == 1){
+            everyBlock.slideDown(animationTime);
+            streamUrlBlock.slideUp(animationTime);
+            fileManager.slideDown(animationTime);
+        } else if(type == 2){
+            everyBlock.slideUp(animationTime);
+            streamUrlBlock.slideDown(animationTime);
+            fileManager.slideUp(animationTime);
+        }
+    }
+
+    hideFunctionality(type, 0);
+
+    typeBlock.on('change', function(e) {
+        hideFunctionality($(e.target).val(), 200);
+    });
 
 });

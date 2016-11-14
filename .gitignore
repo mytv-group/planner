@@ -39,6 +39,8 @@ phpunit.phar
 
 #dev content
 /_dev
+#php and apache log
+/log
 
 #runtime
 /protected/runtime/*

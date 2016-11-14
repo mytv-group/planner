@@ -3,7 +3,7 @@
 class SiteController extends Controller
 {
 	public $layout='//layouts/columnLogin';
-	
+
 	/**
 	 * Declares class-based actions.
 	 */
@@ -28,12 +28,12 @@ class SiteController extends Controller
 	 * when an action is not explicitly requested by users.
 	 */
 	public function actionIndex()
-	{		
+	{
         if (Yii::app()->user->isGuest)
         {
             $this->redirect("/site/login");
         }
-        else 
+        else
         {
 			$this->redirect('/admin/index');
         }

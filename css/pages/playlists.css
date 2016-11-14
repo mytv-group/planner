@@ -1,31 +1,31 @@
 table{
-	width: auto;
+    width: auto;
 }
 
 .form table tr td {
-	text-align: left;
-	padding-right: 15px;
+    text-align: left;
+    padding-right: 15px;
 }
 
 #Playlists_name,
 #Stream_url {
-	max-width:415px;
+    max-width:415px;
 }
 
 #Playlists_every{
-	max-width:180px;
+    max-width:180px;
 }
 
 .buttons input {
-	max-width:245px;
+    max-width:245px;
 }
 
 /*drop zone on playlist edit*/
 
 #progress{
-	width:465px;
-	margin-top:15px;
-	margin-bottom:15px;
+    width:465px;
+    margin-top:15px;
+    margin-bottom:15px;
 }
 
 #dropzone {
@@ -58,104 +58,106 @@ table{
 }
 
 .PreviewContentRow {
-	text-align: center; 
-	text-decoration:none;
-	color:#000;
-	font-size:1.2em;
-	vertical-align: top;
+    text-align: center;
+    text-decoration:none;
+    color:#000;
+    font-size:1.2em;
+    vertical-align: top;
 }
 
 .DeleteItemCell {
-	vertical-align: top;
-	padding-top: 1px;
+    vertical-align: top;
+    padding-top: 1px;
 }
 
 .PreviewContentMiddleCell {
-	width:500px;
-	overflow-x:hidden;
+    width:500px;
+    overflow-x:hidden;
 }
 
 .LinkButton {
-	width: 450px;
-	height: 28px;
-	margin: 1px;
-	line-height: 14px;
-    overflow: hidden;	
+    width: 450px;
+    height: 28px;
+    margin: 1px;
+    line-height: 14px;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-    
+
 .btn-num {
-	min-width: 35px;
-	height: 28px;
-	margin: 1px;
-	line-height: 14px;
+    min-width: 35px;
+    height: 28px;
+    margin: 1px;
+    line-height: 14px;
 }
 
 .ImgInPreviewTable {
-	width:500px; 
-	heigth:320px;
-	border-radius:3px;
-	border: 1px solid #999;
+    width:500px;
+    heigth:320px;
+    border-radius:3px;
+    border: 1px solid #999;
 }
 
 .Tree {
-	width:255px;
-	float:left;
-	overflow:auto; 
-	/*border:1px solid silver;*/ 
-	height:470px;
+    width:255px;
+    float:left;
+    overflow:auto;
+    /*border:1px solid silver;*/
+    height:470px;
 }
 
 .SubTree {
-	width:100%;
-	overflow:auto; 
-	border:1px solid silver; 
-	height:234px;
+    width:100%;
+    overflow:auto;
+    border:1px solid silver;
+    height:234px;
 }
 
 .Heap {
-	overflow:auto; 
-	border:none; 
-	float:left;
-	display:inline;
-	border:1px solid silver; 
-	height:470px;
-	margin-left:5px;
-	width: calc(100% - 260px - 10px);	
+    overflow:auto;
+    border:none;
+    float:left;
+    display:inline;
+    border:1px solid silver;
+    height:470px;
+    margin-left:5px;
+    width: calc(100% - 260px - 10px);
 }
 
 .HeapItem {
-	padding:5px;
-	width: 100%;
-	border-bottom:solid 1px darkgrey;	
+    padding:5px;
+    width: 100%;
+    border-bottom:solid 1px darkgrey;
 }
 
 .HeapItemFolder {
-	padding:5px;
-	width: 100%;
-	border-bottom:solid 1px darkgrey;	
-	background-color:#fce667;	
+    padding:5px;
+    width: 100%;
+    border-bottom:solid 1px darkgrey;
+    background-color:#fce667;
 }
 
 .HeapItem:hover, .HeapItemFolder:hover  {
-	background-color:#b7e4ff;		
+    background-color:#b7e4ff;
 }
 
 .HeapItem span {
-	width: 95%;
-	display: inline-block;
+    width: 95%;
+    display: inline-block;
 }
 
 .heapitemnode {
-	margin-right:5px !important;
+    margin-right:5px !important;
 }
 
-#sortable {
-	
+.btn-dialog-heap {
+    max-width: 180px;
+    margin-top: 20px;
+    text-overflow: ellipsis;
 }
 
 /*preview*/
 #dialogVideoPreview, #dialogAudioPreplay {
-	overflow: hidden;
+    overflow: hidden;
 }

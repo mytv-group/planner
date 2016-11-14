@@ -26,7 +26,7 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
-#log
+#php and apache log
 /log
 /_log
 
@@ -39,8 +39,6 @@ phpunit.phar
 
 #dev content
 /_dev
-#php and apache log
-/log
 
 #runtime
 /protected/runtime/*

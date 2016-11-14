@@ -107,6 +107,7 @@ class PlaylistsController extends Controller
     public function actionUpdate($id)
     {
         $model=$this->loadModel($id);
+        $author = $model->username;
         $stream = new Stream();
 
         if(isset($_POST['Playlists']))
@@ -136,6 +137,11 @@ class PlaylistsController extends Controller
                 );
             }
             $model->attributes=$playlists;
+
+            if ($author) {
+                $model->author = $author;
+            }
+
             if($model->save())
                 $this->redirect(array('view','id'=>$model->id));
         }

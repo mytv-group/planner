@@ -28,6 +28,7 @@ phpunit.phar
 
 #log
 /log
+/_log
 
 #spool
 /spool
@@ -41,4 +42,3 @@ phpunit.phar
 
 #runtime
 /protected/runtime/*
-

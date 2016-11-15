@@ -455,31 +455,18 @@ class PlaylistsController extends Controller
 
         $model = $this->loadModel($playlistId);
 
-        if($model->files == "")
-        {
+        if($model->files == "") {
             $model->files = $fileId;
-        }
-        else
-        {
+        } else {
             $model->files .= "," . $fileId;
         }
 
-        if($model->validate()){
-            $model->save();
-            if($model->save())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
+        if(!$model->validate() || !$model->save()) {
             error_log(json_encode(CHtml::errorSummary($model)));
             return false;
         }
+
+        return true;
     }
 
     /**

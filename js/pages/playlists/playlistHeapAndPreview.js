@@ -30,8 +30,6 @@ $(document).ready(function () {
                     'background-position': '-16px -144px;'
                 });
 
-                currPreviewCo                        //play: 0,ntainer.append(BuildVideoContainer());
-
                 if((mime == 'mp4') || (mime == 'mpeg')){
                     $("#jquery_jplayer").jPlayer({
                         ready: function () {

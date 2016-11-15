@@ -463,7 +463,8 @@ class PlaylistsController extends Controller
 
         if(!$model->save()) {
             error_log(json_encode(CHtml::errorSummary($model)));
-            return false;
+            print_r($model->getErrors());
+            exit;
         }
 
         return true;

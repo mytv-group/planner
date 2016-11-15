@@ -26,6 +26,8 @@ $(document).ready(function () {
                     mime = el.data('mime'),
                     link = el.data('link');
 
+                currPreviewContainer.append(BuildVideoContainer());
+
                 $("ui-button-icon-primary ui-icon ui-icon-closethick ui-state-default").css({
                     'background-position': '-16px -144px;'
                 });

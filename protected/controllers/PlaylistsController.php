@@ -107,7 +107,7 @@ class PlaylistsController extends Controller
     public function actionUpdate($id)
     {
         $model=$this->loadModel($id);
-        $author = $model->username;
+        $author = $model->author;
         $stream = new Stream();
 
         if(isset($_POST['Playlists']))

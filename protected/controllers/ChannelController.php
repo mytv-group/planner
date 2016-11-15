@@ -20,36 +20,36 @@ class ChannelController extends Controller
     }
 
     function hasAccess(){
-		return true;
+        return true;
     }
 
     public function accessRules()
     {
-    	return array(
-    			array('allow',
-    					'actions'=>array('addChannel','addPlaylistToChannel'),
-    					'users'=>array('@'),
-    					'roles'=>array('playlistEditUser', 'pointEditUser'),
-    			),
-    			array('allow',
-    					'actions'=>array('attachWidget'),
-    					'users'=>array('@'),
-    					'roles'=>array('widgetEditUser'),
-    			),
-    			array('allow',
-    					'actions'=>array('removeChannel','removePlaylistFromChannel'),
-    					'users'=>array('@'),
-    					'roles'=>array('pointUser', 'playlistUser'),
-    			),
-    			array('allow',
-    					'actions'=>array('detachWidget'),
-    					'users'=>array('@'),
-    					'roles'=>array('widgetUser'),
-    			),
-    			array('deny',  // deny all users
-    					'users'=>array('*'),
-    			),
-    	);
+        return array(
+                array('allow',
+                        'actions'=>array('addChannel','addPlaylistToChannel'),
+                        'users'=>array('@'),
+                        'roles'=>array('playlistEditUser', 'pointEditUser'),
+                ),
+                array('allow',
+                        'actions'=>array('attachWidget'),
+                        'users'=>array('@'),
+                        'roles'=>array('widgetEditUser'),
+                ),
+                array('allow',
+                        'actions'=>array('removeChannel','removePlaylistFromChannel'),
+                        'users'=>array('@'),
+                        'roles'=>array('pointUser', 'playlistUser'),
+                ),
+                array('allow',
+                        'actions'=>array('detachWidget'),
+                        'users'=>array('@'),
+                        'roles'=>array('widgetUser'),
+                ),
+                array('deny',  // deny all users
+                        'users'=>array('*'),
+                ),
+        );
     }
 
     /**
@@ -80,194 +80,194 @@ class ChannelController extends Controller
         }
     }
 
-	public function actionAttachWidget()
-	{
-		$request = Yii::app()->request;
-		if(($channelId = $request->getParam('channelId')) && 
-    		($widgetId = $request->getParam('widgetId'))) {
+    public function actionAttachWidget()
+    {
+        $request = Yii::app()->request;
+        if(($channelId = $request->getParam('channelId')) &&
+            ($widgetId = $request->getParam('widgetId'))) {
 
-    		$model = new WidgetToChannel();
-    		$model->attributes = array(
-    			'channel_id' => $channelId,
-    			'widget_id' => $widgetId
-    		);
-    		
-			if($model->save()) {
-				echo json_encode(
-					array(
-							'status' => 'ok'
-					));
-			} else {
-				echo json_encode(
-					array(
-							'status' => 'err',
-							'error' => 'Error during attaching widget'
-					));
-			}
-		} else {
-			echo json_encode(
-				array(
-				'status' => 'err',
-				'error' => 'Incorrect POST data during AttachWidget action'
-			));
-		}
-	}
-	
-	public function actionDetachWidget()
-	{
-		$request = Yii::app()->request;
-		if($channelId = $request->getParam('channelId')) {
-			if(WidgetToChannel::model()->deleteAll("channel_id = :channel_id", array("channel_id" => $channelId))) {
-				echo json_encode(
-						array(
-								'status' => 'ok'
-						));
-			} else {
-				echo json_encode(
-						array(
-								'status' => 'err',
-								'error' => 'Error during detaching widget'
-						));
-			}
-		} else {
-			echo json_encode(
-					array(
-							'status' => 'err',
-							'error' => 'Incorrect POST data during DetachWidget action'
-					));
-		}
-	}
-	
-	public function actionAddPlaylistToChannel()
-	{
-		if(isset($_POST['channelId']) &&
-				isset($_POST['plId']))
-		{
-			$channelId = $_POST['channelId'];
-			$plId = $_POST['plId'];
-				
-			if(isset($_POST['isNet'])){
-	
-			} else {
-				if(PlaylistToChannel::model()->AddPlaylistToChannel($channelId, $plId))
-				{
-					echo json_encode(
-							array(
-									'status' => 'ok'
-							));
-				}
-				else
-				{
-					echo json_encode(
-							array(
-									'status' => 'err',
-									'error' => 'Error during PlaylistToChannel model saving'
-							));
-				}
-			}
-		}
-		else
-		{
-			echo json_encode(
-					array(
-							'status' => 'err',
-							'error' => 'Incorrect POST data during PlaylistToChannel model saving'
-					));
-		}
-	}
-	
-	public function actionRemovePlaylistFromChannel()
-	{
-		if(isset($_POST['channelId']) &&
-				isset($_POST['plId']))
-		{
-			$channelId = $_POST['channelId'];
-			$plId = $_POST['plId'];
-	
-			if(isset($_POST['isNet'])){
-					
-			} else {
-				if(PlaylistToChannel::model()->RemovePlaylistFromChannel($channelId, $plId))
-				{
-					echo json_encode(
-							array(
-									'status' => 'ok'
-							));
-				}
-				else
-				{
-					echo json_encode(
-							array(
-									'status' => 'err',
-									'error' => 'Error during PlaylistToChannel model deleting'
-							));
-				}
-			}
-		}
-		else
-		{
-			echo json_encode(
-					array(
-							'status' => 'err',
-							'error' => 'Incorrect POST data during PlaylistToChannel model deleting'
-					));
-		}
-	}
-	
-	public function actionAddChannel()
-	{
-		if(isset($_POST['itemId']))
-		{
-			$itemId = $_POST['itemId'];
-		
-			$res = Channel::model()->AddChannelToPoint($itemId);
-			if($res["status"])
-			{
-				echo json_encode(
-					array(
-						"status" => 'ok',
-						"id" => $res['id'],
-						"internalId" => $res['internalId']
-					));
-			}
-			else
-			{
-				echo json_encode(
-					array(
-						'status' => 'err',
-						'error' => $res['error']
-					));
-			}
-		}
-		else
-		{
-			echo json_encode(
-				array(
-					'status' => 'err',
-					'error' => 'Incorrect POST data during Channel model creating'
-				));
-		}
-	}
-	
-	public function actionRemoveChannel()
-	{
-		if(isset($_POST['channelId']))
-		{
-			$channelId = $_POST['channelId'];
-	
-			$res = Channel::model()->RemoveChannel($channelId);
-			echo json_encode(
-				array(
-						"status" => 'ok'
-				));
-		}
-		else
-		{
-			echo json_encode(
-				array(
-						'status' => 'err',
-						'error' => 'Incorrect POST data during Channel model creating'
-				));
-		}
-	}
+            $model = new WidgetToChannel();
+            $model->attributes = array(
+                'channel_id' => $channelId,
+                'widget_id' => $widgetId
+            );
+
+            if($model->save()) {
+                echo json_encode(
+                    array(
+                            'status' => 'ok'
+                    ));
+            } else {
+                echo json_encode(
+                    array(
+                            'status' => 'err',
+                            'error' => 'Error during attaching widget'
+                    ));
+            }
+        } else {
+            echo json_encode(
+                array(
+                'status' => 'err',
+                'error' => 'Incorrect POST data during AttachWidget action'
+            ));
+        }
+    }
+
+    public function actionDetachWidget()
+    {
+        $request = Yii::app()->request;
+        if($channelId = $request->getParam('channelId')) {
+            if(WidgetToChannel::model()->deleteAll("channel_id = :channel_id", array("channel_id" => $channelId))) {
+                echo json_encode(
+                        array(
+                                'status' => 'ok'
+                        ));
+            } else {
+                echo json_encode(
+                        array(
+                                'status' => 'err',
+                                'error' => 'Error during detaching widget'
+                        ));
+            }
+        } else {
+            echo json_encode(
+                    array(
+                            'status' => 'err',
+                            'error' => 'Incorrect POST data during DetachWidget action'
+                    ));
+        }
+    }
+
+    public function actionAddPlaylistToChannel()
+    {
+        if(isset($_POST['channelId']) &&
+                isset($_POST['plId']))
+        {
+            $channelId = $_POST['channelId'];
+            $plId = $_POST['plId'];
+
+            if(isset($_POST['isNet'])){
+
+            } else {
+                if(PlaylistToChannel::model()->AddPlaylistToChannel($channelId, $plId))
+                {
+                    echo json_encode(
+                            array(
+                                    'status' => 'ok'
+                            ));
+                }
+                else
+                {
+                    echo json_encode(
+                            array(
+                                    'status' => 'err',
+                                    'error' => 'Error during PlaylistToChannel model saving'
+                            ));
+                }
+            }
+        }
+        else
+        {
+            echo json_encode(
+                    array(
+                            'status' => 'err',
+                            'error' => 'Incorrect POST data during PlaylistToChannel model saving'
+                    ));
+        }
+    }
+
+    public function actionRemovePlaylistFromChannel()
+    {
+        if(isset($_POST['channelId']) &&
+                isset($_POST['plId']))
+        {
+            $channelId = $_POST['channelId'];
+            $plId = $_POST['plId'];
+
+            if(isset($_POST['isNet'])){
+
+            } else {
+                if(PlaylistToChannel::model()->RemovePlaylistFromChannel($channelId, $plId))
+                {
+                    echo json_encode(
+                            array(
+                                    'status' => 'ok'
+                            ));
+                }
+                else
+                {
+                    echo json_encode(
+                            array(
+                                    'status' => 'err',
+                                    'error' => 'Error during PlaylistToChannel model deleting'
+                            ));
+                }
+            }
+        }
+        else
+        {
+            echo json_encode(
+                    array(
+                            'status' => 'err',
+                            'error' => 'Incorrect POST data during PlaylistToChannel model deleting'
+                    ));
+        }
+    }
+
+    public function actionAddChannel()
+    {
+        if(isset($_POST['itemId']))
+        {
+            $itemId = $_POST['itemId'];
+
+            $res = Channel::model()->AddChannelToPoint($itemId);
+            if($res["status"])
+            {
+                echo json_encode(
+                    array(
+                        "status" => 'ok',
+                        "id" => $res['id'],
+                        "internalId" => $res['internalId']
+                    ));
+            }
+            else
+            {
+                echo json_encode(
+                    array(
+                        'status' => 'err',
+                        'error' => $res['error']
+                    ));
+            }
+        }
+        else
+        {
+            echo json_encode(
+                array(
+                    'status' => 'err',
+                    'error' => 'Incorrect POST data during Channel model creating'
+                ));
+        }
+    }
+
+    public function actionRemoveChannel()
+    {
+        if(isset($_POST['channelId']))
+        {
+            $channelId = $_POST['channelId'];
+
+            $res = Channel::model()->RemoveChannel($channelId);
+            echo json_encode(
+                array(
+                        "status" => 'ok'
+                ));
+        }
+        else
+        {
+            echo json_encode(
+                array(
+                        'status' => 'err',
+                        'error' => 'Incorrect POST data during Channel model creating'
+                ));
+        }
+    }
 }

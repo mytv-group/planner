@@ -405,7 +405,7 @@ class InterfaceController extends Controller
         echo 'ok';
     }
 
-    // interface/setSync/id/156/sync/1
+    // interface/getWidgets/id/156/
     public function actionGetWidgets($id)
     {
         $point = Point::model()->findByPk($id);

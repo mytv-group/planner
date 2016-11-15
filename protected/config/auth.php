@@ -273,7 +273,6 @@ return array(
             'netViewUser',
             'pointViewUser',
             'screenViewUser',
-            'widgetViewUser',
         ),
         'bizRule' => null,
         'data' => [
@@ -300,7 +299,8 @@ return array(
         'description' => 'Administrator',
         'children' => array(
             'moderator',
-            'userEditorUser'
+            'userEditorUser',
+            'widgetUser',
         ),
         'bizRule' => null,
         'data' => [

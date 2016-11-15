@@ -461,7 +461,7 @@ class PlaylistsController extends Controller
             $model->files .= "," . $fileId;
         }
 
-        if(!$model->validate() || !$model->save()) {
+        if(!$model->save()) {
             error_log(json_encode(CHtml::errorSummary($model)));
             return false;
         }

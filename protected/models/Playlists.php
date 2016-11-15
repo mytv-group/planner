@@ -47,7 +47,7 @@ class Playlists extends CActiveRecord
             array('author', 'length', 'max'=>255),
             array('sun, mon, tue, wed, thu, fri, sat', 'boolean'),
             array('type','in','range'=>array('0','1','2'),'allowEmpty'=>false),
-            array('fromDatetime, toDatetime', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd'),
+            array('fromDatetime, toDatetime', 'type', 'type'=>'date', 'datetimeFormat'=>'yyyy-MM-dd'),
             array('fromTime, toTime, every', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm:ss'),
             array('name', 'safe', 'on'=>'search'),
         );

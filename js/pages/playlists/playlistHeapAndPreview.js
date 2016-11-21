@@ -558,12 +558,12 @@ $(document).ready(function () {
     $("#check-all-in-folder").click(function() {
         $(".heapitemnode")
             .attr('checked', 'checked')
-            .prop('checked');
+            .prop('checked', true);
     });
 
     $("#uncheck-all-in-folder").click(function(){
         $(".heapitemnode")
             .removeAttr('checked', 'checked')
-            .removeProp('checked');
+            .prop('checked', false);
     });
 });

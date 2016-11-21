@@ -2,12 +2,6 @@
 /* @var $this PointController */
 /* @var $model Point */
 
-// $this->breadcrumbs=array(
-// 	'Points'=>array('index'),
-// 	$model->name=>array('view','id'=>$model->id),
-// 	'Update',
-// );
-
 $this->menu=array(
 	array('label'=>'List', 'url'=>array('index')),
 	array('label'=>'Create', 'url'=>array('create')),

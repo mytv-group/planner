@@ -91,6 +91,7 @@
 
             printf("<div id='channelsList'>");
             $channels = $model->channels;
+
             foreach ($channels as $channel)
             {
                 if($channel->window_id == null)

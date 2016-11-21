@@ -103,14 +103,12 @@ class PointController extends Controller
     public function actionCreate()
     {
         $model = new Point;
-        $model->unsetAttributes();  // clear any default values
-
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $model->unsetAttributes();
 
         if(isset($_POST['Point']))
         {
             $model->attributes = $_POST['Point'];
+            $model->tv_schedule_blocks = '';
             $TVshceduleFromDatetime = array();
             $TVshceduleToDatetime = array();
             if(isset($_POST['Point']['TVshceduleFromDatetime']) &&
@@ -129,9 +127,7 @@ class PointController extends Controller
                 $model->PrepareFilesForSync($model->getPrimaryKey());
                 $model->CreateChannelsForWindows($model->screen_id, $model->id);
 
-                $this->render('update',array(
-                        'model'=>$model,
-                ));
+                $this->redirect(['point/update','id'=>$model->id]);
             }
             else
             {

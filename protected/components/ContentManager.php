@@ -6,11 +6,6 @@ class ContentManager extends CApplicationComponent
 
     public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
     {
-        $playlistsType = 0;
-        if ($pointChannel === 3) {
-            $playlistsType = 2;
-        }
-
         $connection = Yii::app()->db;
 
         $pointDate = new DateTime($pointDatetimeStr);
@@ -28,7 +23,6 @@ class ContentManager extends CApplicationComponent
             "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
             "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
             "AND `t3`.`" . $weekDay . "` = '1' " .
-            "AND (`t3`.`type` = '" . $playlistsType . "')" .
             "ORDER BY `fromTime`;";
 
         $command=$connection->createCommand($sql);

@@ -58,8 +58,14 @@ class WidgetController extends Controller
             throw new CHttpException(404, 'The requested widget does not exist.');
         }
 
+        $config = [];
+        if($model->config) {
+            $config = json_decode($model->config);
+        }
+
         $this->widget('application.widgets.' . ucfirst($model->name) . 'Widget', [
-            'type' => 'preview'
+            'type' => 'preview',
+            'config' => $config
         ]);
     }
 

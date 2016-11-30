@@ -33,7 +33,7 @@ class Widget extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, description, show_duration, periodicity, widget_action', 'required'),
+            array('name, description, show_duration, periodicity', 'required'),
             array('show_duration, periodicity', 'numerical', 'integerOnly'=>true),
             array('name', 'length', 'max'=>255),
             array('created_dt', 'safe'),
@@ -64,7 +64,6 @@ class Widget extends CActiveRecord
             'description' => 'Description',
             'show_duration' => 'Show duration',
             'periodicity' => 'Periodicity',
-            'widget_action' => 'Widget action',
             'config' => 'Config',
             'created_dt' => 'Created Date',
         );

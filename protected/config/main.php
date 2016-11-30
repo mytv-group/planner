@@ -62,5 +62,6 @@ return array(
     ),
     'params'=>array(
         'adminEmail'=>'webmaster@example.com',
+        'weatherApiKey'=>'1be0ed3547cbc0a415058b881eac9494',
     ),
 );

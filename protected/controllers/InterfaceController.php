@@ -279,14 +279,14 @@ class InterfaceController extends Controller
         }
 
         $pointId = intval($id);
-        $data = Yii::app()->request->getRawBody();
+        $decodedData = json_decode(strval($data), true);
 
         if ($decodedData === null) {
             try {
                 $CM = Yii::app()->contentManager;
-                $pointDir = "spool/points/" . $pointId;
+                $pointDir = "spool/points/" . $pointId . "/" . data('Y-m-d');
                 $pointDir = $CM->PrepareSpoolPath($pointDir);
-                $handle = fopen($pointDir . "/" . data('Y-m-d') . "/statistic.txt", "w");
+                $handle = fopen($pointDir . "/statistic.txt", "w");
                 fwrite($handle, $data);
                 fclose($handle);
             } catch (Exception $e) {
@@ -303,6 +303,7 @@ class InterfaceController extends Controller
         }
 
         foreach ($decodedData as $value) {
+            print_r($decodedData);
             if (!$value['meta']) {
                 http_response_code(400);
                 echo sprintf("Incorrect statistic data format. Empty meta in row %s. Data: %s", json_encode($value), $data);

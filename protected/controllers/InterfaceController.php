@@ -303,7 +303,6 @@ class InterfaceController extends Controller
         }
 
         foreach ($decodedData as $value) {
-            print_r($decodedData);
             if (!$value['meta']) {
                 http_response_code(400);
                 echo sprintf("Incorrect statistic data format. Empty meta in row %s. Data: %s", json_encode($value), $data);

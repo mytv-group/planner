@@ -30,10 +30,10 @@ class Statistic extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('id, duration, dt_playback, file_name, id_file, id_playlist, id_author', 'required'),
+            array('duration, dt_playback, file_name, id_file, id_playlist, id_author', 'required'),
             array('id, id_file, id_playlist, id_author, channel', 'numerical', 'integerOnly'=>true),
             array('duration', 'numerical'),
-            array('file_name', 'length', 'max'=>45),
+            array('file_name', 'length', 'max'=>255),
             array('dt_playback, dt', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.

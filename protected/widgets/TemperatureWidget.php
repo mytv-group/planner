@@ -101,7 +101,7 @@ class TemperatureWidget extends CWidget
         exit;
     }
 
-    public function info()
+    public function showData()
     {
         $file = dirname(Yii::app()->basePath) . '/' . $this->getImg();
         if (file_exists ($file)) {
@@ -114,6 +114,6 @@ class TemperatureWidget extends CWidget
             $this->generateImage();
         }
 
-        return ['img' => $this->img];
+        return ['img' => $this->getImg()];
     }
 }

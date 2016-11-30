@@ -440,10 +440,15 @@ class InterfaceController extends Controller
                 && $widgetToChannel->widget
             ) {
                 $widget = $widgetToChannel->widget;
+                $widgetObj = $this->widget('application.widgets.' . ucfirst($widget->name) . 'Widget', [
+                    'type' => 'showData',
+                    'config' => json_decode($widget->config)
+                ]);
+
                 $responce['widgets'][] = [
                     'window' => $window->getInfo(),
                     'config' => $widget->getInfo(),
-                    'content' => $widget->getWidgetInfo()
+                    'content' => $widgetObj->showData()
                 ];
             }
         }

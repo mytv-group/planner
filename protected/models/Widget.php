@@ -97,15 +97,6 @@ class Widget extends CActiveRecord
         ];
     }
 
-    public function getWidgetInfo()
-    {
-        if(!is_file(Yii::getPathOfAlias('application.widgets.' . ucfirst($this->name) . 'Widget') . '.php')) {
-            throw new CHttpException(404, 'The requested widget does not exist.');
-        }
-
-        return Yii::createComponent('application.widgets.' . ucfirst($this->name) . 'Widget')->info();
-    }
-
     /**
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!

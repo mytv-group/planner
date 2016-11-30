@@ -43,7 +43,7 @@ class WeatherWidget extends CWidget
         echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather substrate"/>', $this->getImg());
     }
 
-    public function info()
+    public function showData()
     {
         return ['img' => $this->getImg()];
     }

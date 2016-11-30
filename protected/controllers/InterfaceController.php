@@ -264,7 +264,7 @@ class InterfaceController extends Controller
     public function actionPostStatistics()
     {
         $id = Yii::app()->request->getParam('id');
-        $data = Yii::app()->request->getParam('data');
+        $data = Yii::app()->request->getRawBody();
 
         if (($id === null) || !is_int(intval($id))) {
             http_response_code(400);
@@ -279,7 +279,7 @@ class InterfaceController extends Controller
         }
 
         $pointId = intval($id);
-        $decodedData = json_decode(strval($data));
+        $data = Yii::app()->request->getRawBody();
 
         if ($decodedData === null) {
             try {
@@ -389,10 +389,11 @@ class InterfaceController extends Controller
             $day = substr((string)$date, 6, 2);
 
             $hours = substr((string)$time, 0, 2);
-            $minutes = substr((string)$time, 0, 3);
+            $minutes = substr((string)$time, 3, 2);
+            $seconds = substr((string)$time, 6, 2);
 
             $statistic = new Statistic();
-            $statistic->dt_playback = $year . '-' . $month . '-' . $day . ' ' . $hours . ':' . $minutes . ':' . '00';
+            $statistic->dt_playback = $year . '-' . $month . '-' . $day . ' ' . $hours . ':' . $minutes . ':' . $seconds;
             $statistic->duration = $duration;
             $statistic->file_name = substr($fileName, 0, 255);
             $statistic->channel = $channel;

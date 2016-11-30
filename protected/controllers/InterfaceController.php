@@ -397,6 +397,7 @@ class InterfaceController extends Controller
             $statistic->duration = $duration;
             $statistic->file_name = substr($fileName, 0, 255);
             $statistic->channel = $channel;
+            $statistic->id_point = $pointId;
             $statistic->id_file = $idFile;
             $statistic->id_playlist = $idPlaylist;
             $statistic->id_author = $idAuthor;

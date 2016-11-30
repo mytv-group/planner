@@ -31,7 +31,7 @@ class Statistic extends CActiveRecord
         // will receive user inputs.
         return array(
             array('duration, dt_playback, file_name, id_file, id_playlist, id_author', 'required'),
-            array('id, id_file, id_playlist, id_author, channel', 'numerical', 'integerOnly'=>true),
+            array('id, id_point, id_file, id_playlist, id_author, channel', 'numerical', 'integerOnly'=>true),
             array('duration', 'numerical'),
             array('file_name', 'length', 'max'=>255),
             array('dt_playback, dt', 'safe'),

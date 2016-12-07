@@ -362,6 +362,87 @@ class PointController extends Controller
         }
     }
 
+    public function actionAddPlaylistToChannel()
+    {
+        if(isset($_POST['channelType']) &&
+              isset($_POST['plId']) &&
+              isset($_POST['pointId']))
+        {
+            $channelType = intval($_POST['channelType']);
+            $plId = intval($_POST['plId']);
+            $pointId = intval($_POST['pointId']);
+
+            $model = new PlaylistToPoint();
+            $model->attributes = array(
+                'id_point' => $pointId,
+                'id_playlist' => $plId,
+                'channel_type' => $channelType,
+            );
+
+            if ($model->save()) {
+                echo json_encode(
+                    array(
+                            'status' => 'ok'
+                    ));
+            }
+            else
+            {
+                echo json_encode(
+                        array(
+                                'status' => 'err',
+                                'error' => 'Error during PlaylistToPoint model saving'
+                        ));
+            }
+        }
+        else
+        {
+            echo json_encode(
+                    array(
+                            'status' => 'err',
+                            'error' => 'Incorrect POST data during PlaylistToPoint model saving'
+                    ));
+        }
+    }
+
+    public function actionRemovePlaylistFromChannel()
+    {
+        if(isset($_POST['channelType']) &&
+              isset($_POST['plId']) &&
+              isset($_POST['pointId'])
+        ) {
+            $channelType = intval($_POST['channelType']);
+            $plId = intval($_POST['plId']);
+            $pointId = intval($_POST['pointId']);
+
+            if(PlaylistToPoint::model()->deleteAllByAttributes(array(
+                'id_point' => $pointId,
+                'id_playlist' => $plId,
+                'channel_type' => $channelType,
+            ))) {
+                echo json_encode(
+                        array(
+                                'status' => 'ok'
+                        ));
+            }
+            else
+            {
+                echo json_encode(
+                        array(
+                                'status' => 'err',
+                                'error' => 'Error during PlaylistToPoint model deleting'
+                        ));
+            }
+        }
+        else
+        {
+            echo json_encode(
+                    array(
+                            'status' => 'err',
+                            'error' => 'Incorrect POST data during PlaylistToPoint model deleting'
+                    ));
+        }
+    }
+
     public function beforeAction($action) {
         if( parent::beforeAction($action) ) {
             /* @var $cs CClientScript */
@@ -384,7 +465,6 @@ class PointController extends Controller
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/point.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointTV.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointVolume.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointChannels.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointScreen.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/playlistChooseDialog.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/widgetChooseDialog.js' );

@@ -34,7 +34,7 @@ $(document).ready(function(e){
                         plName = $(selectedPls[ii]).data('plnametoadd').toString();
 
                     if($.inArray(plId, channelPlIds(playlistLinksInChannel)) == -1){
-                        CM.AddPlaylistToChannel(channelid, plId, plName, function(e, plId, plName){
+                        CM.AddPlaylistToChannel(channelid, plId, pointId, plName, function(e, plId, plName){
                             if(e.status == 'ok'){
                                 curChannelContainer.append(
                                         "<div class='btn-group' role='group' aria-label=''>" +
@@ -76,7 +76,7 @@ $(document).ready(function(e){
             plId = $this.data("plidtoremove");
 
         if(confirm("Romeve playlist from channel?")){
-            CM.RemovePlaylistFromChannel(channelId, plId).done(function(e){
+            CM.RemovePlaylistFromChannel(channelId, plId, pointId).done(function(e){
                 if(e.status == 'ok'){
                     $this.parents(".btn-group").remove();
                 } else if(e.status == 'err'){

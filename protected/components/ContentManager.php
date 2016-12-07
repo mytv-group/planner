@@ -11,18 +11,16 @@ class ContentManager extends CApplicationComponent
         $pointDate = new DateTime($pointDatetimeStr);
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
-        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `playlistId`, `t4`.`id` AS 'id-author' FROM `channel` AS `t1` " .
-            "JOIN `playlist_to_channel` AS `t2` " .
+        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `id_playlist`, `t4`.`id` AS 'id-author' FROM `playlist_to_point` AS `t2` " .
             "JOIN `playlists` AS `t3` " .
             "JOIN `user` AS `t4` " .
-            "ON `t1`.`id` = `t2`.`channelId` " .
+            "ON `t2`.`id_playlist` = `t3`.`id` " .
             "AND `t3`.`author` = `t4`.`username` " .
-            "AND `t2`.`playlistId` = `t3`.`id` " .
-            "AND `t1`.`id_point` = '" . $pointId . "' " .
-            "AND `t1`.`internalId` = '" . $pointChannel . "' " .
+            "AND `t2`.`id_point` = '" . $pointId . "' " .
             "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
             "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
             "AND `t3`.`" . $weekDay . "` = '1' " .
+            "AND `t2`.`channel_type` = '" . $pointChannel . "' " .
             "ORDER BY `fromTime`;";
 
         $command=$connection->createCommand($sql);
@@ -128,17 +126,15 @@ class ContentManager extends CApplicationComponent
     {
         $connection = Yii::app()->db;
 
-        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `every`, `playlistId`, `t4`.`id` AS 'id-author' FROM `channel` AS `t1` " .
-            "JOIN `playlist_to_channel` AS `t2` " .
+        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `every`, `id_playlist`, `t4`.`id` AS 'id-author' FROM `playlist_to_point` AS `t2` " .
             "JOIN `playlists` AS `t3` " .
             "JOIN `user` AS `t4` " .
-            "ON `t1`.`id` = `t2`.`channelId` " .
+            "ON `t2`.`id_playlist` = `t3`.`id` " .
             "AND `t3`.`author` = `t4`.`username` " .
-            "AND `t2`.`playlistId` = `t3`.`id` " .
-            "AND `t1`.`id_point` = '" . $pointId . "' " .
-            "AND `t1`.`internalId` = '" . $pointChannel . "' " .
+            "AND `t2`.`id_point` = '" . $pointId . "' " .
             "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
             "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
+            "AND `t2`.`channel_type` = '" . $pointChannel . "' " .
             "AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '1';";
 
         $command=$connection->createCommand($sql);

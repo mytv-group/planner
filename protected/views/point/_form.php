@@ -90,45 +90,48 @@
             echo $form->labelEx($model,'channels');
 
             printf("<div id='channelsList'>");
-            $channels = $model->channels;
+            $playlistsToPoint = $model->playlistToPoint;
 
-            foreach ($channels as $channel)
+            for ($ii = 1; $ii <= 3; $ii++)
             {
-                if($channel->window_id == null)
-                {
-                    printf("<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>",
-                        $channel['id']);
-                    $channelM = Channel::model()->findByPk($channel['id']);
-                    $pls = $channelM->playlists;
+                printf("<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>",
+                    $ii);
 
-                    printf("<div class='btn-group' role='group' aria-label=''>" .
-                        "<button type='button' class='btn btn-default ChannelButt'>".
-                            "Channel %s <span class='glyphicon glyphicon-minus' style='color:#F05757;'></span></button>".
-                        "<button type='button' class='AddPlaylistsBut btn btn-info' data-channelid='%s'>" .
-                        "<span class='glyphicon glyphicon-plus'></span> Add playlists" .
-                        "</button></div>", $channel['internalId'], $channel['id']);
+                printf("<div class='btn-group' role='group' aria-label=''>" .
+                    "<button type='button' class='btn btn-default ChannelButt'>".
+                        "Channel %s </button>".
+                    "<button type='button' class='AddPlaylistsBut btn btn-info' data-channelid='%s'>" .
+                    "<span class='glyphicon glyphicon-plus'></span> Add playlists" .
+                    "</button></div>", $ii, $ii);
 
-                    foreach ($pls as $pl)
-                    {
-                        echo "<div class='btn-group' role='group' aria-label=''>";
+                $channelPlaylists = [];
+                foreach ($playlistsToPoint as $pl) {
+                    if ($pl->channel_type == $ii) {
+                        $channelPlaylists[] = Playlists::model()->findByPk($pl->id_playlist);;
+                    }
+                }
+
+                if (count($playlistsToPoint) > 0) {
+                    echo "<div class='btn-group' role='group' aria-label=''>";
+                }
+                foreach ($channelPlaylists as $pl) {
                         printf("<button type='button' class='PlaylistLinks btn btn-default' ".
                                 "data-plid='%s'>%s</button>",
                             $pl['id'], CHtml::link($pl['name'], array('playlists/' . $pl['id'])));
                         printf("<button type='button' class='RemovePlaylist btn btn-danger' ".
                                 "data-plidtoremove='%s' ".
                                 "data-channelidpltoremove='%s' ".
-                            ">x</button>", $pl['id'], $channel['id']);
-                        echo "</div>";
-                    }
+                            ">x</button>", $pl['id'], $ii);
+                }
 
+                if (count($playlistsToPoint) > 0) {
                     echo "</div>";
                 }
+
+                echo "</div>";
             }
 
             printf("</div>");
-            printf("<button type='button' id='addChannel' class='btn btn-default'>" .
-                    "<span class='glyphicon glyphicon-plus'></span> Add channel" .
-                    "</button>");
         }
     ?>
 
@@ -165,6 +168,7 @@
 
             if(!$model->isNewRecord)
             {
+                $channels = $model->channels;
                 $ScreenModelId = $model->screen_id;
                 if($ScreenModelId != null){
                     $ScreenModel = Screen::model()->findByPk($ScreenModelId);
@@ -179,12 +183,9 @@
                             foreach ($channels as $channel) {
                                 if(($channel->id_point === $model->id) && ($channel->window_id === $window->id)) {
                                     printf ( "<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>", $channel ['id'] );
-                                    $channelM = Channel::model()->findByPk($channel['id']);
-                                    $pls = $channelM->playlists;
 
                                     $widgetToChannel = WidgetToChannel::model()->find("channel_id = :channel_id",
                                         array("channel_id" => $channel['id']));
-                                    $pls = $channelM->playlists;
 
                                     printf ("<div class='btn-group' role='group' aria-label=''>" .
                                             "<button type='button' class='btn btn-default ChannelButt' disabled='disabled'>Screen %s</button>",

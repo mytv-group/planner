@@ -58,8 +58,8 @@ class Point extends CActiveRecord
     {
         return array(
             'channels'=>array(self::HAS_MANY, 'Channel', 'id_point'),
-            'playlistToChannel'=>array(self::HAS_MANY,'PlaylistToChannel',array('id'=>'channelId'),'through'=>'channels'),
-            'playlists'=>array(self::HAS_MANY,'Playlists', array('playlistId'=>'id'),'through'=>'playlistToChannel'),
+            'playlistToPoint'=>array(self::HAS_MANY,'PlaylistToPoint', array('id_point' => 'id')),
+            'playlists'=>array(self::HAS_MANY,'Playlists', array('id_playlist'=>'id'),'through'=>'playlistToPoint'),
             'pointtonet'=>array(self::HAS_MANY, 'PointToNetByUsers', 'point_id'),
             'net'=>array(self::HAS_MANY, 'Net', array('netId'=>'id'),'through'=>'pointtonet'),
             'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id')

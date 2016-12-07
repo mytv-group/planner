@@ -12,7 +12,7 @@ class InterfaceController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('getPointSchedule', 'getChannels', 'getTVschedule', 'setSync', 'postStatistics'),
+                'actions'=>array('getPointSchedule', 'getTVschedule', 'setSync', 'postStatistics'),
                 'users'=>array('*'),
             ),
             array('deny',  // deny all users
@@ -26,31 +26,6 @@ class InterfaceController extends Controller
         return [
             'postOnly + postStatistics',
         ];
-    }
-
-    public function actionGetChannels($id)
-    {
-        $pointId = intval($id);
-
-        if(is_int($pointId))
-        {
-          $channels = Channel::model()->findAll(["condition"=>"id_point = $pointId"]);
-
-          $channelIds = [];
-          foreach($channels as $channel) {
-              $channelIds[] = $channel->internalId;
-          }
-
-          if(count($channelIds) > 0)
-          {
-              echo implode($this->eol, $channelIds);
-              exit;
-          }
-
-          http_response_code(404);
-          echo sprintf("No channes attached to point %s, or point does not exist", $pointId);
-          exit;
-        }
     }
 
     // interface/getPointSchedule/id/124/ch/1/date/20160806

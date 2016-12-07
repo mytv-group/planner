@@ -3,98 +3,84 @@
 /* @var $model Point */
 
 // $this->breadcrumbs=array(
-// 	'Points'=>array('index'),
-// 	$model->name,
+//   'Points'=>array('index'),
+//   $model->name,
 // );
 
 $this->menu=array(
-	array('label'=>'List', 'url'=>array('index')),
-	array('label'=>'Create', 'url'=>array('create')),
-	array('label'=>'Update', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete', 'url'=>array('delete', 'id'=>$model->id), 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+  array('label'=>'List', 'url'=>array('index')),
+  array('label'=>'Create', 'url'=>array('create')),
+  array('label'=>'Update', 'url'=>array('update', 'id'=>$model->id)),
+  array('label'=>'Delete', 'url'=>array('delete', 'id'=>$model->id), 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 );
 ?>
 
 <h1>View Point: <?php echo $model->name; ?></h1>
 
-<?php 
+<?php
 
 
 function getPointSpaceInfo ($ip) {
-	$spaceInfo = Yii::app()->pointInfo->getSpaceInfo($ip);
-	return isset($spaceInfo['free']) ? $spaceInfo['free'] : '';
+  $spaceInfo = Yii::app()->pointInfo->getSpaceInfo($ip);
+  return isset($spaceInfo['free']) ? $spaceInfo['free'] : '';
 }
 
 $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		/*'id',*/
-		'name',
-		/*'username',*/
-		/*'password',*/
-		'volume',
-		'sync',
-		'sync_time',
-		'update_time',
-		array(
-			'name' => 'free_space',
-			'value' => getPointSpaceInfo($model->ip),
-			'type'  => 'raw',
-		),
-		/*array(
-				'name'  => 'channel1',
-				'value' => $model->channel1 ? CHtml::link($channelNames[1], Yii::app()->
-					createUrl("playlist/view",array("id"=>$model->channel1))) : '',
-				'type'  => 'raw',
-		),
-		array(
-				'name'  => 'channel2',
-				'value' => $model->channel2 ? CHtml::link($channelNames[2], Yii::app()->
-					createUrl("playlist/view",array("id"=>$model->channel2))) : '',
-				'type'  => 'raw',
-		),
-		array(
-				'name'  => 'channel3',
-				'value' => $model->channel3 ? CHtml::link($channelNames[3], Yii::app()->
-						createUrl("schedule/update",array("id"=>$model->channel3))) : '',
-				'type'  => 'raw',
-		),
-		array(
-				'name'  => 'channel3',
-				'value' => $model->channel4 ? CHtml::link($channelNames[4], Yii::app()->
-						createUrl("schedule/update",array("id"=>$model->channel4))) : '',
-				'type'  => 'raw',
-		),*/
-	),
+  'data'=>$model,
+  'attributes'=>array(
+    'name',
+    'volume',
+    'sync',
+    'sync_time',
+    'update_time',
+    array(
+      'name' => 'free_space',
+      'value' => getPointSpaceInfo($model->ip),
+      'type'  => 'raw',
+    ),
+  ),
 )); ?>
 
 
 <div class="PointPlaylistsInView">
-	<?php 
-	
-		$channels = $model->channels;
-		foreach ($channels as $channel)
-		{
-			printf("<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>", 
-				$channel['id']); 
-			$channelM = Channel::model()->findByPk($channel['id']);
-			$pls = $channelM->playlists;
-			
-			printf("<div class='btn-group' role='group' aria-label=''>
-				<button class='ChannelId btn btn-default' disabled>Id: %s</button>".
-				"</div>", $channel['internalId']);
-			
-			foreach ($pls as $pl)
-			{
-				
-				echo "<div class='btn-group' role='group' aria-label=''>";
-				printf("<button type='button' class='btn btn-default'>%s</button>",
-					CHtml::link($pl['name'], array('playlists/' . $pl['id'])));
-				echo "</div>";
-			}
-						
-			echo "</div>";
-		}
-	?>
+<?php
+  printf("<div id='channelsList'>");
+  $playlistsToPoint = $model->playlistToPoint;
+
+  for ($ii = 1; $ii <= 3; $ii++)
+  {
+      printf("<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>",
+          $ii);
+
+      printf("<div class='btn-group' role='group' aria-label=''>" .
+          "<button type='button' class='btn btn-default ChannelButt'>".
+              "Channel %s </button>".
+          "</div>", $ii, $ii);
+
+      $channelPlaylists = [];
+      foreach ($playlistsToPoint as $pl) {
+          if ($pl->channel_type == $ii) {
+              $channelPlaylists[] = Playlists::model()->findByPk($pl->id_playlist);;
+          }
+      }
+
+      if (count($playlistsToPoint) > 0) {
+          echo "<div class='btn-group' role='group' aria-label=''>";
+      }
+      foreach ($channelPlaylists as $pl) {
+              printf("<button type='button' class='PlaylistLinks btn btn-default' ".
+                      "data-plid='%s'>%s</button>",
+                  $pl['id'], CHtml::link($pl['name'], array('playlists/' . $pl['id'])));
+      }
+
+      if (count($playlistsToPoint) > 0) {
+          echo "</div>";
+      }
+
+      echo "</div>";
+  }
+
+  printf("</div>");
+?>
 
 </div>

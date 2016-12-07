@@ -268,52 +268,47 @@ class Point extends CActiveRecord
             }
         }
 
-        $avaliableChannels = $model->channels;
+        $avaliablePlaylists = PlaylistToPoint::model()->findAllByAttributes([
+          'id_point' => $id
+        ]);
 
         $connection = Yii::app()->db;
-        foreach ($avaliableChannels as $channel)
+        foreach ($avaliablePlaylists as $playlistToPoint)
         {
-            $channelId = $channel['id'];
-            $channelInfo = Channel::model()->findByPk($channelId);
-            $internalId = $channelInfo['internalId'];
-            $playlists = $channelInfo->playlists;
-
-            $channelDir = $pointDir . "/" . $internalId;
+            $pl = $playlistToPoint->playlist;
+            $channelDir = $pointDir . "/" . $playlistToPoint->channel_type;
             $channelFullDir = $this->PrepareSpoolPath($channelDir);
 
-            foreach ($playlists as $pl)
+            $plFiles = explode(",", $pl->files);
+
+            foreach ($plFiles as $fileId)
             {
-                $plFiles = explode(",", $pl->files);
-
-                foreach ($plFiles as $fileId)
+                if($fileId != '')
                 {
-                    if($fileId != '')
+                    $connection->active=true;
+                    $sql = "SELECT `name`, `path` FROM `file` WHERE `id` = ".$fileId.";";
+                    $command = $connection->createCommand($sql);
+                    $dataReader=$command->query();
+
+                    if(($row=$dataReader->read())!==false)
                     {
-                        $connection->active=true;
-                        $sql = "SELECT `name`, `path` FROM `file` WHERE `id` = ".$fileId.";";
-                        $command = $connection->createCommand($sql);
-                        $dataReader=$command->query();
+                        $path = $row['path'];
+                        $fileName = $row['name'];
+                        $symlinkPath = $channelFullDir . $fileName;
 
-                        if(($row=$dataReader->read())!==false)
+                        if(!file_exists($symlinkPath))
                         {
-                            $path = $row['path'];
-                            $fileName = $row['name'];
-                            $symlinkPath = $channelFullDir . $fileName;
-
-                            if(!file_exists($symlinkPath))
+                            if(defined('SYMLINK'))
                             {
-                                if(defined('SYMLINK'))
-                                {
-                                    symlink($path, $symlinkPath);
-                                }
-                                else
-                                {
-                                    copy($path, $symlinkPath);
-                                }
+                                symlink($path, $symlinkPath);
+                            }
+                            else
+                            {
+                                copy($path, $symlinkPath);
                             }
                         }
-                        $connection->active=false;
                     }
+                    $connection->active=false;
                 }
             }
         }

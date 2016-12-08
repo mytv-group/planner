@@ -83,7 +83,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                                         '</button>' .
                                     '</form>';
 
-                        $delBut = '<form action="/point/delete/' . $data->id . '" type="post" class="btn-group">' .
+                        $delBut = '<form action="/point/delete/' . $data->id . '" type="post" class="delete-point btn-group">' .
                                         '<button type="submit" class="btn btn-danger btn-sm">' .
                                             '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' .
                                         '</button>' .
@@ -141,7 +141,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                                     '</button>' .
                                     '</form>';
 
-                        $delBut = '<form action="/playlists/delete/' . $data->id . '" type="post" class="btn-group">' .
+                        $delBut = '<form action="/playlists/delete/' . $data->id . '" type="post" class="delete-playlist btn-group">' .
                                     '<button type="submit" class="btn btn-danger btn-sm">' .
                                     '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' .
                                     '</button>' .

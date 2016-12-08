@@ -164,10 +164,11 @@ class PlaylistsController extends Controller
     public function actionDelete($id)
     {
         $model = $this->loadModel($id);
-        $files = explode(",", $model->files);
+        $files = trim($model->files);
         $model->delete();
-        if($files != '') {
-            $this->DeleteALLFilesFromPlaylist($id, $files);
+        if(isset($files) && ($files != '')) {
+            $filesArr = explode(",", $files);
+            $this->DeleteALLFilesFromPlaylist($id, $filesArr);
         }
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

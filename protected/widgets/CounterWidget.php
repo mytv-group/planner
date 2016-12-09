@@ -1,23 +1,11 @@
 <?
-class WeatherWidget extends CWidget
+class CounterWidget extends CWidget
 {
     private $type = '';
     private $config;
 
-    private $imgFolder = '/widgets-content/weather/';
-    private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q';
-    private $celsiusMin = 273.15;
-    private $imageCacheTime = 3600;
-    private $weekDays = [
-        'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
-    ];
-
-    private $apiKey;
-
-    private function setApiKey()
-    {
-        $this->apiKey = Yii::app()->params['weatherApiKey'];
-    }
+    private $imgFolder = '/widgets-content/counter/';
+    private $imageCacheTime = 1;
 
     private function getOutput()
     {
@@ -27,9 +15,15 @@ class WeatherWidget extends CWidget
 
         return $this->imgFolder . 'runtime' . DIRECTORY_SEPARATOR . $this->config->output;
     }
-
     /*$config example
-    * {"city": "Kiev,ua", "cityshow":"Київ", "output":"weather.png","bg":"background.png"}
+    * "header": "НОВИЙ РІК",
+    * "below_header":"Почнеться через",
+    * "footer":"ДНІВ",
+    * "test":"1",
+    * "test_current_time":"2016-12-30 22:40:11",
+    * "logo": "logo",
+    * "output": "counter.png",
+    * "bg":"background.png"
     */
     public function setConfig($config)
     {
@@ -41,23 +35,39 @@ class WeatherWidget extends CWidget
         $this->type = $type;
     }
 
-    private function buildRequest()
-    {
-        if ($this->apiKey && $this->config->city) {
-            return $this->apiUrl . '=' . $this->config->city . '&appid=' . $this->apiKey;
-        }
-        return false;
-    }
-
     private function checkConfig()
     {
-        if(!isset($this->config->cityname)) {
+        if (!isset($this->config->header)) {
             throw new Error (implode('',
-                ['Widget ', __CLASS__, ' config error. No cityname.']
+                ['Widget ', __CLASS__, ' config error. No header text.']
             ));
         }
 
-        if(!isset($this->config->output)) {
+        if (!isset($this->config->below_header)) {
+            throw new Error (implode('',
+                ['Widget ', __CLASS__, ' config error. No below_header text.']
+            ));
+        }
+
+        if (!isset($this->config->footer)) {
+            throw new Error (implode('',
+                ['Widget ', __CLASS__, ' config error. No footer text.']
+            ));
+        }
+
+        if (!isset($this->config->footer2)) {
+            throw new Error (implode('',
+                ['Widget ', __CLASS__, ' config error. No footer2 text.']
+            ));
+        }
+
+        if (!isset($this->config->logo)) {
+            throw new Error (implode('',
+                ['Widget ', __CLASS__, ' config error. No logo.']
+            ));
+        }
+
+        if (!isset($this->config->output)) {
             throw new Error (implode('',
                 ['Widget ', __CLASS__, ' config error. No output image name.']
             ));
@@ -65,7 +75,7 @@ class WeatherWidget extends CWidget
 
         if (!isset($this->config->bg)) {
             throw new Error (implode('',
-                ['Widget ', __CLASS__, ' configured background unexist.']
+                ['Widget ', __CLASS__, ' config error. No bg image name.']
             ));
         }
 
@@ -82,23 +92,6 @@ class WeatherWidget extends CWidget
 
     private function generateImage()
     {
-
-        $json = file_get_contents($this->buildRequest());
-        $responce = json_decode($json, true);
-
-        if (!isset($responce['main'])
-          || !isset($responce['weather'])
-          || !isset($responce['weather'][0])
-          || !isset($responce['weather'][0]['icon'])
-          || !isset($responce['main']['temp'])) {
-            throw new Error (implode('',
-                ['Widget ', __CLASS__, ' weather API responce error.']
-            ));
-        }
-
-        $temperature = round($responce['main']['temp'] - $this->celsiusMin) . '°';
-        $icon = $responce['weather'][0]['icon'] . '.png';
-
         $image = @imagecreatetruecolor(400, 300);
         imagesavealpha($image, true);
         if (!$image) {
@@ -110,23 +103,13 @@ class WeatherWidget extends CWidget
         $color = imagecolorallocate($image, 255, 255, 255);
         imagefill($image, 0, 0, $color);
 
-        $icon = dirname(Yii::app()->basePath)
+        $logo = dirname(Yii::app()->basePath)
           . DIRECTORY_SEPARATOR . $this->imgFolder
-          . DIRECTORY_SEPARATOR . 'ico'
-          . DIRECTORY_SEPARATOR . $icon;
+          . DIRECTORY_SEPARATOR . 'logo.png';
 
-        $notAvaliableIcon = dirname(Yii::app()->basePath)
-          . DIRECTORY_SEPARATOR . $this->imgFolder
-          . DIRECTORY_SEPARATOR . 'ico'
-          . DIRECTORY_SEPARATOR . 'na.png';
-
-        if (!file_exists($icon)) {
-            $icon = $notAvaliableIcon;
-        }
-
-        if (!file_exists($icon)) {
+        if (!file_exists($logo)) {
             throw new Error (implode('',
-                ['Widget ', __CLASS__, ' icon unexist.']
+                ['Widget ', __CLASS__, ' logo unexist.']
             ));
         }
 
@@ -135,25 +118,38 @@ class WeatherWidget extends CWidget
           . DIRECTORY_SEPARATOR . $this->config->bg;
 
         $bg = imagecreatefrompng($bg);
-        $icon = imagecreatefrompng($icon);
+        $logo = imagecreatefrompng($logo);
 
         $textColor = imagecolorallocatealpha($image, 255, 255, 255, 0);
 
         imagecopy($image, $bg, 0, 0, 0, 0, 400, 300);
-        imagecopy($image, $icon, 138, 105, 0, 0, imagesx($icon), imagesx($icon));
+        imagecopy($image, $logo, 168, 224, 0, 0, imagesx($logo), imagesx($logo));
         putenv('GDFONTPATH=' . dirname(Yii::app()->basePath)
           . DIRECTORY_SEPARATOR . 'css'
           . DIRECTORY_SEPARATOR . 'fonts');
 
         $font = getenv('GDFONTPATH') . DIRECTORY_SEPARATOR . 'arialbd.ttf';
 
-        $w =  $this->weekDays[date('w')];
+        $counter = $this->daysLeft();
 
-        $temperatureXpos = 192 - (strlen($temperature) - 2) * 10;
+        if ($this->daysLeft() < 5) {
+            $counter = $this->hoursLeft();
+        }
 
-        imagettftext($image, 36, 0, 155, 60, $textColor, $font, $this->config->cityname);
-        imagettftext($image, 16, 0, 158, 105, $textColor, $font, $w . ', ' . date('d/m'));
-        imagettftext($image, 40, 0, $temperatureXpos, 280, $textColor, $font, $temperature);
+        $counterXpos = 174 - (strlen($counter) - 1) * 10;
+
+        imagettftext($image, 24, 0, 120, 60, $textColor, $font, $this->config->header);
+        imagettftext($image, 24, 0, 70, 95, $textColor, $font, $this->config->below_header);
+        imagettftext($image, 54, 0, $counterXpos, 170, $textColor, $font, $counter);
+        if ($this->daysLeft() < 5) {
+            imagettftext($image, 24, 0, 150, 204, $textColor, $font, $this->config->footer2);
+        } else {
+            imagettftext($image, 24, 0, 166, 204, $textColor, $font, $this->config->footer);
+        }
+
+        if ($this->config->test_current_time) {
+            imagettftext($image, 12, 0, 10, 20, $textColor, $font, date('y-m-d H:i:s'));
+        }
 
         imagepng($image, dirname(Yii::app()->basePath) . $this->getOutput(), 1);
         imagedestroy($image);
@@ -161,10 +157,35 @@ class WeatherWidget extends CWidget
         return;
     }
 
+    private function daysLeft()
+    {
+        $datetime1 = new DateTime();
+        if ($this->config->test_current_time) {
+            $datetime1 = date_create($this->config->test_current_time);
+        }
+        $datetime2 = date_create('2017-01-01 00:00:00');
+
+        $interval = date_diff($datetime1, $datetime2);
+
+        return $interval->format('%d');
+    }
+
+    private function hoursLeft()
+    {
+        $datetime1 = new DateTime();
+        if ($this->config->test_current_time) {
+            $datetime1 = date_create($this->config->test_current_time);
+        }
+        $datetime2 = date_create('2017-01-01 00:00:00');
+
+        $interval = date_diff($datetime1, $datetime2);
+
+        return $interval->format('%d') * 24 + $interval->format('%H');
+    }
+
     public function run()
     {
         $this->checkConfig();
-        $this->setApiKey();
 
         if (($this->type !== '') && method_exists($this, $this->type)) {
             call_user_func([$this, $this->type]);
@@ -183,13 +204,13 @@ class WeatherWidget extends CWidget
             $fileCreated = filemtime (dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput());
 
             if ((time() - $fileCreated) < $this->imageCacheTime) {
-                echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather temperature"/>', $this->getOutput());
+                echo sprintf('<img class="widget-preview-img" src="%s" alt="Counter"/>', $this->getOutput());
                 exit;
             }
         }
 
         $this->generateImage();
-        echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather temperature"/>', $this->getOutput());
+        echo sprintf('<img class="widget-preview-img" src="%s" alt="Counter"/>', $this->getOutput());
         exit;
     }
 

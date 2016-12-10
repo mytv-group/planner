@@ -420,9 +420,9 @@ class PointController extends Controller
                 'channel_type' => $channelType,
             ))) {
                 echo json_encode(
-                        array(
-                                'status' => 'ok'
-                        ));
+                    array(
+                            'status' => 'ok'
+                    ));
             }
             else
             {

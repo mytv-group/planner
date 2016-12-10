@@ -171,6 +171,10 @@ class PlaylistsController extends Controller
             $this->DeleteALLFilesFromPlaylist($id, $filesArr);
         }
 
+        PlaylistToPoint::model()->deleteAllByAttributes([
+            'id_playlist' => $id,
+        ]);
+
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if(!isset($_GET['ajax'])) {
             $this->redirect(array('playlists/index'),array(

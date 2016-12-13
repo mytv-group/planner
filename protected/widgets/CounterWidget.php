@@ -147,7 +147,7 @@ class CounterWidget extends CWidget
             imagettftext($image, 24, 0, 166, 204, $textColor, $font, $this->config->footer);
         }
 
-        if ($this->config->test_current_time) {
+        if (isset($this->config->test_current_time)) {
             imagettftext($image, 12, 0, 10, 20, $textColor, $font, date('y-m-d H:i:s'));
         }
 
@@ -160,7 +160,7 @@ class CounterWidget extends CWidget
     private function daysLeft()
     {
         $datetime1 = new DateTime();
-        if ($this->config->test_current_time) {
+        if (isset($this->config->test_current_time)) {
             $datetime1 = date_create($this->config->test_current_time);
         }
         $datetime2 = date_create('2017-01-01 00:00:00');
@@ -173,7 +173,7 @@ class CounterWidget extends CWidget
     private function hoursLeft()
     {
         $datetime1 = new DateTime();
-        if ($this->config->test_current_time) {
+        if (isset($this->config->test_current_time)) {
             $datetime1 = date_create($this->config->test_current_time);
         }
         $datetime2 = date_create('2017-01-01 00:00:00');

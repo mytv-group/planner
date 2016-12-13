@@ -9,7 +9,7 @@ class WeatherWidget extends CWidget
     private $celsiusMin = 273.15;
     private $imageCacheTime = 3600;
     private $weekDays = [
-        'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
+        '', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
     ];
 
     private $apiKey;

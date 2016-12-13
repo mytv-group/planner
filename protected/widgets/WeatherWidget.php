@@ -107,7 +107,7 @@ class WeatherWidget extends CWidget
             ));
         }
 
-        $color = imagecolorallocate($image, 255, 255, 255);
+        $color = imagecolorallocatealpha($image, 0, 0, 0, 127);
         imagefill($image, 0, 0, $color);
 
         $icon = dirname(Yii::app()->basePath)

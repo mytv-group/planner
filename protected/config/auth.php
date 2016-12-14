@@ -285,9 +285,9 @@ return array(
         'children' => array(
             'heapUser',
             'playlistUser',
-            'netUser',
             'pointUser',
-            'screenUser'
+            'screenUser',
+            'widgetUser',
         ),
         'bizRule' => null,
         'data' => [
@@ -299,8 +299,8 @@ return array(
         'description' => 'Administrator',
         'children' => array(
             'moderator',
+            'netUser',
             'userEditorUser',
-            'widgetUser',
         ),
         'bizRule' => null,
         'data' => [

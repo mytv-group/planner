@@ -85,6 +85,7 @@ class Widget extends CActiveRecord
     {
         if (!is_int(intval($this->show_duration))
             || !is_int(intval($this->periodicity))
+            || !is_int(intval($this->offset))
         ) {
             throw new Error (implode('',
                 [ __CLASS__, ' contains corrupted data ', $this->show_duration, ', ', $this->periodicity, '.']
@@ -93,7 +94,8 @@ class Widget extends CActiveRecord
 
         return [
             'show_duration' => $this->show_duration,
-            'periodicity' => $this->periodicity
+            'periodicity' => $this->periodicity,
+            'offset' => $this->offset
         ];
     }
 

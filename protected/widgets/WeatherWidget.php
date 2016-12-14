@@ -9,7 +9,7 @@ class WeatherWidget extends CWidget
     private $celsiusMin = 273.15;
     private $imageCacheTime = 3600;
     private $weekDays = [
-        'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
+        '', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
     ];
 
     private $apiKey;
@@ -107,7 +107,7 @@ class WeatherWidget extends CWidget
             ));
         }
 
-        $color = imagecolorallocate($image, 255, 255, 255);
+        $color = imagecolorallocatealpha($image, 0, 0, 0, 127);
         imagefill($image, 0, 0, $color);
 
         $icon = dirname(Yii::app()->basePath)

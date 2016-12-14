@@ -36,7 +36,7 @@ class ContentManager extends CApplicationComponent
 
             $files = $row['files'];
             $type = $row['type'];
-            $playlistId = $row['id'];
+            $playlistId = $row['id_playlist'];
             $authorId = $row['id-author'];
 
             /* if today starts showing check broadcasting is later showing begin */
@@ -166,7 +166,7 @@ class ContentManager extends CApplicationComponent
                     $row2['duration'] . " " . $row2['name'] . " "
                         . "duration:" . $row2['duration'] . ";"
                         . "file:" . $row2['id'] . ";"
-                        . "pl:" . $row['playlistId'] . ";"
+                        . "pl:" . $row['id_playlist'] . ";"
                         . "author:" . $row['id-author'] . ""
                         . $this->eol /*ready to output str*/
                 );

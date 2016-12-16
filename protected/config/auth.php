@@ -279,6 +279,18 @@ return array(
             'avaliable' => true,
         ],
     ),
+    'monitoring' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Moderator',
+        'children' => array(
+            'playlistViewUser',
+            'pointViewUser',
+        ),
+        'bizRule' => null,
+        'data' => [
+            'avaliable' => true,
+        ],
+    ),
    'moderator' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Moderator',

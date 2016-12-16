@@ -7,7 +7,7 @@ class WeatherWidget extends CWidget
     private $imgFolder = '/widgets-content/weather/';
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q';
     private $celsiusMin = 273.15;
-    private $imageCacheTime = 3600;
+    private $imageCacheTime = 60;
     private $weekDays = [
         '', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
     ];
@@ -99,7 +99,9 @@ class WeatherWidget extends CWidget
         $temperature = round($responce['main']['temp'] - $this->celsiusMin) . '°';
         $icon = $responce['weather'][0]['icon'] . '.png';
 
-        $image = @imagecreatetruecolor(400, 300);
+        $imageWidth = 400;
+        $imageHeigth = 300;
+        $image = @imagecreatetruecolor($imageWidth, $imageHeigth);
         imagesavealpha($image, true);
         if (!$image) {
             throw new Error (implode('',
@@ -149,9 +151,10 @@ class WeatherWidget extends CWidget
 
         $w =  $this->weekDays[date('w')];
 
+        $cityXpos = ($imageWidth - strlen($this->config->cityname) * 12) / 2;
         $temperatureXpos = 192 - (strlen($temperature) - 2) * 10;
 
-        imagettftext($image, 36, 0, 155, 60, $textColor, $font, $this->config->cityname);
+        imagettftext($image, 36, 0, $cityXpos, 60, $textColor, $font, $this->config->cityname);
         imagettftext($image, 16, 0, 158, 105, $textColor, $font, $w . ', ' . date('d/m'));
         imagettftext($image, 40, 0, $temperatureXpos, 280, $textColor, $font, $temperature);
 

@@ -23,11 +23,23 @@ $(document).ready(function () {
         ).done(function (result) {
             $previewBox.empty();
             $previewBox.append(result);
-            $previewBox.css({
-                top: buttonPosition.top - $previewBox.height() / 2,
-                left: buttonPosition.left - $previewBox.width() - 10
-            });
+
             $previewBox.addClass('is-active');
+            var height = $previewBox.height();
+            var width = $previewBox.width();
+
+            if (height === 0) {
+                height = 300;
+            }
+
+            if (width === 0) {
+                width = 400;
+            }
+
+            $previewBox.css({
+                top: buttonPosition.top - height / 2,
+                left: buttonPosition.left - width - 10
+            });
         });
     });
 });

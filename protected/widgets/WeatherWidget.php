@@ -158,6 +158,12 @@ class WeatherWidget extends CWidget
         imagettftext($image, 16, 0, 158, 105, $textColor, $font, $w . ', ' . date('d/m'));
         imagettftext($image, 40, 0, $temperatureXpos, 280, $textColor, $font, $temperature);
 
+        if (isset($this->config->rotation)
+            && is_int(intval($this->config->rotation))
+        ) {
+            $image = imagerotate($image, $this->config->rotation, 0);
+        }
+
         imagepng($image, dirname(Yii::app()->basePath) . $this->getOutput(), 1);
         imagedestroy($image);
 

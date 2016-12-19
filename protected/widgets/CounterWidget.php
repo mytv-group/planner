@@ -151,6 +151,12 @@ class CounterWidget extends CWidget
             imagettftext($image, 12, 0, 10, 20, $textColor, $font, date('y-m-d H:i:s'));
         }
 
+        if (isset($this->config->rotation)
+            && is_int(intval($this->config->rotation))
+        ) {
+            $image = imagerotate($image, $this->config->rotation, 0);
+        }
+
         imagepng($image, dirname(Yii::app()->basePath) . $this->getOutput(), 1);
         imagedestroy($image);
 

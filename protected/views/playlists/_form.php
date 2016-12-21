@@ -8,20 +8,29 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'playlists-form',
-    // Please note: When you enable ajax validation, make sure the corresponding
-    // controller action is handling ajax validation correctly.
-    // There is a call to performAjaxValidation() commented in generated controller code.
-    // See class documentation of CActiveForm for details on this.
     'enableAjaxValidation'=>false,
 )); ?>
 
-    <p class="note">Fields with <span class="required">*</span> are required.</p>
+<?php
+    $isView = false;
+    if(isset($isViewForm)
+        && ($isViewForm === true)
+    ) {
+        $isView = true;
+    }
+?>
 
-    <?php echo $form->errorSummary($model); ?>
+    <?php if(!$isView): ?>
+        <p class="note">Fields with <span class="required">*</span> are required.</p>
+    <?php endif; ?>
+
+    <?php if(!$isView): ?>
+        <?php echo $form->errorSummary($model); ?>
+    <?php endif; ?>
 
     <div class="row">
         <?php echo $form->labelEx($model,'name'); ?>
-        <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>100, 'class'=>"form-control")); ?>
+        <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>100, 'class'=>"form-control", 'readonly' => $isView)); ?>
         <?php echo $form->error($model,'name'); ?>
     </div>
 
@@ -32,8 +41,8 @@
             <td><?php echo $form->labelEx($model,'toDatetime'); ?></td>
         </tr>
         <tr>
-            <td><?php echo $form->textField($model,'fromDatetime', array('class'=>"form-control datepicker")); ?></td>
-            <td><?php echo $form->textField($model,'toDatetime', array('class'=>"form-control datepicker")); ?></td>
+            <td><?php echo $form->textField($model,'fromDatetime', array('class'=>"form-control datepicker", 'disabled' => $isView)); ?></td>
+            <td><?php echo $form->textField($model,'toDatetime', array('class'=>"form-control datepicker", 'disabled' => $isView)); ?></td>
         </tr>
         <tr>
             <td><?php echo $form->error($model,'fromDatetime'); ?></td>
@@ -49,8 +58,8 @@
                 <td><?php echo $form->labelEx($model,'toTime'); ?></td>
             </tr>
             <tr>
-                <td><?php echo $form->textField($model,'fromTime', array('class'=>"form-control timepicker")); ?></td>
-                <td><?php echo $form->textField($model,'toTime', array('class'=>"form-control timepicker")); ?></td>
+                <td><?php echo $form->textField($model,'fromTime', array('class'=>"form-control timepicker", 'disabled' => $isView)); ?></td>
+                <td><?php echo $form->textField($model,'toTime', array('class'=>"form-control timepicker", 'disabled' => $isView)); ?></td>
             </tr>
             <tr>
                 <td><?php echo $form->error($model,'fromTime'); ?></td>
@@ -65,7 +74,8 @@
             array('0'=>'Background','1'=>'Advertising','2'=>'Stream'),
             array('class'=>"type-control",
                 'separator'=>' &nbsp; ',
-                'labelOptions'=>array('style'=>'display:inline;')
+                'labelOptions'=>array('style'=>'display:inline;'),
+                'disabled' => $isView
             )
         ); ?>
         <?php echo $form->error($model,'type'); ?>
@@ -78,7 +88,8 @@
             </tr>
             <tr>
                 <td>    <?php echo $form->textField($model,'every',array('class'=>"form-control timepicker",
-                            'value'=>$model->isNewRecord ? "00:30:00" : $model->every)); ?>
+                            'value'=>$model->isNewRecord ? "00:30:00" : $model->every,
+                            'readonly' => $isView)); ?>
                 </td>
             </tr>
             <tr>
@@ -89,7 +100,7 @@
 
     <div id="stream-url-block" class="row" >
         <?php echo $form->labelEx($stream,'url'); ?>
-        <?php echo $form->textField($stream,'url', array('class'=>"form-control")); ?>
+        <?php echo $form->textField($stream,'url', array('class'=>"form-control", 'disabled' => $isView)); ?>
         <?php echo $form->error($stream,'url'); ?>
     </div>
 
@@ -105,13 +116,13 @@
                 <td><?php echo $form->labelEx($model,'sat'); ?></td>
             </tr>
             <tr>
-                <td><?php echo $form->checkBox($model,'sun'); ?></td>
-                <td><?php echo $form->checkBox($model,'mon'); ?></td>
-                <td><?php echo $form->checkBox($model,'tue'); ?></td>
-                <td><?php echo $form->checkBox($model,'wed'); ?></td>
-                <td><?php echo $form->checkBox($model,'thu'); ?></td>
-                <td><?php echo $form->checkBox($model,'fri'); ?></td>
-                <td><?php echo $form->checkBox($model,'sat'); ?></td>
+                <td><?php echo $form->checkBox($model,'sun', ['disabled' => $isView]); ?></td>
+                <td><?php echo $form->checkBox($model,'mon', ['disabled' => $isView]); ?></td>
+                <td><?php echo $form->checkBox($model,'tue', ['disabled' => $isView]); ?></td>
+                <td><?php echo $form->checkBox($model,'wed', ['disabled' => $isView]); ?></td>
+                <td><?php echo $form->checkBox($model,'thu', ['disabled' => $isView]); ?></td>
+                <td><?php echo $form->checkBox($model,'fri', ['disabled' => $isView]); ?></td>
+                <td><?php echo $form->checkBox($model,'sat', ['disabled' => $isView]); ?></td>
             </tr>
         </table>
     </div>
@@ -130,9 +141,11 @@
         <?php echo $form->hiddenField($model,'author',array('value'=>Yii::app()->user->name)); ?>
     </div>
 
-    <div class="row buttons">
-        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>"form-control")); ?>
-    </div>
+    <?php if(!$isView): ?>
+        <div class="row buttons">
+            <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>"form-control")); ?>
+        </div>
+    <?php endif; ?>
 
 <?php $this->endWidget(); ?>
 

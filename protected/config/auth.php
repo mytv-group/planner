@@ -251,19 +251,6 @@ return array(
             'avaliable' => false,
         ],
     ),
-    'halfDemo' => array(
-        'type' => CAuthItem::TYPE_ROLE,
-        'description' => 'Demo',
-        'children' => array(
-            'heapUser',
-            'playlistUser',
-            'pointUser',
-        ),
-        'bizRule' => null,
-        'data' => [
-            'avaliable' => true,
-        ],
-    ),
     'demo' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Demo',
@@ -300,6 +287,7 @@ return array(
             'pointUser',
             'screenUser',
             'widgetUser',
+            'statisticsViewUser',
         ),
         'bizRule' => null,
         'data' => [

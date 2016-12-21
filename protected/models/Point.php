@@ -131,15 +131,6 @@ class Point extends CActiveRecord
         return parent::model($className);
     }
 
-    public function CheckNetOwnerExist($id)
-    {
-        $owner = null;
-        $model = self::model()->findByPk($id);
-
-
-        return $owner;
-    }
-
     public function GetPointPlaylistNames($id)
     {
         $model = self::model()->findByPk($id);

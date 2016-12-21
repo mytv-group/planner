@@ -2,11 +2,6 @@
 /* @var $this ScreenController */
 /* @var $model Screen */
 
-$this->breadcrumbs=array(
-	'Screens'=>array('index'),
-	'Manage',
-);
-
 $this->menu=array(
 	array('label'=>'Create', 'url'=>array('create')),
 );

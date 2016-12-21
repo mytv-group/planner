@@ -104,6 +104,19 @@ $mm = $this->widget ( 'zii.widgets.CMenu', array (
         ),
 
         array (
+            'label' => 'Statistics',
+            'url' => array (
+                '/statistic'
+            ),
+            'visible' => ! Yii::app ()->user->isGuest &&
+              Yii::app ()->user->checkAccess ( "statisticsViewUser" ),
+            'itemOptions' => array(
+                'class' => 'list-group-item',
+                'data-url'=> '/statistic'
+            )
+        ),
+
+        array (
             'label' => 'User',
             'url' => array (
                 '/user'
@@ -116,12 +129,9 @@ $mm = $this->widget ( 'zii.widgets.CMenu', array (
             )
         ),
     )
-
-) );
+));
 
 $this->widget ('zii.widgets.CMenu', array (
     'items' => $this->menu,
     'htmlOptions'=>array('class'=>'OperationsMenu list-group HiddenOnLoad'),
 ));
-
-?>

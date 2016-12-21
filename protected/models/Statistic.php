@@ -5,7 +5,9 @@
  *
  * The followings are the available columns in table 'statistic':
  * @property integer $id
+ * @property string $dt_playback
  * @property double $duration
+ * @property integer $channel
  * @property string $file_name
  * @property integer $id_file
  * @property integer $id_playlist
@@ -30,14 +32,14 @@ class Statistic extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('duration, dt_playback, file_name, id_file, id_playlist, id_author', 'required'),
-            array('id, id_point, id_file, id_playlist, id_author, channel', 'numerical', 'integerOnly'=>true),
+            array('id, dt_playback, duration, channel, file_name, id_file, id_playlist, id_author', 'required'),
+            array('id, channel, id_file, id_playlist, id_author', 'numerical', 'integerOnly'=>true),
             array('duration', 'numerical'),
-            array('file_name', 'length', 'max'=>255),
-            array('dt_playback, dt', 'safe'),
+            array('file_name', 'length', 'max'=>45),
+            array('dt', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, duration, file_name, id_file, id_playlist, id_author, dt', 'safe', 'on'=>'search'),
+            array('id, dt_playback, duration, channel, file_name, id_file, id_playlist, id_author, dt', 'safe', 'on'=>'search'),
         );
     }
 
@@ -46,9 +48,10 @@ class Statistic extends CActiveRecord
      */
     public function relations()
     {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
+            'point'=>array(self::HAS_ONE, 'Point', array('id'=>'id_point')),
+            'playlist'=>array(self::HAS_ONE, 'Playlists', array('id'=>'id_playlist')),
+            'file'=>array(self::HAS_ONE, 'File', 'id_file')
         );
     }
 
@@ -58,8 +61,9 @@ class Statistic extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id' => 'ID',
+            'dt_playback' => 'Playback datetime',
             'duration' => 'Duration',
+            'channel' => 'Channel',
             'file_name' => 'File Name',
             'id_file' => 'Id File',
             'id_playlist' => 'Id Playlist',
@@ -87,7 +91,9 @@ class Statistic extends CActiveRecord
         $criteria=new CDbCriteria;
 
         $criteria->compare('id',$this->id);
+        $criteria->compare('dt_playback',$this->dt_playback,true);
         $criteria->compare('duration',$this->duration);
+        $criteria->compare('channel',$this->channel);
         $criteria->compare('file_name',$this->file_name,true);
         $criteria->compare('id_file',$this->id_file);
         $criteria->compare('id_playlist',$this->id_playlist);
@@ -96,6 +102,9 @@ class Statistic extends CActiveRecord
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
+            'Pagination' => array (
+                 'PageSize' => 100
+             ),
         ));
     }
 

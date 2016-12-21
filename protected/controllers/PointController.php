@@ -79,7 +79,7 @@ class PointController extends Controller
         $model = $this->loadModel($id);
 
         $this->render('view',array(
-                'model'=>$model,
+            'model'=>$model,
         ));
     }
 

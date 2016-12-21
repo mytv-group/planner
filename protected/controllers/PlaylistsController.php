@@ -57,8 +57,17 @@ class PlaylistsController extends Controller
      */
     public function actionView($id)
     {
+        $model=$this->loadModel($id);
+        $author = $model->author;
+        $stream = new Stream();
+
+        if(count($model->stream) > 0) {
+            $stream = $model->stream[0];
+        }
+
         $this->render('view',array(
-            'model'=>$this->loadModel($id),
+            'model'=>$model,
+            'stream'=>$stream,
         ));
     }
 

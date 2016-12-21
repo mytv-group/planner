@@ -20,6 +20,9 @@
  */
 class Channel extends CActiveRecord
 {
+    public static $types = [
+        '', 'bg', 'adv', 'strm'
+    ];
     /**
      * @return string the associated database table name
      */

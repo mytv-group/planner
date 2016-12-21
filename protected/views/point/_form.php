@@ -8,41 +8,33 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'point-form',
-    // Please note: When you enable ajax validation, make sure the corresponding
-    // controller action is handling ajax validation correctly.
-    // There is a call to performAjaxValidation() commented in generated controller code.
-    // See class documentation of CActiveForm for details on this.
     'enableAjaxValidation'=>true,
 )); ?>
 
-    <p class="note">
-        Fields with <span class="required">*</span> are required.
-    </p>
+<?php
+    $isView = false;
+    if(isset($isViewForm)
+        && ($isViewForm === true)
+    ) {
+        $isView = true;
+    }
+?>
 
-    <?php
-        if(!$model->isNewRecord)
-        {
-            $netOwner = Point::model()->CheckNetOwnerExist($model->id);
-
-            if($netOwner != '')
-            {
-                printf('<p class="note"><span class="required">Attention! Point belongs to net %s
-                any changes will throw it out.</span></p>', $netOwner['name']);
-            }
-        }
-    ?>
+    <?php if(!$isView): ?>
+        <p class="note">Fields with <span class="required">*</span> are required.</p>
+    <?php endif; ?>
 
     <?php echo $form->errorSummary($model); ?>
 
     <div class="row">
         <?php echo $form->labelEx($model,'name'); ?>
-        <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
+        <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255, 'class'=>"form-control", 'readonly' => $isView)); ?>
         <?php echo $form->error($model,'name'); ?>
     </div>
 
     <div class="row">
         <?php echo $form->labelEx($model,'ip'); ?>
-        <?php echo $form->textField($model,'ip',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
+        <?php echo $form->textField($model,'ip',array('size'=>60,'maxlength'=>255, 'class'=>"form-control", 'readonly' => $isView)); ?>
         <?php echo $form->error($model,'ip'); ?>
     </div>
 
@@ -50,27 +42,28 @@
         <?php echo $form->hiddenField($model,'username',array('value'=>Yii::app()->user->name)); ?>
     </div>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'volume'); ?>
-        <?php echo $form->hiddenField($model,'volume'); ?>
 
-        <section>
-            <span class="tooltip"></span>
-            <!-- Tooltip -->
-            <div id="slider"></div>
-            <!-- the Slider -->
-            <span class="volume"></span>
-            <!-- Volume -->
-        </section>
+        <div class="row">
+            <?php echo $form->labelEx($model,'volume'); ?>
+            <?php if(!$isView): ?>
+                <?php echo $form->hiddenField($model,'volume'); ?>
 
-        <?php echo $form->error($model,'volume'); ?>
-    </div>
+                <section>
+                    <span class="tooltip"></span>
+                    <!-- Tooltip -->
+                    <div id="slider"></div>
+                    <!-- the Slider -->
+                    <span class="volume"></span>
+                    <!-- Volume -->
+                </section>
+            <?php else: ?>
+                <?php echo $model->volume . ' %'; ?>
+            <?php endif; ?>
 
-    <!--     <div class="row"> -->
-        <?php //echo $form->labelEx($model,'TV'); ?>
-        <?php echo $form->hiddenField($model,'TV', array('value' => 0)); ?>
-        <?php //echo $form->error($model,'TV'); ?>
-<!--     </div> -->
+            <?php echo $form->error($model,'volume'); ?>
+        </div>
+
+    <?php echo $form->hiddenField($model,'TV', array('value' => 0)); ?>
 
     <div class="row">
         <?php echo $form->hiddenField($model,'tv_schedule_blocks'); ?>
@@ -79,7 +72,9 @@
     <div class="row">
         <?php echo $form->labelEx($model,'TVschedule'); ?>
         <?php echo "<br><div id='periodContainer'></div>"; ?>
-        <?php echo "<p><button id='addTVperiod' class='btn btn-default'>Add period</button></p>"; ?>
+        <?php if(!$isView): ?>
+            <?php echo "<p><button id='addTVperiod' class='btn btn-default'>Add period</button></p>"; ?>
+        <?php endif; ?>
     </div>
 
     <div class="row">

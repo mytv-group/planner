@@ -72,8 +72,11 @@ $('.search-form form').submit(function(){
                     && isset($data->point->name)
                     && isset($data->point->ip)
                 ) {
-                    return $data->point->name
-                    . '<p>( '.$data->point->ip.' )</p>';
+                    return "<a href='" .
+                        Yii::app()->createUrl('point/' . $data->point->id). "'>"
+                        . $data->point->name
+                        . '<p>( '.$data->point->ip.' )</p>';
+                    "</a>";
                 } else {
                     return '';
                 }
@@ -81,12 +84,15 @@ $('.search-form form').submit(function(){
             'type'  => 'raw',
         ),
         array(
-            'name' => 'Point',
+            'name' => 'Playlist',
             'value' => function($data, $row){
                 if(isset($data->playlist)
                     && isset($data->playlist->name)
                 ) {
-                    return $data->playlist->name;
+                    return "<a href='" .
+                        Yii::app()->createUrl('playlists/' . $data->playlist->id). "'>"
+                        . $data->playlist->name
+                        . "</a>";
                 } else {
                     return '';
                 }

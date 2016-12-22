@@ -205,8 +205,8 @@
                                         $widgetModel = Widget::model()->findByPk($widgetToChannel['widget_id']);
 
                                         printf ("<button type='button' class='detach-widget btn btn-warning' data-channelid='%s' %s>".
-                                                "<span class='glyphicon glyphicon-off'></span> Detach widget " . $widgetModel['name'] .
-                                                "</button>",  $channel ['id'], $isView ? "disabled='disabled'" : '');
+                                                "<span class='glyphicon glyphicon-off'></span> %s %s" .
+                                                "</button>",  $channel ['id'], $isView ? "disabled='disabled'" : '', $isView ? "Widget" : "Detach widget", $widgetModel['name'] );
                                     } else if (!$isView) {
                                         printf ("<button type='button' class='attach-widget btn btn-success' data-channelid='%s'>".
                                                 "<span class='glyphicon glyphicon-paperclip'></span> Attach widget" .

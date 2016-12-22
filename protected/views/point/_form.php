@@ -71,7 +71,7 @@
 
     <div class="row">
         <?php echo $form->labelEx($model,'TVschedule'); ?>
-        <?php echo "<br><div id='periodContainer'></div>"; ?>
+        <?php echo "<br><div id='periodContainer' data-isview='".$isView."'></div>"; ?>
         <?php if(!$isView): ?>
             <?php echo "<p><button id='addTVperiod' class='btn btn-default'>Add period</button></p>"; ?>
         <?php endif; ?>
@@ -79,7 +79,6 @@
 
     <div class="row">
     <?php
-
         if(!$model->isNewRecord)
         {
             echo $form->labelEx($model,'channels');
@@ -94,10 +93,15 @@
 
                 printf("<div class='btn-group' role='group' aria-label=''>" .
                     "<button type='button' class='btn btn-default ChannelButt'>".
-                        "Channel %s </button>".
-                    "<button type='button' class='AddPlaylistsBut btn btn-info' data-channelid='%s'>" .
-                    "<span class='glyphicon glyphicon-plus'></span> Add playlists" .
-                    "</button></div>", $ii, $ii);
+                        "Channel %s </button>", $ii);
+
+                if (!$isView) {
+                    printf("<button type='button' class='AddPlaylistsBut btn btn-info' data-channelid='%s'>" .
+                        "<span class='glyphicon glyphicon-plus'></span> Add playlists" .
+                        "</button>", $ii);
+                }
+
+                printf("</div>");
 
                 $channelPlaylists = [];
                 foreach ($playlistsToPoint as $pl) {
@@ -113,10 +117,13 @@
                         printf("<button type='button' class='PlaylistLinks btn btn-default' ".
                                 "data-plid='%s'>%s</button>",
                             $pl['id'], CHtml::link($pl['name'], array('playlists/' . $pl['id'])));
-                        printf("<button type='button' class='RemovePlaylist btn btn-danger' ".
-                                "data-plidtoremove='%s' ".
-                                "data-channelidpltoremove='%s' ".
-                            ">x</button>", $pl['id'], $ii);
+
+                        if (!$isView) {
+                            printf("<button type='button' class='RemovePlaylist btn btn-danger' ".
+                                    "data-plidtoremove='%s' ".
+                                    "data-channelidpltoremove='%s' ".
+                                ">x</button>", $pl['id'], $ii);
+                        }
                 }
 
                 if (count($playlistsToPoint) > 0) {
@@ -154,10 +161,18 @@
 
             }
 
-            echo $form->dropDownList($model, 'screen_id',
-                    $dropDown,
-                    array('options'=>$selectedItems,
-                        'multiple'=>false,'class'=>'form-control','size'=>'10'));
+            if (!$isView) {
+                echo $form->dropDownList($model, 'screen_id',
+                        $dropDown,
+                        array('options'=>$selectedItems,
+                            'multiple'=>false,'class'=>'form-control','size'=>'10'));
+            } else {
+                echo "<b><a href='" .
+                    Yii::app()->createUrl('screen/' . $model->screen_id). "'>" .
+                    Screen::model()->findByPk($model->screen_id)->name .
+                "</a></b>";
+                echo "<br><br>";
+            }
 
             printf ( "<div id='windowsList'>" );
 
@@ -188,10 +203,11 @@
 
                                     if(count($widgetToChannel) > 0) {
                                         $widgetModel = Widget::model()->findByPk($widgetToChannel['widget_id']);
-                                        printf ("<button type='button' class='detach-widget btn btn-warning' data-channelid='%s'>".
+
+                                        printf ("<button type='button' class='detach-widget btn btn-warning' data-channelid='%s' %s>".
                                                 "<span class='glyphicon glyphicon-off'></span> Detach widget " . $widgetModel['name'] .
-                                                "</button>",  $channel ['id']);
-                                    } else {
+                                                "</button>",  $channel ['id'], $isView ? "disabled='disabled'" : '');
+                                    } else if (!$isView) {
                                         printf ("<button type='button' class='attach-widget btn btn-success' data-channelid='%s'>".
                                                 "<span class='glyphicon glyphicon-paperclip'></span> Attach widget" .
                                                 "</button>",  $channel ['id']);
@@ -220,9 +236,11 @@
         ?>
     </div>
 
-    <div class="row buttons">
-        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>"form-control")); ?>
-    </div>
+    <?php if (!$isView): ?>
+        <div class="row buttons">
+            <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>"form-control")); ?>
+        </div>
+    <?php endif; ?>
 
 <?php $this->endWidget(); ?>
 

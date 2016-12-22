@@ -21,17 +21,23 @@ $(document).ready(function(e){
                   var TVshceduleDatetimeArr = e['TVshceduleDatetimeArr'];
 
                   var periodContainer = $("#periodContainer");
+                  var isDisabled = periodContainer.data('isview');
 
                   for(var ii = 0; ii < TVshceduleDatetimeArr.length; ii++){
-                      periodContainer.append("<p>" +
-                              "<input name='Point[TVshceduleFromDatetime][]' type='text' size='15' " +
-                                  "class='form-control TVshceduleFromDatetime' title='From datetime' value='" + TVshceduleDatetimeArr[ii][0] + "'/> " +
-                              "<input name='Point[TVshceduleToDatetime][]' type='text' size='15' " +
-                              "    class='form-control TVshceduleToDatetime' title='To datetime' value='" + TVshceduleDatetimeArr[ii][1] + "'/> " +
-                              "<button class='btn btn-danger RemoveTVonOff'>" +
-                                    " x " +
-                                "</button>" +
-                              "</p>");
+                          var str = "<p>" +
+                          "<input name='Point[TVshceduleFromDatetime][]' type='text' size='15' " +
+                              "class='form-control TVshceduleFromDatetime' title='From datetime' value='" + TVshceduleDatetimeArr[ii][0] + "'/> " +
+                          "<input name='Point[TVshceduleToDatetime][]' type='text' size='15' " +
+                              "class='form-control TVshceduleToDatetime' title='To datetime' value='" + TVshceduleDatetimeArr[ii][1] + "'/> ";
+
+                          if (isDisabled !== 1) {
+                            str += "<button class='btn btn-danger RemoveTVonOff'>" +
+                                " x " +
+                            "</button>";
+                          }
+
+                          str += "</p>";
+                          periodContainer.append(str);
                   }
 
                   $(".TVshceduleFromDatetime").datetimepicker({
@@ -41,6 +47,10 @@ $(document).ready(function(e){
                   $(".TVshceduleToDatetime").datetimepicker({
                       format:'Y-m-d H:i:s'
                   });
+
+                  if (isDisabled === 1) {
+                      $(".TVshceduleFromDatetime, .TVshceduleToDatetime").attr('disabled', 'disabled');
+                  }
 
                   $(".RemoveTVonOff").on("click", function(e){
                       e.preventDefault();

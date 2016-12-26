@@ -287,7 +287,6 @@ return array(
             'pointUser',
             'screenUser',
             'widgetUser',
-            'statisticsUser',
         ),
         'bizRule' => null,
         'data' => [
@@ -301,6 +300,7 @@ return array(
             'moderator',
             'netUser',
             'userEditorUser',
+            'statisticsUser',
         ),
         'bizRule' => null,
         'data' => [

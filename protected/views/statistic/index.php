@@ -21,12 +21,7 @@ $('.search-form form').submit(function(){
 <div class='row row-menu'>
     <span class="btn btn-default search-button">
         <span class="glyphicon glyphicon-search"></span>
-        Search
-    </span>
-
-    <span class="btn btn-default">
-        <span class="glyphicon glyphicon-floppy-save"></span>
-        Export to excel
+        Filter
     </span>
 
     <div class="search-form" style="display:none">

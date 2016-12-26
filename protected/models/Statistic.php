@@ -29,8 +29,6 @@ class Statistic extends CActiveRecord
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('id, dt_playback, duration, channel, file_name, id_file, id_playlist, id_author', 'required'),
             array('id, channel, id_file, id_playlist, id_author', 'numerical', 'integerOnly'=>true),
@@ -84,27 +82,53 @@ class Statistic extends CActiveRecord
      * @return CActiveDataProvider the data provider that can return the models
      * based on the search/filter conditions.
      */
-    public function search()
+    public function search($pagination = ['pageSize' => 100])
     {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria=new CDbCriteria;
 
-        $criteria->compare('id',$this->id);
         $criteria->compare('dt_playback',$this->dt_playback,true);
-        $criteria->compare('duration',$this->duration);
         $criteria->compare('channel',$this->channel);
         $criteria->compare('file_name',$this->file_name,true);
-        $criteria->compare('id_file',$this->id_file);
-        $criteria->compare('id_playlist',$this->id_playlist);
-        $criteria->compare('id_author',$this->id_author);
-        $criteria->compare('dt',$this->dt,true);
+
+        if (ctype_digit((string)$this->id_playlist)) {
+            $criteria->compare('id_playlist', $this->id_playlist);
+        } else if($this->id_playlist !== '') {
+            $pls = Playlists::model()->findAll([
+                'select'=>'id',
+                'condition'=>'name LIKE :name',
+                'params'=> [':name'=> '%'.$this->id_playlist.'%'],
+            ]);
+
+            $ids = [];
+            foreach ($pls as $pl) {
+                $ids[] = $pl->id;
+            }
+
+            $criteria->compare('id_playlist', $ids);
+        }
+
+        if (ctype_digit((string)$this->id_point)) {
+            $criteria->compare('id_point', $this->id_point);
+        } else if($this->id_point !== '') {
+            $points = Point::model()->findAll([
+                'select'=>'id',
+                'condition'=>'name LIKE :name',
+                'params'=> [':name'=> '%'.$this->id_point.'%'],
+            ]);
+
+            $ids = [];
+            foreach ($points as $pl) {
+                $ids[] = $pl->id;
+            }
+
+            $criteria->compare('id_point', $ids);
+        }
 
         return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-            'Pagination' => array (
-                 'PageSize' => 100
-             ),
+            'criteria' => $criteria,
+            'pagination' => $pagination,
         ));
     }
 

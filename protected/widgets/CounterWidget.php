@@ -136,19 +136,23 @@ class CounterWidget extends CWidget
             $counter = $this->hoursLeft();
         }
 
-        $counterXpos = 174 - (strlen($counter) - 1) * 10;
+        $counterXpos = 184 - (strlen($counter) - 1) * 10;
 
-        imagettftext($image, 24, 0, 120, 60, $textColor, $font, $this->config->header);
-        imagettftext($image, 24, 0, 70, 95, $textColor, $font, $this->config->below_header);
-        imagettftext($image, 54, 0, $counterXpos, 170, $textColor, $font, $counter);
-        if ($this->daysLeft() < 5) {
-            imagettftext($image, 24, 0, 150, 204, $textColor, $font, $this->config->footer2);
+        if (!$this->isNewYear()) {
+            imagettftext($image, 24, 0, 120, 60, $textColor, $font, $this->config->header);
+            imagettftext($image, 24, 0, 70, 95, $textColor, $font, $this->config->below_header);
+            imagettftext($image, 54, 0, $counterXpos, 170, $textColor, $font, $counter);
+            if ($this->daysLeft() < 5) {
+                imagettftext($image, 24, 0, 150, 204, $textColor, $font, $this->config->footer2);
+            } else {
+                imagettftext($image, 24, 0, 166, 204, $textColor, $font, $this->config->footer);
+            }
+
+            if (isset($this->config->test_current_time)) {
+                imagettftext($image, 12, 0, 10, 20, $textColor, $font, date('y-m-d H:i:s'));
+            }
         } else {
-            imagettftext($image, 24, 0, 166, 204, $textColor, $font, $this->config->footer);
-        }
-
-        if (isset($this->config->test_current_time)) {
-            imagettftext($image, 12, 0, 10, 20, $textColor, $font, date('y-m-d H:i:s'));
+            imagettftext($image, 31, 0, 20, 120, $textColor, $font, $this->config->header2 . "!");
         }
 
         if (isset($this->config->rotation)
@@ -174,6 +178,18 @@ class CounterWidget extends CWidget
         $interval = date_diff($datetime1, $datetime2);
 
         return $interval->format('%d');
+    }
+
+    private function isNewYear() {
+        $datetime = new DateTime();
+        if (isset($this->config->test_current_time)) {
+            $datetime = new DateTime($this->config->test_current_time);
+        }
+        if ($datetime > new DateTime("2017-01-01 00:00:00")) {
+            return true;
+        }
+
+        return false;
     }
 
     private function hoursLeft()

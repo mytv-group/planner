@@ -1,13 +1,16 @@
 <?
-class WeatherWidget extends CWidget
+class WeatherWidget extends AbstractWidget
 {
-    private $type = '';
-    private $config;
+    /*$config example
+    * {"city": "Kiev,ua",
+    * "cityshow":"Київ",
+    * "bg":"background.png"}
+    */
 
     private $imgFolder = '/widgets-content/weather/';
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q';
     private $celsiusMin = 273.15;
-    private $imageCacheTime = 60;
+    protected $imageCacheTime = 60;
     private $weekDays = [
         '', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
     ];
@@ -19,28 +22,6 @@ class WeatherWidget extends CWidget
         $this->apiKey = Yii::app()->params['weatherApiKey'];
     }
 
-    private function getOutput()
-    {
-        if(!file_exists(dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->imgFolder . 'runtime')) {
-            mkdir(dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->imgFolder . 'runtime');
-        }
-
-        return $this->imgFolder . 'runtime' . DIRECTORY_SEPARATOR . $this->config->output;
-    }
-
-    /*$config example
-    * {"city": "Kiev,ua", "cityshow":"Київ", "output":"weather.png","bg":"background.png"}
-    */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
     private function buildRequest()
     {
         if ($this->apiKey && $this->config->city) {
@@ -49,17 +30,11 @@ class WeatherWidget extends CWidget
         return false;
     }
 
-    private function checkConfig()
+    protected function checkConfig()
     {
         if(!isset($this->config->cityname)) {
             throw new Error (implode('',
                 ['Widget ', __CLASS__, ' config error. No cityname.']
-            ));
-        }
-
-        if(!isset($this->config->output)) {
-            throw new Error (implode('',
-                ['Widget ', __CLASS__, ' config error. No output image name.']
             ));
         }
 
@@ -80,9 +55,8 @@ class WeatherWidget extends CWidget
         }
     }
 
-    private function generateImage()
+    protected function generateImage()
     {
-
         $json = file_get_contents($this->buildRequest());
         $responce = json_decode($json, true);
 
@@ -183,38 +157,5 @@ class WeatherWidget extends CWidget
         throw new Error (implode('',
             ['Widget ', __CLASS__, ' does not contain method ', $this->type, '.']
         ));
-    }
-
-    public function preview()
-    {
-        $file = dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput();
-        if (file_exists ($file)) {
-            $fileCreated = filemtime (dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput());
-
-            if ((time() - $fileCreated) < $this->imageCacheTime) {
-                echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather temperature"/>', $this->getOutput());
-                exit;
-            }
-        }
-
-        $this->generateImage();
-        echo sprintf('<img class="widget-preview-img" src="%s" alt="Weather temperature"/>', $this->getOutput());
-        exit;
-    }
-
-    public function showData()
-    {
-        $file = dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput();
-        if (file_exists ($file)) {
-            $fileCreated = filemtime (dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput());
-
-            if ((time() - $fileCreated) > $this->imageCacheTime) {
-                $this->generateImage();
-            }
-        } else {
-            $this->generateImage();
-        }
-
-        return ['img' => $this->getOutput()];
     }
 }

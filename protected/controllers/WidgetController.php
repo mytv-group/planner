@@ -64,6 +64,7 @@ class WidgetController extends Controller
         }
 
         $this->widget('application.widgets.' . ucfirst($model->name) . 'Widget', [
+            'id' => $model->id,
             'type' => 'preview',
             'config' => $config
         ]);

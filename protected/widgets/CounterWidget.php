@@ -1,20 +1,6 @@
 <?
-class CounterWidget extends CWidget
+class CounterWidget extends AbstractWidget
 {
-    private $type = '';
-    private $config;
-
-    private $imgFolder = '/widgets-content/counter/';
-    private $imageCacheTime = 1;
-
-    private function getOutput()
-    {
-        if(!file_exists(dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->imgFolder . 'runtime')) {
-            mkdir(dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->imgFolder . 'runtime');
-        }
-
-        return $this->imgFolder . 'runtime' . DIRECTORY_SEPARATOR . $this->config->output;
-    }
     /*$config example
     * "header": "НОВИЙ РІК",
     * "below_header":"Почнеться через",
@@ -25,17 +11,10 @@ class CounterWidget extends CWidget
     * "output": "counter.png",
     * "bg":"background.png"
     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
 
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
+    private $imgFolder = '/widgets-content/counter/';
 
-    private function checkConfig()
+    protected function checkConfig()
     {
         if (!isset($this->config->header)) {
             throw new Error (implode('',
@@ -67,12 +46,6 @@ class CounterWidget extends CWidget
             ));
         }
 
-        if (!isset($this->config->output)) {
-            throw new Error (implode('',
-                ['Widget ', __CLASS__, ' config error. No output image name.']
-            ));
-        }
-
         if (!isset($this->config->bg)) {
             throw new Error (implode('',
                 ['Widget ', __CLASS__, ' config error. No bg image name.']
@@ -90,7 +63,7 @@ class CounterWidget extends CWidget
         }
     }
 
-    private function generateImage()
+    protected function generateImage()
     {
         $image = @imagecreatetruecolor(400, 300);
         imagesavealpha($image, true);
@@ -136,7 +109,7 @@ class CounterWidget extends CWidget
             $counter = $this->hoursLeft();
         }
 
-        $counterXpos = 184 - (strlen($counter) - 1) * 10;
+        $counterXpos = 184 - (strlen($counter) - 1) * 19;
 
         if (!$this->isNewYear()) {
             imagettftext($image, 24, 0, 120, 60, $textColor, $font, $this->config->header);
@@ -152,7 +125,8 @@ class CounterWidget extends CWidget
                 imagettftext($image, 12, 0, 10, 20, $textColor, $font, date('y-m-d H:i:s'));
             }
         } else {
-            imagettftext($image, 31, 0, 20, 120, $textColor, $font, $this->config->header2 . "!");
+            imagettftext($image, 31, 0, 20, 90, $textColor, $font, $this->config->header2);
+            imagettftext($image, 31, 0, 65, 150, $textColor, $font, $this->config->header3);
         }
 
         if (isset($this->config->rotation)
@@ -217,38 +191,5 @@ class CounterWidget extends CWidget
         throw new Error (implode('',
             ['Widget ', __CLASS__, ' does not contain method ', $this->type, '.']
         ));
-    }
-
-    public function preview()
-    {
-        $file = dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput();
-        if (file_exists ($file)) {
-            $fileCreated = filemtime (dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput());
-
-            if ((time() - $fileCreated) < $this->imageCacheTime) {
-                echo sprintf('<img class="widget-preview-img" src="%s" alt="Counter"/>', $this->getOutput());
-                exit;
-            }
-        }
-
-        $this->generateImage();
-        echo sprintf('<img class="widget-preview-img" src="%s" alt="Counter"/>', $this->getOutput());
-        exit;
-    }
-
-    public function showData()
-    {
-        $file = dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput();
-        if (file_exists ($file)) {
-            $fileCreated = filemtime (dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput());
-
-            if ((time() - $fileCreated) > $this->imageCacheTime) {
-                $this->generateImage();
-            }
-        } else {
-            $this->generateImage();
-        }
-
-        return ['img' => $this->getOutput()];
     }
 }

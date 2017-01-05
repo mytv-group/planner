@@ -42,5 +42,4 @@ phpunit.phar
 
 #runtime
 /protected/runtime/*
-
-widgets-content/*/runtime/*
+/runtime-widgets

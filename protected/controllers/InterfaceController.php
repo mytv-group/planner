@@ -416,6 +416,7 @@ class InterfaceController extends Controller
             ) {
                 $widget = $widgetToChannel->widget;
                 $widgetObj = $this->widget('application.widgets.' . ucfirst($widget->name) . 'Widget', [
+                    'id' => $widget->id,
                     'type' => 'showData',
                     'config' => json_decode($widget->config)
                 ]);

@@ -7,7 +7,8 @@ return array(
     'import'=>array(
         'application.models.*',
         'application.components.*',
-        'application.modules.rbac.controllers.RbacController'
+        'application.modules.rbac.controllers.RbacController',
+        'application.widgets.*'
     ),
     'theme'=>'basic',
     'modules'=>array(

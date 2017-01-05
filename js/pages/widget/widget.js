@@ -42,4 +42,8 @@ $(document).ready(function () {
             });
         });
     });
+
+    $('.delete-widget').on('submit', function() {
+        return confirm('Do you really want to delete widget?');
+    });
 });

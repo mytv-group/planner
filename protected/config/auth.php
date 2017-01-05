@@ -286,7 +286,7 @@ return array(
             'playlistUser',
             'pointUser',
             'screenUser',
-            'widgetUser',
+            'widgetViewUser',
         ),
         'bizRule' => null,
         'data' => [
@@ -301,6 +301,7 @@ return array(
             'netUser',
             'userEditorUser',
             'statisticsUser',
+            'widgetUser',
         ),
         'bizRule' => null,
         'data' => [

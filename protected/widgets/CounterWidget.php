@@ -178,18 +178,4 @@ class CounterWidget extends AbstractWidget
 
         return $interval->format('%d') * 24 + $interval->format('%H');
     }
-
-    public function run()
-    {
-        $this->checkConfig();
-
-        if (($this->type !== '') && method_exists($this, $this->type)) {
-            call_user_func([$this, $this->type]);
-            return;
-        }
-
-        throw new Error (implode('',
-            ['Widget ', __CLASS__, ' does not contain method ', $this->type, '.']
-        ));
-    }
 }

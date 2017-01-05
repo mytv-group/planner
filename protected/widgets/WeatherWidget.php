@@ -146,16 +146,7 @@ class WeatherWidget extends AbstractWidget
 
     public function run()
     {
-        $this->checkConfig();
         $this->setApiKey();
-
-        if (($this->type !== '') && method_exists($this, $this->type)) {
-            call_user_func([$this, $this->type]);
-            return;
-        }
-
-        throw new Error (implode('',
-            ['Widget ', __CLASS__, ' does not contain method ', $this->type, '.']
-        ));
+        return parent::run();
     }
 }

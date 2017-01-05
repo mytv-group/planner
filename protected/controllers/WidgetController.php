@@ -27,9 +27,20 @@ class WidgetController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
+            array('allow',
                 'actions'=>array('index','preview'),
-                'users'=>array('*'),
+                'users'=>array('@'),
+                'roles'=>array('widgetViewUser'),
+            ),
+            array('allow',
+                'actions'=>array('update', 'copy'),
+                'users'=>array('@'),
+                'roles'=>array('widgetEditUser'),
+            ),
+            array('allow',
+                'actions'=>array('delete'),
+                'users'=>array('@'),
+                'roles'=>array('widgetUser'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
@@ -68,6 +79,56 @@ class WidgetController extends Controller
             'type' => 'preview',
             'config' => $config
         ]);
+    }
+
+    public function actionUpdate($id)
+    {
+        $model=$this->loadModel($id);
+        $this->performAjaxValidation($model);
+
+        if(isset($_POST['Widget']) && isset($_POST['WidgetConfig'])) {
+            $data = $_POST['Widget'];
+            $data['config'] = json_encode($_POST['WidgetConfig']);
+            $model->attributes = $data;
+            if ($model->save()) {
+                $this->redirect('/widget');
+            }
+        }
+
+        $this->render('update',array(
+            'model' => $model,
+            'action' => 'Update'
+        ));
+    }
+
+    public function actionCopy($id)
+    {
+        $model = $this->loadModel($id);
+        $this->performAjaxValidation($model);
+
+        if(isset($_POST['Widget']) && isset($_POST['WidgetConfig'])) {
+            $data = $_POST['Widget'];
+            $data['name'] = $model->name;
+            $data['config'] = json_encode($_POST['WidgetConfig']);
+            $newModel = new Widget;
+            $newModel->unsetAttributes();
+            $newModel->attributes = $data;
+
+            if ($newModel->save()) {
+                $this->redirect('/widget');
+            }
+        }
+
+        $this->render('update',array(
+            'model' => $model,
+            'action' => 'Copy'
+        ));
+    }
+
+    public function actionDelete($id)
+    {
+        $this->loadModel($id)->delete();
+        $this->redirect('/widget');
     }
 
     /**

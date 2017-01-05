@@ -34,12 +34,12 @@ class Widget extends CActiveRecord
         // will receive user inputs.
         return array(
             array('name, description, show_duration, periodicity', 'required'),
-            array('show_duration, periodicity', 'numerical', 'integerOnly'=>true),
+            array('show_duration, periodicity, offset', 'numerical', 'integerOnly'=>true),
             array('name', 'length', 'max'=>255),
-            array('created_dt', 'safe'),
+            array('created_dt, config', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('name, created_dt, config', 'safe', 'on'=>'search'),
+            array('name, created_dt', 'safe', 'on'=>'search'),
         );
     }
 
@@ -63,6 +63,7 @@ class Widget extends CActiveRecord
             'name' => 'Name',
             'description' => 'Description',
             'show_duration' => 'Show duration',
+            'offset' => 'Offset',
             'periodicity' => 'Periodicity',
             'config' => 'Config',
             'created_dt' => 'Created Date',

@@ -20,18 +20,31 @@
             'type'  => 'raw',
         ),
         array(
-            'name' => 'Config',
+            'name' => 'Options',
             'value' => function($data, $row){
                 if ($data->config === null) {
                     return '';
                 }
 
-                return '<button type="button" class="btn btn-default btn-sm widget-edit" ' .
+                $str = '<button type="button" class="btn btn-default btn-sm widget-copy" title="Copy" ' .
+                            'data-id="'.$data->id.'">
+                          <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+                        </button>';
+
+                $str .= '<button type="button" class="btn btn-default btn-sm widget-edit" title="Edit config" ' .
                             'data-id="'.$data->id.'">
                           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         </button>';
+
+                $str .= '<button type="button" class="btn btn-danger btn-sm widget-delete" title="Delete" ' .
+                            'data-id="'.$data->id.'">
+                          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>';
+
+                return $str;
             },
             'type'  => 'raw',
         ),
+
     ),
 ));

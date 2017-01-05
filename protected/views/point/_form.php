@@ -110,10 +110,8 @@
                     }
                 }
 
-                if (count($playlistsToPoint) > 0) {
-                    echo "<div class='btn-group' role='group' aria-label=''>";
-                }
                 foreach ($channelPlaylists as $pl) {
+                        printf("<div class='btn-group' role='group'>");
                         printf("<button type='button' class='PlaylistLinks btn btn-default' ".
                                 "data-plid='%s'>%s</button>",
                             $pl['id'], CHtml::link($pl['name'], array('playlists/' . $pl['id'])));
@@ -124,10 +122,7 @@
                                     "data-channelidpltoremove='%s' ".
                                 ">x</button>", $pl['id'], $ii);
                         }
-                }
-
-                if (count($playlistsToPoint) > 0) {
-                    echo "</div>";
+                        printf("</div>");
                 }
 
                 echo "</div>";
@@ -213,7 +208,7 @@
                                                 "</button>",  $channel ['id']);
                                     }
 
-                                    echo "</div>";
+                                    printf ("</div></div>");
                                 }
                             }
                         }

@@ -75,7 +75,7 @@ $(document).ready(function(e){
             channelId = $this.data("channelidpltoremove"),
             plId = $this.data("plidtoremove");
 
-        if(confirm("Romeve playlist from channel?")){
+        if(confirm("Remove playlist from channel?")){
             CM.RemovePlaylistFromChannel(channelId, plId, pointId).done(function(e){
                 if(e.status == 'ok'){
                     $this.parents(".btn-group").remove();

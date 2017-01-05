@@ -22,7 +22,6 @@ $(document).ready(function(e){
                 }).done(function(channels){
                     var channelList = $("#windowsList");
                     channelList.empty();
-
                     for(var ii = 0; ii < channels.length; ii++) {
 
                         var newChannelId = channels[ii]['id'];

@@ -8,7 +8,7 @@ abstract class AbstractWidget extends CWidget
     protected $outputFolder = '/runtime-widgets';
     protected $imageCacheTime = 1;
 
-    const outputPrefix = 'counter';
+    const outputPrefix = 'wdgt';
     const imgExt = '.png';
 
     abstract protected function checkConfig();

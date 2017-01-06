@@ -10,6 +10,8 @@ class GreetingWidget extends AbstractWidget
 
     private $imgFolder = '/widgets-content/greeting/';
 
+    const outputPrefix = 'greeting';
+
     protected function checkConfig()
     {
         if (!isset($this->config->header)) {

@@ -7,6 +7,8 @@ class WeatherWidget extends AbstractWidget
     * "bg":"background.png"}
     */
 
+    const outputPrefix = 'weather';
+    
     private $imgFolder = '/widgets-content/weather/';
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q';
     private $celsiusMin = 273.15;

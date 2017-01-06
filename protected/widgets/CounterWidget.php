@@ -11,6 +11,7 @@ class CounterWidget extends AbstractWidget
     * "output": "counter.png",
     * "bg":"background.png"
     */
+    const outputPrefix = 'counter';
 
     private $imgFolder = '/widgets-content/counter/';
 

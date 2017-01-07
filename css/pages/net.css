@@ -1,11 +1,37 @@
 .form {
-	margin: 10px auto;
+    margin: 10px auto;
 }
 
 .form .form-control {
-	max-width:415px;
+    max-width:415px;
 }
 
 .buttons input.form-control {
-	max-width:245px;
+    max-width:245px;
+}
+
+.row-header {
+    padding: 2px;
+}
+
+.row-list-view {
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-top-width: 1px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.row-list-view {
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-top-width: 1px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.row-list-view:nth-child(odd) {
+    background-color: #eee;
 }

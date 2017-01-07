@@ -21,128 +21,24 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'name'); ?>
-		<?php echo $form->textField($model,'name', array('size'=>60,'maxlength'=>100, 'class'=>"form-control")); ?>
+		<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'name'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'pointsattached'); ?>
-
-		<?php
-			$dropDown = array();
-			$userId = Yii::app()->user->getId();
-			$userModel = User::model()->findByPk($userId);
-			$pointsAvaliable = $userModel->pointsavaliable;
-			$selectedItems = array();
-			
-			foreach ($pointsAvaliable as $val)
-			{
-				$dropDown[$val->id] = $val->name;
-			}
-
-			if(!$model->isNewRecord)
-			{
-				$pointsAttached = $model->pointsattached; //in case new record this wont be exist
-				foreach ($pointsAttached as $val)
-				{
-					$selectedItems[$val->id] = array('selected'=>'selected');
-				}
-			}
-			
-			echo $form->dropDownList($model, 'pointsattached', 
-					$dropDown,
-					array('options'=>$selectedItems, 
-					'multiple'=>true,'class'=>'form-control','size'=>'10'));
-			?>
-		<?php echo $form->error($model,'points'); ?>
+		<?php echo $form->labelEx($model,'id_user'); ?>
+		<?php echo $form->textField($model,'id_user'); ?>
+		<?php echo $form->error($model,'id_user'); ?>
 	</div>
-		
+
 	<div class="row">
-		<?php echo $form->labelEx($model,'screen_id'); ?>
-
-		<?php
-			$dropDown = array();
-			$userId = Yii::app()->user->getId();
-			$userModel = User::model()->findByPk($userId);
-			$screens = $userModel->screens;
-			$selectedItems = array();
-			
-			foreach ($screens as $val)
-			{
-				$dropDown[$val->id] = $val->name;
-			}
-
-			if(!$model->isNewRecord)
-			{
-				$screenId = $model->screen_id; 
-				$selectedItems[$screenId] = array('selected'=>'selected');
-
-			}
-			
-			echo $form->dropDownList($model, 'screen_id', 
-					$dropDown,
-					array('options'=>$selectedItems, 
-						'multiple'=>false,'class'=>'form-control','size'=>'10'));
-
-			printf ( "<div id='windowsList'>" );
-			
-			if(!$model->isNewRecord) 
-			{
-				$screenId = $model->screen_id;
-				$screen = Screen::model()->findByPk($screenId);
-				$windows = $screen->windows;
-				foreach ($windows as $window) 
-				{
-					$windowId = $window->id;
-					$windowInst = Window::model()->findByPk($windowId);
-					$windowName = $windowInst->name;
-					$channels = $windowInst->netChannels;
-										
-					foreach ($channels as $channel) {
-						if($channel->net_id == $model->id) {
-							printf ( "<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>", $channel ['id'] );
-							$channelM = NetChannel::model()->findByPk($channel['id']);
-							$pls = $channelM->playlists;
-						
-							printf ( "<div class='btn-group' role='group' aria-label=''>" . 
-									"<button type='button' class='btn btn-default ChannelButt' disabled='disabled'>Screen %s</button>" . 
-								"<button type='button' class='AddPlaylistsBut btn btn-info' data-channelid='%s'>" . 
-								"<span class='glyphicon glyphicon-plus'></span> Add playlists" . "</button></div>", $windowName, $channel ['id'] );
-						
-							foreach ( $pls as $pl ) 
-							{
-								echo "<div class='btn-group' role='group' aria-label=''>";
-								printf ( "<button type='button' class='PlaylistLinks btn btn-default' " . "data-plid='%s'>%s</button>", $pl ['id'], CHtml::link ( $pl ['name'], array (
-									'playlists/' . $pl ['id'] 
-								)));
-								printf ( "<button type='button' class='RemovePlaylist btn btn-danger' " . "data-plidtoremove='%s' " . "data-channelidpltoremove='%s' " . ">x</button>", $pl ['id'], $channel ['id'] );
-								echo "</div>";
-							}
-						
-							echo "</div>";
-						}
-					}
-				}
-			}
-		
-		printf ( "</div>" );
-
-			?>
-		<?php echo $form->error($model,'screen_id'); ?>
-	</div>
-	
-	<div class="row">
-		<?php echo $form->hiddenField($model,'user_id', array('value' => Yii::app()->user->id)); ?>
-		<?php 
-			if(!$model->isNewRecord) {
-				echo CHtml::tag('div',array('id'=> 'netId', 'data-value'=>$model->id));
-			} 
-		?>
-	</div>
+		<?php echo $form->labelEx($model,'dt_created'); ?>
+		<?php echo $form->textField($model,'dt_created'); ?>
+		<?php echo $form->error($model,'dt_created'); ?>
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>"form-control")); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

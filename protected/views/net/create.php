@@ -8,7 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Net', 'url'=>array('index'))
+	array('label'=>'List Net', 'url'=>array('index')),
+	array('label'=>'Manage Net', 'url'=>array('admin')),
 );
 ?>
 

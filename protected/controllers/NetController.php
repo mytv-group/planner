@@ -15,7 +15,7 @@ class NetController extends Controller
   {
     return array(
       'accessControl', // perform access control for CRUD operations
-      /*'postOnly + delete',*/ // we only allow deletion via POST request
+      'postOnly + delete', // we only allow deletion via POST request
     );
   }
 
@@ -71,26 +71,7 @@ class NetController extends Controller
     {
       $model->attributes=$_POST['Net'];
       if($model->save())
-      {
-        $pointsAttached = $_POST['Net']['pointsattached'];
-        $pointToNet = new PointToNet();
-        $pointToNet::model()->deleteAll('net_id = ' . $model->id);
-        foreach ($pointsAttached as $attached)
-        {
-          $pointToNet->attributes = array(
-              'net_id' => $model->id,
-              'point_id' => $attached
-          );
-          $pointToNet->save();
-          $PointModel = Point::model()->findByPk($attached);
-          $PointModel->CreateChannelsForWindows($model->screen_id, $attached);
-          unset($PointModel);
-          $pointToNet = new PointToNet();
-        }
-
-        $model->CreateChannelsForWindows($model->screen_id, $model->id);
-        $this->redirect(array('update','id'=>$model->id));
-      }
+        $this->redirect(array('view','id'=>$model->id));
     }
 
     $this->render('create',array(
@@ -113,27 +94,8 @@ class NetController extends Controller
     if(isset($_POST['Net']))
     {
       $model->attributes=$_POST['Net'];
-      if($model->save()){
-        $pointsAttached = $_POST['Net']['pointsattached'];
-        $pointToNet = new PointToNet();
-        $pointToNet::model()->deleteAll('net_id = ' . $model->id);
-        foreach ($pointsAttached as $attached)
-        {
-          $pointToNet->attributes = array(
-              'net_id' => $model->id,
-              'point_id' => $attached
-          );
-          $pointToNet->save();
-          $PointModel = Point::model()->findByPk($attached);
-          $PointModel->CreateChannelsForWindows($model->screen_id, $attached);
-          unset($PointModel);
-          $pointToNet = new PointToNet();
-        }
-
-        $model->CreateChannelsForWindows($model->screen_id, $model->id);
+      if($model->save())
         $this->redirect(array('view','id'=>$model->id));
-      }
-
     }
 
     $this->render('update',array(
@@ -152,7 +114,7 @@ class NetController extends Controller
 
     // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
     if(!isset($_GET['ajax']))
-      $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+      $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
   }
 
   /**
@@ -160,12 +122,28 @@ class NetController extends Controller
    */
   public function actionIndex()
   {
+    $dataProvider = new CActiveDataProvider('Net', [
+        'pagination' => [
+            'pageSize'=> 10,
+        ]
+    ]);
+
+    $this->render('index',array(
+        'dataProvider'=>$dataProvider,
+    ));
+  }
+
+  /**
+   * Manages all models.
+   */
+  public function actionAdmin()
+  {
     $model=new Net('search');
     $model->unsetAttributes();  // clear any default values
     if(isset($_GET['Net']))
       $model->attributes=$_GET['Net'];
 
-    $this->render('index',array(
+    $this->render('admin',array(
       'model'=>$model,
     ));
   }
@@ -210,11 +188,11 @@ class NetController extends Controller
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
 
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/ChannelManager.js' );
+      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/ChannelManager.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/net.js' );
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/netChannels.js' );
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/netScreen.js' );
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/playlistChooseDialog.js' );
+      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/netChannels.js' );
+      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/netScreen.js' );
+      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/playlistChooseDialog.js' );
 
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');

@@ -12,6 +12,7 @@ $this->menu=array(
 	array('label'=>'Create Net', 'url'=>array('create')),
 	array('label'=>'Update Net', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Delete Net', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Manage Net', 'url'=>array('admin')),
 );
 ?>
 
@@ -22,6 +23,7 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'name',
-		'user_id',
+		'id_user',
+		'dt_created',
 	),
 )); ?>

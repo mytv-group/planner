@@ -34,9 +34,9 @@ class PointController extends Controller
             ),
             array('allow',
                 'actions'=>array('create', 'receiveTVBlocks',
-                        'update', 'addChannel', 'removeChannel',
-                        'attachScreen', 'addPlaylistToChannel',
-                        'attachScreenToPoint'
+                    'update', 'addChannel', 'removeChannel',
+                    'attachScreen', 'addPlaylistToChannel',
+                    'attachScreenToPoint'
                 ),
                 'users'=>array('@'),
                 'roles'=>array('pointEditUser'),

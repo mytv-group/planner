@@ -26,23 +26,30 @@ class NetController extends Controller
    */
   public function accessRules()
   {
-    return array(
-      array('allow',  // allow all users to perform 'index' and 'view' actions
-        'actions'=>array('index','view'),
-        'users'=>array('*'),
-      ),
-      array('allow', // allow authenticated user to perform 'create' and 'update' actions
-        'actions'=>array('create','update'),
-        'users'=>array('@'),
-      ),
-      array('allow', // allow admin user to perform 'admin' and 'delete' actions
-        'actions'=>array('admin','delete'),
-        'users'=>array('admin'),
-      ),
-      array('deny',  // deny all users
-        'users'=>array('*'),
-      ),
-    );
+    return [
+      [
+        'allow',
+        'actions'=>['index','view'],
+        'users'=>['@'],
+        'roles'=>['netViewUser'],
+      ],
+      [
+        'allow',
+        'actions'=>['create','update'],
+        'users'=>['@'],
+        'roles'=>['netEditUser'],
+      ],
+      [
+        'allow',
+        'actions'=>['delete'],
+        'users'=>['@'],
+        'roles'=>['netUser'],
+      ],
+      [
+        'deny',
+        'users'=>['*'],
+      ],
+    ];
   }
 
   /**
@@ -64,18 +71,29 @@ class NetController extends Controller
   {
     $model=new Net;
 
-    // Uncomment the following line if AJAX validation is needed
-    // $this->performAjaxValidation($model);
+    $this->performAjaxValidation($model);
 
     if(isset($_POST['Net']))
     {
-      $model->attributes=$_POST['Net'];
-      if($model->save())
-        $this->redirect(array('view','id'=>$model->id));
+        $attributes = array_merge($_POST['Net'], ['id_user' => Yii::app()->user->id]);
+        $model->attributes=$attributes;
+        if ($model->save()) {
+            $this->redirect(array('update','id'=>$model->id));
+        }
+    }
+
+    $availablePoints = [];
+    if (Yii::app()->user->role === User::ROLE_ADMIN) {
+        $availablePoints = Point::Model()->findAll();
+    } else {
+        $availablePoints = Point::Model()->findAll('username=:u',
+            [':u'=> Yii::app()->user->name]
+        );
     }
 
     $this->render('create',array(
-      'model'=>$model,
+        'model' => $model,
+        'availablePoints' => $availablePoints,
     ));
   }
 
@@ -122,29 +140,14 @@ class NetController extends Controller
    */
   public function actionIndex()
   {
-    $dataProvider = new CActiveDataProvider('Net', [
-        'pagination' => [
-            'pageSize'=> 10,
-        ]
-    ]);
-
-    $this->render('index',array(
-        'dataProvider'=>$dataProvider,
-    ));
-  }
-
-  /**
-   * Manages all models.
-   */
-  public function actionAdmin()
-  {
     $model=new Net('search');
     $model->unsetAttributes();  // clear any default values
     if(isset($_GET['Net']))
-      $model->attributes=$_GET['Net'];
+        $model->attributes = $_GET['Net'];
 
-    $this->render('admin',array(
-      'model'=>$model,
+
+    $this->render('index',array(
+        'model'=>$model,
     ));
   }
 

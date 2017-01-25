@@ -14,10 +14,10 @@
 class User extends CActiveRecord
 {
  	const ROLE_ADMIN = 'admin';
-// 	const ROLE_MODER = 'moderator';
+  const ROLE_MODER = 'moderator';
 // 	const ROLE_USER = 'user';
 // 	const ROLE_BANNED = 'banned';
-	
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -54,7 +54,7 @@ class User extends CActiveRecord
 		return array(
 			'pointtouser' => array(self::HAS_MANY, 'PointToUser', array('user_id' => 'id')),
 			'pointsavaliable' => array(self::HAS_MANY, 'Point', array('point_id' => 'id'), 'through'=>'pointtouser'),
-				
+
 			'screens' => array(self::HAS_MANY, 'Screen', array('user_id' => 'id')),
 		);
 	}
@@ -99,7 +99,7 @@ class User extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('blocked',$this->blocked);
 		$criteria->compare('role',$this->role);
-		
+
 		$activeRecord = new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -116,7 +116,7 @@ class User extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	
+
 	protected function beforeSave(){
 		$this->password = md5($this->password);
 		return parent::beforeSave();

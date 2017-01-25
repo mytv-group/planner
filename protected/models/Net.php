@@ -35,9 +35,7 @@ class Net extends CActiveRecord
       array('id_user', 'numerical', 'integerOnly'=>true),
       array('name', 'length', 'max'=>255),
       array('dt_created', 'safe'),
-      // The following rule is used by search().
-      // @todo Please remove those attributes that should not be searched.
-      array('id, name, id_user, dt_created', 'safe', 'on'=>'search'),
+      array('name', 'safe', 'on'=>'search'),
     );
   }
 
@@ -46,11 +44,9 @@ class Net extends CActiveRecord
    */
   public function relations()
   {
-    // NOTE: you may need to adjust the relation name and the related
-    // class name for the relations automatically generated below.
     return array(
       'user' => array(self::BELONGS_TO, 'User', 'id_user'),
-      'pointToNets' => array(self::HAS_MANY, 'PointToNet', 'id_net'),
+      'pointsToNet' => array(self::HAS_MANY, 'PointToNet', 'id_net'),
     );
   }
 
@@ -86,13 +82,13 @@ class Net extends CActiveRecord
 
     $criteria=new CDbCriteria;
 
-    $criteria->compare('id',$this->id);
     $criteria->compare('name',$this->name,true);
-    $criteria->compare('id_user',$this->id_user);
-    $criteria->compare('dt_created',$this->dt_created,true);
 
     return new CActiveDataProvider($this, array(
       'criteria'=>$criteria,
+      'pagination' => [
+          'pageSize'=> 10,
+      ]
     ));
   }
 

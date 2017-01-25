@@ -59,21 +59,21 @@
     <div class="col-md-2">
       <div class="btn-group">
         <?php if (Yii::app ()->user->checkAccess ("netViewUser")): ?>
-          <form action="/net/view/'.$data->id.'" type="post" class="btn-group">
-            <button type="submit" class="btn btn-default btn-sm" title="Copy">
+          <form action="/net/view/<?= $data->id ?>" type="post" class="btn-group">
+            <button type="submit" class="btn btn-default btn-sm" title="View">
               <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
             </button>
           </form>
         <?php endif; ?>
 
         <?php if (Yii::app ()->user->checkAccess ("netEditUser")): ?>
-          <form action="/net/copy/'.$data->id.'" type="post" class="btn-group">
+          <form action="/net/copy/<?= $data->id ?>" type="post" class="btn-group">
             <button type="submit" class="btn btn-default btn-sm" title="Copy">
               <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
             </button>
           </form>
 
-          <form action="/net/update/'.$data->id.'" type="post" class="btn-group">
+          <form action="/net/update/<?= $data->id ?>" type="post" class="btn-group">
             <button type="submit" class="btn btn-default btn-sm" title="Update">
               <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
             </button>
@@ -81,7 +81,7 @@
         <?php endif; ?>
 
         <?php if (Yii::app ()->user->checkAccess ("netUser")): ?>
-          <form action="/widget/net/'.$data->id.'" type="post" class="btn-group delete-widget">
+          <form action="/net/delete/<?= $data->id ?>" type="post" class="btn-group delete-net">
             <button type="submit" class="btn btn-danger btn-sm" title="Delete">
               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </button>

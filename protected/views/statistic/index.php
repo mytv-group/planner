@@ -29,7 +29,7 @@ $('.search-form form').submit(function(){
         'model'=>$model,
     )); ?>
     </div><!-- search-form -->
-<div>
+</div>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'statistic-grid',

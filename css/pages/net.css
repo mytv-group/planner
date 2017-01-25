@@ -35,3 +35,7 @@
 .row-list-view:nth-child(odd) {
     background-color: #eee;
 }
+
+.row-menu {
+  margin: 0;
+}

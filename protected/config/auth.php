@@ -284,6 +284,7 @@ return array(
         'children' => array(
             'heapUser',
             'playlistUser',
+            'netUser',
             'pointUser',
             'screenUser',
             'widgetViewUser',
@@ -298,7 +299,6 @@ return array(
         'description' => 'Administrator',
         'children' => array(
             'moderator',
-            'netUser',
             'userEditorUser',
             'statisticsUser',
             'widgetUser',

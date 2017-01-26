@@ -91,10 +91,10 @@ class NetController extends Controller
         );
     }
 
-    $this->render('create',array(
+    $this->render('create',[
         'model' => $model,
         'availablePoints' => $availablePoints,
-    ));
+    ]);
   }
 
   /**

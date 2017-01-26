@@ -1,5 +1,15 @@
 <?php
 
+/*
+ALTER TABLE `point` ADD `id_user` INT NOT NULL AFTER `sync`, ADD INDEX (`id_user`);
+
+UPDATE point t1
+        INNER JOIN user t2
+             ON t1.username = t2.username  COLLATE utf8_unicode_ci
+SET t1.id_user = t2.id
+WHERE 1
+*/
+
 Yii::import('ext.EHttpClient.*');
 
 /**

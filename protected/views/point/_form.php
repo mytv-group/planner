@@ -39,188 +39,32 @@
     </div>
 
     <div class="row">
-        <?php echo $form->hiddenField($model,'username',array('value'=>Yii::app()->user->name)); ?>
+        <?php echo $form->hiddenField($model,'username', array('value'=>Yii::app()->user->name)); ?>
     </div>
 
+    <?php $this->renderPartial('sections/_volume', [
+        'model' => $model,
+        'form' => $form,
+        'isView' => $isView
+    ]); ?>
 
-        <div class="row">
-            <?php echo $form->labelEx($model,'volume'); ?>
-            <?php if(!$isView): ?>
-                <?php echo $form->hiddenField($model,'volume'); ?>
+    <?php $this->renderPartial('sections/_tv', [
+        'model' => $model,
+        'form' => $form,
+        'isView' => $isView
+    ]); ?>
 
-                <section>
-                    <span class="tooltip"></span>
-                    <!-- Tooltip -->
-                    <div id="slider"></div>
-                    <!-- the Slider -->
-                    <span class="volume"></span>
-                    <!-- Volume -->
-                </section>
-            <?php else: ?>
-                <?php echo $model->volume . ' %'; ?>
-            <?php endif; ?>
+    <?php $this->renderPartial('sections/_channels', [
+        'model' => $model,
+        'form' => $form,
+        'isView' => $isView
+    ]); ?>
 
-            <?php echo $form->error($model,'volume'); ?>
-        </div>
-
-    <?php echo $form->hiddenField($model,'TV', array('value' => 0)); ?>
-
-    <div class="row">
-        <?php echo $form->hiddenField($model,'tv_schedule_blocks'); ?>
-    </div>
-
-    <div class="row">
-        <?php echo $form->labelEx($model,'TVschedule'); ?>
-        <?php echo "<br><div id='periodContainer' data-isview='".$isView."'></div>"; ?>
-        <?php if(!$isView): ?>
-            <?php echo "<p><button id='addTVperiod' class='btn btn-default'>Add period</button></p>"; ?>
-        <?php endif; ?>
-    </div>
-
-    <div class="row">
-    <?php
-        if(!$model->isNewRecord)
-        {
-            echo $form->labelEx($model,'channels');
-
-            printf("<div id='channelsList'>");
-            $playlistsToPoint = $model->playlistToPoint;
-
-            for ($ii = 1; $ii <= 3; $ii++)
-            {
-                printf("<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>",
-                    $ii);
-
-                printf("<div class='btn-group' role='group' aria-label=''>" .
-                    "<button type='button' class='btn btn-default ChannelButt'>".
-                        "Channel %s </button>", $ii);
-
-                if (!$isView) {
-                    printf("<button type='button' class='AddPlaylistsBut btn btn-info' data-channelid='%s'>" .
-                        "<span class='glyphicon glyphicon-plus'></span> Add playlists" .
-                        "</button>", $ii);
-                }
-
-                printf("</div>");
-
-                $channelPlaylists = [];
-                foreach ($playlistsToPoint as $pl) {
-                    if ($pl->channel_type == $ii) {
-                        $channelPlaylists[] = Playlists::model()->findByPk($pl->id_playlist);;
-                    }
-                }
-
-                foreach ($channelPlaylists as $pl) {
-                        printf("<div class='btn-group' role='group'>");
-                        printf("<button type='button' class='PlaylistLinks btn btn-default' ".
-                                "data-plid='%s'>%s</button>",
-                            $pl['id'], CHtml::link($pl['name'], array('playlists/' . $pl['id'])));
-
-                        if (!$isView) {
-                            printf("<button type='button' class='RemovePlaylist btn btn-danger' ".
-                                    "data-plidtoremove='%s' ".
-                                    "data-channelidpltoremove='%s' ".
-                                ">x</button>", $pl['id'], $ii);
-                        }
-                        printf("</div>");
-                }
-
-                echo "</div>";
-            }
-
-            printf("</div>");
-        }
-    ?>
-
-    </div>
-
-    <div class="row">
-        <?php echo $form->labelEx($model,'screen_id'); ?>
-
-        <?php
-            $dropDown = array();
-            $userId = Yii::app()->user->getId();
-            $userModel = User::model()->findByPk($userId);
-            $ScreenModels = $userModel->screens;
-            $selectedItems = array();
-
-            foreach ($ScreenModels as $val)
-            {
-                $dropDown[$val->id] = $val->name;
-            }
-
-            if(!$model->isNewRecord)
-            {
-                $ScreenModelId = $model->screen_id;
-                $selectedItems[$ScreenModelId] = array('selected'=>'selected');
-
-            }
-
-            if (!$isView) {
-                echo $form->dropDownList($model, 'screen_id',
-                        $dropDown,
-                        array('options'=>$selectedItems,
-                            'multiple'=>false,'class'=>'form-control','size'=>'10'));
-            } else {
-                echo "<b><a href='" .
-                    Yii::app()->createUrl('screen/' . $model->screen_id). "'>" .
-                    Screen::model()->findByPk($model->screen_id)->name .
-                "</a></b>";
-                echo "<br><br>";
-            }
-
-            printf ( "<div id='windowsList'>" );
-
-            if(!$model->isNewRecord)
-            {
-                $channels = $model->channels;
-                $ScreenModelId = $model->screen_id;
-                if($ScreenModelId != null){
-                    $ScreenModel = Screen::model()->findByPk($ScreenModelId);
-
-                    if(isset($ScreenModel->windows)) {
-                        $windows = $ScreenModel->windows;
-                        foreach ($windows as $window) {
-
-                            $windowId = $window->id;
-                            $windowName = $window->name;
-
-                            foreach ($channels as $channel) {
-                                if(($channel->id_point === $model->id) && ($channel->window_id === $window->id)) {
-                                    printf ( "<div class='ChannelsContainer btn-toolbar' data-channelid='%s' role='toolbar' aria-label=''>", $channel ['id'] );
-
-                                    $widgetToChannel = WidgetToChannel::model()->find("channel_id = :channel_id",
-                                        array("channel_id" => $channel['id']));
-
-                                    printf ("<div class='btn-group' role='group' aria-label=''>" .
-                                            "<button type='button' class='btn btn-default ChannelButt' disabled='disabled'>Screen %s</button>",
-                                            $windowName);
-
-                                    if(count($widgetToChannel) > 0) {
-                                        $widgetModel = Widget::model()->findByPk($widgetToChannel['widget_id']);
-
-                                        printf ("<button type='button' class='detach-widget btn btn-warning' data-channelid='%s' %s>".
-                                                "<span class='glyphicon glyphicon-off'></span> %s %s" .
-                                                "</button>",  $channel ['id'], $isView ? "disabled='disabled'" : '', $isView ? "Widget" : "Detach widget", $widgetModel['name'] );
-                                    } else if (!$isView) {
-                                        printf ("<button type='button' class='attach-widget btn btn-success' data-channelid='%s'>".
-                                                "<span class='glyphicon glyphicon-paperclip'></span> Attach widget" .
-                                                "</button>",  $channel ['id']);
-                                    }
-
-                                    printf ("</div></div>");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-        printf ( "</div>" );
-
-            ?>
-        <?php echo $form->error($model,'screen_id'); ?>
-    </div>
+    <?php $this->renderPartial('sections/_screen-with-blocks', [
+        'model' => $model,
+        'form' => $form,
+        'isView' => $isView
+    ]); ?>
 
     <div class="row">
         <?php

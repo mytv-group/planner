@@ -15,6 +15,8 @@
  */
 class Net extends CActiveRecord
 {
+  public $attachedPoints;
+  public $availablePoints;
   /**
    * @return string the associated database table name
    */
@@ -61,6 +63,7 @@ class Net extends CActiveRecord
       'id_user' => 'User',
       'dt_created' => 'Date created',
       'options' => 'Options',
+      'attachedPoints' => 'Attached points',
     );
   }
 
@@ -78,11 +81,9 @@ class Net extends CActiveRecord
    */
   public function search()
   {
-    // @todo Please modify the following code to remove attributes that should not be searched.
-
     $criteria=new CDbCriteria;
 
-    $criteria->compare('name',$this->name,true);
+    $criteria->compare('name', $this->name, true);
 
     return new CActiveDataProvider($this, array(
       'criteria'=>$criteria,

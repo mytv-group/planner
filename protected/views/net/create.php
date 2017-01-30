@@ -10,6 +10,5 @@ $this->menu=array(
 <h1>Create Net</h1>
 
 <?php $this->renderPartial('_form', [
-    'model' => $model,
-		'availablePoints' => $availablePoints,
-]); ?>
+    'model' => $model
+]);

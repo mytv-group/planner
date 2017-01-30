@@ -21,6 +21,22 @@
     <?php echo $form->error($model,'name'); ?>
   </div>
 
+  <div class="row">
+    <?
+      $selected = [];
+      if (isset($attachedPoints) && is_array($attachedPoints)) {
+          $selected = $attachedPoints;
+      }
+    ?>
+    <?php echo $form->labelEx($model, 'attachedPoints'); ?>
+    <?php echo $form->dropDownList($model, 'attachedPoints', $model->availablePoints, [
+      'class' => 'form-control',
+      'multiple' => 'multiple',
+      'size' => '15',
+      'options' => $selected
+    ]); ?>
+  </div>
+
   <div class="row buttons">
     <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', ['class'=> 'btn btn-default']); ?>
   </div>

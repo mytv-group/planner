@@ -75,10 +75,21 @@ class NetController extends Controller
 
     if(isset($_POST['Net']))
     {
+
         $attributes = array_merge($_POST['Net'], ['id_user' => Yii::app()->user->id]);
-        $model->attributes=$attributes;
+        $model->attributes = $attributes;
         if ($model->save()) {
-            $this->redirect(array('update','id'=>$model->id));
+            $attachedPoints = [];
+            if(isset($attributes['attachedPoints'])
+              && is_array($attributes['attachedPoints'])
+            ) {
+               $attachedPoints = $attributes['attachedPoints'];
+            }
+
+            $pointToNet = new PointToNet;
+            $pointToNet->saveArray($model->id, $attachedPoints);
+
+            $this->redirect(['update', 'id' => $model->id]);
         }
     }
 
@@ -86,14 +97,15 @@ class NetController extends Controller
     if (Yii::app()->user->role === User::ROLE_ADMIN) {
         $availablePoints = Point::Model()->findAll();
     } else {
-        $availablePoints = Point::Model()->findAll('username=:u',
-            [':u'=> Yii::app()->user->name]
+        $availablePoints = Point::Model()->findAll('id_user=:u',
+            [':u'=> Yii::app()->user->id]
         );
     }
 
-    $this->render('create',[
-        'model' => $model,
-        'availablePoints' => $availablePoints,
+    $model->availablePoints = CHtml::listData($availablePoints, 'id', 'name');
+
+    $this->render('create', [
+        'model' => $model
     ]);
   }
 
@@ -106,19 +118,45 @@ class NetController extends Controller
   {
     $model=$this->loadModel($id);
 
-    // Uncomment the following line if AJAX validation is needed
-    // $this->performAjaxValidation($model);
-
-    if(isset($_POST['Net']))
+    if (isset($_POST['Net']))
     {
-      $model->attributes=$_POST['Net'];
-      if($model->save())
-        $this->redirect(array('view','id'=>$model->id));
+      $attributes = $_POST['Net'];
+      $model->attributes = $attributes;
+      if ($model->save()) {
+          $attachedPoints = [];
+          if(isset($attributes['attachedPoints'])
+            && is_array($attributes['attachedPoints'])
+          ) {
+             $attachedPoints = $attributes['attachedPoints'];
+          }
+
+          $pointToNet = new PointToNet;
+          $pointToNet->saveArray($model->id, $attachedPoints);
+
+          $this->redirect(['view', 'id'=>$model->id]);
+      }
     }
 
-    $this->render('update',array(
-      'model'=>$model,
-    ));
+    $availablePoints = [];
+    if (Yii::app()->user->role === User::ROLE_ADMIN) {
+        $availablePoints = Point::Model()->findAll();
+    } else {
+        $availablePoints = Point::Model()->findAll('id_user=:u',
+            [':u'=> Yii::app()->user->id]
+        );
+    }
+
+    $model->availablePoints = CHtml::listData($availablePoints, 'id', 'name');
+    $attachedPoints = [];
+
+    foreach ($model->pointsToNet as $pointToNet) {
+        $attachedPoints[strval($pointToNet->id_point)] = ['selected' => 'selected'];
+    }
+
+    $this->render('update',[
+        'model' => $model,
+        'attachedPoints' => $attachedPoints
+    ]);
   }
 
   /**

@@ -11,4 +11,7 @@ $this->menu=array(
 
 <h1>Update Net <?php echo $model->name; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', [
+    'model' => $model,
+		'attachedPoints' => $attachedPoints
+]);

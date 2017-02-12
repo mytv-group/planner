@@ -1,0 +1,17 @@
+ALTER TABLE `point` ADD `id_user` INT NOT NULL AFTER `sync`, ADD INDEX (`id_user`);
+
+UPDATE `point`
+LEFT JOIN `user` ON `point`.`username`= `user`.`name` COLLATE utf8_unicode_ci
+SET `point`.`id_user`  = `user`.`id`
+
+ALTER TABLE `point` DROP `tv_schedule_blocks`;
+
+ALTER TABLE `tvschedule` CHANGE `point_id` `id_point` INT(11) NOT NULL;
+
+ALTER TABLE `tvschedule` DROP `author`;
+
+ALTER TABLE `tvschedule` CHANGE `from` `dt_from` DATETIME NOT NULL;
+
+ALTER TABLE `tvschedule` CHANGE `to` `dt_to` DATETIME NOT NULL;
+
+ALTER TABLE `tvschedule` ADD `id_user` INT NOT NULL AFTER `author`, ADD INDEX (`id_user`);

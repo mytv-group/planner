@@ -440,11 +440,6 @@ section {
 .ui-timepicker-rtl dl dt{ float: right; clear: right; }
 .ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
 
-.RemoveTVonOff {
-    padding-top: 0px;
-    padding-bottom: 2px;
-}
-
 .Calendar {
     /*max-width: 1000px;*/
     margin: 0px auto;

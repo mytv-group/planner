@@ -1,0 +1,12 @@
+.tv-schedule-datetime {
+  	max-width:205px;
+	  display:inline-block;
+}
+
+.remove-tv-block {
+		padding: 6px 12px;
+}
+
+#js-tv-schedule {
+	  display: none;
+}

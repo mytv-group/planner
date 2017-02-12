@@ -1,15 +1,5 @@
 <?php
 
-/*
-ALTER TABLE `point` ADD `id_user` INT NOT NULL AFTER `sync`, ADD INDEX (`id_user`);
-
-UPDATE point t1
-        INNER JOIN user t2
-             ON t1.username = t2.username  COLLATE utf8_unicode_ci
-SET t1.id_user = t2.id
-WHERE 1
-*/
-
 Yii::import('ext.EHttpClient.*');
 
 /**
@@ -72,7 +62,8 @@ class Point extends CActiveRecord
             'playlists'=>array(self::HAS_MANY,'Playlists', array('id_playlist'=>'id'),'through'=>'playlistToPoint'),
             'pointtonet'=>array(self::HAS_MANY, 'PointToNetByUsers', 'point_id'),
             'net'=>array(self::HAS_MANY, 'Net', array('netId'=>'id'),'through'=>'pointtonet'),
-            'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id')
+            'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id'),
+            'tv'=>array(self::HAS_MANY, 'TVSchedule', 'id_point')
         );
     }
 

@@ -8,7 +8,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'point-form',
-    'enableAjaxValidation'=>true,
+    'enableAjaxValidation'=>false,
 )); ?>
 
 <?php
@@ -48,11 +48,13 @@
         'isView' => $isView
     ]); ?>
 
-    <?php $this->renderPartial('sections/_tv', [
-        'model' => $model,
-        'form' => $form,
-        'isView' => $isView
+    <div class="row">
+    <?php echo $form->labelEx($model, 'TVschedule'); ?>
+    <?php $this->widget('TVscheduleWidget', [
+        'tvBlocks' => $model->tv,
+        'editable' => !$isView
     ]); ?>
+    </div>
 
     <?php $this->renderPartial('sections/_channels', [
         'model' => $model,

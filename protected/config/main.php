@@ -8,7 +8,8 @@ return array(
         'application.models.*',
         'application.components.*',
         'application.modules.rbac.controllers.RbacController',
-        'application.widgets.*'
+        'application.widgets.*',
+        'application.widgets-internal.tv-schedule.*',
     ),
     'theme'=>'basic',
     'modules'=>array(

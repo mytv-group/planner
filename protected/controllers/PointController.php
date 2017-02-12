@@ -463,7 +463,7 @@ class PointController extends Controller
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/ChannelManager.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/WidgetManager.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/point.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointTV.js' );
+
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointVolume.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointScreen.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/playlistChooseDialog.js' );
@@ -471,12 +471,12 @@ class PointController extends Controller
 
             /*$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/datetimePicker/jquery-ui-timepicker-addon.js' );*/
 
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
 
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/point.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/pages/point.css');
 
             return true;
         }

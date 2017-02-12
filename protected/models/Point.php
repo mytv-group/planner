@@ -35,7 +35,7 @@ class Point extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, username, ip, screen_id, id_user', 'required'),
+            array('name, username, ip, screen_id', 'required'),
             array('volume, TV, screen_id, id_user', 'numerical', 'integerOnly'=>true),
             array('name, username', 'length', 'max'=>255),
             array('sync', 'boolean'),

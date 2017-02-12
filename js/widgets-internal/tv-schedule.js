@@ -14,6 +14,8 @@ $(document).ready(function(e) {
           });
     }
 
+    bindControls();
+
     $("#add-tv-period").click(function(e){
         var $tvSchedule = $("#js-tv-schedule").clone();
         $('#tv-schedule-grid').append($tvSchedule.css({display: 'block'}));

@@ -43,12 +43,6 @@ return array(
             ),
         ),
         'db'=> include(dirname(__FILE__).'/db.php'),
-        'pointInfo'=>array(
-            'class'=>'PointInfoRequester',
-        ),
-        'contentManager'=>array(
-            'class'=>'ContentManager',
-        ),
         'errorHandler'=>array(
             'errorAction'=>'site/error',
         ),
@@ -60,6 +54,15 @@ return array(
                     'levels'=>'error, warning',
                 ),
             ),
+        ),
+        'pointInfo'=>array(
+            'class'=>'PointInfoRequester',
+        ),
+        'contentManager'=>array(
+            'class'=>'ContentManager',
+        ),
+        'tvSchedule'=>array(
+            'class'=>'TvScheduleManager',
         ),
     ),
     'params'=>array(

@@ -1,15 +1,15 @@
 <?php
-  $prop = '';
-  if(!$editable) {
-      $prop = 'disabled="disabled"';
-  }
+    $prop = '';
+    if(!$editable) {
+        $prop = 'disabled="disabled"';
+    }
 ?>
 
 <?php
-  $id = '';
-  if($rowId !== '') {
-      $id = 'id="'.$rowId.'"';
-  }
+    $id = '';
+    if($rowId !== '') {
+        $id = 'id="'.$rowId.'"';
+    }
 ?>
 
 <div <?= $id; ?>>

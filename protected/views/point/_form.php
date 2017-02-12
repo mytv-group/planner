@@ -68,15 +68,6 @@
         'isView' => $isView
     ]); ?>
 
-    <div class="row">
-        <?php
-            echo $form->hiddenField($model,'sync', array("value"=>"0"));
-            if(!$model->isNewRecord) {
-                echo CHtml::tag('div',array('id'=> 'pointId', 'data-value'=>$model->id));
-            }
-        ?>
-    </div>
-
     <?php if (!$isView): ?>
         <div class="row buttons">
             <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>"form-control")); ?>

@@ -15,6 +15,7 @@ Yii::import('ext.EHttpClient.*');
  * @property integer $volume
  * @property integer $TV
  * @property integer $channels
+ * @property integer $id_user
  */
 class Point extends CActiveRecord
 {
@@ -34,19 +35,25 @@ class Point extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, username, ip, screen_id', 'required'),
-            array('volume, TV, screen_id', 'numerical', 'integerOnly'=>true),
+            array('name, username, ip, screen_id, id_user', 'required'),
+            array('volume, TV, screen_id, id_user', 'numerical', 'integerOnly'=>true),
             array('name, username', 'length', 'max'=>255),
             array('sync', 'boolean'),
-            array('update_time','default',
-                    'value'=>new CDbExpression('NOW()'),
+            array('sync', 'default',
+                    'value'=> false,
+                    'setOnEmpty' => true, 'on'=>'insert'),
+            array('id_user', 'default',
+                    'value'=> Yii::app()->user->id,
+                    'setOnEmpty' => true, 'on'=>'insert'),
+            array('update_time', 'default',
+                    'value' => new CDbExpression('NOW()'),
                     'setOnEmpty'=>false,'on'=>'insert'),
-            array('update_time','default',
-                    'value'=>new CDbExpression('NOW()'),
-                    'setOnEmpty'=>false,'on'=>'update'),
+            array('update_time', 'default',
+                    'value' => new CDbExpression('NOW()'),
+                    'setOnEmpty' => false, 'on'=>'update'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('name, username', 'safe', 'on'=>'search'),
+            array('name', 'safe', 'on'=>'search'),
         );
     }
 

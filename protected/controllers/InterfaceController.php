@@ -10,15 +10,22 @@ class InterfaceController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('getPointSchedule', 'getTVschedule', 'setSync', 'postStatistics'),
-                'users'=>array('*'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            [
+                'allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=> [
+                    'getPointSchedule', 
+                    'getTVschedule',
+                    'setSync',
+                    'postStatistics'
+                ],
+                'users'=>['*'],
+            ],
+            [
+                'deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     public function filters()
@@ -144,18 +151,18 @@ class InterfaceController extends Controller
         $pointDate = $year . "-" . $month . "-" . $day;
 
         $criteria=new CDbCriteria;
-        $criteria->select = "`from`, `to`";
-        $criteria->condition = "`point_id` = {$pointId} AND `from` <= '{$pointDate}' AND `to` >= '{$pointDate}'";
-        $criteria->order = '`from` DESC';
+        $criteria->select = "`dt_from`, `dt_to`";
+        $criteria->condition = "`id_point` = {$pointId} AND `dt_from` <= '{$pointDate}' AND `dt_to` >= '{$pointDate}'";
+        $criteria->order = '`dt_from` DESC';
         $schedule = TVSchedule::model()->findAll($criteria);
 
         $onOffArr = [];
         foreach ($schedule as $item)
         {
-            $fromFull = explode(" ", $item->from);
+            $fromFull = explode(" ", $item->dt_from);
             $from = $fromFull[1];
 
-            $toFull = explode(" ", $item->to);
+            $toFull = explode(" ", $item->dt_to);
             $to = $toFull[1];
 
             /* if prev 'to' gather current 'from' change prev 'to' to current */

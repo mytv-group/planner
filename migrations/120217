@@ -15,3 +15,5 @@ ALTER TABLE `tvschedule` CHANGE `from` `dt_from` DATETIME NOT NULL;
 ALTER TABLE `tvschedule` CHANGE `to` `dt_to` DATETIME NOT NULL;
 
 ALTER TABLE `tvschedule` ADD `id_user` INT NOT NULL AFTER `author`, ADD INDEX (`id_user`);
+
+INSERT INTO `widget` (`id`, `name`, `description`, `show_duration`, `periodicity`, `offset`, `created_dt`, `config`) VALUES (NULL, 'logo', 'logo 4 minutes interval 20 seconds showing duration with offset 2 minutes', '20', '240', '120', '2017-02-21 19:55:42', '{"rotation": 0, "bg":"background.png"}')

@@ -155,7 +155,7 @@ class StatisticController extends Controller
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
 
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-1.11.0.js' );
+            
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );

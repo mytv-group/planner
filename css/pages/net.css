@@ -39,3 +39,8 @@
 .row-menu {
   margin: 0;
 }
+
+.items .empty {
+  margin: 15px -25px;
+  display: block;
+}

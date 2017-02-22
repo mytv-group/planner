@@ -8,12 +8,32 @@ ALTER TABLE `point` DROP `tv_schedule_blocks`;
 
 ALTER TABLE `tvschedule` CHANGE `point_id` `id_point` INT(11) NOT NULL;
 
-ALTER TABLE `tvschedule` DROP `author`;
-
 ALTER TABLE `tvschedule` CHANGE `from` `dt_from` DATETIME NOT NULL;
 
 ALTER TABLE `tvschedule` CHANGE `to` `dt_to` DATETIME NOT NULL;
 
-ALTER TABLE `tvschedule` ADD `id_user` INT NOT NULL AFTER `author`, ADD INDEX (`id_user`);
+ALTER TABLE `tvschedule` ADD `id_user` INT NOT NULL AFTER `dt_to`, ADD INDEX (`id_user`);
+
+UPDATE `tvschedule`
+LEFT JOIN `user` ON `tvschedule`.`author`= `user`.`name` COLLATE utf8_unicode_ci
+SET `tvschedule`.`id_user`  = `user`.`id`
+
+ALTER TABLE `tvschedule` DROP `author`;
 
 INSERT INTO `widget` (`id`, `name`, `description`, `show_duration`, `periodicity`, `offset`, `created_dt`, `config`) VALUES (NULL, 'logo', 'logo 4 minutes interval 20 seconds showing duration with offset 2 minutes', '20', '240', '120', '2017-02-21 19:55:42', '{"rotation": 0, "bg":"background.png"}')
+
+DELETE FROM `net` WHERE 1
+
+DROP TABLE `net_channel`;
+
+DROP TABLE `net`;
+
+CREATE TABLE `net` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+ `id_user` int(11) NOT NULL,
+ `dt_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (`id`),
+ KEY `id_user` (`id_user`),
+ CONSTRAINT `net_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8

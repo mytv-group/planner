@@ -295,14 +295,12 @@ class Point extends CActiveRecord
                         $fileName = $row['name'];
                         $symlinkPath = $channelFullDir . $fileName;
 
-                        if(!file_exists($symlinkPath))
-                        {
-                            if(defined('SYMLINK'))
-                            {
+                        if(!file_exists($symlinkPath)
+                          && file_exists($path)
+                        ) {
+                            if (defined('SYMLINK')) {
                                 symlink($path, $symlinkPath);
-                            }
-                            else
-                            {
+                            } else {
                                 copy($path, $symlinkPath);
                             }
                         }

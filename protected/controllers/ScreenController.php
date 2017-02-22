@@ -39,7 +39,8 @@ class ScreenController extends Controller
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions'=>array('delete'),
-                'users'=>array('screenUser'),
+                'users'=>array('@'),
+                'roles'=>array('screenUser'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
@@ -194,7 +195,7 @@ class ScreenController extends Controller
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
 
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-1.11.0.js' );
+            
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 

@@ -14,7 +14,7 @@ class InterfaceController extends Controller
             [
                 'allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=> [
-                    'getPointSchedule', 
+                    'getPointSchedule',
                     'getTVschedule',
                     'setSync',
                     'postStatistics'
@@ -139,6 +139,9 @@ class InterfaceController extends Controller
         }
     }
 
+    /*
+    * interface/getTVschedule/id/159/date/20170222/tv
+    */
     public function actionGetTVschedule($id, $date, $tv)
     {
         $pointId = intval($_GET['id']);
@@ -179,8 +182,7 @@ class InterfaceController extends Controller
         if(count($onOffArr) > 0)
         {
             $onOffList = '';
-            foreach ($onOffArr as $item)
-            {
+            foreach ($onOffArr as $item) {
                 $onOffList .= $item[0] . $this->eol;
                 $onOffList .= '1 on';
                 $onOffList .= $this->eol. $this->eol;

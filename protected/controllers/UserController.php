@@ -37,6 +37,11 @@ class UserController extends Controller
                 'users'=>array('@'),
                 'roles'=>array('userEditorUser'),
             ),
+            array('allow',
+                'actions'=>array('delete'),
+                'users'=>array('@'),
+                'roles'=>array('admin'),
+            ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
@@ -74,8 +79,7 @@ class UserController extends Controller
                 $this->redirect(array('view','id'=>$model->id));
         }
 
-        $rolesList = array();
-
+        $rolesList = [];
         foreach (Yii::app()->authManager->getRoles() as $key => $val) {
             if($val->data['avaliable']) {
                 $rolesList[$key] = $key;
@@ -109,9 +113,12 @@ class UserController extends Controller
                 $this->redirect(array('view','id'=>$model->id));
         }
 
-        $rolesList = array();
-        foreach (Yii::app()->authManager->getRoles() as $key => $val)
-            $rolesList[$key] = $key;
+        $rolesList = [];
+        foreach (Yii::app()->authManager->getRoles() as $key => $val) {
+            if($val->data['avaliable']) {
+                $rolesList[$key] = $key;
+            }
+        }
 
         $this->render('update',array(
                 'model'=>$model,
@@ -212,7 +219,7 @@ class UserController extends Controller
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
 
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-1.11.0.js' );
+            
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );

@@ -171,25 +171,19 @@ $(document).ready(function(e){
             children = node.children_d,
             folderName = node.text;
 
-        if(children.length == 0){
+        if (children.length == 0){
             children = 0;
         }
-
-        var pV = {
-            type: type,
-            id: id,
-            children: children
-        };
 
         $.ajax({
           url: deleteNodeSrc,
           type: "POST",
-          data: pV,
+          data: {
+              type: type,
+              id: id,
+              children: children
+          },
           dataType: "json",
-        }).done(function(e){
-            if(e['status'] == 'err') {
-                console.log(e['error']);
-            }
         }).fail(function(e){
             console.log(e);
         });
@@ -277,13 +271,12 @@ $(document).ready(function(e){
                     };
                 }
             },
-            /*'data' : [
-                { "text" : "Root node", "children" : [
-                        { "text" : "Child node 1", "id" : 1 },
-                        { "text" : "Child node 2" }
-                ]}
-            ],*/
-            "check_callback" : true
+            'check_callback' : function (op, node, par, pos, more) {
+                if(op === "delete_node") {
+                    return confirm('Are you sure you want to delete?');
+                }
+                return true;
+            },
         },
         "plugins" : [ "dnd", "contextmenu", "types"],
     });

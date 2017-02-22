@@ -58,12 +58,12 @@
 							array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 						),
 					)); ?>
-					
+
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="cont">
 	<div class="container-fluid">
 	  <?php if(isset($this->breadcrumbs)):?>
@@ -78,13 +78,13 @@
 			)); ?>
 		<!-- breadcrumbs -->
 	  <?php endif?>
-	
+
 	<?php echo $content ?>
-	
-	
+
+
 	</div><!--/.fluid-container-->
 	</div>
-	
+
 	<div class="extra">
 	  <div class="container">
 		<div class="row">
@@ -97,7 +97,7 @@
 					<li><a href="#">Subheading 1.4</a></li>
 				</ul>
 			</div> <!-- /span3 -->
-			
+
 			<div class="col-md-3">
 				<h4>Heading 2</h4>
 				<ul>
@@ -107,9 +107,9 @@
 					<li><a href="#">Subheading 2.4</a></li>
 				</ul>
 			</div> <!-- /span3 -->
-			
+
 			<div class="col-md-3">
-				<h4>Heading 3</h4>	
+				<h4>Heading 3</h4>
 				<ul>
 					<li><a href="#">Subheading 3.1</a></li>
 					<li><a href="#">Subheading 3.2</a></li>
@@ -117,7 +117,7 @@
 					<li><a href="#">Subheading 3.4</a></li>
 				</ul>
 			</div> <!-- /span3 -->
-			
+
 			<div class="col-md-3">
 				<h4>Heading 4</h4>
 				<ul>
@@ -130,7 +130,7 @@
 			</div> <!-- /row -->
 		</div> <!-- /container -->
 	</div>
-	
+
 	<div class="footer">
 	  <div class="container">
 		<div class="row">

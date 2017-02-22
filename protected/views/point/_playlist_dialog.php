@@ -1,7 +1,7 @@
 <!-- Modal -->
-<div id="dialog" title="Add playlist on channel">
+<div id="dialog" title="Add playlist on channel" data-point-id="<?= $model->id; ?>">
   <p>
-  <?php 
+  <?php
 
   	 $userName = Yii::app()->user->name;
  	 $pls = Playlists::model()->findAll(array("condition"=>"author = '{$userName}'","order"=>"id"));
@@ -28,7 +28,7 @@
 	 		if($pl['thu']) { $weedDays .= 'Thu '; }
 	 		if($pl['fri']) { $weedDays .= 'Fri '; }
 	 		if($pl['sat']) { $weedDays .= 'Sat '; }
-	 		
+
 		 	echo '<tr>';
 		 	echo '<td>' . '<input class="SelectedPlsToAdd" type="checkbox" data-plidtoadd="'.$pl['id'].
 		 		'" data-plnametoadd="'.$pl['name'].'">' . '</td>';
@@ -42,10 +42,10 @@
  		}
  		echo '</table>';
 	 }
-	 else 
+	 else
 	 {
 	 	echo 'No avaliable playlists';
-	 } 
+	 }
   ?>
   </p>
 </div>

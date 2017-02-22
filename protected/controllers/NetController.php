@@ -222,7 +222,7 @@ class NetController extends Controller
       /* @var $cs CClientScript */
       $cs = Yii::app()->clientScript;
 
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-1.11.0.js' );
+      
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-multiselect.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-multiselect-collapsible-groups.js' );

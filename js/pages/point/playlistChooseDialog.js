@@ -1,6 +1,6 @@
 $(document).ready(function(e){
 
-    var pointId = $("#pointId").data('value'),
+    var pointId = $("#dialog").data('point-id'),
         channelList = $("#channelsList, #windowsList"),
         CM = new ChannelManager(pointId);
 
@@ -34,6 +34,7 @@ $(document).ready(function(e){
                         plName = $(selectedPls[ii]).data('plnametoadd').toString();
 
                     if($.inArray(plId, channelPlIds(playlistLinksInChannel)) == -1){
+                      debugger;
                         CM.AddPlaylistToChannel(channelid, plId, pointId, plName, function(e, plId, plName){
                             if(e.status == 'ok'){
                                 curChannelContainer.append(

@@ -56,8 +56,11 @@ return array(
             ),
         ),
         'clientScript'=>array(
-            'scriptMap'=>array(
-                'jquery'=>'js\lib\jquery-1.11.0.js'
+            'packages'=>array(
+                'jquery'=>array(
+                    'baseUrl'=>'/',
+                    'js'=>array('js/lib/jquery-1.11.0.js'),
+                )
             ),
         ),
         'pointInfo'=>array(

@@ -55,6 +55,11 @@ return array(
                 ),
             ),
         ),
+        'clientScript'=>array(
+            'scriptMap'=>array(
+                'jquery'=>'js\lib\jquery-1.11.0.js'
+            ),
+        ),
         'pointInfo'=>array(
             'class'=>'PointInfoRequester',
         ),

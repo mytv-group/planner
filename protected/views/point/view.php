@@ -14,5 +14,6 @@ $this->menu=array(
 
 <?php $this->renderPartial('_form', [
 	'model' => $model,
+  'screens' => $screens,
 	'isViewForm' => true
 ]);

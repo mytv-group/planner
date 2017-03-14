@@ -11,6 +11,9 @@ $this->menu=array(
 
 <h1>Update Point: <?php echo $model->name; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', [
+	'model'=>$model,
+	'screens' => $screens,
+	'widgets' => $widgets
+]); ?>
 <?php $this->renderPartial('_playlist_dialog', array('model'=>$model)); ?>
-<?php $this->renderPartial('_widget_dialog', array('model'=>$model)); ?>

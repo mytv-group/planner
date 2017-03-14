@@ -64,11 +64,12 @@ class Point extends CActiveRecord
     public function relations()
     {
         return array(
-            'channels'=>array(self::HAS_MANY, 'Channel', 'id_point'),
-            'playlistToPoint'=>array(self::HAS_MANY,'PlaylistToPoint', array('id_point' => 'id')),
-            'playlists'=>array(self::HAS_MANY,'Playlists', array('id_playlist'=>'id'),'through'=>'playlistToPoint'),
-            'pointtonet'=>array(self::HAS_MANY, 'PointToNetByUsers', 'point_id'),
-            'net'=>array(self::HAS_MANY, 'Net', array('netId'=>'id'),'through'=>'pointtonet'),
+            'showcases'=>array(self::HAS_MANY, 'Showcase', 'id_point'),
+            'widgets'=>array(self::HAS_MANY, 'Widget', ['id_widget'=>'id'],'through'=>'showcase'),
+            'playlistToPoint'=>array(self::HAS_MANY,'PlaylistToPoint', ['id_point' => 'id']),
+            'playlists'=>array(self::HAS_MANY,'Playlists', ['id_playlist'=>'id'],'through'=>'playlistToPoint'),
+            'pointToNet'=>array(self::HAS_MANY, 'PointToNet', 'id_point'),
+            'net'=>array(self::HAS_MANY, 'Net', ['id_net'=>'id'],'through'=>'pointToNet'),
             'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id'),
             'tv'=>array(self::HAS_MANY, 'TVSchedule', 'id_point')
         );
@@ -254,14 +255,10 @@ class Point extends CActiveRecord
         $pointDir = "spool/points/" . $model->id;
 
         //remove dir if exist
-        if(file_exists($pointDir))
-        {
-            try
-            {
+        if(file_exists($pointDir)) {
+            try {
                 $this->DeleteDir($pointDir);
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 error_log("Unlink failed. Exception - " . json_encode($e).
                 "Dir - " . $pointDir);
             }
@@ -272,25 +269,21 @@ class Point extends CActiveRecord
         ]);
 
         $connection = Yii::app()->db;
-        foreach ($avaliablePlaylists as $playlistToPoint)
-        {
+        foreach ($avaliablePlaylists as $playlistToPoint) {
             $pl = $playlistToPoint->playlist;
             $channelDir = $pointDir . "/" . $playlistToPoint->channel_type;
             $channelFullDir = $this->PrepareSpoolPath($channelDir);
 
             $plFiles = explode(",", $pl->files);
 
-            foreach ($plFiles as $fileId)
-            {
-                if($fileId != '')
-                {
+            foreach ($plFiles as $fileId) {
+                if ($fileId != '') {
                     $connection->active=true;
                     $sql = "SELECT `name`, `path` FROM `file` WHERE `id` = ".$fileId.";";
                     $command = $connection->createCommand($sql);
                     $dataReader=$command->query();
 
-                    if(($row=$dataReader->read())!==false)
-                    {
+                    if (($row=$dataReader->read())!==false) {
                         $path = $row['path'];
                         $fileName = $row['name'];
                         $symlinkPath = $channelFullDir . $fileName;
@@ -319,11 +312,9 @@ class Point extends CActiveRecord
 
         $contentPath = $_SERVER["DOCUMENT_ROOT"];
 
-        foreach($pathAppendix as $folder)
-        {
+        foreach($pathAppendix as $folder) {
             $contentPath .= "/" . $folder;
-            if (!file_exists($contentPath) && !is_dir($contentPath))
-            {
+            if (!file_exists($contentPath) && !is_dir($contentPath)) {
                 mkdir($contentPath);
             }
         }
@@ -360,63 +351,6 @@ class Point extends CActiveRecord
             }
             reset($objects);
             rmdir($dir);
-        }
-    }
-
-    public function CreateTVSocketRequest($ip, $TV)
-    {
-        if(defined('SOCKET_REQUEST_TO_POINT') && function_exists ('socket_create'))
-        {
-            // socket
-            try {
-                set_time_limit ( 10 );
-
-                /* Создаём  TCP / IP */
-                //error_reporting ( 0 );
-                $socket = socket_create ( AF_INET, SOCK_STREAM, SOL_TCP );
-                if ($socket === false) {
-                    error_log ( "Не удалось выполнить socket_create(): причина: " . socket_strerror ( socket_last_error () ) . "\n" );
-                }
-
-                $result = socket_connect ( $socket, $ip, 8777 );
-                if ($result === false) {
-                    error_log ( "Не удалось выполнить socket_connect().\nПричина: ($result) " . socket_strerror ( socket_last_error ( $socket ) ) . "\n" );
-                } else {
-                    if ($TV == 1) {
-                        socket_write ( $socket, 0, strlen ( 0 ) );
-                    } else {
-                        socket_write ( $socket, 1, strlen ( 1 ) );
-                    }
-                }
-                socket_close ( $socket );
-                //error_reporting ( E_ALL );
-
-            } catch ( Exception $ex ) {
-                error_log ( "Socket exception." );
-            }
-        }
-    }
-
-    public function CreateChannelsForWindows($screenId, $pointId)
-    {
-        $Screen = Screen::model()->findByPk($screenId);
-        $windows = $Screen->windows;
-
-        Channel::model()->deleteAll("id_point = :id_point AND window_id IS NOT NULL", array('id_point' => $pointId));
-
-        $ii = 0;
-        foreach($windows as $window)
-        {
-            $ii++;
-            $channel = new Channel;
-
-            $channel->attributes = array(
-                'id_point' => $pointId,
-                'window_id' => $window->id,
-                'internalId' => $ii
-            );
-
-            $channel->save();
         }
     }
 }

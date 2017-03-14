@@ -10,6 +10,8 @@ return array(
         'application.modules.rbac.controllers.RbacController',
         'application.widgets.*',
         'application.widgets-internal.tv-schedule.*',
+        'application.widgets-internal.screen-selector.*',
+        'application.widgets-internal.choose-widget-dialog.*',
     ),
     'theme'=>'basic',
     'modules'=>array(

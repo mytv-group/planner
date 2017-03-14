@@ -2,11 +2,6 @@
 /* @var $this PointController */
 /* @var $model Point */
 
-// $this->breadcrumbs=array(
-// 	'Points'=>array('index'),
-// 	'Create',
-// );
-
 $this->menu=array(
 	array('label'=>'List', 'url'=>array('index')),
 );
@@ -14,4 +9,8 @@ $this->menu=array(
 
 <h1>Create Point</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', [
+	'model'=>$model,
+	'screens' => $screens,
+	'widgets' => $widgets
+]); ?>

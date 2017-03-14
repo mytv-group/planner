@@ -25,6 +25,10 @@ class Playlists extends CActiveRecord
 
     public static $types = ['Background', 'Advertising', 'Stream'];
 
+    public static $typesShort = [
+        '', 'bg', 'adv', 'strm'
+    ];
+
     /**
      * @return string the associated database table name
      */

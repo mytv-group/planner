@@ -231,7 +231,7 @@ class InterfaceController extends Controller
         exit;
     }
 
-    // interface/setSync/id/156/sync/1
+    // interface/postStatistics/id/1
     /*
     * $_POST['data'] has following structure
     * [
@@ -240,7 +240,7 @@ class InterfaceController extends Controller
     *         "file": "xxxxxx.mp4",
     *         "date": "20161107",
     *         "time": "18:23",
-    *         "meta": "YourMetaData"
+    *         "meta": "duration:100;file:1;pl:1;author:1"
     *     },
     *     ...
     * ]
@@ -268,7 +268,7 @@ class InterfaceController extends Controller
         if ($decodedData === null) {
             try {
                 $CM = Yii::app()->contentManager;
-                $pointDir = "spool/points/" . $pointId . "/" . data('Y-m-d');
+                $pointDir = "spool/points/" . $pointId . "/" . date('Y-m-d');
                 $pointDir = $CM->PrepareSpoolPath($pointDir);
                 $handle = fopen($pointDir . "/statistic.txt", "w");
                 fwrite($handle, $data);

@@ -62,11 +62,14 @@
         'isView' => $isView
     ]); ?>
 
-    <?php $this->renderPartial('sections/_screen-with-blocks', [
-        'model' => $model,
-        'form' => $form,
-        'isView' => $isView
+    <div class="row">
+    <?= $form->labelEx($model, 'screen_id'); ?>
+    <?php $this->widget('ScreenSelectorWidget', [
+        'point' => $model,
+        'screens' => $screens,
+        'editable' => !$isView
     ]); ?>
+    </div>
 
     <?php if (!$isView): ?>
         <div class="row buttons">
@@ -78,3 +81,8 @@
 
 </div>
 <!-- form -->
+
+<?php if (!$isView) {
+  $this->widget('ChooseWidgetDialogWidget', [
+    'widgets' => $widgets,
+  ]); } ?>

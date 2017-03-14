@@ -74,8 +74,8 @@ class StatisticController extends Controller
             $output .= $counter.','
               . $model->dt_playback.',';
 
-            if (isset(Channel::$types[$model->channel])) {
-                $output .= strtoupper(Channel::$types[$model->channel]).',';
+            if (isset(Playlists::$typesShort[$model->channel])) {
+                $output .= strtoupper(Playlists::$typesShort[$model->channel]).',';
             } else {
                 $output .= ''.',';
             }
@@ -155,7 +155,7 @@ class StatisticController extends Controller
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
 
-            
+
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );

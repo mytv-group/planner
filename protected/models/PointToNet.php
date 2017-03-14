@@ -44,8 +44,8 @@ class PointToNet extends CActiveRecord
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
     return array(
-      'idNet' => array(self::BELONGS_TO, 'Net', 'id_net'),
-      'idPoint' => array(self::BELONGS_TO, 'Point', 'id_point'),
+      'net' => array(self::BELONGS_TO, 'Net', 'id_net'),
+      'point' => array(self::BELONGS_TO, 'Point', 'id_point'),
     );
   }
 

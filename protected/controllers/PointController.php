@@ -79,23 +79,8 @@ class PointController extends Controller
 
         $this->render('view',array(
             'model'=>$model,
+            'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id])
         ));
-    }
-
-    /**
-     * Returns the data model based on the primary key given in the GET variable.
-     * If the data model is not found, an HTTP exception will be raised.
-     * @param integer $id the ID of the model to be loaded
-     * @return Playlist the loaded model
-     * @throws CHttpException
-     */
-    public function loadModel($id)
-    {
-        $model=Point::model()->findByPk($id);
-
-        if($model===null)
-            throw new CHttpException(404,'The requested page does not exist.');
-        return $model;
     }
 
     public function actionCreate()
@@ -103,10 +88,16 @@ class PointController extends Controller
         $model = new Point;
         $model->unsetAttributes();
 
-        if(!isset($_POST['Point'])) {
+        $renderCreate = function($model) {
             $this->render('create',array(
                 'model'=>$model,
+                'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id]),
+                'widgets' => Widget::model()->findAll()
             ));
+        };
+
+        if(!isset($_POST['Point'])) {
+            $renderCreate($model);
             return;
         }
 
@@ -121,9 +112,7 @@ class PointController extends Controller
 
             $this->redirect(['point/update','id'=>$model->id]);
         } else {
-            $this->render('create',array(
-                'model'=>$model,
-            ));
+            $renderCreate($model);
         }
     }
 
@@ -136,10 +125,16 @@ class PointController extends Controller
     {
         $model = $this->loadModel($id);
 
-        if(!isset($_POST['Point'])) {
+        $renderUpdate = function($model) {
             $this->render('update',array(
                 'model'=>$model,
+                'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id]),
+                'widgets' => Widget::model()->findAll()
             ));
+        };
+
+        if(!isset($_POST['Point'])) {
+            $renderUpdate($model);
             return;
         }
 
@@ -156,38 +151,11 @@ class PointController extends Controller
 
             $this->render('view',array(
                   'model'=>$model,
+                  'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id])
             ));
         } else {
-            $this->render('update',array(
-                'model'=>$model,
-            ));
+            $renderUpdate($model);
         }
-    }
-
-    /**
-     *
-     */
-    public function actionAttachScreenToPoint()
-    {
-        $pointId = Yii::app()->request->getPost('pointId');
-        $screenId = Yii::app()->request->getPost('screenId');
-
-        $Point = new Point();
-        $Channel = new Channel();
-        $Point->CreateChannelsForWindows($screenId, $pointId);
-        $channels = $Channel->findAll('id_point=:p AND window_id IS NOT NULL', array('p'=>$pointId));
-
-        $channelsToSend = array();
-        foreach ($channels as $item){
-            $channelsToSend[] = [
-                'id' => $item->id,
-                'internalId' => $item->internalId,
-                'windowId' => $item->window->id,
-                'windowName' => $item->window->name,
-            ];
-        }
-
-        echo (json_encode($channelsToSend));
     }
 
     /**
@@ -217,6 +185,22 @@ class PointController extends Controller
                 'model'=>$model
             ));
         }
+    }
+
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     * @param integer $id the ID of the model to be loaded
+     * @return Playlist the loaded model
+     * @throws CHttpException
+     */
+    public function loadModel($id)
+    {
+        $model=Point::model()->findByPk($id);
+
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
     }
 
     public function actionAddPlaylistToChannel()
@@ -284,19 +268,21 @@ class PointController extends Controller
             else
             {
                 echo json_encode(
-                        array(
-                                'status' => 'err',
-                                'error' => 'Error during PlaylistToPoint model deleting'
-                        ));
+                    array(
+                        'status' => 'err',
+                        'error' => 'Error during PlaylistToPoint model deleting'
+                    )
+                );
             }
         }
         else
         {
             echo json_encode(
-                    array(
-                            'status' => 'err',
-                            'error' => 'Incorrect POST data during PlaylistToPoint model deleting'
-                    ));
+                array(
+                    'status' => 'err',
+                    'error' => 'Incorrect POST data during PlaylistToPoint model deleting'
+                )
+            );
         }
     }
 
@@ -304,12 +290,6 @@ class PointController extends Controller
         if( parent::beforeAction($action) ) {
             /* @var $cs CClientScript */
             $cs = Yii::app()->clientScript;
-            //$cs->registerPackage('jquery');
-            //$cs->registerPackage('history');
-
-            //Yii::app()->clientScript->registerCoreScript('jquery');
-
-            
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
@@ -325,9 +305,6 @@ class PointController extends Controller
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointScreen.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/playlistChooseDialog.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/widgetChooseDialog.js' );
-
-            /*$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/datetimePicker/jquery-ui-timepicker-addon.js' );*/
-
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');

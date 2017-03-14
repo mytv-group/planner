@@ -48,7 +48,7 @@ class Screen extends CActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'windows' => array(self::HAS_MANY, 'Window', 'screen_id'),
-            'channels' => array(self::HAS_MANY, 'Channel', array('id' => 'window_id'), 'through'=>'windows')
+            'showcases' => array(self::HAS_MANY, 'Showcase', 'id_window')
         );
     }
 

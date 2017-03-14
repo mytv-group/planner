@@ -11,22 +11,14 @@ class TVscheduleWidget extends CWidget
     {
         $cs=Yii::app()->clientScript;
         $cs->registerCssFile(Yii::app()->getBaseUrl() . $this->cssSrc);
+        $cs->registerScriptFile(Yii::app()->getBaseUrl() . $this->jsSrc, $cs::POS_END);
     }
 
     public function run()
     {
-        $this->render('TVschedule', [
+        $this->render('tvSchedule', [
             'tvBlocks' => $this->tvBlocks,
             'editable' => $this->editable
         ]);
-
-        $this->registerClientScript();
     }
-
-    protected function registerClientScript()
-    {
-        $cs=Yii::app()->clientScript;
-        $cs->registerScriptFile(Yii::app()->getBaseUrl() . $this->jsSrc, $cs::POS_END);
-    }
-
 }

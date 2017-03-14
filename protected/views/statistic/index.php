@@ -39,9 +39,9 @@ $('.search-form form').submit(function(){
         array(
             'name' => 'Сhannel',
             'value' => function($data, $row){
-                if (isset(Channel::$types[$data->channel])) {
+                if (isset(Playlists::$typesShort[$data->channel])) {
                     return '<span class="channel-type channel-type--'.$data->channel.'">' .
-                        Channel::$types[$data->channel];
+                        Playlists::$typesShort[$data->channel];
                         '</span>';
                 } else {
                     return '';

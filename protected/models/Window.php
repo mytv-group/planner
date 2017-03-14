@@ -50,8 +50,8 @@ class Window extends CActiveRecord
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'channels' => array(self::HAS_MANY, 'Channel', 'window_id'),
-            'netChannels' => array(self::HAS_MANY, 'NetChannel', 'window_id'),
+            'showcases' => array(self::HAS_MANY, 'Showcase', 'id_window'),
+            'widget' => array(self::HAS_ONE, 'Widget', ['id_widget'=>'id'],'through'=>'showcases'),
         );
     }
 

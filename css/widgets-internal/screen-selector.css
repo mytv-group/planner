@@ -1,0 +1,21 @@
+input.showcase-widget {
+    display: none;
+}
+
+.windows-list {
+    display: none;
+}
+
+.windows-list.is-active {
+    display: block;
+}
+
+.detach-widget {
+    max-width: 280px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.detach-widget-name {
+    text-decoration: underline;
+}

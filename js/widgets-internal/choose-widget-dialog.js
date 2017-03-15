@@ -17,14 +17,18 @@ $(document).ready(function() {
     $attachWidgetBtn.click(function(event) {
         var $selected = $($rows.filter('.is-selected').get(0));
         var id = $selected.data('id') || null;
+        var description = $selected.children('.modal-widget-description').text().trim() || null;
 
         if ((windowId !== null) && (id !== null)) {
             $(document).trigger('choose-widget-dialog:widget-attached', {
                 windowId: windowId,
+                widgetDescription: description,
                 widgetId: id
             });
         }
 
         $dialog.modal('hide');
+        $rows.removeClass('is-selected');
+        $attachWidgetBtn.attr('disabled', 'disabled');
     });
 });

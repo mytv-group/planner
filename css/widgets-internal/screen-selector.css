@@ -16,6 +16,14 @@ input.showcase-widget {
     overflow-x: hidden;
 }
 
-.detach-widget-name {
+.widget-name {
     text-decoration: underline;
+}
+
+.detach-widget .widget-attach-btn-text {
+    display: none;
+}
+
+.attach-widget .widget-detach-btn-text {
+    display: none;
 }

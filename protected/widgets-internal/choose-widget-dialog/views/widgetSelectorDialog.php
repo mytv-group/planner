@@ -6,7 +6,7 @@
     <div class="col-sm-2">
       <?= $attr['name']; ?>
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-5 modal-widget-description">
       <?= $attr['description']; ?>
     </div>
     <div class="col-sm-1">

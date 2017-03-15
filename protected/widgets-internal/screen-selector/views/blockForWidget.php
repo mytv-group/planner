@@ -1,16 +1,9 @@
-
-<?php if (isset($widgetDescription) && isset($widgetId)): ?>
-  <button class="detach-widget btn btn-warning" type="button"
-    data-window-id="<?= $windowId ?>" title="<?= $widgetDescription ?>">
-      <span class="glyphicon glyphicon-off"></span>
-      Detach <span class="detach-widget-name"><?= $widgetDescription ?></span>
-      <input class="showcase-widget" value="Point[Showcases][<?= $windowId ?>][]" value="<?= $widgetId ?>"/>
-  </button>
-<?php else: ?>
-  <button class="attach-widget btn btn-success" type="button"
-    data-window-id="<?= $windowId ?>">
-      <span class="glyphicon glyphicon-paperclip"></span>
-      Attach widget
-      <input class="showcase-widget" value="Point[Showcases][<?= $windowId ?>][]" value=""/>
-  </button>
-<?php endif; ?>
+<button class="<?= isset($widgetId) ? 'detach-widget' : 'attach-widget' ?> btn
+  <?= isset($widgetId) ? 'btn-warning' : 'btn-success' ?>" type="button"
+  data-window-id="<?= $windowId ?>" title="<?= isset($widgetDescription) ? $widgetDescription : '' ?>">
+    <span class="glyphicon <?= isset($widgetId) ? 'glyphicon-off' : 'glyphicon-paperclip' ?>"></span>
+    <span class="widget-detach-btn-text">Detach</span>
+    <span class="widget-attach-btn-text">Attach widget</span>
+    <span class="widget-name"><?= isset($widgetDescription) ? $widgetDescription : '' ?></span>
+    <input class="showcase-widget" value="Point[Showcases][<?= $windowId ?>][]" value="<?= isset($widgetId) ? $widgetId : '' ?>"/>
+</button>

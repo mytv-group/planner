@@ -8,10 +8,8 @@ $(document).ready(function(e) {
     $('.windows-list').on('click', '.detach-widget', function(event) {
         event.stopPropagation();
         var $this = $(this);
-        $this.removeClass('btn-warning')
-            .removeClass('detach-widget')
-            .addClass('attach-widget')
-            .addClass('btn-success')
+        $this.removeClass('btn-warning detach-widget')
+            .addClass('attach-widget btn-success')
             .children('.glyphicon')
             .removeClass('glyphicon-off')
             .addClass('glyphicon-paperclip');
@@ -22,10 +20,8 @@ $(document).ready(function(e) {
 
     $(document).on('choose-widget-dialog:widget-attached', function(event, args) {
         var $this = $('.windows-list.is-active').find('[data-window-id='+args.windowId+']');
-        $this.addClass('btn-warning')
-            .addClass('detach-widget')
-            .removeClass('attach-widget')
-            .removeClass('btn-success')
+        $this.addClass('btn-warning detach-widget')
+            .removeClass('attach-widget btn-success')
             .children('.glyphicon')
             .addClass('glyphicon-off')
             .removeClass('glyphicon-paperclip');

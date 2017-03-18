@@ -222,18 +222,14 @@ class NetController extends Controller
       /* @var $cs CClientScript */
       $cs = Yii::app()->clientScript;
 
-      
+
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-multiselect.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-multiselect-collapsible-groups.js' );
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
 
-      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/ChannelManager.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/net.js' );
-      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/netChannels.js' );
-      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/netScreen.js' );
-      //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/playlistChooseDialog.js' );
 
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');

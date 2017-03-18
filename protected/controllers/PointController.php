@@ -126,8 +126,14 @@ class PointController extends Controller
         $model = $this->loadModel($id);
 
         $renderUpdate = function($model) {
+            $playlists = [];
+            foreach ($model->playlists as $playlist) {
+                $playlists[$playlist['type']][] = $playlist;
+            };
+
             $this->render('update',array(
                 'model'=>$model,
+                'playlists' => $playlists,
                 'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id]),
                 'widgets' => Widget::model()->findAll()
             ));
@@ -297,14 +303,9 @@ class PointController extends Controller
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
 
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/ChannelManager.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/proto/WidgetManager.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/point.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointVolume.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointScreen.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/playlistChooseDialog.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/widgetChooseDialog.js' );
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');

@@ -3,25 +3,25 @@
 /* @var $model Playlists */
 
 $this->breadcrumbs=array(
-	'Playlists'=>array('index'),
-	'Manage',
+  'Playlists'=>array('index'),
+  'Manage',
 );
 
 $this->menu=array(
-	/*array('label'=>'List Playlists', 'url'=>array('index')),*/
-	array('label'=>'Create', 'url'=>array('create')),
+  /*array('label'=>'List Playlists', 'url'=>array('index')),*/
+  array('label'=>'Create', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
+  $('.search-form').toggle();
+  return false;
 });
 $('.search-form form').submit(function(){
-	$('#playlists-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
+  $('#playlists-grid').yiiGridView('update', {
+    data: $(this).serialize()
+  });
+  return false;
 });
 ");
 ?>
@@ -36,42 +36,42 @@ $('.search-form form').submit(function(){
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
-	'model'=>$model,
+  'model'=>$model,
 )); ?>
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'playlists-grid',
-	'dataProvider' => $model->search(),
-	'columns'=>array(
-		'name',
-		array(
-				'name' => 'type',
-				'value' => function($data, $row) {
-					if (Playlists::$types[$data->type]) {
-							return Playlists::$types[$data->type];
-					}
+  'id'=>'playlists-grid',
+  'dataProvider' => $model->search(),
+  'columns'=>array(
+    'name',
+    array(
+        'name' => 'type',
+        'value' => function($data, $row) {
+          if (Playlists::$types[$data->type]) {
+              return Playlists::$types[$data->type];
+          }
 
-					return 'unknown';
-				},
-				'type'  => 'raw',
-		),
-		'fromDatetime',
-		'toDatetime',
-		'fromTime',
-		'toTime',
-		array(
-				'name' => 'every',
-				'value' => function($data, $row) {
-					if($data->type == 1) //0 - bg, 1- adv
-						return $data->every;
-					else
-						return '';
-				},
-				'type'  => 'raw',
-		),
-		array(
-			'class'=>'CButtonColumn',
-		),
-	),
+          return 'unknown';
+        },
+        'type'  => 'raw',
+    ),
+    'fromDatetime',
+    'toDatetime',
+    'fromTime',
+    'toTime',
+    array(
+        'name' => 'every',
+        'value' => function($data, $row) {
+          if($data->type == 1) //0 - bg, 1- adv
+            return $data->every;
+          else
+            return '';
+        },
+        'type'  => 'raw',
+    ),
+    array(
+      'class'=>'CButtonColumn',
+    ),
+  ),
 )); ?>

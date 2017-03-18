@@ -1,4 +1,4 @@
-<?php function buildRow($rowClass, $attr) { ?>
+<?php function buildWidgetModalRow($rowClass, $attr) { ?>
   <div class="row <?= $rowClass; ?>" data-id="<?= $attr['id']; ?>">
     <div class="col-sm-1">
       <?= $attr['counter']; ?>
@@ -31,7 +31,7 @@
       <div class="modal-body">
           <?php
              $attributeLabels = Widget::model()->attributeLabels();
-             buildRow('row-header', array_merge(['id' => '', 'counter' => '#'], $attributeLabels));
+             buildWidgetModalRow('row-header', array_merge(['id' => '', 'counter' => '#'], $attributeLabels));
           ?>
 
           <?php
@@ -39,7 +39,7 @@
              $counter = 1;
           ?>
           <?php foreach ($widgets as $widget) {
-              buildRow('row-data', [
+              buildWidgetModalRow('row-data', [
                   'id' => $widget->id,
                   'counter' => $counter,
                   'name' => $widget->name,

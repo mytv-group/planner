@@ -1,0 +1,36 @@
+.choose-playlist-dialog .modal-dialog {
+    width: 85%;
+}
+
+.choose-playlist-dialog .row {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.choose-playlist-dialog .row-header {
+    font-weight: bold;
+    background-color: #eee;
+    padding: 2px 0px;
+    min-height: 45px;
+}
+
+.choose-playlist-dialog .row-header div {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.choose-playlist-dialog .row-data {
+    padding: 2px 0px;
+    border-top: 1px solid #ddd;
+    min-height: 45px;
+}
+
+.choose-playlist-dialog .row-data:nth-child(odd) {
+    background-color: #efefef;
+}
+
+.choose-playlist-dialog .row-data.is-selected {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #269abc;
+}

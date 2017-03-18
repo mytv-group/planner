@@ -49,18 +49,20 @@
     ]); ?>
 
     <div class="row">
-    <?php echo $form->labelEx($model, 'TVschedule'); ?>
+    <?= $form->labelEx($model, 'TVschedule'); ?>
     <?php $this->widget('TVscheduleWidget', [
         'tvBlocks' => $model->tv,
         'editable' => !$isView
     ]); ?>
     </div>
 
-    <?php $this->renderPartial('sections/_channels', [
-        'model' => $model,
-        'form' => $form,
-        'isView' => $isView
+    <div class="row">
+    <?= $form->labelEx($model, 'channels'); ?>
+    <?php $this->widget('PointChannelsWidget', [
+        'playlistToPoint' => $model->playlistToPoint,
+        'editable' => !$isView
     ]); ?>
+    </div>
 
     <div class="row">
     <?= $form->labelEx($model, 'screen_id'); ?>
@@ -83,6 +85,18 @@
 <!-- form -->
 
 <?php if (!$isView) {
-  $this->widget('ChooseWidgetDialogWidget', [
-    'widgets' => $widgets,
-  ]); } ?>
+$this->widget('ChooseWidgetDialogWidget', [
+  'widgets' => $widgets,
+]); } ?>
+
+<?php
+if (!$isView) {
+    foreach (Playlists::$types as $type => $name) {
+        $this->widget('ChoosePlaylistDialogWidget', [
+          'channelType' => $type, // 0, 1, 2
+          'channelName' => $name, 
+          'playlists' => isset($playlists[$type]) ? $playlists[$type] : [],
+        ]);
+    }
+}
+?>

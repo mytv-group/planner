@@ -18,6 +18,7 @@ $(document).ready(function(e) {
 
     $("#add-tv-period").click(function(e){
         var $tvSchedule = $("#js-tv-schedule").clone();
+        $tvSchedule.find('input').removeAttr('disabled');
         $('#tv-schedule-grid').append($tvSchedule.css({display: 'block'}));
 
         bindControls();

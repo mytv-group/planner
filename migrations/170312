@@ -7,3 +7,5 @@ LEFT JOIN `widget_to_channel` ON `channel`.`id`= `widget_to_channel`.`channel_id
 SET `channel`.`id_widget`  = `widget_to_channel`.`widget_id`;
 
 ALTER TABLE `channel` RENAME `showcase`;
+
+DROP TABLE `widget_to_channel`;

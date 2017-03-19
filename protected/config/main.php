@@ -73,8 +73,24 @@ return array(
         'contentManager'=>array(
             'class'=>'ContentManager',
         ),
-        'tvSchedule'=>array(
-            'class'=>'TvScheduleManager',
+        'pointService' => array(
+            'class'=>'PointService',
+            'spoolPath' => 'spool/points/',
+            'user' => function() {
+                return Yii::app()->user;
+            },
+            'tvSchedule' => function() {
+                return TvSchedule::model();
+            },
+            'showcase' => function() {
+                return Showcase::model();
+            },
+            'playlistToPoint' => function() {
+                return PlaylistToPoint::model();
+            },
+            'file' => function() {
+                return File::model();
+            }
         ),
     ),
     'params'=>array(

@@ -13,7 +13,7 @@ $this->menu=array(
 <h1>View Point: <?php echo $model->name; ?></h1>
 
 <?php $this->renderPartial('_form', [
-	'model' => $model,
-  'screens' => $screens,
-	'isViewForm' => true
+    'model' => $model,
+    'screens' => $screens,
+    'isViewForm' => true
 ]);

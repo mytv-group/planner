@@ -1,7 +1,5 @@
 <?php
 
-Yii::import('ext.EHttpClient.*');
-
 /**
  * This is the model class for table "point".
  *
@@ -71,7 +69,7 @@ class Point extends CActiveRecord
             'pointToNet'=>array(self::HAS_MANY, 'PointToNet', 'id_point'),
             'net'=>array(self::HAS_MANY, 'Net', ['id_net'=>'id'],'through'=>'pointToNet'),
             'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id'),
-            'tv'=>array(self::HAS_MANY, 'TVSchedule', 'id_point')
+            'tv'=>array(self::HAS_MANY, 'TvSchedule', 'id_point')
         );
     }
 
@@ -207,104 +205,6 @@ class Point extends CActiveRecord
         return $playlists;
     }
 
-
-    public function SendRequestForUpdate($ip)
-    {
-        if(defined('HTTP_REQUEST_TO_POINT'))
-        {
-            $requestData = array(
-                    "update_need" => true
-            );
-
-            $requestAddr = 'http://' . $ip . "/sc_upd";
-
-            try
-            {
-                $client = new EHttpClient($requestAddr, array(
-                        'maxredirects' => 3,
-                        'timeout' => 10,
-                        'adapter' => 'EHttpClientAdapterCurl'));
-
-                $client->setParameterGet($requestData);
-
-                $response = $client->request();
-
-                $body = "";
-                if($response->isSuccessful())
-                {
-                    $body = $response->getBody();
-                }
-                else
-                {
-                    $body = $response->getRawBody();
-                }
-            }
-            catch (Exception $ex)
-            {
-                error_log("http request exception - " . json_encode($ex) . ". " .
-                        "IP - " . $requestAddr . ", " .
-                        "Post - " . json_encode($requestData)
-                );
-            }
-        }
-    }
-
-    public function PrepareFilesForSync($id)
-    {
-        $model = self::model()->findByPk($id);
-        $pointDir = "spool/points/" . $model->id;
-
-        //remove dir if exist
-        if(file_exists($pointDir)) {
-            try {
-                $this->DeleteDir($pointDir);
-            } catch (Exception $e) {
-                error_log("Unlink failed. Exception - " . json_encode($e).
-                "Dir - " . $pointDir);
-            }
-        }
-
-        $avaliablePlaylists = PlaylistToPoint::model()->findAllByAttributes([
-          'id_point' => $id
-        ]);
-
-        $connection = Yii::app()->db;
-        foreach ($avaliablePlaylists as $playlistToPoint) {
-            $pl = $playlistToPoint->playlist;
-            $channelDir = $pointDir . "/" . $playlistToPoint->channel_type;
-            $channelFullDir = $this->PrepareSpoolPath($channelDir);
-
-            $plFiles = explode(",", $pl->files);
-
-            foreach ($plFiles as $fileId) {
-                if ($fileId != '') {
-                    $connection->active=true;
-                    $sql = "SELECT `name`, `path` FROM `file` WHERE `id` = ".$fileId.";";
-                    $command = $connection->createCommand($sql);
-                    $dataReader=$command->query();
-
-                    if (($row=$dataReader->read())!==false) {
-                        $path = $row['path'];
-                        $fileName = $row['name'];
-                        $symlinkPath = $channelFullDir . $fileName;
-
-                        if(!file_exists($symlinkPath)
-                          && file_exists($path)
-                        ) {
-                            if (defined('SYMLINK')) {
-                                symlink($path, $symlinkPath);
-                            } else {
-                                copy($path, $symlinkPath);
-                            }
-                        }
-                    }
-                    $connection->active=false;
-                }
-            }
-        }
-    }
-
-
     private function PrepareSpoolPath($extPathAppendix)
     {
         $pathAppendix = $extPathAppendix;
@@ -321,36 +221,5 @@ class Point extends CActiveRecord
 
         $contentPath .= "/";
         return $contentPath;
-    }
-
-    public function RemovePointSpoolPath($id)
-    {
-        $pointDir = "spool/points/" . $id;
-        if(file_exists($pointDir))
-        {
-            try
-            {
-                $this->DeleteDir($pointDir);
-            }
-            catch (Exception $e)
-            {
-                error_log("Unlink failed. Exception - " . json_encode($e).
-                    "Dir - " . $pointDir
-                );
-            }
-        }
-    }
-
-    private function DeleteDir($dir) {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (filetype($dir."/".$object) == "dir") $this->DeleteDir($dir."/".$object); else unlink($dir."/".$object);
-                }
-            }
-            reset($objects);
-            rmdir($dir);
-        }
     }
 }

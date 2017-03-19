@@ -20,6 +20,7 @@ $(document).ready(function(e) {
 
         var $plTpl = $('.channel-playlist-item-template').clone();
         $plTpl.removeClass('channel-playlist-item-template');
+        $plTpl.find('input').removeAttr('disabled');
 
         var plTplHtml = $plTpl.get(0).outerHTML.replace(/%playlistId%/g, args.playlistId);
         plTplHtml = plTplHtml.replace(/%playlistName%/g, args.playlistName);

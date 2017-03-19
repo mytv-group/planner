@@ -157,7 +157,7 @@ class InterfaceController extends Controller
         $criteria->select = "`dt_from`, `dt_to`";
         $criteria->condition = "`id_point` = {$pointId} AND `dt_from` <= '{$pointDate}' AND `dt_to` >= '{$pointDate}'";
         $criteria->order = '`dt_from` DESC';
-        $schedule = TVSchedule::model()->findAll($criteria);
+        $schedule = TvSchedule::model()->findAll($criteria);
 
         $onOffArr = [];
         foreach ($schedule as $item)

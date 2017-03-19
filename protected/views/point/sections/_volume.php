@@ -1,7 +1,7 @@
 <div class="row">
     <?php echo $form->labelEx($model,'volume'); ?>
     <?php if(!$isView): ?>
-        <?php echo $form->hiddenField($model,'volume'); ?>
+        <?php echo $form->hiddenField($model, 'volume'); ?>
 
         <section>
             <span class="tooltip"></span>

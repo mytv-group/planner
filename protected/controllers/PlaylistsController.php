@@ -655,9 +655,6 @@ class PlaylistsController extends Controller
         if( parent::beforeAction($action) ) {
             /* @var $cs CClientScript */
             $cs = Yii::app()->clientScript;
-            //$cs->registerPackage('jquery');
-            //$cs->registerPackage('history');
-
             
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );

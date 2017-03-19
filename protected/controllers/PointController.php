@@ -14,8 +14,8 @@ class PointController extends Controller
     public function filters()
     {
         return array(
-                'accessControl', // perform access control for CRUD operations
-                //'postOnly + delete', // we only allow deletion via POST request
+            'accessControl', // perform access control for CRUD operations
+            'postOnly + delete', // we only allow deletion via POST request
         );
     }
 
@@ -33,16 +33,12 @@ class PointController extends Controller
                 'roles'=>array('pointViewUser'),
             ),
             array('allow',
-                'actions'=>array('create',
-                    'update', 'addChannel', 'removeChannel',
-                    'attachScreen', 'addPlaylistToChannel',
-                    'attachScreenToPoint'
-                ),
+                'actions'=>array('create', 'update'),
                 'users'=>array('@'),
                 'roles'=>array('pointEditUser'),
             ),
             array('allow',
-                'actions'=>array('delete', 'removePlaylistFromChannel'),
+                'actions'=>array('delete'),
                 'users'=>array('@'),
                 'roles'=>array('pointUser'),
             ),
@@ -76,11 +72,7 @@ class PointController extends Controller
     public function actionView($id)
     {
         $model = $this->loadModel($id);
-
-        $this->render('view',array(
-            'model'=>$model,
-            'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id])
-        ));
+        $this->renderView($model, 'view');
     }
 
     public function actionCreate()
@@ -88,16 +80,8 @@ class PointController extends Controller
         $model = new Point;
         $model->unsetAttributes();
 
-        $renderCreate = function($model) {
-            $this->render('create',array(
-                'model'=>$model,
-                'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id]),
-                'widgets' => Widget::model()->findAll()
-            ));
-        };
-
         if(!isset($_POST['Point'])) {
-            $renderCreate($model);
+            $this->renderView($model, 'create');
             return;
         }
 
@@ -105,14 +89,19 @@ class PointController extends Controller
         $model->username = Yii::app()->user->username;
 
         if($model->save()) {
-            Yii::app()->tvSchedule->updatePointTable($model->id, $_POST['Point']);
-            $model->SendRequestForUpdate($model->ip);
-            $model->PrepareFilesForSync($model->id);
-            $model->CreateChannelsForWindows($model->screen_id, $model->id);
+            $postPoint = $_POST['Point'];
+            Yii::app()->pointService->updateRelations([
+                'id' => intval($model->id),
+                'tvScheduleFrom' => isset($postPoint["tvScheduleFrom"]) ? $postPoint["tvScheduleFrom"] : [],
+                'tvScheduleTo' => isset($postPoint["tvScheduleTo"]) ? $postPoint["tvScheduleTo"] : [],
+                'showcases' => isset($postPoint["showcases"]) ? $postPoint["showcases"] : [],
+                'channels' => isset($postPoint["channels"]) ? $postPoint["channels"] : [],
+                'ip' => $model->ip
+            ]);
 
-            $this->redirect(['point/update','id'=>$model->id]);
+            $this->redirect(['point/view','id'=>$model->id]);
         } else {
-            $renderCreate($model);
+            $this->renderView($model, 'create');
         }
     }
 
@@ -125,22 +114,8 @@ class PointController extends Controller
     {
         $model = $this->loadModel($id);
 
-        $renderUpdate = function($model) {
-            $playlists = [];
-            foreach ($model->playlists as $playlist) {
-                $playlists[$playlist['type']][] = $playlist;
-            };
-
-            $this->render('update',array(
-                'model'=>$model,
-                'playlists' => $playlists,
-                'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id]),
-                'widgets' => Widget::model()->findAll()
-            ));
-        };
-
         if(!isset($_POST['Point'])) {
-            $renderUpdate($model);
+            $this->renderView($model, 'update');
             return;
         }
 
@@ -150,17 +125,21 @@ class PointController extends Controller
             $model->username = $author;
         }
 
-        if($model->validate() && $model->save()) {
-            Yii::app()->tvSchedule->updatePointTable($model->id, $_POST['Point']);
-            Point::model()->SendRequestForUpdate($model->ip);
-            Point::model()->PrepareFilesForSync($model->getPrimaryKey());
+        if ($model->validate() && $model->save()) {
+            $postPoint = $_POST['Point'];
 
-            $this->render('view',array(
-                  'model'=>$model,
-                  'screens' => Screen::model()->findAllByAttributes(['user_id' => Yii::app()->user->id])
-            ));
+            Yii::app()->pointService->updateRelations([
+                'id' => intval($model->id),
+                'tvScheduleFrom' => isset($postPoint["tvScheduleFrom"]) ? $postPoint["tvScheduleFrom"] : [],
+                'tvScheduleTo' => isset($postPoint["tvScheduleTo"]) ? $postPoint["tvScheduleTo"] : [],
+                'showcases' => isset($postPoint["showcases"]) ? $postPoint["showcases"] : [],
+                'channels' => isset($postPoint["channels"]) ? $postPoint["channels"] : [],
+                'ip' => $model->ip
+            ]);
+
+            $this->redirect(['point/view','id'=>$model->id]);
         } else {
-            $renderUpdate($model);
+            $this->renderView($model, 'update');
         }
     }
 
@@ -172,25 +151,42 @@ class PointController extends Controller
     public function actionDelete($id)
     {
         $this->loadModel($id)->delete();
-        $userId = Yii::app()->user->id;
-        TVSchedule::model()->deleteAll(
-            "`id_point` = :id_point AND `id_user` = :id_user",
-            [':id_point' => $id, ':id_user' => $userId]
-        );
+        Yii::app()->pointService->deleteRelations(intval($id));
 
-        Point::model()->RemovePointSpoolPath($id);
+        if(!isset($_GET['ajax'])) {
+            $model = new Point('search');
+            $model->unsetAttributes();
 
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax']))
-        {
-            //$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-            $model=new Point('search');
-            $model->unsetAttributes();  // clear any default values
-
-            $this->redirect(array('point/index'),array(
-                'model'=>$model
+            $this->redirect(array('point/index'), array(
+                'model' => $model
             ));
         }
+    }
+
+    private function renderView($model, $view)
+    {
+        $widgets = [];
+        $playlists = [];
+        // dont need for view
+        if ($view !== 'view') {
+            $allPlaylists = Playlists::getUserPlaylists();
+            foreach ($allPlaylists as $playlist) {
+                $playlists[$playlist['type']][] = $playlist;
+            }
+
+            $widgets = Widget::model()->findAll();
+        }
+
+        $screens = Screen::model()->findAllByAttributes(
+          ['user_id' => Yii::app()->user->id]
+        );
+
+        $this->render($view, array(
+            'model'=>$model,
+            'playlists' => $playlists,
+            'screens' => $screens,
+            'widgets' => $widgets
+        ));
     }
 
     /**
@@ -207,89 +203,6 @@ class PointController extends Controller
         if($model===null)
             throw new CHttpException(404,'The requested page does not exist.');
         return $model;
-    }
-
-    public function actionAddPlaylistToChannel()
-    {
-        if(isset($_POST['channelType']) &&
-              isset($_POST['plId']) &&
-              isset($_POST['pointId']))
-        {
-            $channelType = intval($_POST['channelType']);
-            $plId = intval($_POST['plId']);
-            $pointId = intval($_POST['pointId']);
-
-            $model = new PlaylistToPoint();
-            $model->attributes = array(
-                'id_point' => $pointId,
-                'id_playlist' => $plId,
-                'channel_type' => $channelType,
-            );
-
-            if ($model->save()) {
-                echo json_encode(
-                    array(
-                            'status' => 'ok'
-                    ));
-            }
-            else
-            {
-                echo json_encode(
-                        array(
-                                'status' => 'err',
-                                'error' => 'Error during PlaylistToPoint model saving'
-                        ));
-            }
-        }
-        else
-        {
-            echo json_encode(
-                    array(
-                            'status' => 'err',
-                            'error' => 'Incorrect POST data during PlaylistToPoint model saving'
-                    ));
-        }
-    }
-
-    public function actionRemovePlaylistFromChannel()
-    {
-        if(isset($_POST['channelType']) &&
-              isset($_POST['plId']) &&
-              isset($_POST['pointId'])
-        ) {
-            $channelType = intval($_POST['channelType']);
-            $plId = intval($_POST['plId']);
-            $pointId = intval($_POST['pointId']);
-
-            if(PlaylistToPoint::model()->deleteAllByAttributes(array(
-                'id_point' => $pointId,
-                'id_playlist' => $plId,
-                'channel_type' => $channelType,
-            ))) {
-                echo json_encode(
-                    array(
-                            'status' => 'ok'
-                    ));
-            }
-            else
-            {
-                echo json_encode(
-                    array(
-                        'status' => 'err',
-                        'error' => 'Error during PlaylistToPoint model deleting'
-                    )
-                );
-            }
-        }
-        else
-        {
-            echo json_encode(
-                array(
-                    'status' => 'err',
-                    'error' => 'Incorrect POST data during PlaylistToPoint model deleting'
-                )
-            );
-        }
     }
 
     public function beforeAction($action) {

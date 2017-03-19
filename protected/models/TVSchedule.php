@@ -10,7 +10,7 @@
  * @property string $to
  * @property string $author
  */
-class TVSchedule extends CActiveRecord
+class TvSchedule extends CActiveRecord
 {
     /**
      * @return string the associated database table name
@@ -88,7 +88,7 @@ class TVSchedule extends CActiveRecord
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
      * @param string $className active record class name.
-     * @return TVSchedule the static model class
+     * @return TvSchedule the static model class
      */
     public static function model($className=__CLASS__)
     {

@@ -1,14 +1,14 @@
 <?php
-    $prop = '';
-    if(!$editable) {
-        $prop = 'disabled="disabled"';
+    $id = '';
+    if($rowId !== '') {
+        $id = 'id="'.$rowId.'"';
     }
 ?>
 
 <?php
-    $id = '';
-    if($rowId !== '') {
-        $id = 'id="'.$rowId.'"';
+    $prop = '';
+    if(!$editable || ($rowId !== '')) {
+        $prop = 'disabled="disabled"';
     }
 ?>
 

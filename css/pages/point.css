@@ -1,7 +1,3 @@
-.row > .btn {
-	width:245px;
-}
-
 .btn-group{
 	margin-bottom:2px;
 }
@@ -20,4 +16,55 @@ select {
 
 .buttons input {
 	max-width:215px;
+}
+
+.form {
+    margin: 10px auto;
+}
+
+.form .form-control {
+    max-width:415px;
+}
+
+.buttons input.form-control {
+    max-width:245px;
+}
+
+.row-header {
+    padding: 2px;
+}
+
+.row-list-view {
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-top-width: 1px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.row-list-view {
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-top-width: 1px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.row-list-view:nth-child(odd) {
+    background-color: #eee;
+}
+
+.row-menu {
+  margin: 0;
+}
+
+.items .empty {
+  margin: 15px -25px;
+  display: block;
+}
+
+.delete-point input {
+  display: none;
 }

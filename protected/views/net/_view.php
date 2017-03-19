@@ -4,7 +4,10 @@
 ?>
 
 <?php if ($index === 0): ?>
-<?php $net = new Net; ?>
+<?php
+    $net = Net::model();
+    $user = Yii::app()->user;
+?>
   <div class="row row-header">
     <div class="col-md-1">
       <b>#</b>
@@ -26,7 +29,7 @@
       <b><?php echo CHtml::encode($net->getAttributeLabel('dt_created')); ?></b>
     </div>
 
-    <?php if (Yii::app ()->user->checkAccess ("netViewUser")): ?>
+    <?php if ($user->checkAccess ("netViewUser")): ?>
       <div class="col-md-2">
         <b><?php echo CHtml::encode($net->getAttributeLabel('options')); ?></b>
       </div>
@@ -81,7 +84,7 @@
         <?php endif; ?>
 
         <?php if (Yii::app ()->user->checkAccess ("netUser")): ?>
-          <form action="/net/delete/<?= $data->id ?>" type="post" class="btn-group delete-net">
+          <form action="/net/delete/<?= $data->id ?>" method="post" class="btn-group delete-net">
             <button type="submit" class="btn btn-danger btn-sm" title="Delete">
               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </button>

@@ -11,7 +11,20 @@ $(document).ready(function(e) {
     });
 
     $(document).on('choose-playlist-dialog:playlist-attached', function(event, args) {
-        console.log(args);
+        var $channelContainer = $('.channel-container[data-channel-type='+args.channelType+']:first')
+        var $pl = $channelContainer.find('.channel-playlist-item[data-playlist-id='+args.playlistId+']');
+
+        if ($pl.length > 0) {
+            return false;
+        }
+
+        var $plTpl = $('.channel-playlist-item-template').clone();
+        $plTpl.removeClass('channel-playlist-item-template');
+
+        var plTplHtml = $plTpl.get(0).outerHTML.replace(/%playlistId%/g, args.playlistId);
+        plTplHtml = plTplHtml.replace(/%playlistName%/g, args.playlistName);
+        plTplHtml = plTplHtml.replace(/%channelType%/g, args.channelType);
+        $channelContainer.append(plTplHtml);
     });
 
 });

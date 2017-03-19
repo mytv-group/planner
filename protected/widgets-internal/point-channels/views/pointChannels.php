@@ -17,4 +17,12 @@
             'editable' => $editable
         ]);
     } ?>
+
+    <?php /*playlist template for js*/
+    $this->render('playlist', [
+      'playlist' => null,
+      'channelType' => null,
+      'playlistGroupClass' => 'channel-playlist-item-template',
+      'editable' => true
+    ]); ?>
 </div>

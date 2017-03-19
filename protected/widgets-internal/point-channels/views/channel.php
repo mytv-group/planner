@@ -8,9 +8,12 @@
       <?php endif; ?>
   </div>
 
-  <?php $this->render('playlist', [
-      'playlists' => $playlists,
+  <?php foreach ($playlists as $playlist) {
+    $this->render('playlist', [
+      'playlist' => $playlist,
       'channelType' => $channelType,
+      'playlistGroupClass' => '',
       'editable' => $editable
-  ]); ?>
+    ]);
+  } ?>
 </div>

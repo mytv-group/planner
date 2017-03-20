@@ -1,5 +1,4 @@
 $(document).ready(function(e){
-
     var radioSet = $("#radioSet").buttonset()
         .css("width", "170px");
 

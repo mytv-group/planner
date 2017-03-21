@@ -201,19 +201,19 @@ class m170320_204850_init extends CDbMigration
           ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
       }
 
-      $this->addForeignKey('FK_channel_point',
+      /*$this->addForeignKey('FK_channel_point',
           'channel',
           'id_point',
           'point',
           'id',
           'CASCADE',
           'NO ACTION'
-      );
+      );*/
   }
 
   public function down()
   {
-      $this->dropForeignKey('FK_channel_point', 'channel');
+      //$this->dropForeignKey('FK_channel_point', 'channel');
 
       $this->dropTable('channel');
       $this->dropTable('point');
@@ -235,15 +235,4 @@ class m170320_204850_init extends CDbMigration
 
       return true;
   }
-
-  /*
-  // Use safeUp/safeDown to do migration with transaction
-  public function safeUp()
-  {
-  }
-
-  public function safeDown()
-  {
-  }
-  */
 }

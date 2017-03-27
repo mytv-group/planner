@@ -72,6 +72,15 @@ class m170320_204850_init extends CDbMigration
           ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
       }
 
+      if (Yii::app()->db->schema->getTable('point_to_net', true) === null) {
+          $this->createTable('point_to_net', [
+              'id' => 'pk',
+              'point_id' => 'int(11) NOT NULL',
+              'net_id' => 'int(11) NOT NULL',
+              'time' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
+          ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+      }
+
       if (Yii::app()->db->schema->getTable('playlists', true) === null) {
           $this->createTable('playlists', [
               'id' => 'pk',

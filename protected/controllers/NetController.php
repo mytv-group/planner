@@ -35,7 +35,7 @@ class NetController extends Controller
       ],
       [
         'allow',
-        'actions'=>['create','update'],
+        'actions'=>['create','update', 'changePoints', 'individualUpdate'],
         'users'=>['@'],
         'roles'=>['netEditUser'],
       ],
@@ -118,23 +118,61 @@ class NetController extends Controller
   {
     $model=$this->loadModel($id);
 
-    if (isset($_POST['Net']))
-    {
-      $attributes = $_POST['Net'];
-      $model->attributes = $attributes;
-      if ($model->save()) {
-          $attachedPoints = [];
-          if(isset($attributes['attachedPoints'])
-            && is_array($attributes['attachedPoints'])
-          ) {
-             $attachedPoints = $attributes['attachedPoints'];
-          }
+    if (isset($_POST['Net'])) {
+        $attributes = $_POST['Net'];
+        $model->attributes = $attributes;
+        if ($model->save()) {
+            $attachedPoints = [];
+            if(isset($attributes['attachedPoints'])
+              && is_array($attributes['attachedPoints'])
+            ) {
+               $attachedPoints = $attributes['attachedPoints'];
+            }
 
-          $pointToNet = new PointToNet;
-          $pointToNet->saveArray($model->id, $attachedPoints);
+            $pointToNet = new PointToNet;
+            $pointToNet->saveArray($model->id, $attachedPoints);
 
-          $this->redirect(['view', 'id'=>$model->id]);
-      }
+            $this->redirect(['view', 'id'=>$model->id]);
+        }
+    }
+
+    $playlists = [];
+    $allPlaylists = Playlists::getUserPlaylists();
+    foreach ($allPlaylists as $playlist) {
+        $playlists[$playlist['type']][] = $playlist;
+    }
+
+    $widgets = Widget::model()->findAll();
+
+    $screens = Screen::model()->findAllByAttributes(
+      ['user_id' => Yii::app()->user->id]
+    );
+
+    $this->render('update', [
+        'model' => $model,
+        'playlists' => $playlists,
+        'screens' => $screens,
+        'widgets' => $widgets
+    ]);
+  }
+
+  public function actionChangePoints($id)
+  {
+    $model=$this->loadModel($id);
+
+    if (isset($_POST['Net'])) {
+        $attachedPoints = [];
+
+        if(isset($_POST['Net']['attachedPoints'])
+          && is_array($_POST['Net']['attachedPoints'])
+        ) {
+           $attachedPoints = $_POST['Net']['attachedPoints'];
+        }
+
+        $pointToNet = new PointToNet;
+        $pointToNet->saveArray($model->id, $attachedPoints);
+
+        $this->redirect(['update', 'id'=>$model->id]);
     }
 
     $availablePoints = [];
@@ -147,13 +185,54 @@ class NetController extends Controller
     }
 
     $model->availablePoints = CHtml::listData($availablePoints, 'id', 'name');
-    $attachedPoints = [];
 
+    $attachedPoints = [];
     foreach ($model->pointsToNet as $pointToNet) {
         $attachedPoints[strval($pointToNet->id_point)] = ['selected' => 'selected'];
     }
 
-    $this->render('update',[
+    $this->render('changePoints', [
+        'model' => $model,
+        'attachedPoints' => $attachedPoints
+    ]);
+  }
+
+  public function actionIndividualUpdate($id)
+  {
+    $model=$this->loadModel($id);
+
+    if (isset($_POST['Net'])) {
+        $attachedPoints = [];
+
+        if(isset($_POST['Net']['attachedPoints'])
+          && is_array($_POST['Net']['attachedPoints'])
+        ) {
+           $attachedPoints = $_POST['Net']['attachedPoints'];
+        }
+
+        $pointToNet = new PointToNet;
+        $pointToNet->saveArray($model->id, $attachedPoints);
+
+        $this->redirect(['update', 'id'=>$model->id]);
+    }
+
+    $availablePoints = [];
+    if (Yii::app()->user->role === User::ROLE_ADMIN) {
+        $availablePoints = Point::Model()->findAll();
+    } else {
+        $availablePoints = Point::Model()->findAll('id_user=:u',
+            [':u'=> Yii::app()->user->id]
+        );
+    }
+
+    $model->availablePoints = CHtml::listData($availablePoints, 'id', 'name');
+
+    $attachedPoints = [];
+    foreach ($model->pointsToNet as $pointToNet) {
+        $attachedPoints[strval($pointToNet->id_point)] = ['selected' => 'selected'];
+    }
+
+    $this->render('changePoints', [
         'model' => $model,
         'attachedPoints' => $attachedPoints
     ]);
@@ -224,20 +303,19 @@ class NetController extends Controller
 
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-multiselect.js' );
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-multiselect-collapsible-groups.js' );
+      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );
+      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
 
-      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/net.js' );
+      $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/network.js' );
 
-      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
-      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
-      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
-      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-multiselect.css');
+      $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
+      $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
+      $cs->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
+      $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
 
-      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/net.css');
+      $cs->registerCssFile(Yii::app()->baseUrl.'/css/pages/net.css');
 
       return true;
     }

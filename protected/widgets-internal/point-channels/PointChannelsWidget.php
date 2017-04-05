@@ -1,7 +1,7 @@
 <?php
 class PointChannelsWidget extends CWidget
 {
-    public $playlistToPoint = null;
+    public $playlistToPoint = [];
     public $editable = null;
 
     private $jsSrc = '/js/widgets-internal/point-channels.js';

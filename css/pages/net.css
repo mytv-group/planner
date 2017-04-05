@@ -44,3 +44,11 @@
   margin: 15px -25px;
   display: block;
 }
+
+#net-form .row.buttons {
+  padding: 5px 0;
+}
+
+#net-form .row.buttons input {
+  margin: 0;
+}

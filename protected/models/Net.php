@@ -64,6 +64,9 @@ class Net extends CActiveRecord
       'dt_created' => 'Date created',
       'options' => 'Options',
       'attachedPoints' => 'Attached points',
+      'TVschedule' => 'TV turn on Schedule',
+      'channels' => 'Channels',
+      'screen_id' => "Screen",
     );
   }
 

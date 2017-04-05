@@ -1,7 +1,7 @@
 <?
 class TVscheduleWidget extends CWidget
 {
-    public $tvBlocks = '';
+    public $tvBlocks = [];
     public $editable = false;
 
     private $jsSrc = '/js/widgets-internal/tv-schedule.js';

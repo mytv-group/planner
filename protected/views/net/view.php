@@ -2,28 +2,40 @@
 /* @var $this NetController */
 /* @var $model Net */
 
-$this->breadcrumbs=array(
-	'Nets'=>array('index'),
-	$model->name,
-);
-
-$this->menu=array(
-	array('label'=>'List Net', 'url'=>array('index')),
-	array('label'=>'Create Net', 'url'=>array('create')),
-	array('label'=>'Update Net', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Net', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Net', 'url'=>array('admin')),
-);
+$this->menu=[
+  ['label'=>'List Net', 'url'=>['index']],
+  ['label'=>'Create Net', 'url'=>['create']],
+  ['label'=>'Update Net', 'url'=>['update', 'id'=>$model->id]],
+  ['label'=>'Change point list', 'url'=>['changePoints', 'id'=>$model->id]],
+  ['label'=>'Individual update', 'url'=>['individualUpdate', 'id'=>$model->id]],
+  ['label'=>'Delete Net', 'url'=>'#', 'linkOptions'=>['submit'=>
+    ['delete','id'=>$model->id],
+    'confirm'=>'Are you sure you want to delete this item?']
+  ],
+];
 ?>
 
-<h1>View Net #<?php echo $model->id; ?></h1>
+<h1>View Net <?= $model->name; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'name',
-		'id_user',
-		'dt_created',
-	),
-)); ?>
+<?php $form=$this->beginWidget('CActiveForm', [
+  'id'=>'net-form',
+  'enableAjaxValidation'=>false,
+]); ?>
+
+  <div class="row">
+    <?= $form->labelEx($model,'name'); ?>
+    <?= $form->textField($model,'name', ['size'=>60,'maxlength'=>255, 'class'=> 'form-control', 'readonly' => true]); ?>
+    <?= $form->error($model,'name'); ?>
+  </div>
+
+  <div class="row">
+    <?= $form->labelEx($model, 'attachedPoints'); ?>
+    <?php
+      $counter = 1;
+      foreach ($model->pointsToNet as $item) {
+          echo('<p>'.$counter.'. '.'<b>'.$item->point->name.'</b>'.' '.$item->point->ip.'</p>');
+          $counter++;
+      }
+    ?>
+  </div>
+<?php $this->endWidget(); ?>

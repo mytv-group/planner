@@ -3,6 +3,7 @@ class TVscheduleWidget extends CWidget
 {
     public $tvBlocks = [];
     public $editable = false;
+    public $postName = 'Point';
 
     private $jsSrc = '/js/widgets-internal/tv-schedule.js';
     private $cssSrc = '/css/widgets-internal/tv-schedule.css';
@@ -18,7 +19,8 @@ class TVscheduleWidget extends CWidget
     {
         $this->render('tvSchedule', [
             'tvBlocks' => $this->tvBlocks,
-            'editable' => $this->editable
+            'editable' => $this->editable,
+            'postName' => $this->postName
         ]);
     }
 }

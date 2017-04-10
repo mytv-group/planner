@@ -171,11 +171,11 @@ class PointService extends CApplicationComponent
 
     public function updateRelations($attr)
     {
-        Yii::app()->pointService->updatePointTVschedule($attr['id'], $attr['tvScheduleFrom'], $attr['tvScheduleTo']);
-        Yii::app()->pointService->updateShowcases($attr['id'], $attr['showcases']);
-        Yii::app()->pointService->updateChannels($attr['id'], $attr['channels']);
-        Yii::app()->pointService->sendRequestForUpdate($attr['ip']);
-        Yii::app()->pointService->prepareFilesForSync($attr['id']);
+        $this->updatePointTVschedule($attr['id'], $attr['tvScheduleFrom'], $attr['tvScheduleTo']);
+        $this->updateShowcases($attr['id'], $attr['showcases']);
+        $this->updateChannels($attr['id'], $attr['channels']);
+        $this->sendRequestForUpdate($attr['ip']);
+        $this->prepareFilesForSync($attr['id']);
     }
 
     public function deleteRelations($id)

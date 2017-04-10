@@ -52,3 +52,16 @@
 #net-form .row.buttons input {
   margin: 0;
 }
+
+#net-form .form-control {
+  max-width:415px;
+}
+
+#net-form ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#net-form ul li:not(:first-child) {
+    margin-top: 50px;
+}

@@ -3,6 +3,7 @@ class PointChannelsWidget extends CWidget
 {
     public $playlistToPoint = [];
     public $editable = null;
+    public $postName = 'Point';
 
     private $jsSrc = '/js/widgets-internal/point-channels.js';
     private $cssSrc = '/css/widgets-internal/point-channels.css';
@@ -19,7 +20,8 @@ class PointChannelsWidget extends CWidget
         $this->render('pointChannels', [
             'channelTypes' => Playlists::$types,
             'playlistToPoint' => $this->playlistToPoint,
-            'editable' => $this->editable
+            'editable' => $this->editable,
+            'postName' => $this->postName
         ]);
     }
 }

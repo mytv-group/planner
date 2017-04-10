@@ -13,7 +13,8 @@
       'playlist' => $playlist,
       'channelType' => $channelType,
       'playlistGroupClass' => '',
-      'editable' => $editable
+      'editable' => $editable,
+      'postName' => $postName
     ]);
   } ?>
 </div>

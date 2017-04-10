@@ -4,6 +4,7 @@ class ScreenSelectorWidget extends CWidget
     public $point = null;
     public $screens = [];
     public $editable = false;
+    public $postName = 'Point';
 
     private $jsSrc = '/js/widgets-internal/screen-selector.js';
     private $cssSrc = '/css/widgets-internal/screen-selector.css';
@@ -20,7 +21,8 @@ class ScreenSelectorWidget extends CWidget
         $this->render('screenSelector', [
             'point' => $this->point,
             'screens' => $this->screens,
-            'editable' => $this->editable
+            'editable' => $this->editable,
+            'postName' => $this->postName
         ]);
     }
 }

@@ -11,7 +11,7 @@
       <span class="widget-detach-btn-text">Detach</span>
       <span class="widget-attach-btn-text">Attach widget</span>
       <span class="widget-name"><?= $description ?></span>
-      <input class="showcase-widget" name="Point[showcases][<?= $windowId ?>]"
+      <input class="showcase-widget" name="<?= $postName ?>[showcases][<?= $windowId ?>]"
         value="<?= isset($widgetId) ? $widgetId : '' ?>"
         <?= $disabled ?>/>
   </button>

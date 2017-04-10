@@ -29,6 +29,7 @@ phpunit.phar
 #php and apache log
 /log
 /_log
+php_errors.log
 
 #spool
 /spool

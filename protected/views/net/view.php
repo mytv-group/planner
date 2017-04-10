@@ -3,12 +3,12 @@
 /* @var $model Net */
 
 $this->menu=[
-  ['label'=>'List Net', 'url'=>['index']],
-  ['label'=>'Create Net', 'url'=>['create']],
-  ['label'=>'Update Net', 'url'=>['update', 'id'=>$model->id]],
+  ['label'=>'List', 'url'=>['index']],
+  ['label'=>'Create', 'url'=>['create']],
+  ['label'=>'Update', 'url'=>['update', 'id'=>$model->id]],
   ['label'=>'Change point list', 'url'=>['changePoints', 'id'=>$model->id]],
   ['label'=>'Individual update', 'url'=>['individualUpdate', 'id'=>$model->id]],
-  ['label'=>'Delete Net', 'url'=>'#', 'linkOptions'=>['submit'=>
+  ['label'=>'Delete', 'url'=>'#', 'linkOptions'=>['submit'=>
     ['delete','id'=>$model->id],
     'confirm'=>'Are you sure you want to delete this item?']
   ],

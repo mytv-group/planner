@@ -22,7 +22,7 @@ $this->menu=[
 
   <div class="row">
     <?= $form->labelEx($model,'name'); ?>
-    <?= $form->textField($model,'name', ['size'=>60,'maxlength'=>255, 'class'=> 'form-control', 'readonly' => true]); ?>
+    <?= $form->textField($model,'name', ['size'=>60,'maxlength'=>255, 'class'=> 'form-control']); ?>
     <?= $form->error($model,'name'); ?>
   </div>
 

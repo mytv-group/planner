@@ -49,6 +49,7 @@ class Net extends CActiveRecord
     return array(
       'user' => array(self::BELONGS_TO, 'User', 'id_user'),
       'pointsToNet' => array(self::HAS_MANY, 'PointToNet', 'id_net'),
+      'points'=>array(self::HAS_MANY,'Point', ['id_point'=>'id'],'through'=>'pointsToNet'),
     );
   }
 

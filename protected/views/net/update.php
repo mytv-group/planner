@@ -20,79 +20,76 @@ $this->menu=[
   'enableAjaxValidation'=>false,
 )); ?>
 
-  <p class="note">Fields with <span class="required">*</span> are required.</p>
+<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-  <?= $form->errorSummary($model); ?>
+<?= $form->errorSummary($model); ?>
 
-  <div class="row">
-    <?= $form->labelEx($model,'name'); ?>
-    <?= $form->textField($model,'name', ['size'=>60,'maxlength'=>255, 'class'=> 'form-control']); ?>
-    <?= $form->error($model,'name'); ?>
-  </div>
+<div class="row">
+  <?= $form->labelEx($model,'name'); ?>
+  <?= $form->textField($model,'name', ['size'=>60,'maxlength'=>255, 'class'=> 'form-control']); ?>
+  <?= $form->error($model,'name'); ?>
+</div>
 
-  <div class="row">
-    <?= $form->labelEx($model, 'attachedPoints'); ?>
-    <?php
-      $counter = 1;
-      foreach ($model->pointsToNet as $item) {
-          echo('<p>'.$counter.'. '.'<b>'.$item->point->name.'</b>'.' '.$item->point->ip.'</p>');
-          $counter++;
-      }
-    ?>
-  </div>
+<div class="row">
+  <?= $form->labelEx($model, 'attachedPoints'); ?>
+  <?php
+    $counter = 1;
+    foreach ($model->points as $point) {
+        echo('<p>'.$counter.'. '.'<b>'.$point->name.'</b>'.' '.$point->ip.'</p>');
+        $counter++;
+    }
+  ?>
+</div>
 
-  <div class="row buttons">
-    <?= CHtml::link('Change point list',
-      '/net/changePoints/id/'.$model->id,
-      ['class'=> 'btn btn-danger']
-    ); ?>
-  </div>
+<div class="row buttons">
+  <?= CHtml::link('Change point list',
+    '/net/changePoints/id/'.$model->id,
+    ['class'=> 'btn btn-danger']
+  ); ?>
+</div>
 
-  <?php if(!$model->isNewRecord) : ?>
-    <div class="row">
-        <h3>Apply config to all network points</h3>
-        <p class="note">All exist points configs will be lost</p>
-    </div>
+<div class="row">
+    <h3>Apply config to all network points</h3>
+    <p class="note">All exist points configs will be lost</p>
+</div>
 
-    <div class="row">
-        <?= $form->labelEx($model, 'TVschedule'); ?>
-        <?php $this->widget('TVscheduleWidget', [
-            'tvBlocks' => [],
-            'editable' => true
-        ]); ?>
-    </div>
+<div class="row">
+    <?= $form->labelEx($model, 'TVschedule'); ?>
+    <?php $this->widget('TVscheduleWidget', [
+        'tvBlocks' => [],
+        'editable' => true,
+        'postName' => 'NetApplications'
+    ]); ?>
+</div>
 
-    <div class="row">
-        <?= $form->labelEx($model, 'channels'); ?>
-        <?php $this->widget('PointChannelsWidget', [
-            'playlistToPoint' => [],
-            'editable' => true
-        ]); ?>
-    </div>
+<div class="row">
+    <?= $form->labelEx($model, 'channels'); ?>
+    <?php $this->widget('PointChannelsWidget', [
+        'playlistToPoint' => [],
+        'editable' => true,
+        'postName' => 'NetApplications'
+    ]); ?>
+</div>
 
-    <div class="row">
-        <?= $form->labelEx($model, 'screen_id'); ?>
-        <?php $this->widget('ScreenSelectorWidget', [
-            'point' => $model,
-            'screens' => $screens,
-            'editable' => true
-        ]); ?>
-        <?= $form->error($model,'screen_id'); ?>
-    </div>
-  <?php endif; ?>
+<div class="row">
+    <?= $form->labelEx($model, 'screen_id'); ?>
+    <?php $this->widget('ScreenSelectorWidget', [
+        'point' => $model,
+        'screens' => $screens,
+        'editable' => true,
+        'postName' => 'NetApplications'
+    ]); ?>
+    <?= $form->error($model,'screen_id'); ?>
+</div>
 
-  <div class="row buttons">
-    <?= CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', ['class'=> 'btn btn-default']); ?>
+<div class="row buttons">
+  <?= CHtml::submitButton('Save', ['class'=> 'btn btn-default']); ?>
 
-    <?php if(!$model->isNewRecord) {
-        echo CHtml::link('Discard and perform individual update',
-          '/net/individualUpdate/id/'.$model->id,
-          ['class'=> 'btn btn-warning']
-        );
-      }
-    ?>
-    </div>
-  </div>
+  <?= CHtml::link('Discard and perform individual update',
+    '/net/individualUpdate/id/'.$model->id,
+    ['class'=> 'btn btn-warning']
+  );?>
+</div>
 
 <?php $this->endWidget(); ?>
 

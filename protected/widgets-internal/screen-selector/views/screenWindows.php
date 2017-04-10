@@ -17,7 +17,8 @@
                   'windowId' => $window->id,
                   'widgetId' => isset($widget->id) ? $widget->id : null,
                   'widgetDescription' => isset($widget->description) ? $widget->description : null,
-                  'editable' => $editable
+                  'editable' => $editable,
+                  'postName' => $postName
               ]); ?>
           </div>
       </div>

@@ -14,7 +14,8 @@
             'channelName' => $name,
             'channelType' => $type,
             'playlists' => $channelPlaylists,
-            'editable' => $editable
+            'editable' => $editable,
+            'postName' => $postName
         ]);
     } ?>
 
@@ -23,6 +24,7 @@
       'playlist' => null,
       'channelType' => null,
       'playlistGroupClass' => 'channel-playlist-item-template',
-      'editable' => true
+      'editable' => true,
+      'postName' => $postName
     ]); ?>
 </div>

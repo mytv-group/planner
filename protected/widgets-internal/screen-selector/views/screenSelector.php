@@ -11,7 +11,7 @@
 ?>
 
 <div id='screen-selector-grid'>
-    <select id="point-screen-id" class="form-control" name="Point[screen_id]" size="10" <?= $prop ?>>
+    <select id="point-screen-id" class="form-control" name="<?= $postName ?>[screen_id]" size="10" <?= $prop ?>>
         <? foreach ($screens as $item): ?>
             <option value="<?= $item->id; ?>"
               <?= ($item->id == $screenId) ? "selected='selected'" : '' ?>
@@ -28,7 +28,8 @@
             'isActive' => true,
             'screenId' => $point->screen->id,
             'windows' => $point->screen->windows,
-            'editable' => $editable
+            'editable' => $editable,
+            'postName' => $postName
         ]); ?>
     <? endif; ?>
 
@@ -38,7 +39,8 @@
                 'isActive' => false,
                 'screenId' => $screen->id,
                 'windows' => $screen->windows,
-                'editable' => $editable
+                'editable' => $editable,
+                'postName' => $postName
             ]); ?>
         <?php endif; ?>
     <? endforeach; ?>

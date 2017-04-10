@@ -13,7 +13,7 @@
         </a>
     </button>
     <input class="channel-playlist"
-       name="Point[channels][<?= $channelType; ?>][]"
+       name="<?= $postName; ?>[channels][<?= $channelType; ?>][]"
        value="<?= $playlistId; ?>"
        <?= $disabled; ?>/>
     <?php if ($editable): ?>

@@ -5,7 +5,8 @@
         'rowId' => '',
         'dtFrom' => $item->dt_from,
         'dtTo' => $item->dt_to,
-        'editable' => $editable
+        'editable' => $editable,
+        'postName' => $postName
     ]); ?>
 <?php endforeach; ?>
 
@@ -19,7 +20,8 @@
     'rowId' => 'js-tv-schedule',
     'dtFrom' => '',
     'dtTo' => '',
-    'editable' => $editable
+    'editable' => $editable,
+    'postName' => $postName
 ]); ?>
 
 <?php if($editable): ?>

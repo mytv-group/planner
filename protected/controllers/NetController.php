@@ -121,18 +121,24 @@ class NetController extends Controller
     if (isset($_POST['Net'])) {
         $attributes = $_POST['Net'];
         $model->attributes = $attributes;
+
         if ($model->save()) {
-            $attachedPoints = [];
-            if(isset($attributes['attachedPoints'])
-              && is_array($attributes['attachedPoints'])
-            ) {
-               $attachedPoints = $attributes['attachedPoints'];
+            if (isset($_POST['NetApplications'])) {
+                $pointApplications = $_POST['NetApplications'];
+                foreach ($model->points as $point) {
+                    Yii::app()->pointService->updateRelations([
+                        'id' => intval($point->id),
+                        'tvScheduleFrom' => isset($pointApplications["tvScheduleFrom"]) ? $pointApplications["tvScheduleFrom"] : [],
+                        'tvScheduleTo' => isset($pointApplications["tvScheduleTo"]) ? $pointApplications["tvScheduleTo"] : [],
+                        'showcases' => isset($pointApplications["showcases"]) ? $pointApplications["showcases"] : [],
+                        'channels' => isset($pointApplications["channels"]) ? $pointApplications["channels"] : [],
+                        'ip' => $point->ip
+                    ]);
+                }
+
             }
 
-            $pointToNet = new PointToNet;
-            $pointToNet->saveArray($model->id, $attachedPoints);
-
-            $this->redirect(['view', 'id'=>$model->id]);
+            $this->redirect(['individualUpdate', 'id'=>$model->id]);
         }
     }
 
@@ -161,16 +167,21 @@ class NetController extends Controller
     $model=$this->loadModel($id);
 
     if (isset($_POST['Net'])) {
-        $attachedPoints = [];
+        $attributes = $_POST['Net'];
+        $model->attributes = $attributes;
 
-        if(isset($_POST['Net']['attachedPoints'])
-          && is_array($_POST['Net']['attachedPoints'])
-        ) {
-           $attachedPoints = $_POST['Net']['attachedPoints'];
+        if ($model->save()) {
+            $attachedPoints = [];
+
+            if(isset($_POST['Net']['attachedPoints'])
+              && is_array($_POST['Net']['attachedPoints'])
+            ) {
+               $attachedPoints = $_POST['Net']['attachedPoints'];
+            }
+
+            $pointToNet = new PointToNet;
+            $pointToNet->saveArray($model->id, $attachedPoints);
         }
-
-        $pointToNet = new PointToNet;
-        $pointToNet->saveArray($model->id, $attachedPoints);
 
         $this->redirect(['update', 'id'=>$model->id]);
     }
@@ -202,39 +213,50 @@ class NetController extends Controller
     $model=$this->loadModel($id);
 
     if (isset($_POST['Net'])) {
-        $attachedPoints = [];
+        $attributes = $_POST['Net'];
+        $model->attributes = $attributes;
 
-        if(isset($_POST['Net']['attachedPoints'])
-          && is_array($_POST['Net']['attachedPoints'])
-        ) {
-           $attachedPoints = $_POST['Net']['attachedPoints'];
+        if ($model->save()) {
+            if (isset($_POST['NetApplications'])
+                && isset($_POST['NetApplications']['Points'])
+            ) {
+                $applications = $_POST['NetApplications']['Points'];
+                foreach ($applications as $pointId => $pointApplications) {
+                    $point = Point::model()->findByPk($pointId);
+                    Yii::app()->pointService->updateRelations([
+                        'id' => intval($point->id),
+                        'tvScheduleFrom' => isset($pointApplications["tvScheduleFrom"]) ? $pointApplications["tvScheduleFrom"] : [],
+                        'tvScheduleTo' => isset($pointApplications["tvScheduleTo"]) ? $pointApplications["tvScheduleTo"] : [],
+                        'showcases' => isset($pointApplications["showcases"]) ? $pointApplications["showcases"] : [],
+                        'channels' => isset($pointApplications["channels"]) ? $pointApplications["channels"] : [],
+                        'ip' => $point->ip
+                    ]);
+                }
+
+            }
+
+            $this->redirect(['view', 'id'=>$model->id]);
         }
-
-        $pointToNet = new PointToNet;
-        $pointToNet->saveArray($model->id, $attachedPoints);
-
-        $this->redirect(['update', 'id'=>$model->id]);
     }
 
-    $availablePoints = [];
-    if (Yii::app()->user->role === User::ROLE_ADMIN) {
-        $availablePoints = Point::Model()->findAll();
-    } else {
-        $availablePoints = Point::Model()->findAll('id_user=:u',
-            [':u'=> Yii::app()->user->id]
-        );
+    $playlists = [];
+    $allPlaylists = Playlists::getUserPlaylists();
+    foreach ($allPlaylists as $playlist) {
+        $playlists[$playlist['type']][] = $playlist;
     }
 
-    $model->availablePoints = CHtml::listData($availablePoints, 'id', 'name');
+    $widgets = Widget::model()->findAll();
 
-    $attachedPoints = [];
-    foreach ($model->pointsToNet as $pointToNet) {
-        $attachedPoints[strval($pointToNet->id_point)] = ['selected' => 'selected'];
-    }
+    $screens = Screen::model()->findAllByAttributes(
+      ['user_id' => Yii::app()->user->id]
+    );
 
-    $this->render('changePoints', [
+    $this->render('individualUpdate', [
         'model' => $model,
-        'attachedPoints' => $attachedPoints
+        'playlists' => $playlists,
+        'screens' => $screens,
+        'widgets' => $widgets,
+        'points' => $model->points
     ]);
   }
 

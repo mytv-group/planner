@@ -1,9 +1,11 @@
 $(document).ready(function() {
     var windowId = null;
+    var pointId = null;
     var $dialog = $('#choose-widget-dialog');
     $(document).on('choose-widget-dialog:show', function(event, args) {
         $dialog.modal('show');
         windowId = args.windowId || null;
+        pointId = args.pointId || null;
     });
 
     var $rows = $('#choose-widget-dialog .row-data');
@@ -23,7 +25,8 @@ $(document).ready(function() {
             $(document).trigger('choose-widget-dialog:widget-attached', {
                 windowId: windowId,
                 widgetDescription: description,
-                widgetId: id
+                widgetId: id,
+                pointId: pointId
             });
         }
 

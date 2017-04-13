@@ -6,7 +6,10 @@
 <?php if($editable): ?>
   <button class="<?= isset($widgetId) ? 'detach-widget' : 'attach-widget' ?> btn
     <?= isset($widgetId) ? 'btn-warning' : 'btn-success' ?>" type="button"
-    data-window-id="<?= $windowId ?>" title="<?= $description ?>">
+    data-window-id="<?= $windowId ?>"
+    title="<?= $description ?>"
+    data-point-id="<?= $pointId ?>"
+  >
       <span class="glyphicon <?= isset($widgetId) ? 'glyphicon-off' : 'glyphicon-paperclip' ?>"></span>
       <span class="widget-detach-btn-text">Detach</span>
       <span class="widget-attach-btn-text">Attach widget</span>

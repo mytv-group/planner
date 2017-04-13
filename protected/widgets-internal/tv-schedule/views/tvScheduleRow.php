@@ -1,18 +1,11 @@
 <?php
-    $id = '';
-    if($rowId !== '') {
-        $id = 'id="'.$rowId.'"';
-    }
-?>
-
-<?php
     $prop = '';
-    if(!$editable || ($rowId !== '')) {
+    if(!$editable || ($className !== '')) {
         $prop = 'disabled="disabled"';
     }
 ?>
 
-<div <?= $id; ?>>
+<div class="<?= $className ?>">
     <input name="<?= $postName ?>[tvScheduleFrom][]" type="text" size="15"
       class="form-control tv-schedule-datetime" title="From datetime" value="<?= $dtFrom; ?>" <?= $prop; ?>/>
     <input name="<?= $postName ?>[tvScheduleTo][]" type="text" size="15"

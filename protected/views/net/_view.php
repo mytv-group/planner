@@ -81,6 +81,12 @@
               <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
             </button>
           </form>
+
+          <form action="/net/individualUpdate/<?= $data->id ?>" type="post" class="btn-group">
+            <button type="submit" class="btn btn-default btn-sm" title="Update">
+              <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+            </button>
+          </form>
         <?php endif; ?>
 
         <?php if (Yii::app ()->user->checkAccess ("netUser")): ?>

@@ -7,8 +7,6 @@ class WeatherWidget extends AbstractWidget
     * "bg":"background.png"}
     */
 
-    const outputPrefix = 'weather';
-    
     private $imgFolder = '/widgets-content/weather/';
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q';
     private $celsiusMin = 273.15;
@@ -16,6 +14,21 @@ class WeatherWidget extends AbstractWidget
     private $weekDays = [
         '', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
     ];
+
+    private $imageSizeX = 400;
+    private $imageSizeY = 300;
+
+    private $temperatureValuePosX = 192;
+    private $temperatureValuePosY = 280;
+
+    private $cityLabelPosX = 200;
+    private $cityLabelPosY = 60;
+
+    private $dateLabelPosX = 158;
+    private $dateLabelPosY = 105;
+
+    private $icoPosX = 138;
+    private $icoPosY = 105;
 
     private $apiKey;
 
@@ -75,8 +88,9 @@ class WeatherWidget extends AbstractWidget
         $temperature = round($responce['main']['temp'] - $this->celsiusMin) . '°';
         $icon = $responce['weather'][0]['icon'] . '.png';
 
-        $imageWidth = 400;
-        $imageHeigth = 300;
+        $imageWidth = $this->getConfigVal('imageSizeX');
+        $imageHeigth = $this->getConfigVal('imageSizeY');
+
         $image = @imagecreatetruecolor($imageWidth, $imageHeigth);
         imagesavealpha($image, true);
         if (!$image) {
@@ -117,22 +131,41 @@ class WeatherWidget extends AbstractWidget
 
         $textColor = imagecolorallocatealpha($image, 255, 255, 255, 0);
 
-        imagecopy($image, $bg, 0, 0, 0, 0, 400, 300);
-        imagecopy($image, $icon, 138, 105, 0, 0, imagesx($icon), imagesx($icon));
+        imagecopy($image, $bg, 0, 0, 0, 0, $imageWidth, $imageHeigth);
+
+        $icoPosX = $this->getConfigVal('icoPosX');
+        $icoPosY = $this->getConfigVal('icoPosY');
+
+        imagecopy($image, $icon, $icoPosX, $icoPosY, 0, 0, imagesx($icon), imagesx($icon));
         putenv('GDFONTPATH=' . dirname(Yii::app()->basePath)
           . DIRECTORY_SEPARATOR . 'css'
           . DIRECTORY_SEPARATOR . 'fonts');
-
         $font = getenv('GDFONTPATH') . DIRECTORY_SEPARATOR . 'arialbd.ttf';
 
+        $cityLabelPosX = $this->getConfigVal('cityLabelPosX');
+        $cityLabelPosY = $this->getConfigVal('cityLabelPosY');
+
+        // align to center if no config
+        if (!isset($this->config->temperatureValuePosX)) {
+            $cityLabelPosX = ($cityLabelPosX * 2 - strlen($this->config->cityname) * 12) / 2;
+        }
+
+        imagettftext($image, 36, 0, $cityLabelPosX, $cityLabelPosY, $textColor, $font, $this->config->cityname);
+
         $w =  $this->weekDays[date('w')];
+        $dateLabelPosX = $this->getConfigVal('dateLabelPosX');
+        $dateLabelPosY = $this->getConfigVal('dateLabelPosY');
+        imagettftext($image, 16, 0, $dateLabelPosX, $dateLabelPosY, $textColor, $font, $w . ', ' . date('d/m'));
 
-        $cityXpos = ($imageWidth - strlen($this->config->cityname) * 12) / 2;
-        $temperatureXpos = 192 - (strlen($temperature) - 2) * 10;
+        $temperatureValuePosX = $this->getConfigVal('temperatureValuePosX');
+        $temperatureValuePosY = $this->getConfigVal('temperatureValuePosY');
 
-        imagettftext($image, 36, 0, $cityXpos, 60, $textColor, $font, $this->config->cityname);
-        imagettftext($image, 16, 0, 158, 105, $textColor, $font, $w . ', ' . date('d/m'));
-        imagettftext($image, 40, 0, $temperatureXpos, 280, $textColor, $font, $temperature);
+        // align to center if no config
+        if (!isset($this->config->temperatureValuePosX)) {
+            $temperatureValuePosX = $this->temperatureValuePosX - (strlen($temperature) - 2) * 10;
+        }
+
+        imagettftext($image, 40, 0, $temperatureValuePosX, $temperatureValuePosY, $textColor, $font, $temperature);
 
         if (isset($this->config->rotation)
             && is_int(intval($this->config->rotation))
@@ -144,6 +177,14 @@ class WeatherWidget extends AbstractWidget
         imagedestroy($image);
 
         return;
+    }
+
+    private function getConfigVal($attrName)
+    {
+        $defaultVal = isset($this->$attrName) ? $this->$attrName : 0;
+        return (isset($this->config->$attrName) && is_int(intval($this->config->$attrName)))
+          ? intval($this->config->$attrName)
+          : $defaultVal;
     }
 
     public function run()

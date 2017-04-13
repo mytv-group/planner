@@ -1,5 +1,7 @@
-<div class="windows-list <? echo $isActive ? 'is-active' : ''; ?>"
-  data-screen-id="<?= $screenId; ?>">
+<div class="windows-list <?= $isActive ? 'is-active' : ''; ?>"
+  data-screen-id="<?= $screenId; ?>"
+  data-point-id="<?= $pointId; ?>"
+>
   <?php foreach ($windows as $window): ?>
       <div class="showcases-container btn-toolbar" role="toolbar" aria-label="">
           <div class="btn-group" role="group" aria-label="">
@@ -15,6 +17,7 @@
 
               <?php $this->render('blockForWidget', [
                   'windowId' => $window->id,
+                  'pointId' => $pointId,
                   'widgetId' => isset($widget->id) ? $widget->id : null,
                   'widgetDescription' => isset($widget->description) ? $widget->description : null,
                   'editable' => $editable,

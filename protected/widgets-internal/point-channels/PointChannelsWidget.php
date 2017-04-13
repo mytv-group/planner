@@ -1,7 +1,7 @@
 <?php
 class PointChannelsWidget extends CWidget
 {
-    public $playlistToPoint = [];
+    public $point = null;
     public $editable = null;
     public $postName = 'Point';
 
@@ -19,7 +19,7 @@ class PointChannelsWidget extends CWidget
     {
         $this->render('pointChannels', [
             'channelTypes' => Playlists::$types,
-            'playlistToPoint' => $this->playlistToPoint,
+            'point' => $this->point,
             'editable' => $this->editable,
             'postName' => $this->postName
         ]);

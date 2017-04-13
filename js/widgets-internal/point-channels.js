@@ -1,7 +1,12 @@
 $(document).ready(function(e) {
     $('.add-playlists-btn').click(function(event) {
         var channelType = $(this).data('channel-type');
-        $(document).trigger('choose-playlist-dialog:show', {channelType: channelType});
+        var pointId = $(this).data('point-id');
+
+        $(document).trigger('choose-playlist-dialog:show', {
+            channelType: channelType,
+            pointId: pointId
+        });
     });
 
     $('#channels-list').on('click', '.remove-playlist', function(event) {
@@ -11,7 +16,16 @@ $(document).ready(function(e) {
     });
 
     $(document).on('choose-playlist-dialog:playlist-attached', function(event, args) {
-        var $channelContainer = $('.channel-container[data-channel-type='+args.channelType+']:first')
+        var $channelContainer;
+        if ((args.pointId !== null) && (args.pointId !== '')) {
+            $channelContainer = $('.channel-container'
+               + '[data-channel-type='+args.channelType+']'
+               + '[data-point-id='+args.pointId+']'
+               + ':first'
+            );
+        } else {
+            $channelContainer = $('.channel-container[data-channel-type='+args.channelType+']:first');
+        }
         var $pl = $channelContainer.find('.channel-playlist-item[data-playlist-id='+args.playlistId+']');
 
         if ($pl.length > 0) {

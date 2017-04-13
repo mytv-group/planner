@@ -1,16 +1,18 @@
 <div id="channels-list">
+    <?php
+        $pointPlaylists = isset($point->playlists) ? $point->playlists : [];
+        $pointId = isset($point->id) ? $point->id : '';
+    ?>
     <?php foreach ($channelTypes as $type => $name) {
         $channelPlaylists = [];
-        foreach ($playlistToPoint as $item) {
-            if (isset($item->playlist)
-              && isset($item->playlist->type)
-              && (intval($item->playlist->type) === intval($type))
-            ) {
-                $channelPlaylists[] = $item->playlist;
+        foreach ($pointPlaylists as $playlist) {
+            if (intval($playlist->type) === intval($type)) {
+                $channelPlaylists[] = $playlist;
             }
         }
 
         $this->render('channel', [
+            'pointId' => $pointId,
             'channelName' => $name,
             'channelType' => $type,
             'playlists' => $channelPlaylists,

@@ -1,9 +1,13 @@
 $(document).ready(function(e) {
-    var $showcases = $('#screen-showcases');
+    var $showcases = $('.screen-showcases');
     $showcases.on('click', '.attach-widget', function(event) {
         event.stopPropagation();
         var windowId = $(this).data('window-id');
-        $(document).trigger('choose-widget-dialog:show', {windowId: windowId});
+        var pointId = $(this).data('point-id');
+        $(document).trigger('choose-widget-dialog:show', {
+            windowId: windowId,
+            pointId: pointId
+        });
     });
 
     $showcases.on('click', '.detach-widget', function(event) {
@@ -20,28 +24,42 @@ $(document).ready(function(e) {
     });
 
     $(document).on('choose-widget-dialog:widget-attached', function(event, args) {
-        var $this = $('.windows-list.is-active').find('[data-window-id='+args.windowId+']');
-        $this.addClass('btn-warning detach-widget')
+        var $window;
+        if ((args.pointId !== null) && (args.pointId !== '')) {
+            $window = $('.windows-list.is-active[data-point-id='+args.pointId+']').find('[data-window-id='+args.windowId+']');
+        } else {
+            $window = $('.windows-list.is-active').find('[data-window-id='+args.windowId+']');
+        }
+        $window.addClass('btn-warning detach-widget')
             .removeClass('attach-widget btn-success')
             .children('.glyphicon')
             .addClass('glyphicon-off')
             .removeClass('glyphicon-paperclip');
 
-        $this.find('.widget-name').text(args.widgetDescription);
-        $this.find('.showcase-widget').val(args.widgetId).removeAttr('disabled');
+        $window.find('.widget-name').text(args.widgetDescription);
+        $window.find('.showcase-widget').val(args.widgetId).removeAttr('disabled');
     });
 
-    $('#point-screen-id').change(function(event) {
-        var active = $('.windows-list.is-active');
-        var append = function ($this) {
-            var screenId = $this.val();
-            $('.windows-list.is-active').remove();
-            var newContent = $('.windows-list[data-screen-id='+screenId+']:not(.is-active)')
-                .clone().addClass('is-active').get(0).outerHTML;
-            $showcases.prepend(newContent);
+    $('.point-screen').change(function(event) {
+        var pointId = $(this).data('point-id');
+        var $active;
+
+        if (pointId !== undefined) {
+           $active = $('.windows-list.is-active[data-point-id='+pointId+']');
+        } else {
+           $active = $('.windows-list.is-active');
         }
 
-        if (active.length === 0) {
+        var append = function ($this) {
+            var screenId = $this.val();
+            $active.remove();
+
+            var newContent = $('.windows-list[data-point-id='+pointId+'][data-screen-id='+screenId+']:not(.is-active)')
+                .clone().addClass('is-active').get(0).outerHTML;
+            $showcases.filter('[data-point-id='+pointId+']').prepend(newContent);
+        }
+
+        if ($active.length === 0) {
             append($(this));
         } else if (confirm("Screen change will drop widget settings. Continue?")) {
             append($(this));

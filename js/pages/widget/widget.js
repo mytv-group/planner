@@ -11,7 +11,7 @@ $(document).ready(function () {
             $(this).removeClass('is-active');
         });
 
-    $('.btn-widget-preview').click(function (event) {
+    $('#widget-grid').on('click', '.btn-widget-preview', function (event) {
         var $target = $(event.currentTarget),
             buttonPosition = $target.offset(),
             widgetName = $target.data('id');

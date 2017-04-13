@@ -1,4 +1,5 @@
 <?php
+    $pointId = isset($point->id) ? $point->id : '';
     $screenId = -1;
     if (isset($point->screen) && isset($point->screen->id)) {
         $screenId = $point->screen->id;
@@ -10,8 +11,11 @@
     }
 ?>
 
-<div id='screen-selector-grid'>
-    <select id="point-screen-id" class="form-control" name="<?= $postName ?>[screen_id]" size="10" <?= $prop ?>>
+<div class='screen-selector-grid'>
+    <select class="point-screen form-control" size="10" <?= $prop ?>
+        name="<?= $postName ?>[screen_id]"
+        data-point-id="<?=$pointId ?>"
+    >
         <? foreach ($screens as $item): ?>
             <option value="<?= $item->id; ?>"
               <?= ($item->id == $screenId) ? "selected='selected'" : '' ?>
@@ -22,10 +26,11 @@
     </select>
 </div>
 
-<div id='screen-showcases'>
+<div class='screen-showcases' data-point-id="<?=$pointId ?>">
     <?php if (isset($point->screen) && isset($point->screen->windows)): ?>
         <?php $this->render('screenWindows', [
             'isActive' => true,
+            'pointId' => $pointId,
             'screenId' => $point->screen->id,
             'windows' => $point->screen->windows,
             'editable' => $editable,
@@ -37,6 +42,7 @@
         <?php if (isset($screen->windows)): ?>
             <?php $this->render('screenWindows', [
                 'isActive' => false,
+                'pointId' => $pointId,
                 'screenId' => $screen->id,
                 'windows' => $screen->windows,
                 'editable' => $editable,

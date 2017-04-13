@@ -55,7 +55,7 @@ $this->menu=[
 
 <div class="row">
     <?= $form->labelEx($model, 'TVschedule'); ?>
-    <?php $this->widget('TVscheduleWidget', [
+    <?php $this->widget('tvScheduleWidget', [
         'tvBlocks' => [],
         'editable' => true,
         'postName' => 'NetApplications'
@@ -65,7 +65,7 @@ $this->menu=[
 <div class="row">
     <?= $form->labelEx($model, 'channels'); ?>
     <?php $this->widget('PointChannelsWidget', [
-        'playlistToPoint' => [],
+        'point' => [],
         'editable' => true,
         'postName' => 'NetApplications'
     ]); ?>

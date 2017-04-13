@@ -1,7 +1,10 @@
 $(document).ready(function() {
     var channelType = null;
+    var pointId = null;
     $(document).on('choose-playlist-dialog:show', function(event, args) {
         channelType = args.channelType;
+        pointId = args.pointId;
+
         var $dialog = $('.choose-playlist-dialog[data-channel-type='+channelType+']:first');
         if ($dialog.length > 0) {
             $dialog.modal('show');
@@ -13,8 +16,8 @@ $(document).ready(function() {
         $rows.removeClass('is-selected');
         $(this).addClass('is-selected');
 
-        var $attachWidgetBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
-        $attachWidgetBtn.removeAttr('disabled');
+        var $attachPlaylistBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
+        $attachPlaylistBtn.removeAttr('disabled');
     });
 
     $('.attach-playlist-btn').click(function(event) {
@@ -26,14 +29,15 @@ $(document).ready(function() {
             $(document).trigger('choose-playlist-dialog:playlist-attached', {
                 channelType: channelType,
                 playlistName: playlistName,
-                playlistId: id
+                playlistId: id,
+                pointId: pointId
             });
         }
 
         var $dialog = $('.choose-playlist-dialog[data-channel-type='+channelType+']:first');
         $dialog.modal('hide');
         $rows.removeClass('is-selected');
-          var $attachWidgetBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
-        $attachWidgetBtn.attr('disabled', 'disabled');
+          var $attachPlaylistBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
+        $attachPlaylistBtn.attr('disabled', 'disabled');
     });
 });

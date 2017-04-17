@@ -49,7 +49,7 @@ class MonitoringController extends Controller
 					'pageSize'=>10
 				),
 		));
-		
+
 		$playlistModelGrid = new CActiveDataProvider('Playlists', array(
 				'criteria' => array(
 					'condition' => "author='".Yii::app()->user->username."'",
@@ -59,7 +59,7 @@ class MonitoringController extends Controller
 						'pageSize'=>10
 				),
 		));
-		
+
 		/*$playlistBgModelGrid = new CActiveDataProvider('Playlists', array(
 				'criteria' => array(
 						'condition' => "author='".Yii::app()->user->username."'",
@@ -69,7 +69,7 @@ class MonitoringController extends Controller
 						'pageSize'=>10
 				)
 		));
-		
+
 		$playlistAdvModelGrid = new CActiveDataProvider('Playlists', array(
 				'criteria' => array(
 						'condition' => "author='".Yii::app()->user->username."'",
@@ -86,9 +86,9 @@ class MonitoringController extends Controller
 				//'playlistAdvModel' => $playlistAdvModelGrid
 		));
 	}
-	
+
 	public function actionAjaxGetPointScreen()
-	{	
+	{
 		error_reporting(E_ALL);
 		$answ = array('err', '');
 		if (isset($_POST['pointId']) && isset($_POST['pointIp']))
@@ -96,13 +96,13 @@ class MonitoringController extends Controller
 			$pointId = $_POST['pointId'];
 			$pointIp = $_POST['pointIp'];
 			$monitoring = new Monitoring();
-			
+
 			//$url = 'http://local.planner.rtvgroup.com.ua/images/screenshot.jpg';
 			$url = 'http://'.$pointIp.'/screenshot.jpg';
 			$appendPath = '/spool/points/'.$pointId;
 			$contentPath = YiiBase::getPathOfAlias('webroot');
 			$imgPath = $contentPath.$appendPath;
-			
+
 			//maybe this dir doesnt exist
 			$pathAppendix = explode("/", $appendPath);
 			foreach($pathAppendix as $folder)
@@ -129,7 +129,7 @@ class MonitoringController extends Controller
 						$answ = array('ok', $res);
 					}
 				}
-				
+
 				if(!$entrance)
 				{
 					error_log("res2 ". json_encode($entrance));
@@ -141,7 +141,7 @@ class MonitoringController extends Controller
 					}
 				}
 			}
-			else 
+			else
 			{
 				$res = $monitoring->receiveScreenshot($imgPath, $url);
 				if($res != false)
@@ -181,23 +181,22 @@ class MonitoringController extends Controller
 			Yii::app()->end();
 		}
 	}
-	
+
 	public function beforeAction($action) {
 		if( parent::beforeAction($action) ) {
 			$cs = Yii::app()->clientScript;
-			
-			
+
+
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-switch.min.js' );
-			 
+
 			$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/monitoring/monitoring.js' );
-	
+
 			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
 			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
 			Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/monitoring.css');
-			 
+
 			return true;
 		}
 		return false;

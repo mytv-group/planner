@@ -5,7 +5,7 @@
 
 $this->pageTitle=Yii::app()->name . ' - Login';
 $this->breadcrumbs=array(
-	'Login',
+  'Login',
 );
 ?>
 
@@ -13,43 +13,41 @@ $this->breadcrumbs=array(
 
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'login-form',
-	'enableClientValidation'=>false,
-	'clientOptions'=>array(
-		'validateOnSubmit'=>true,
-	),
+  'id'=>'login-form',
+  'enableClientValidation'=>false,
+  'clientOptions'=>array(
+    'validateOnSubmit'=>true,
+  ),
 )); ?>
 
-	<p>
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username'); ?>
-		<?php echo $form->error($model,'username'); ?>
-	</div>
-	</p>
-	
-	<p>
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password'); ?>
-		<?php echo $form->error($model,'password'); ?>
-		
-	</div>
-	</p>
-	
-	<div class="row rememberMe">
-		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo $form->label($model,'rememberMe'); ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
-	</div>
-	
-	<div style='font-size:12px;'><p>Demo usage login and pass: 'demo'</p></div>
+  <p>
+  <div class="row">
+    <?php echo $form->labelEx($model,'username'); ?>
+    <?php echo $form->textField($model,'username', ['class'=>"form-control"]); ?>
+    <?php echo $form->error($model,'username'); ?>
+  </div>
+  </p>
 
-	<p>
-	<div class="row buttons" >
-		<?php echo CHtml::submitButton('Login'); ?>
-	</div>
-	</p>
+  <p>
+  <div class="row">
+    <?php echo $form->labelEx($model,'password'); ?>
+    <?php echo $form->passwordField($model, 'password', ['class'=>"form-control"]); ?>
+    <?php echo $form->error($model,'password'); ?>
+
+  </div>
+  </p>
+
+  <div class="row rememberMe">
+    <?php echo $form->checkBox($model,'rememberMe'); ?>
+    <?php echo $form->label($model,'rememberMe'); ?>
+    <?php echo $form->error($model,'rememberMe'); ?>
+  </div>
+
+  <p>
+  <div class="row buttons" >
+    <?php echo CHtml::submitButton('Login', ['class'=>"btn btn-default"]); ?>
+  </div>
+  </p>
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->

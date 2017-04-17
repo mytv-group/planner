@@ -655,7 +655,7 @@ class PlaylistsController extends Controller
         if( parent::beforeAction($action) ) {
             /* @var $cs CClientScript */
             $cs = Yii::app()->clientScript;
-            
+
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/vendor/jquery.ui.widget.js' );
@@ -673,7 +673,6 @@ class PlaylistsController extends Controller
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistFileUpload.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistHeapAndPreview.js' );
 
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.bootstrap.css');

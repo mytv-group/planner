@@ -163,14 +163,13 @@ class WidgetController extends Controller
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
 
-            
+
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/widget/widget.js' );
 
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/widget.css');
 
             return true;

@@ -779,7 +779,7 @@ class AdminController extends Controller
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
 
-            
+
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/vendor/jquery.ui.widget.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/jquery.fileupload.js' );
@@ -792,7 +792,6 @@ class AdminController extends Controller
 
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.bootstrap.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jTreeThemes/default/style.min.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');

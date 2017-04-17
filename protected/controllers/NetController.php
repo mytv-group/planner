@@ -330,7 +330,6 @@ class NetController extends Controller
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/net/network.js' );
 
-      $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap.css.map');
       $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
       $cs->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
       $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');

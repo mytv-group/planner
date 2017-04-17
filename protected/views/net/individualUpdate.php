@@ -54,7 +54,7 @@ $this->menu=[
 <?php foreach ($model->points as $point): ?>
   <li>
     <div class="row">
-        <h4 class="alert alert-info" role="alert"><strong>Point</strong> <?= $point->name ?> <?= $point->ip ?></h4>
+        <h4 class="alert alert-info" role="alert"><strong>Point</strong> <?= $point->name ?>  <?= $point->ip ?></h4>
     </div>
 
     <div class="row">

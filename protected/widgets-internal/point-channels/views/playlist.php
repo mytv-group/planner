@@ -1,4 +1,5 @@
 <?php
+  $pointId = isset($pointId) ? $pointId : '';
   $playlistId = isset($playlist->id) ? $playlist->id : '%playlistId%';
   $playlistName = isset($playlist->name) ? $playlist->name : '%playlistName%';
   $channelType = isset($channelType) ? $channelType : '%channelType%';
@@ -6,7 +7,7 @@
 ?>
 
 <div class="btn-group channel-playlist-item <?= $playlistGroupClass; ?>"
-  role="group" data-playlist-id="<?= $playlistId; ?>">
+  role="group" data-playlist-id="<?= $playlistId; ?>" data-point-id="<?= $pointId; ?>">
     <button type="button" class="playlist-link btn btn-default">
         <a href="/playlists/<?= $playlistId; ?>">
           <?= $playlistName; ?>

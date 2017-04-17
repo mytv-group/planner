@@ -9,7 +9,7 @@ $(document).ready(function(e) {
         });
     });
 
-    $('#channels-list').on('click', '.remove-playlist', function(event) {
+    $('.channels-list').on('click', '.remove-playlist', function(event) {
       event.stopPropagation();
       var $this = $(this);
       $this.parent('.channel-playlist-item').remove();
@@ -17,6 +17,7 @@ $(document).ready(function(e) {
 
     $(document).on('choose-playlist-dialog:playlist-attached', function(event, args) {
         var $channelContainer;
+
         if ((args.pointId !== null) && (args.pointId !== '')) {
             $channelContainer = $('.channel-container'
                + '[data-channel-type='+args.channelType+']'
@@ -32,7 +33,14 @@ $(document).ready(function(e) {
             return false;
         }
 
-        var $plTpl = $('.channel-playlist-item-template').clone();
+        var $plTpl;
+        if ((args.pointId !== null) && (args.pointId !== '')) {
+           $plTpl = $('.channel-playlist-item-template'
+            + '[data-point-id='+args.pointId+']'
+            + ':first').clone();
+        } else {
+            $plTpl = $('.channel-playlist-item-template:first').clone();
+        }
         $plTpl.removeClass('channel-playlist-item-template');
         $plTpl.find('input').removeAttr('disabled');
 

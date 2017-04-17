@@ -73,9 +73,7 @@ class NetController extends Controller
 
     $this->performAjaxValidation($model);
 
-    if(isset($_POST['Net']))
-    {
-
+    if (isset($_POST['Net'])) {
         $attributes = array_merge($_POST['Net'], ['id_user' => Yii::app()->user->id]);
         $model->attributes = $attributes;
         if ($model->save()) {
@@ -223,6 +221,7 @@ class NetController extends Controller
                 $applications = $_POST['NetApplications']['Points'];
                 foreach ($applications as $pointId => $pointApplications) {
                     $point = Point::model()->findByPk($pointId);
+
                     Yii::app()->pointService->updateRelations([
                         'id' => intval($point->id),
                         'tvScheduleFrom' => isset($pointApplications["tvScheduleFrom"]) ? $pointApplications["tvScheduleFrom"] : [],
@@ -232,7 +231,6 @@ class NetController extends Controller
                         'ip' => $point->ip
                     ]);
                 }
-
             }
 
             $this->redirect(['view', 'id'=>$model->id]);

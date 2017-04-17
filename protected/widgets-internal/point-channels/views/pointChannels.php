@@ -1,4 +1,4 @@
-<div id="channels-list">
+<div class="channels-list">
     <?php
         $pointPlaylists = isset($point->playlists) ? $point->playlists : [];
         $pointId = isset($point->id) ? $point->id : '';
@@ -23,6 +23,7 @@
 
     <?php /*playlist template for js*/
     $this->render('playlist', [
+      'pointId' => $pointId,
       'playlist' => null,
       'channelType' => null,
       'playlistGroupClass' => 'channel-playlist-item-template',

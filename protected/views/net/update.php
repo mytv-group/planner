@@ -7,6 +7,7 @@ $this->menu=[
     ['label'=>'Create', 'url'=>['create']],
     ['label'=>'Change point list', 'url'=>['changePoints', 'id'=>$model->id]],
     ['label'=>'Individual update', 'url'=>['individualUpdate', 'id'=>$model->id]],
+    ['label'=>'Add to all points', 'url'=>['add', 'id'=>$model->id]],
     ['label'=>'View', 'url'=>['view', 'id'=>$model->id]],
 ];
 ?>

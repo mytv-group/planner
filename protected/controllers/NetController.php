@@ -35,7 +35,7 @@ class NetController extends Controller
       ],
       [
         'allow',
-        'actions'=>['create','update', 'changePoints', 'individualUpdate'],
+        'actions'=>['create','update', 'changePoints', 'individualUpdate', 'add'],
         'users'=>['@'],
         'roles'=>['netEditUser'],
       ],
@@ -122,14 +122,18 @@ class NetController extends Controller
 
         if ($model->save()) {
             if (isset($_POST['NetApplications'])) {
-                $pointApplications = $_POST['NetApplications'];
+                $attr = $_POST['NetApplications'];
                 foreach ($model->points as $point) {
+                    if (isset($attr['screen_id']) && $attr['screen_id'] !== null) {
+                        $point->attributes = ['screen_id' => $attr['screen_id']];
+                        $point->save();
+                    }
                     Yii::app()->pointService->updateRelations([
                         'id' => intval($point->id),
-                        'tvScheduleFrom' => isset($pointApplications["tvScheduleFrom"]) ? $pointApplications["tvScheduleFrom"] : [],
-                        'tvScheduleTo' => isset($pointApplications["tvScheduleTo"]) ? $pointApplications["tvScheduleTo"] : [],
-                        'showcases' => isset($pointApplications["showcases"]) ? $pointApplications["showcases"] : [],
-                        'channels' => isset($pointApplications["channels"]) ? $pointApplications["channels"] : [],
+                        'tvScheduleFrom' => isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
+                        'tvScheduleTo' => isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : [],
+                        'showcases' => isset($attr["showcases"]) ? $attr["showcases"] : [],
+                        'channels' => isset($attr["channels"]) ? $attr["channels"] : [],
                         'ip' => $point->ip
                     ]);
                 }
@@ -153,6 +157,58 @@ class NetController extends Controller
     );
 
     $this->render('update', [
+        'model' => $model,
+        'playlists' => $playlists,
+        'screens' => $screens,
+        'widgets' => $widgets
+    ]);
+  }
+
+  public function actionAdd($id)
+  {
+    $model=$this->loadModel($id);
+
+    if (isset($_POST['Net'])) {
+        $attributes = $_POST['Net'];
+        $model->attributes = $attributes;
+
+        if ($model->save()) {
+            if (isset($_POST['NetApplications'])) {
+                $attr = $_POST['NetApplications'];
+                foreach ($model->points as $point) {
+                    $ps = Yii::app()->pointService;
+                    $ps->addPointTVschedule(
+                        intval($point->id),
+                        isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
+                        isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : []
+                    );
+                    $ps->addChannels(
+                        intval($point->id),
+                        isset($attr["channels"]) ? $attr["channels"] : []
+                    );
+                    $ps->sendRequestForUpdate($point->ip);
+                    $ps->prepareFilesForSync(intval($point->id));
+                }
+
+            }
+
+            $this->redirect(['view', 'id'=>$model->id]);
+        }
+    }
+
+    $playlists = [];
+    $allPlaylists = Playlists::getUserPlaylists();
+    foreach ($allPlaylists as $playlist) {
+        $playlists[$playlist['type']][] = $playlist;
+    }
+
+    $widgets = Widget::model()->findAll();
+
+    $screens = Screen::model()->findAllByAttributes(
+      ['user_id' => Yii::app()->user->id]
+    );
+
+    $this->render('add', [
         'model' => $model,
         'playlists' => $playlists,
         'screens' => $screens,
@@ -219,15 +275,15 @@ class NetController extends Controller
                 && isset($_POST['NetApplications']['Points'])
             ) {
                 $applications = $_POST['NetApplications']['Points'];
-                foreach ($applications as $pointId => $pointApplications) {
+                foreach ($applications as $pointId => $attr) {
                     $point = Point::model()->findByPk($pointId);
 
                     Yii::app()->pointService->updateRelations([
                         'id' => intval($point->id),
-                        'tvScheduleFrom' => isset($pointApplications["tvScheduleFrom"]) ? $pointApplications["tvScheduleFrom"] : [],
-                        'tvScheduleTo' => isset($pointApplications["tvScheduleTo"]) ? $pointApplications["tvScheduleTo"] : [],
-                        'showcases' => isset($pointApplications["showcases"]) ? $pointApplications["showcases"] : [],
-                        'channels' => isset($pointApplications["channels"]) ? $pointApplications["channels"] : [],
+                        'tvScheduleFrom' => isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
+                        'tvScheduleTo' => isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : [],
+                        'showcases' => isset($attr["showcases"]) ? $attr["showcases"] : [],
+                        'channels' => isset($attr["channels"]) ? $attr["channels"] : [],
                         'ip' => $point->ip
                     ]);
                 }

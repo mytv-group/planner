@@ -41,7 +41,7 @@ class PointService extends CApplicationComponent
         return $this->file->__invoke();
     }
 
-    public function updatePointTVschedule($id, $tvScheduleFrom, $tvScheduleTo)
+    public function addPointTVschedule($id, $tvScheduleFrom, $tvScheduleTo)
     {
         if (!is_int($id)) {
             throw new Exception("Incorrect PointId passed. Integer is required. Passed: "
@@ -49,17 +49,12 @@ class PointService extends CApplicationComponent
         }
 
         $userId = intval($this->getUser()->id);
-        $tvScheduleModel = $this->getTvSchedule();
-        $tvScheduleModel->deleteAll(
-            "`id_point` = :id_point",
-            [':id_point' => $id]
-        );
 
         if ((count($tvScheduleFrom) > 0)
             && (count($tvScheduleTo) > 0)
         ) {
             $tvScheduleTable = $this->organizeTvArray($tvScheduleFrom, $tvScheduleTo);
-
+            $tvScheduleModel = $this->getTvSchedule();
             foreach ($tvScheduleTable as $tvScheduleAttributes) {
                 $tvSchedule = new $tvScheduleModel();
                 $tvSchedule->attributes = array_merge(
@@ -70,6 +65,21 @@ class PointService extends CApplicationComponent
                 $tvSchedule->save();
             }
         }
+    }
+    public function updatePointTVschedule($id, $tvScheduleFrom, $tvScheduleTo)
+    {
+        if (!is_int($id)) {
+            throw new Exception("Incorrect PointId passed. Integer is required. Passed: "
+                . json_encode($id), 1);
+        }
+
+        $tvScheduleModel = $this->getTvSchedule();
+        $tvScheduleModel->deleteAll(
+            "`id_point` = :id_point",
+            [':id_point' => $id]
+        );
+
+        $this->addPointTVschedule($id, $tvScheduleFrom, $tvScheduleTo);
     }
 
     private function organizeTvArray ($fromArray, $toArray)
@@ -109,6 +119,42 @@ class PointService extends CApplicationComponent
         return $arr;
     }
 
+    public function addChannels($id, $channels, $checkExist = true)
+    {
+        if (!is_int($id)) {
+            throw new Exception("Incorrect PointId passed. Integer is required. Passed: "
+                . json_encode($id), 1);
+        }
+
+        if (!is_array($channels)) {
+            throw new Exception("Incorrect channels passed. Array is required. Passed: "
+                . json_encode($channels), 1);
+        }
+
+        $playlistToPointModel = $this->getPlaylistToPoint();
+        foreach ($channels as $channelType => $playlists) {
+            foreach ($playlists as $playlistId) {
+                $attributes = [
+                    'id_point' => intval($id),
+                    'id_playlist' => intval($playlistId),
+                    'channel_type' => intval($channelType)
+                ];
+
+                $list = [];
+
+                if ($checkExist) {
+                    PlaylistToPoint::model()->findAllByAttributes($attributes);
+                }
+
+                if (count($list) === 0) {
+                    $playlistToPointInstance = new $playlistToPointModel();
+                    $playlistToPointInstance->attributes = $attributes;
+                    $playlistToPointInstance->save();
+                }
+            }
+        }
+    }
+
     public function updateChannels($id, $channels)
     {
         if (!is_int($id)) {
@@ -127,17 +173,7 @@ class PointService extends CApplicationComponent
             [':id_point' => $id]
         );
 
-        foreach ($channels as $channelType => $playlists) {
-            foreach ($playlists as $playlistId) {
-                $playlistToPointInstance = new $playlistToPointModel();
-                $playlistToPointInstance->attributes = [
-                    'id_point' => intval($id),
-                    'id_playlist' => intval($playlistId),
-                    'channel_type' => intval($channelType)
-                ];
-                $playlistToPointInstance->save();
-            }
-        }
+        $this->addChannels($id, $channels, false);
     }
 
     public function updateShowcases($id, $showcases)

@@ -4,26 +4,25 @@
     if (isset($point->screen) && isset($point->screen->id)) {
         $screenId = $point->screen->id;
     }
-
-    $prop = '';
-    if(!$editable) {
-        $prop = 'disabled="disabled"';
-    }
 ?>
 
 <div class='screen-selector-grid'>
-    <select class="point-screen form-control" size="10" <?= $prop ?>
-        name="<?= $postName ?>[screen_id]"
-        data-point-id="<?=$pointId ?>"
-    >
-        <? foreach ($screens as $item): ?>
-            <option value="<?= $item->id; ?>"
-              <?= ($item->id == $screenId) ? "selected='selected'" : '' ?>
-            >
-                <?= $item->name; ?>
-            </option>
-        <? endforeach; ?>
-    </select>
+    <?php if ($editable): ?>
+      <select class="point-screen form-control" size="10"
+          name="<?= $postName ?>[screen_id]"
+          data-point-id="<?=$pointId ?>"
+      >
+          <? foreach ($screens as $item): ?>
+              <option value="<?= $item->id; ?>"
+                <?= ($item->id == $screenId) ? "selected='selected'" : '' ?>
+              >
+                  <?= $item->name; ?>
+              </option>
+          <? endforeach; ?>
+      </select>
+    <?php else: ?>
+        <p>Name: <b><?= $point->screen->name ?></b></p>
+    <?php endif; ?>
 </div>
 
 <div class='screen-showcases' data-point-id="<?=$pointId ?>">

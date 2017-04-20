@@ -70,9 +70,9 @@
         <?php endif; ?>
 
         <?php if (Yii::app ()->user->checkAccess ("netEditUser")): ?>
-          <form action="/net/copy/<?= $data->id ?>" type="post" class="btn-group">
-            <button type="submit" class="btn btn-default btn-sm" title="Copy">
-              <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+          <form action="/net/add/<?= $data->id ?>" type="post" class="btn-group">
+            <button type="submit" class="btn btn-default btn-sm" title="Add to all">
+              <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
             </button>
           </form>
 

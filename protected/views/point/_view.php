@@ -12,16 +12,28 @@
       <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?></b>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
 
     <div class="col-md-2">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('id_user')); ?></b>
+      <b><?php echo CHtml::encode($model->getAttributeLabel('ip')); ?></b>
     </div>
 
-    <div class="col-md-2">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('dt_created')); ?></b>
+    <div class="col-md-1">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('volume')); ?></b>
+    </div>
+
+    <div class="col-md-1">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('sync_time')); ?></b>
+    </div>
+
+    <div class="col-md-1">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('update_time')); ?></b>
+    </div>
+
+    <div class="col-md-1">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('sync')); ?></b>
     </div>
 
     <?php if ($user->checkAccess ("pointViewUser")): ?>
@@ -41,16 +53,36 @@
     <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
   </div>
 
-  <div class="col-md-4">
-    <?php echo CHtml::encode($data->name); ?>
-  </div>
-
   <div class="col-md-2">
     <?php echo CHtml::encode($data->name); ?>
   </div>
 
   <div class="col-md-2">
-    <?php echo CHtml::encode($data->name); ?>
+    <?php echo CHtml::encode($data->ip); ?>
+  </div>
+
+  <div class="col-md-1">
+    <?php echo CHtml::encode($data->volume); ?>
+  </div>
+
+  <div class="col-md-1">
+    <?php echo CHtml::encode($data->sync_time); ?>
+  </div>
+
+  <div class="col-md-1">
+    <?php echo CHtml::encode($data->update_time); ?>
+  </div>
+
+  <div class="col-md-1">
+    <?php
+        $indicator = '';
+        if ($data->sync) {
+          $indicator = '<input name="syncCheckBox" type="checkbox" checked>';
+        } else  {
+          $indicator = '<input name="syncCheckBox" type="checkbox">';
+        }
+        echo $indicator;
+    ?>
   </div>
 
   <?php if (Yii::app ()->user->checkAccess ("pointViewUser")): ?>
@@ -65,12 +97,6 @@
         <?php endif; ?>
 
         <?php if (Yii::app ()->user->checkAccess ("pointEditUser")): ?>
-          <form action="/point/copy/<?= $data->id ?>" type="post" class="btn-group">
-            <button type="submit" class="btn btn-default btn-sm" title="Copy">
-              <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
-            </button>
-          </form>
-
           <form action="/point/update/<?= $data->id ?>" type="post" class="btn-group">
             <button type="submit" class="btn btn-default btn-sm" title="Update">
               <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -89,31 +115,3 @@
    </div>
   <?php endif; ?>
 </div>
-
-<?php /*'id'=>'point-grid',
-'dataProvider'=>$model->search(),
-'columns'=>array(
-  'name',
-  'ip',
-  'volume',
-  'sync_time',
-  'update_time',
-  array(
-      'name' => 'sync',
-      'value' => function($data,$row){
-        if($data->sync)
-        {
-          return '<input name="syncCheckBox" type="checkbox" checked>';
-        }
-        else
-        {
-          return '<input name="syncCheckBox" type="checkbox">';
-        }
-
-         },
-         'type'  => 'raw',
-  ),
-  array(
-    'class'=>'CButtonColumn',
-  ),
-),*/

@@ -52,7 +52,7 @@ select {
     padding: 2px;
 }
 
-.row-list-view:nth-child(odd) {
+.row-list-view:nth-child(even) {
     background-color: #eee;
 }
 

@@ -373,21 +373,17 @@ class AdminController extends Controller
 
     public function actionDelete()
     {
-        if(isset($_POST['type']) && isset($_POST['id'])) {
+        if (isset($_POST['type']) && isset($_POST['id'])) {
             $type = $_POST['type'];
             $id = $_POST['id'];
 
-            if($type == 'file') {
+            if ($type == 'file') {
                 $connection = Yii::app()->db;
                 $connection->active=true;
 
                 $sql = "SELECT `path` FROM `file` WHERE `id` = ".$id.";";
                 $command = $connection->createCommand($sql);
                 $dataReader=$command->query();
-
-                if(($row=$dataReader->read())!==false) {
-                    unlink($row['path']);
-                }
 
                 $sql = "DELETE FROM `file` WHERE `id` = " . $id . ";";
 
@@ -400,6 +396,12 @@ class AdminController extends Controller
                 $command->execute();
 
                 $connection->active=false;
+
+                if ((($row=$dataReader->read()) !== false)
+                  && (file_exists($row['path']))
+                ) {
+                    unlink($row['path']);
+                }
             } else if($type == 'folder') {
                 $children = $_POST['children'];
 
@@ -548,7 +550,7 @@ class AdminController extends Controller
     {
         $answ = array();
         $answ['status'] = 'err';
-        if(isset($_POST['data'])) {
+        if (isset($_POST['data'])) {
             $folderId = $_POST['data']['folderId'];
             $uploadInfo = $_POST['data']['file'];
             $uploadFileUrl = $uploadInfo['url'];
@@ -564,12 +566,9 @@ class AdminController extends Controller
             $insertedStatus['status'] = false;
             $contentPath = "";
 
-            if($type == "audio") {
-                $pathAppendix = "spool/audio/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
+            if ($type == "audio") {
+                list($moved, $uploadFileName, $contentPath, $pathAppendix)
+                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
 
                 $getID3 = new getID3;
                 $audioFileInfo = $getID3->analyze($contentPath . $uploadFileName);
@@ -581,12 +580,9 @@ class AdminController extends Controller
                         $mime, $duration, Yii::app()->user->name);
                 $fileId = $insertedStatus['id'];
                 $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
-            } else if($type == "image") {
-                $pathAppendix = "spool/images/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
+            } else if ($type == "image") {
+                list($moved, $uploadFileName, $contentPath, $pathAppendix)
+                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
 
                 $duration = 10;
 
@@ -595,12 +591,9 @@ class AdminController extends Controller
                         $mime, $duration, Yii::app()->user->name);
                 $fileId = $insertedStatus['id'];
                 $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
-            } else if($type == "video") {
-                $pathAppendix = "spool/video/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
+            } else if ($type == "video") {
+                list($moved, $uploadFileName, $contentPath, $pathAppendix)
+                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
 
                 $getID3 = new getID3;
                 $videoFileInfo = $getID3->analyze($contentPath . $uploadFileName);
@@ -613,12 +606,8 @@ class AdminController extends Controller
                 $fileId = $insertedStatus['id'];
                 $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
             } else {
-                $pathAppendix = "spool/other/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
-
+                list($moved, $uploadFileName, $contentPath, $pathAppendix)
+                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
                 $duration = 0;
 
                 $insertedStatus = $this->InsertFile($uploadFileName,
@@ -646,6 +635,16 @@ class AdminController extends Controller
         echo(json_encode($answ));
     }
 
+    private function moveToSpool($pathAppendix, $uploadFileName, $uploadFilePath)
+    {
+        $contentPath = $this->PrepareSpoolPath($pathAppendix);
+        $uploadFileName = str_replace(" ", "", $uploadFileName);
+        $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
+        $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
+
+        return [$moved, $uploadFileName, $contentPath, $pathAppendix];
+    }
+
     private function CurrUrl()
     {
         return sprintf(
@@ -657,6 +656,8 @@ class AdminController extends Controller
 
     private function CyrillicToTransLite($textcyr)
     {
+        iconv("utf-8", "cp1251//IGNORE", $textcyr);
+
         $cyr  = array('Р°','Р±','РІ','Рі','Рґ','e','Рµ','С”','Р¶','Р·','Рё','С–','С—','Р№','Рє','Р»','Рј','РЅ','Рѕ','Рї','СЂ','СЃ','С‚','Сѓ',
                 'С„','С…','С†','С‡','С€','С‰','СЉ','СЊ', 'СЋ','СЏ','Рђ','Р‘','Р’','Р“','Р”','Р•','Р–','Р—','Р�','Р™','Рљ','Р›','Рњ','Рќ','Рћ','Рџ','Р ','РЎ','Рў','РЈ',
                 'Р¤','РҐ','Р¦','Р§','РЁ','Р©','РЄ','Р¬', 'Р®','РЇ' );
@@ -676,13 +677,13 @@ class AdminController extends Controller
         $translit = preg_replace('/[^\p{L}\p{N}\s\.]/u', '', $translit);
 
         $cyr  = array('а','б','в','г','д','e','ж','з','и','й','к','л','м','н','о','п','р','с','т','у',
-                'ф','х','ц','ч','ш','щ','ъ','ь', 'ю','я','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У',
-                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ю','Я' );
+                'ф','х','ц','ч','ш','щ','ъ','ь', 'ы', 'ю','я','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У',
+                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ы', 'Ю','Я' );
 
         $lat = array( 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u',
-                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y' ,'yu' ,'ya','A','B','V','G','D','E','Zh',
+                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y', 'u', 'yu' ,'ya','A','B','V','G','D','E','Zh',
                 'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' );
+                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y', 'U', 'Yu' ,'Ya' );
 
         $translit = str_replace($cyr, $lat, $translit);
 

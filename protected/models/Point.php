@@ -17,6 +17,8 @@
  */
 class Point extends CActiveRecord
 {
+    public $content;
+
     /**
      * @return string the associated database table name
      */
@@ -30,8 +32,6 @@ class Point extends CActiveRecord
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('name, username, ip, screen_id', 'required'),
             array('volume, TV, screen_id, id_user', 'numerical', 'integerOnly'=>true),
@@ -49,8 +49,7 @@ class Point extends CActiveRecord
             array('update_time', 'default',
                     'value' => new CDbExpression('NOW()'),
                     'setOnEmpty' => false, 'on'=>'update'),
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
+            array('content', 'file', 'types'=>'zip', 'allowEmpty'=>true),
             array('name', 'safe', 'on'=>'search'),
         );
     }

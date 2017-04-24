@@ -35,7 +35,7 @@ $('.search-form form').submit(function(){
     </div><!-- search-form -->
 </div>
 
-<div class="container-fluid">
+<div class="playlist-list container-fluid">
 <?php
   $this->widget('zii.widgets.CListView', [
       'dataProvider' => $model->search(),

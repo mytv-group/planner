@@ -269,7 +269,10 @@ td {
 .LogoBlock {
     background-image:url('../images/Logo_RTV_small.png');
     background-repeat:no-repeat;
-    height:48px;
+    background-position: center;
+    max-width: 75px;
+    height: 48px;
+    margin-left: 0;
 }
 
 @media only all and (max-width: 767px){

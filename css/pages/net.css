@@ -10,11 +10,11 @@
     max-width:245px;
 }
 
-.row-header {
+.network-list .row-header {
     padding: 2px;
 }
 
-.row-list-view {
+.network-list .row-list-view {
     border-color: #e5e5e5 #eee #eee;
     border-style: solid;
     border-top-width: 1px;
@@ -23,17 +23,12 @@
     padding: 2px;
 }
 
-.row-list-view {
-    border-color: #e5e5e5 #eee #eee;
-    border-style: solid;
-    border-top-width: 1px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    padding: 2px;
-}
-
-.row-list-view:nth-child(even) {
+.network-list .row-list-view:nth-child(even) {
     background-color: #eee;
+}
+
+.point-list .col {
+    overflow: hidden;
 }
 
 .row-menu {

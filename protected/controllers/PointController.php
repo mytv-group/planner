@@ -121,6 +121,8 @@ class PointController extends Controller
 
         $author = $model->username;
         $model->attributes = $_POST['Point'];
+
+        $model->content = CUploadedFile::getInstance($model, 'content');
         if ($author) {
             $model->username = $author;
         }
@@ -137,7 +139,16 @@ class PointController extends Controller
                 'ip' => $model->ip
             ]);
 
-            $this->redirect(['point/view','id'=>$model->id]);
+            $CM = Yii::app()->contentManager;
+            if (isset($model->content)
+              && isset(pathinfo($model->content->getName())['extension'])
+            ) {
+                $extension = pathinfo($model->content->getName())['extension'];
+                $path = $CM->PrepareSpoolPath("spool/content/" . $model->id);
+                $model->content->saveAs($path."/"."content".".".$extension);
+            }
+
+            $this->redirect(['point/view','id' => $model->id]);
         } else {
             $this->renderView($model, 'update');
         }

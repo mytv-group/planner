@@ -13,35 +13,35 @@
       <b>#</b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?></b>
     </div>
 
-    <div class="col-md-2">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('type')); ?></b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('fromDatetime')); ?></b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('toDatetime')); ?></b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('fromTime')); ?></b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('toTime')); ?></b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('every')); ?></b>
     </div>
 
@@ -54,19 +54,19 @@
 <?php endif; ?>
 
 <div class="row row-list-view">
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <b><?= $index + 1 ?></b>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
   </div>
 
-  <div class="col-md-2">
+  <div class="col col-md-2">
     <?php echo CHtml::encode($data->name); ?>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?
       $type = 'unknown';
       if (Playlists::$types[$data->type]) {
@@ -77,23 +77,23 @@
     ?>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php echo CHtml::encode($data->fromDatetime); ?>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php echo CHtml::encode($data->toDatetime); ?>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php echo CHtml::encode($data->fromTime); ?>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php echo CHtml::encode($data->toTime); ?>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php
       $every = '';
       if ($data->type == 1) {//0 - bg, 1- adv

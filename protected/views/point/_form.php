@@ -15,10 +15,11 @@
 
 <div class="form">
 
-    <?php $form=$this->beginWidget('CActiveForm', array(
+    <?php $form=$this->beginWidget('CActiveForm', [
         'id'=>'point-form',
         'enableAjaxValidation'=>false,
-    )); ?>
+        'htmlOptions'=> ['enctype'=>'multipart/form-data'],
+    ]); ?>
 
     <?php if(!$isView): ?>
         <p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -69,6 +70,13 @@
         ]); ?>
         <?php echo $form->error($model,'screen_id'); ?>
     </div>
+
+    <?php if (!$isView && !$model->isNewRecord): ?>
+      <div class="row">
+          <input id="add-content-file-btn" class="btn btn-default" type="file" name="Point[content]" />
+          <input id="add-content-btn" class="btn btn-default" type="button" name="content" value="Add content" />
+      </div>
+    <?php endif; ?>
 
     <?php if (!$isView): ?>
         <div class="row buttons">

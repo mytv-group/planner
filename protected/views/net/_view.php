@@ -13,19 +13,19 @@
       <b>#</b>
     </div>
 
-    <div class="col-md-1">
+    <div class="col col-md-1">
       <b><?php echo CHtml::encode($net->getAttributeLabel('id')); ?></b>
     </div>
 
-    <div class="col-md-4">
+    <div class="col col-md-4">
       <b><?php echo CHtml::encode($net->getAttributeLabel('name')); ?></b>
     </div>
 
-    <div class="col-md-2">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($net->getAttributeLabel('id_user')); ?></b>
     </div>
 
-    <div class="col-md-2">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($net->getAttributeLabel('dt_created')); ?></b>
     </div>
 
@@ -38,23 +38,23 @@
 <?php endif; ?>
 
 <div class="row row-list-view">
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <b><?= $index + 1 ?></b>
   </div>
 
-  <div class="col-md-1">
+  <div class="col col-md-1">
     <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
   </div>
 
-  <div class="col-md-4">
+  <div class="col col-md-4">
     <?php echo CHtml::encode($data->name); ?>
   </div>
 
-  <div class="col-md-2">
+  <div class="col col-md-2">
     <?php echo CHtml::encode($data->user->name); ?>
   </div>
 
-  <div class="col-md-2">
+  <div class="col col-md-2">
     <?php echo CHtml::encode($data->dt_created); ?>
   </div>
 

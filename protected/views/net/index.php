@@ -35,7 +35,7 @@ $this->menu = array(
     </div><!-- search-form -->
 </div>
 
-<div class="container-fluid">
+<div class="network-list container-fluid">
     <?php $this->widget('zii.widgets.CListView', array(
       'dataProvider' => $model->search(),
       'itemView' => '_view',

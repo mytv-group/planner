@@ -15,6 +15,7 @@ $(document).ready(function(e){
         done: function (e, data) {
             var playlistId = playlistIdTag.val();
             var i = 0;
+            var dfdArr = [];
 
             $.each(data.result.files, function (index, file) {
                 var pV = {
@@ -24,7 +25,7 @@ $(document).ready(function(e){
                     }
                 };
 
-                $.ajax({
+                dfdArr.push($.ajax({
                   url: moveFileSrc,
                   type: "POST",
                   data: pV,
@@ -49,7 +50,11 @@ $(document).ready(function(e){
                         'width',
                         0 + '%'
                     );
-                });
+                }));
+            });
+
+            $.when.apply($, dfdArr).then(function() {
+                location.reload();
             });
         },
         progressall: function (e, data) {
@@ -58,12 +63,6 @@ $(document).ready(function(e){
                 'width',
                 progress + '%'
             );
-
-            if(progress >= 100){
-                setTimeout(function() {
-                    location.reload();
-                }, 5500)
-            }
         }
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');

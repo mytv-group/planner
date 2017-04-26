@@ -113,10 +113,11 @@ class Point extends CActiveRecord
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria=new CDbCriteria;
+        $criteria->compare('name',$this->name,true);
+        $criteria->compare('ip',$this->ip,true);
 
-        if(Yii::app()->user->username != User::ROLE_ADMIN)
-        {
-            $criteria->compare('username',Yii::app()->user->name);
+        if (Yii::app()->user->role != User::ROLE_ADMIN) {
+            $criteria->compare('id_user', Yii::app()->user->id);
         }
 
         $answ = new CActiveDataProvider($this, array(

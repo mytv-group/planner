@@ -13,31 +13,32 @@ $(document).ready(function() {
 
     var $rows = $('.choose-playlist-dialog .row-data');
     $rows.click(function() {
-        $rows.removeClass('is-selected');
-        $(this).addClass('is-selected');
+        $(this).toggleClass('is-selected');
 
         var $attachPlaylistBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
         $attachPlaylistBtn.removeAttr('disabled');
     });
 
     $('.attach-playlist-btn').click(function(event) {
-        var $selected = $($rows.filter('.is-selected').get(0));
-        var id = $selected.data('id') || null;
-        var playlistName = $selected.children('.modal-playlist-name').text().trim() || null;
+        $.each($rows.filter('.is-selected'), function(index, item) {
+            var $selected = $(item);
+            var id = $selected.data('id') || null;
+            var playlistName = $selected.children('.modal-playlist-name').text().trim() || null;
 
-        if ((channelType !== null) && (id !== null)) {
-            $(document).trigger('choose-playlist-dialog:playlist-attached', {
-                channelType: channelType,
-                playlistName: playlistName,
-                playlistId: id,
-                pointId: pointId
-            });
-        }
+            if ((channelType !== null) && (id !== null)) {
+                $(document).trigger('choose-playlist-dialog:playlist-attached', {
+                    channelType: channelType,
+                    playlistName: playlistName,
+                    playlistId: id,
+                    pointId: pointId
+                });
+            }
 
-        var $dialog = $('.choose-playlist-dialog[data-channel-type='+channelType+']:first');
-        $dialog.modal('hide');
-        $rows.removeClass('is-selected');
-          var $attachPlaylistBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
-        $attachPlaylistBtn.attr('disabled', 'disabled');
+            var $dialog = $('.choose-playlist-dialog[data-channel-type='+channelType+']:first');
+            $dialog.modal('hide');
+            $rows.removeClass('is-selected');
+            var $attachPlaylistBtn = $('.attach-playlist-btn[data-channel-type='+channelType+']:first');
+            $attachPlaylistBtn.attr('disabled', 'disabled');
+        })
     });
 });

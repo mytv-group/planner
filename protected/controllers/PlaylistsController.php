@@ -18,7 +18,7 @@ class PlaylistsController extends Controller
     {
         return array(
             'accessControl', // perform access control for CRUD operations
-            //'postOnly + delete', // we only allow deletion via POST request
+            'postOnly + delete', // we only allow deletion via POST request
         );
     }
 
@@ -175,9 +175,9 @@ class PlaylistsController extends Controller
         $model = $this->loadModel($id);
         $files = trim($model->files);
         $model->delete();
-        if(isset($files) && ($files != '')) {
+        if (isset($files) && ($files != '')) {
             $filesArr = explode(",", $files);
-            $this->DeleteALLFilesFromPlaylist($id, $filesArr);
+            Yii::app()->playlistService->deleteALLFilesFromPlaylist($id, $filesArr);
         }
 
         PlaylistToPoint::model()->deleteAllByAttributes([
@@ -192,51 +192,6 @@ class PlaylistsController extends Controller
         }
     }
 
-    private function DeleteALLFilesFromPlaylist($playlistId, $files)
-    {
-        $relatedFiles = $files;
-
-        //remove net relations
-        $connection = Yii::app()->db;
-        $connection->active=true;
-
-        foreach ($relatedFiles as $key => $fileId)
-        {
-            //if file visibilyty 0 (only for current pl), delete it
-            $sql = "SELECT `path`, `visibility` FROM `file` WHERE `id` = ".$fileId.";";
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-            $visibility = 0;
-            $path = '';
-            if(($row=$dataReader->read())!==false)
-            {
-                $visibility = $row['visibility'];
-                $path = $row['path'];
-            }
-
-            if($visibility == 0)
-            {
-                $sql = "DELETE FROM `file` WHERE " .
-                        "`id` = " . $fileId . ";";
-                $command = Yii::app()->db->createCommand($sql);
-                $execution = $command->execute();
-
-                if(file_exists($path)){
-                    try {
-                        unlink($path);
-                    } catch (Exception $e) {
-                        error_log("Unlink failed. Exception - " . json_encode($e).
-                        "Path - " . $path
-                        );
-                    }
-                }
-
-            }
-        }
-        $connection->active=false;
-
-        return;
-    }
 
     /**
      * Lists all models.

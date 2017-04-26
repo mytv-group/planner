@@ -73,6 +73,12 @@ return array(
         'contentManager'=>array(
             'class'=>'ContentManager',
         ),
+        'playlistService' => array(
+            'class'=>'PlaylistService',
+            'db' => function() {
+                return Yii::app()->db;
+            }
+        ),
         'pointService' => array(
             'class'=>'PointService',
             'spoolPath' => 'spool/points/',

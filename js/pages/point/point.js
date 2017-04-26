@@ -29,15 +29,6 @@ $(document).ready(function(e){
         }
     });
 
-    $("[name='syncCheckBox']").bootstrapSwitch({
-            size: 'mini',
-            disabled: true,
-            onText: 'true',
-            offText: 'false',
-            onColor: 'success',
-            offColor: 'warning'
-    });
-
     $('.delete-point').on('submit', function() {
         return confirm('Do you really want to delete point?');
     });

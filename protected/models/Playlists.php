@@ -108,9 +108,12 @@ class Playlists extends CActiveRecord
      */
     public function search()
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
         $criteria=new CDbCriteria;
         $criteria->compare('name',$this->name,true);
+
+        if (Yii::app()->user->role != User::ROLE_ADMIN) {
+            $criteria->compare('author', Yii::app()->user->username);
+        }
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
@@ -131,7 +134,7 @@ class Playlists extends CActiveRecord
     public static function getUserPlaylists()
     {
         if (in_array(Yii::app()->user->role,
-          [User::ROLE_ADMIN, User::ROLE_MODER])
+          [User::ROLE_ADMIN])
         ) {
             return self::model()->findAll();
         } else {

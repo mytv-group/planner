@@ -37,6 +37,11 @@ $('.search-form form').submit(function(){
   $this->widget('zii.widgets.CListView', [
       'dataProvider' => $model->search(),
       'itemView' => '_view',
+      'sortableAttributes'=>array(
+          'id',
+          'name',
+          'ip',
+      ),
       'pager' => [
           'firstPageLabel'=>'&laquo;',
           'prevPageLabel'=>'&lsaquo;',

@@ -74,14 +74,14 @@
   </div>
 
   <div class="col col-md-1">
-    <?php
-        $indicator = '';
-        if ($data->sync) {
-          $indicator = '<input name="syncCheckBox" type="checkbox" checked>';
-        } else  {
-          $indicator = '<input name="syncCheckBox" type="checkbox">';
-        }
-        echo $indicator;
+    <?= '<div class="switch">
+          <input type="checkbox" '.($data->sync ? 'checked' : '').' disabled="disabled">
+          <label>
+            <span class="fontawesome-ok"></span>
+            <span class="fontawesome-remove"></span>
+            <div></div>
+          </label>
+        </div>';
     ?>
   </div>
 

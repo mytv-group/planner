@@ -125,7 +125,12 @@ class NetController extends Controller
                 $attr = $_POST['NetApplications'];
                 foreach ($model->points as $point) {
                     if (isset($attr['screen_id']) && $attr['screen_id'] !== null) {
-                        $point->attributes = ['screen_id' => $attr['screen_id']];
+                        $point->attributes = [
+                          'screen_id' => $attr['screen_id'],
+                          'update_time' => new CDbExpression('NOW()'),
+                          'sync' => 0
+                        ];
+
                         $point->save();
                     }
                     Yii::app()->pointService->updateRelations([
@@ -137,7 +142,6 @@ class NetController extends Controller
                         'ip' => $point->ip
                     ]);
                 }
-
             }
 
             $this->redirect(['individualUpdate', 'id'=>$model->id]);
@@ -176,6 +180,10 @@ class NetController extends Controller
             if (isset($_POST['NetApplications'])) {
                 $attr = $_POST['NetApplications'];
                 foreach ($model->points as $point) {
+                    $point->update_time = new CDbExpression('NOW()');
+                    $point->sync = 0;
+                    $point->save();
+
                     $ps = Yii::app()->pointService;
                     $ps->addPointTVschedule(
                         intval($point->id),
@@ -189,7 +197,6 @@ class NetController extends Controller
                     $ps->sendRequestForUpdate($point->ip);
                     $ps->prepareFilesForSync(intval($point->id));
                 }
-
             }
 
             $this->redirect(['view', 'id'=>$model->id]);
@@ -277,6 +284,9 @@ class NetController extends Controller
                 $applications = $_POST['NetApplications']['Points'];
                 foreach ($applications as $pointId => $attr) {
                     $point = Point::model()->findByPk($pointId);
+                    $point->update_time = new CDbExpression('NOW()');
+                    $point->sync = 0;
+                    $point->save();
 
                     Yii::app()->pointService->updateRelations([
                         'id' => intval($point->id),
@@ -321,11 +331,18 @@ class NetController extends Controller
    */
   public function actionDelete($id)
   {
-    $this->loadModel($id)->delete();
+    $model = $this->loadModel($id);
+    $pointsToNet = $model->pointsToNet;
+
+    foreach ($pointsToNet as $pointToNet) {
+        $pointToNet->delete();
+    }
+
+    $model->delete();
 
     // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
     if(!isset($_GET['ajax']))
-      $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+      $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
   }
 
   /**
@@ -337,7 +354,6 @@ class NetController extends Controller
     $model->unsetAttributes();  // clear any default values
     if(isset($_GET['Net']))
         $model->attributes = $_GET['Net'];
-
 
     $this->render('index',array(
         'model'=>$model,
@@ -365,7 +381,7 @@ class NetController extends Controller
    */
   protected function performAjaxValidation($model)
   {
-    if(isset($_POST['ajax']) && $_POST['ajax']==='net-form')
+    if (isset($_POST['ajax']) && $_POST['ajax']==='net-form')
     {
       echo CActiveForm::validate($model);
       Yii::app()->end();
@@ -376,7 +392,6 @@ class NetController extends Controller
     if( parent::beforeAction($action) ) {
       /* @var $cs CClientScript */
       $cs = Yii::app()->clientScript;
-
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );

@@ -74,14 +74,15 @@ class InterfaceController extends Controller
         $completeSrt = '';
 
         /* background or stream */
-        if (($pointChannel === 1) || (($pointChannel === 3))) {
+        $pointChannel = $pointChannel - 1; // zero start count
+        if (($pointChannel === 0) || (($pointChannel === 2))) {
             $bg = $CM->GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay);
 
             if (count($bg) === 0) {
                 http_response_code(404);
                 echo sprintf("No avaliable content. "
                     ."Received pointId: %s, pointChannel: %s, pointDate: %s",
-                    $pointId, $pointChannel, $pointDate
+                    $pointId, $pointChannel + 1, $pointDate
                 );
                 exit;
             }
@@ -96,14 +97,14 @@ class InterfaceController extends Controller
                     $completeSrt .= $CM->GenerateContentBlock($bg[$ii - 1], $bg[$ii]["to"]);
                 }
             }
-        } else if ($pointChannel === 2) { /*advertising*/
+        } else if ($pointChannel === 1) { /*advertising*/
             $adv = $CM->GetAdvContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay);
 
             if (count($adv) === 0) {
                 http_response_code(404);
                 echo sprintf("No avaliable content. "
                     ."Received pointId: %s, pointChannel: %s, pointDate: %s",
-                    $pointId, $pointChannel, $pointDate
+                    $pointId, $pointChannel + 1, $pointDate
                 );
                 exit;
             }
@@ -120,7 +121,7 @@ class InterfaceController extends Controller
             }
         } else {
             http_response_code(400);
-            echo sprintf("Incorrect channel. PointChannel: %s", $pointChannel);
+            echo sprintf("Incorrect channel. PointChannel: %s", $pointChannel + 1);
             exit;
         }
 
@@ -412,30 +413,23 @@ class InterfaceController extends Controller
         $screen = $point->screen;
         $responce['screen'] = $screen->getInfo();
 
-        $channels = $point->channels;
+        $showcases = $point->showcases;
         $responce['widgets'] = [];
 
-        foreach($channels as $channel) {
-            $widgetToChannel = $channel->widgetToChannel;
-            $window = $channel->window;
+        foreach ($showcases as $showcase) {
+            $window = $showcase->window;
+            $widget = $showcase->widget;
+            $widgetObj = $this->widget('application.widgets.' . ucfirst($widget->name) . 'Widget', [
+                'id' => $widget->id,
+                'type' => 'showData',
+                'config' => json_decode($widget->config)
+            ]);
 
-            if ($widgetToChannel
-                && $window
-                && $widgetToChannel->widget
-            ) {
-                $widget = $widgetToChannel->widget;
-                $widgetObj = $this->widget('application.widgets.' . ucfirst($widget->name) . 'Widget', [
-                    'id' => $widget->id,
-                    'type' => 'showData',
-                    'config' => json_decode($widget->config)
-                ]);
-
-                $responce['widgets'][] = [
-                    'window' => $window->getInfo(),
-                    'config' => $widget->getInfo(),
-                    'content' => $widgetObj->showData()
-                ];
-            }
+            $responce['widgets'][] = [
+                'window' => $window->getInfo(),
+                'config' => $widget->getInfo(),
+                'content' => $widgetObj->showData()
+            ];
         }
 
         echo json_encode($responce);

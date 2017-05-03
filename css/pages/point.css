@@ -77,17 +77,17 @@ select {
 
 /* Container */
 .switch {
-  height: 20px;
-  margin: 23px auto;
+  height: 22px;
+  margin: 1px auto;
   position: relative;
   width: 45px;
 }
 
 /* Background unchecked */
 .switch label {
-  background: #e9513a;
-  color: #c72f18;
-  border-radius: 2px;
+  background: #ec971f;
+  color: #eea236;
+  border-radius: 3px;
   display: block;
   height: 100%;
   position: relative;
@@ -103,7 +103,7 @@ select {
   height: 16px;
   left: 6px;
   position: absolute;
-  top: 2px;
+  top: 3px;
   transition: all .15s ease;
   width: 15px;
   z-index: 3;

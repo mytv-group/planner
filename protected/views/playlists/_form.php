@@ -71,7 +71,7 @@
     <div class="row" style='padding-bottom:1em;'>
         <?php echo $form->labelEx($model,'type'); ?>
         <?php echo $form->radioButtonList($model,'type',
-            array('0'=>'Background','1'=>'Advertising','2'=>'Stream'),
+            Playlists::$types,
             array('class'=>"type-control",
                 'separator'=>' &nbsp; ',
                 'labelOptions'=>array('style'=>'display:inline;'),

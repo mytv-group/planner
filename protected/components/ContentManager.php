@@ -63,7 +63,7 @@ class ContentManager extends CApplicationComponent
         }
 
         foreach ( $blocksArr as &$block ) {
-            if($block ['type'] == 2) {
+            if($block ['type'] == 3) {
                 $sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
 
                 $command=$connection->createCommand($sql);
@@ -135,7 +135,7 @@ class ContentManager extends CApplicationComponent
             "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
             "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
             "AND `t2`.`channel_type` = '" . $pointChannel . "' " .
-            "AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '1';";
+            "AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '2';";
 
         $command=$connection->createCommand($sql);
         $rows=$command->queryAll();

@@ -155,15 +155,6 @@ class m170321_193708_uptade_all extends CDbMigration
           echo PHP_EOL.PHP_EOL;
       }
 
-      if (Yii::app()->db->schema->getTable('playlist_to_channel', true) !== null) {
-          $this->execute('SET FOREIGN_KEY_CHECKS=0;');
-          $this->execute('DROP TABLE `playlist_to_channel`');
-          $this->execute('SET FOREIGN_KEY_CHECKS=1;');
-          $ii++;
-          echo $ii;
-          echo PHP_EOL.PHP_EOL;
-      }
-
       if (Yii::app()->db->schema->getTable('playlist_to_net_channel', true) !== null) {
           $this->execute('SET FOREIGN_KEY_CHECKS=0;');
           $this->execute('DROP TABLE `playlist_to_net_channel`');
@@ -203,86 +194,72 @@ class m170321_193708_uptade_all extends CDbMigration
       }
 
       $channelTable = Yii::app()->db->schema->getTable('channel');
+
+      if (isset($channelTable)) {
+          $this->execute('CREATE TABLE `showcase` (
+               `id` int(11) NOT NULL AUTO_INCREMENT,
+               `id_point` int(11) NOT NULL,
+               `id_window` int(11) DEFAULT NULL,
+               `id_widget` int(11) NOT NULL,
+               PRIMARY KEY (`id`),
+               KEY `id_point` (`id_point`),
+               KEY `id_window` (`id_window`),
+               KEY `id_widget` (`id_widget`),
+               CONSTRAINT `showcase_ibfk_1` FOREIGN KEY (`id_point`) REFERENCES `point` (`id`) ON DELETE CASCADE,
+               CONSTRAINT `showcase_ibfk_2` FOREIGN KEY (`id_window`) REFERENCES `window` (`id`) ON DELETE CASCADE,
+               CONSTRAINT `showcase_ibfk_3` FOREIGN KEY (`id_widget`) REFERENCES `widget` (`id`) ON DELETE CASCADE
+             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;');
+
+          $ii++;
+          echo $ii;
+          echo PHP_EOL.PHP_EOL;
+
+          $this->execute("INSERT INTO
+              `showcase` (`id_point`,`id_window`,`id_widget`)
+            SELECT
+              `channel`.`id_point`,
+              `channel`.`window_id`,
+              `widget_to_channel`.`widget_id`
+            FROM
+                `channel`
+            JOIN `widget_to_channel` ON `channel`.`id` = `widget_to_channel`.`channel_id`
+            WHERE
+                `channel`.`window_id` IS NOT NULL;");
+
+          $ii++;
+          echo $ii;
+          echo PHP_EOL.PHP_EOL;
+      }
+
       if (isset($channelTable)) {
           $this->execute('SET FOREIGN_KEY_CHECKS=0;');
-          $this->execute('DELETE FROM `channel` WHERE `window_id` IS NULL');
+          $this->execute('DROP TABLE `channel`');
           $this->execute('SET FOREIGN_KEY_CHECKS=1;');
           $ii++;
           echo $ii;
           echo PHP_EOL.PHP_EOL;
       }
 
-      if (isset($channelTable)
-        && isset($channelTable->foreignKeys['window_id'])
-      ) {
-          $this->dropForeignKey('channel_ibfk_2', 'channel');
+      if (Yii::app()->db->schema->getTable('playlist_to_channel', true) !== null) {
+          $this->execute('SET FOREIGN_KEY_CHECKS=0;');
+          $this->execute('DROP TABLE `playlist_to_channel`');
+          $this->execute('SET FOREIGN_KEY_CHECKS=1;');
           $ii++;
           echo $ii;
           echo PHP_EOL.PHP_EOL;
       }
 
-      if (isset($channelTable)
-        && isset($channelTable->columns['window_id'])
-      ) {
-          $this->execute('ALTER TABLE `channel` CHANGE `window_id` `id_window` INT(11) NOT NULL');
-          $ii++;
-          echo $ii;
-          echo PHP_EOL.PHP_EOL;
-      }
-
-      if (isset($netTable)
-        && !isset($netTable->foreignKeys['id_window'])
-      ) {
-          $this->addForeignKey('FK_showcase_window',
-              'channel',
-              'id_window',
-              'window',
-              'id',
-              'CASCADE',
-              'CASCADE'
-          );
-          $ii++;
-          echo $ii;
-          echo PHP_EOL.PHP_EOL;
-      }
-
-      if (isset($channelTable)
-        && isset($channelTable->columns['internalId'])
-      ) {
-          $this->execute('ALTER TABLE `channel` CHANGE `internalId` `id_widget` INT(11) NOT NULL');
-          $ii++;
-          echo $ii;
-          echo PHP_EOL.PHP_EOL;
-      }
-
-      $channelTable = Yii::app()->db->schema->getTable('channel');
-      $widgetTable = Yii::app()->db->schema->getTable('widget_to_channel');
-
-      if (isset($channelTable)
-        && isset($widgetTable)
-      ) {
-          try {
-              $this->execute('UPDATE `channel`
-                LEFT JOIN `widget_to_channel` ON `channel`.`id`= `widget_to_channel`.`channel_id`
-                SET `channel`.`id_widget`  = `widget_to_channel`.`widget_id`');
-          } catch(Exception $e) {}
-          $ii++;
-          echo $ii;
-          echo PHP_EOL.PHP_EOL;
-      }
-
-      if (isset($channelTable)) {
-          $this->execute('ALTER TABLE `channel` RENAME `showcase`');
-          $ii++;
-          echo $ii;
-          echo PHP_EOL.PHP_EOL;
-      }
-
-      if (isset($widgetTable)) {
+      if (Yii::app()->db->schema->getTable('widget_to_channel', true) !== null) {
+          $this->execute('SET FOREIGN_KEY_CHECKS=0;');
           $this->execute('DROP TABLE `widget_to_channel`');
+          $this->execute('SET FOREIGN_KEY_CHECKS=1;');
           $ii++;
           echo $ii;
           echo PHP_EOL.PHP_EOL;
+      }
+
+      if (Yii::app()->db->schema->getTable('playlists', true) !== null) {
+          $this->execute('UPDATE `playlists` SET `type`=`type` + 1 WHERE 1;');
       }
     }
 

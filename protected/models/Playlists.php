@@ -22,10 +22,16 @@
  */
 class Playlists extends CActiveRecord
 {
-    public static $types = ['Background', 'Advertising', 'Stream'];
+    public static $types = [
+        1 => 'Background',
+        2 => 'Advertising',
+        3 => 'Stream'
+    ];
 
     public static $typesShort = [
-        '', 'bg', 'adv', 'strm'
+        1 => 'bg',
+        2 => 'adv',
+        3 => 'strm'
     ];
 
     /**

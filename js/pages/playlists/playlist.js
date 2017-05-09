@@ -35,22 +35,22 @@ $(document).ready(function () {
     var periodBlock = $("#periodBlock");
 
     var hideFunctionality = function(type, animationTime) {
-        if(type == 0){
+        if (type == 1) {
             everyBlock.slideUp(animationTime);
             streamUrlBlock.slideUp(animationTime);
             fileManager.slideDown(animationTime);
-        } else if(type == 1){
+        } else if(type == 2) {
             everyBlock.slideDown(animationTime);
             streamUrlBlock.slideUp(animationTime);
             fileManager.slideDown(animationTime);
-        } else if(type == 2){
+        } else if(type == 3) {
             everyBlock.slideUp(animationTime);
             streamUrlBlock.slideDown(animationTime);
             fileManager.slideUp(animationTime);
         }
     }
 
-    hideFunctionality(type, 0);
+    hideFunctionality(type, 1);
 
     typeBlock.on('change', function(e) {
         hideFunctionality($(e.target).val(), 200);

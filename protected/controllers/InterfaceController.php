@@ -74,15 +74,14 @@ class InterfaceController extends Controller
         $completeSrt = '';
 
         /* background or stream */
-        $pointChannel = $pointChannel - 1; // zero start count
-        if (($pointChannel === 0) || (($pointChannel === 2))) {
+        if (($pointChannel === 1) || (($pointChannel === 3))) {
             $bg = $CM->GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay);
 
             if (count($bg) === 0) {
                 http_response_code(404);
                 echo sprintf("No avaliable content. "
                     ."Received pointId: %s, pointChannel: %s, pointDate: %s",
-                    $pointId, $pointChannel + 1, $pointDate
+                    $pointId, $pointChannel, $pointDate
                 );
                 exit;
             }
@@ -97,14 +96,14 @@ class InterfaceController extends Controller
                     $completeSrt .= $CM->GenerateContentBlock($bg[$ii - 1], $bg[$ii]["to"]);
                 }
             }
-        } else if ($pointChannel === 1) { /*advertising*/
+        } else if ($pointChannel === 2) { /*advertising*/
             $adv = $CM->GetAdvContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay);
 
             if (count($adv) === 0) {
                 http_response_code(404);
                 echo sprintf("No avaliable content. "
                     ."Received pointId: %s, pointChannel: %s, pointDate: %s",
-                    $pointId, $pointChannel + 1, $pointDate
+                    $pointId, $pointChannel, $pointDate
                 );
                 exit;
             }

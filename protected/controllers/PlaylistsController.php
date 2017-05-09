@@ -78,18 +78,17 @@ class PlaylistsController extends Controller
     public function actionCreate()
     {
         $model=new Playlists();
-        $model->type = 0; // for radioButtonList default value
+        $model->type = 1; // for radioButtonList default value
         $stream = new Stream();
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if(isset($_POST['Playlists']))
-        {
+        if(isset($_POST['Playlists'])) {
             $model->attributes=$_POST['Playlists'];
             if($model->save()) {
                 if(isset($_POST['Stream']['url']) &&
-                        ($_POST['Playlists']['type'] == 2)) { //2 - stream
+                        ($_POST['Playlists']['type'] == 3)) { //2 - stream
                     $stream->attributes = array(
                         'playlist_id' => $model->id,
                         'url' => $_POST['Stream']['url'],
@@ -119,11 +118,10 @@ class PlaylistsController extends Controller
         $author = $model->author;
         $stream = new Stream();
 
-        if(isset($_POST['Playlists']))
-        {
+        if (isset($_POST['Playlists'])) {
             $playlists = $_POST['Playlists'];
-            if(isset($_POST['Stream']['url']) &&
-                    ($playlists['type'] == 2)) { //2 - stream
+            if (isset($_POST['Stream']['url']) &&
+                    ($playlists['type'] == 3)) { //2 - stream
 
                 $exitstStream = Stream::model()->findByAttributes(
                     array('playlist_id' => $id)
@@ -155,7 +153,7 @@ class PlaylistsController extends Controller
                 $this->redirect(array('view','id'=>$model->id));
         }
 
-        if(count($model->stream) > 0) {
+        if (count($model->stream) > 0) {
             $stream = $model->stream[0];
         }
 

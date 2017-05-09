@@ -104,8 +104,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 array(
                     'name' => 'type',
                     'value' => function($data, $row) {
-                        if (Playlists::$types[$data->type]) {
-                                return Playlists::$types[$data->type];
+                        if (isset(Playlists::$types[$data->type])) {
+                            return Playlists::$types[$data->type];
                         }
 
                         return 'unknown';

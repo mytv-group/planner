@@ -96,7 +96,7 @@
   <div class="col col-md-1">
     <?php
       $every = '';
-      if ($data->type == 1) {//0 - bg, 1- adv
+      if ($data->type == 2) {//0 - bg, 1- adv
           $every = $data->every;
       }
 

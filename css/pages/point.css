@@ -78,14 +78,14 @@ select {
 /* Container */
 .switch {
   height: 22px;
-  margin: 1px auto;
+  margin: 1px;
   position: relative;
   width: 45px;
 }
 
 /* Background unchecked */
 .switch label {
-  background: #ec971f;
+  background: #f0ad4e;
   color: #eea236;
   border-radius: 3px;
   display: block;
@@ -147,7 +147,7 @@ select {
 
 /* Checked States */
 .switch input:checked~label {
-  background: #2fca6c;
+  background: #5cb85c;
   color: #13ad4f;
 }
 

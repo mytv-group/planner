@@ -5,3 +5,8 @@ input.channel-playlist {
 .channel-playlist-item-template {
     display: none;
 }
+
+.channel-btn {
+    min-width: 160px;
+    text-align: left;
+}

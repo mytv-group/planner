@@ -111,11 +111,11 @@ class User extends CActiveRecord
    */
   public static function model($className=__CLASS__)
   {
-    return parent::model($className);
+      return parent::model($className);
   }
 
   protected function beforeSave(){
-    $this->password = md5($this->password);
-    return parent::beforeSave();
+      $this->password = md5($this->password);
+      return parent::beforeSave();
   }
 }

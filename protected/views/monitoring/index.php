@@ -118,8 +118,8 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 'toTime',
                 array(
                     'name' => 'every',
-                    'value' => function($data,$row){
-                        if($data->type == 1) //0 - bg, 1- adv
+                    'value' => function($data, $row){
+                        if ($data->type == 2) //1 - bg, 2 - adv
                             return $data->every;
                         else
                             return '';

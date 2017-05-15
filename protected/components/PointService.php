@@ -195,6 +195,17 @@ class PointService extends CApplicationComponent
         );
 
         foreach ($showcases as $windowId => $widgetId) {
+            if (empty($windowId) || empty($widgetId)) {
+                continue;
+            }
+
+            $windowId = intval($windowId);
+            $widgetId = intval($widgetId);
+
+            if (!is_int($windowId) || empty($widgetId)) {
+                continue;
+            }
+
             $showcaseInstance = new $showcaseModel();
             $showcaseInstance->attributes = [
                 'id_point' => intval($id),

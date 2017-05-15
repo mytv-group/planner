@@ -65,23 +65,18 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model=new User;
+        $model = new User;
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if(isset($_POST['User']))
-        {
-            $userData = $_POST['User'];
-
-            $model->attributes=$userData;
-            if($model->save())
+        if (isset($_POST['User'])) {
+            $model->attributes= $_POST['User'];
+            if ($model->save()) {
                 $this->redirect(array('view','id'=>$model->id));
+            }
         }
 
         $rolesList = [];
         foreach (Yii::app()->authManager->getRoles() as $key => $val) {
-            if($val->data['avaliable']) {
+            if ($val->data['avaliable']) {
                 $rolesList[$key] = $key;
             }
         }
@@ -101,14 +96,8 @@ class UserController extends Controller
     {
         $model=$this->loadModel($id);
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if(isset($_POST['User']))
-        {
-            $userData = $_POST['User'];
-
-            $model->attributes=$userData;
+        if (isset($_POST['User'])) {
+            $model->attributes = $_POST['User'];
             if($model->save())
                 $this->redirect(array('view','id'=>$model->id));
         }
@@ -150,7 +139,7 @@ class UserController extends Controller
     {
         $model=new User('search');
         $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['User']))
+        if (isset($_GET['User']))
             $model->attributes=$_GET['User'];
 
         $this->render('index',array(
@@ -161,43 +150,34 @@ class UserController extends Controller
     public function RoleSrting($role)
     {
         $stringifyRole = '';
-        if (is_object(json_decode($role)))
-        {
+        if (is_object(json_decode($role))) {
             $role = json_decode($role);
             $stringifyRole = '';
-            foreach ($role as $key => $val)
-            {
+            foreach ($role as $key => $val) {
                 $stringifyRole .= strtoupper($key);
                 $permCount = 0;
-                foreach ($val as $permName => $permVal)
-                {
-                    if($permVal == 1)
-                    {
+                foreach ($val as $permName => $permVal) {
+                    if ($permVal == 1) {
                         $permCount++;
                     }
                 }
 
-                if($permCount > 0)
-                {
+                if ($permCount > 0) {
                     $stringifyRole .= "(";
-                    foreach ($val as $permName => $permVal)
-                    {
-                        if($permVal == 1)
-                        {
+                    foreach ($val as $permName => $permVal) {
+                        if ($permVal == 1) {
                             $stringifyRole .= $permName . ",";
                         }
                     }
                     $stringifyRole = substr($stringifyRole, 0, -1);
                     $stringifyRole .= "); ";
-                }
-                else
-                {
+                } else {
                     $stringifyRole .= "(none); ";
                 }
             }
         }
 
-        return    $stringifyRole;
+        return $stringifyRole;
     }
 
     /**
@@ -218,14 +198,9 @@ class UserController extends Controller
     public function beforeAction($action) {
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
-
-            
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/user.js' );
-
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
             return true;
         }

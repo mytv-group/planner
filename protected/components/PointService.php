@@ -335,7 +335,7 @@ class PointService extends CApplicationComponent
 
         foreach ($avaliablePlaylists as $playlistToPoint) {
             $pl = $playlistToPoint->playlist;
-            $channelDir = $pointDir . "/" . $pl->type;
+            $channelDir = $pointDir . DIRECTORY_SEPARATOR . $playlistToPoint->channel_type;
             $channelFullDir = $this->prepareSpoolPath($channelDir);
 
             $plFiles = explode(",", $pl->files);

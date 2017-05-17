@@ -185,6 +185,12 @@ class PointController extends Controller
                 $playlists[$playlist['type']][] = $playlist;
             }
 
+            // stream channel may receive bg playlists
+            $playlists[3] = array_merge(
+                (isset($playlists[1]) ? $playlists[1] : []),
+                (isset($playlists[3]) ? $playlists[3] : [])
+            );
+
             $widgets = Widget::model()->findAll();
         }
 

@@ -1,13 +1,15 @@
 <div class="channels-list">
     <?php
-        $pointPlaylists = isset($point->playlists) ? $point->playlists : [];
+        $playlistsToPoint = isset($point->playlistToPoint) ? $point->playlistToPoint : [];
         $pointId = isset($point->id) ? $point->id : '';
     ?>
     <?php foreach ($channelTypes as $type => $name) {
         $channelPlaylists = [];
-        foreach ($pointPlaylists as $playlist) {
-            if (intval($playlist->type) === intval($type)) {
-                $channelPlaylists[] = $playlist;
+        foreach ($playlistsToPoint as $playlistToPoint) {
+            if (isset($playlistToPoint->playlist)
+                && intval($playlistToPoint->channel_type) === intval($type)
+            ) {
+                $channelPlaylists[] = $playlistToPoint->playlist;
             }
         }
 

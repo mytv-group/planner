@@ -12,14 +12,14 @@
     <div class="col-sm-2">
       <?= $attr['toDatetime']; ?>
     </div>
-    <? if($attr['type'] == 0): ?>
+    <? if($attr['type'] == 1): ?>
         <div class="col-sm-1">
           <?= $attr['fromTime']; ?>
         </div>
         <div class="col-sm-1">
           <?= $attr['toTime']; ?>
         </div>
-    <? elseif($attr['type'] == 1): ?>
+    <? elseif($attr['type'] == 2): ?>
         <div class="col-sm-2">
           <?= $attr['every']; ?>
         </div>

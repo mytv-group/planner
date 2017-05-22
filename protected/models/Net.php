@@ -89,6 +89,10 @@ class Net extends CActiveRecord
 
     $criteria->compare('name', $this->name, true);
 
+    if (Yii::app()->user->role != User::ROLE_ADMIN) {
+        $criteria->compare('id_user', Yii::app()->user->id);
+    }
+
     return new CActiveDataProvider($this, array(
       'criteria'=>$criteria,
       'pagination' => [

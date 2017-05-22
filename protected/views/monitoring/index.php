@@ -26,11 +26,14 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 array(
                     'name' => 'sync',
                     'value' => function($data,$row){
-                        if($data->sync) {
-                            return '<input name="syncCheckBox" type="checkbox" checked>';
-                        } else {
-                            return '<input name="syncCheckBox" type="checkbox">';
-                        }
+                        return('<div class="switch">
+                            <input type="checkbox" '.($data->sync ? 'checked' : '').' disabled="disabled">
+                            <label>
+                              <span class="fontawesome-ok"></span>
+                              <span class="fontawesome-remove"></span>
+                              <div></div>
+                            </label>
+                          </div>');
                     },
                     'type'  => 'raw',
                 ),
@@ -54,17 +57,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
                                     'data-id="'.$data->id.'" data-ip="'.$data->ip.'">
                                   <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
                                 </button>';
-                    },
-                    'type'  => 'raw',
-                ),
-                array(
-                    'name' => 'preview',
-                    'value' => function($data, $row){
-                        return '<form action="/preview/' . $data->id . '" type="GET" class="btn-group" target="_blank">' .
-                            '<button type="submit" class="btn btn-default btn-sm">' .
-                                '<span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>' .
-                            '</button>' .
-                        '</form>';
                     },
                     'type'  => 'raw',
                 ),

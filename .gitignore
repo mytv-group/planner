@@ -42,5 +42,8 @@ php_errors.log
 /_dev
 
 #runtime
+/runtime/*
 /protected/runtime/*
 /runtime-widgets
+
+/uploader/files/*

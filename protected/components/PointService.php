@@ -133,6 +133,7 @@ class PointService extends CApplicationComponent
 
         $playlistToPointModel = $this->getPlaylistToPoint();
         foreach ($channels as $channelType => $playlists) {
+            $playlists = array_unique($playlists);
             foreach ($playlists as $playlistId) {
                 $attributes = [
                     'id_point' => intval($id),
@@ -343,8 +344,13 @@ class PointService extends CApplicationComponent
             foreach ($plFiles as $fileId) {
                 if ($fileId != '') {
                     $file = $fileModel->findByPk($fileId);
+
+                    if (empty($file)) {
+                        continue;
+                    }
+
                     $symlinkPath = $channelFullDir . $file->name;
-                    if(!file_exists($symlinkPath)
+                    if (!file_exists($symlinkPath)
                         && file_exists($file->path)
                     ) {
                         if (defined('SYMLINK')) {
@@ -353,7 +359,6 @@ class PointService extends CApplicationComponent
                             copy($file->path, $symlinkPath);
                         }
                     }
-
                 }
             }
         }

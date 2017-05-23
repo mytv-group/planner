@@ -85,7 +85,7 @@ class PointController extends Controller
             return;
         }
 
-        $model->attributes = $_POST['Point'];
+        $model->attributes = array_merge($_POST['Point'], ['sync' => 0]);
         $model->username = Yii::app()->user->username;
 
         if($model->save()) {
@@ -120,7 +120,7 @@ class PointController extends Controller
         }
 
         $author = $model->username;
-        $model->attributes = $_POST['Point'];
+        $model->attributes = array_merge($_POST['Point'], ['sync' => 0]);
 
         $model->content = CUploadedFile::getInstance($model, 'content');
         if ($author) {

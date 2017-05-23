@@ -13,7 +13,7 @@ defined('APPLICATION_ENV')
                 getenv('APPLICATION_ENV') : 'production'));
 
 if((APPLICATION_ENV === 'dev')
-  || (isset($_COOKIE['debug']) && ($_COOKIE['debug'] === 1))
+  || (isset($_COOKIE['debug']) && ($_COOKIE['debug'] === '1'))
 ) {
     error_reporting(E_ALL);
     ini_set('display_errors','On');

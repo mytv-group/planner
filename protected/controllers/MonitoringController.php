@@ -206,9 +206,8 @@ class MonitoringController extends Controller
   }
 
   public function beforeAction($action) {
-    if( parent::beforeAction($action) ) {
+    if (parent::beforeAction($action)) {
       $cs = Yii::app()->clientScript;
-
 
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
       $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );

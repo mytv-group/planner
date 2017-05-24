@@ -190,9 +190,30 @@ class NetController extends Controller
                         isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
                         isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : []
                     );
+                    $channels = $attr["channels"];
+                    $filteredChannels = [];
+
+                    foreach ($channels as $channelType => $playlists) {
+                        foreach ($playlists as $playlistId) {
+                            $playlistToPointInstance = PlaylistToPoint::model()->findAllByAttributes([
+                                'id_point' => $point->id,
+                                'id_playlist' => intval($playlistId),
+                                'channel_type' => $channelType
+                            ]);
+
+                            if (empty($playlistToPointInstance)) {
+                                if (!isset($filteredChannels[$channelType])) {
+                                    $filteredChannels[$channelType] = [];
+                                }
+
+                                $filteredChannels[$channelType][] = $playlistId;
+                            }
+                        }
+                    }
+
                     $ps->addChannels(
                         intval($point->id),
-                        isset($attr["channels"]) ? $attr["channels"] : []
+                        $filteredChannels
                     );
                     $ps->sendRequestForUpdate($point->ip);
                     $ps->prepareFilesForSync(intval($point->id));

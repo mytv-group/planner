@@ -307,7 +307,11 @@ class PointService extends CApplicationComponent
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
-                    if (filetype($dir."/".$object) == "dir") $this->deleteDir($dir."/".$object); else unlink($dir."/".$object);
+                    if (filetype($dir.DIRECTORY_SEPARATOR.$object) == "dir") {
+                        $this->deleteDir($dir.DIRECTORY_SEPARATOR.$object);
+                    } else {
+                        unlink($dir.DIRECTORY_SEPARATOR.$object);
+                    }
                 }
             }
             reset($objects);
@@ -366,17 +370,17 @@ class PointService extends CApplicationComponent
 
     private function prepareSpoolPath($pathAppendix)
     {
-        $pathAppendix = explode("/", $pathAppendix);
-        $contentPath = $_SERVER["DOCUMENT_ROOT"];
+        $pathAppendix = explode(DIRECTORY_SEPARATOR, $pathAppendix);
+        $contentPath = rtrim($_SERVER["DOCUMENT_ROOT"], '/');
 
         foreach($pathAppendix as $folder) {
-            $contentPath .= "/" . $folder;
+            $contentPath .= DIRECTORY_SEPARATOR . $folder;
             if (!file_exists($contentPath) && !is_dir($contentPath)) {
                 mkdir($contentPath);
             }
         }
 
-        $contentPath .= "/";
+        $contentPath .= DIRECTORY_SEPARATOR;
         return $contentPath;
     }
 }

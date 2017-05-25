@@ -99,6 +99,8 @@ class PointController extends Controller
                 'ip' => $model->ip
             ]);
 
+            Yii::app()->spool->prepareFilesForSync(intval($point->id));
+
             $this->redirect(['point/view','id'=>$model->id]);
         } else {
             $this->renderView($model, 'create');
@@ -138,6 +140,8 @@ class PointController extends Controller
                 'channels' => isset($postPoint["channels"]) ? $postPoint["channels"] : [],
                 'ip' => $model->ip
             ]);
+
+            Yii::app()->spool->prepareFilesForSync(intval($point->id));
 
             $CM = Yii::app()->contentManager;
             if (isset($model->content)

@@ -81,7 +81,6 @@ return array(
         ),
         'pointService' => array(
             'class'=>'PointService',
-            'spoolPath' => 'spool/points/',
             'user' => function() {
                 return Yii::app()->user;
             },
@@ -91,6 +90,17 @@ return array(
             'showcase' => function() {
                 return Showcase::model();
             },
+            'playlistToPoint' => function() {
+                return PlaylistToPoint::model();
+            },
+        ),
+        'spool' => array(
+            'class'=>'Spool',
+            'spoolPointsPath' => 'spool'. DIRECTORY_SEPARATOR . 'points' . DIRECTORY_SEPARATOR,
+            'spoolAudioPath' => 'spool'. DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR,
+            'spoolVideoPath' => 'spool'. DIRECTORY_SEPARATOR . 'video' . DIRECTORY_SEPARATOR,
+            'spoolImagesPath' => 'spool'. DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR,
+            'spoolOtherPath' => 'spool'. DIRECTORY_SEPARATOR . 'other' . DIRECTORY_SEPARATOR,
             'playlistToPoint' => function() {
                 return PlaylistToPoint::model();
             },

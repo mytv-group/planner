@@ -141,6 +141,8 @@ class NetController extends Controller
                         'channels' => isset($attr["channels"]) ? $attr["channels"] : [],
                         'ip' => $point->ip
                     ]);
+
+                    Yii::app()->spool->prepareFilesForSync(intval($point->id));
                 }
             }
 
@@ -317,6 +319,8 @@ class NetController extends Controller
                         'channels' => isset($attr["channels"]) ? $attr["channels"] : [],
                         'ip' => $point->ip
                     ]);
+
+                    Yii::app()->spool->prepareFilesForSync(intval($point->id));
                 }
             }
 

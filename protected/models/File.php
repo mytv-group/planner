@@ -9,14 +9,15 @@ class File extends CActiveRecord
 
     public function rules()
     {
-        return array(
-            array('name, type, extension, link, date_created', 'required'),
-            array('type', 'length', 'max'=>1),
-            array('extension', 'length', 'max'=>10),
-            array('link', 'length', 'max'=>255),
-            array('date_modified', 'safe'),
+        return [
+            array('name, duration, mime, path, link, visibility, id_user', 'required'),
+            array('visibility, id_user', 'numerical', 'integerOnly'=>true),
+            array('duration', 'length', 'max'=>20),
+            array('date_created', 'default', 'value' => date('Y-m-d H:i:s')),
+            array('mime', 'length', 'max'=>100),
+            array('path, link', 'length', 'max'=>255),
             array('name', 'safe', 'on'=>'search'),
-        );
+        ];
     }
 
     public function relations()
@@ -29,13 +30,11 @@ class File extends CActiveRecord
         return array(
             'id' => 'ID',
             'name' => 'Name',
-            'type' => 'Type',
             'duration' => 'Duration',
             'extension' => 'Extension',
             'mime' => 'Mime type',
             'link' => 'Link',
-            'date_created' => 'Date Created',
-            'date_modified' => 'Date Modified',
+            'date_created' => 'Date Created'
         );
     }
 

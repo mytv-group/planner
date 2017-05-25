@@ -20,6 +20,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
              `id` int(11) NOT NULL AUTO_INCREMENT,
              `id_file` int(11) NOT NULL,
              `id_playlist` int(11) NOT NULL,
+             `order` int(11) NOT NULL,
              PRIMARY KEY (`id`),
              KEY `id_file` (`id_file`),
              KEY `id_playlist` (`id_playlist`),
@@ -45,6 +46,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
         $playlistId =  intval($row['id']);
         $files = explode(',', $row['files']);
 
+        $order = 0;
         foreach ($files as $fileId) {
             $fileId = intval($fileId);
             $fileInstance = Yii::app()->db->createCommand()
@@ -56,11 +58,48 @@ class m170523_195940_file_to_playlist extends CDbMigration
             if (count($fileInstance) === 1) {
               Yii::app()->db->createCommand()
                 ->insert('file_to_playlist', array(
-                    'id_file'=>$fileId,
-                    'id_playlist'=>$playlistId,
+                    'id_file' => $fileId,
+                    'id_playlist' => $playlistId,
+                    'order' => $order
                 ));
+                $order++;
             }
         }
+    }
+
+    $fileTable = Yii::app()->db->schema->getTable('file');
+    $ii = 0;
+
+    if (isset($fileTable)
+      && !isset($fileTable->columns['id_user'])
+    ) {
+        $this->addColumn('file', 'id_user', 'int(11) NOT NULL AFTER `author`');
+        $ii++;
+        echo $ii;
+        echo PHP_EOL.PHP_EOL;
+    }
+
+    $fileTable = Yii::app()->db->schema->getTable('file');
+    $userTable = Yii::app()->db->schema->getTable('user');
+
+    if (isset($fileTable)
+      && isset($userTable)
+    ) {
+        try {
+          $this->execute('UPDATE `file`
+            LEFT JOIN `user` ON `file`.`author`= `user`.`username` COLLATE utf8_unicode_ci
+            SET `file`.`id_user`  = `user`.`id`');
+        } catch(Exception $e) {}
+        $ii++;
+        echo $ii;
+        echo PHP_EOL.PHP_EOL;
+    }
+
+    if (isset($fileTable)) {
+        $this->dropColumn('file', 'author');
+        $ii++;
+        echo $ii;
+        echo PHP_EOL.PHP_EOL;
     }
   }
 

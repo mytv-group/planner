@@ -214,9 +214,8 @@ class PlaylistsController extends Controller
         $answ = array();
         $answ['status'] = 'err';
 
-        if(isset($_POST['data']))
-        {
-            $playlistId = $_POST['data']['playlistId'];
+        if (isset($_POST['data'])) {
+            $playlistId = intval($_POST['data']['playlistId']);
             $uploadInfo = $_POST['data']['file'];
             $uploadFileUrl = $uploadInfo['url'];
             $uploadFileName = $uploadInfo['name'];
@@ -227,101 +226,52 @@ class PlaylistsController extends Controller
             $mime = urldecode($uploadInfo['type']);
             $mimeArr = explode("/", $mime);
             $type = $mimeArr[0];
-            $moved = false;
-            $insertedStatus['status'] = false;
-            $contentPath = "";
 
-            if($type == "audio")
-            {
-                $pathAppendix = "spool/audio/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
+            $userId = Yii::app()->user->id;
+            $duration = 0;
 
+            $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
+
+            if (($type === "audio") || ($type == "video")) {
                 $getID3 = new getID3;
-                $audioFileInfo = $getID3->analyze($contentPath . $uploadFileName);
+                $fileInfo = $getID3->analyze($movedFileInfo['path']);
                 unset($getID3);
 
-                $duration = $audioFileInfo['playtime_seconds'];
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFilePlaylistRelation($fileId, $playlistId);
-            }
-            else if($type == "image")
-            {
-                $pathAppendix = "spool/images/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
-
+                $duration = $fileInfo['playtime_seconds'];
+            } else if($type == "image") {
                 $duration = 10;
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFilePlaylistRelation($fileId, $playlistId);
-            }
-            else if($type == "video")
-            {
-                $pathAppendix = "spool/video/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
-
-                $getID3 = new getID3;
-                $videoFileInfo = $getID3->analyze($contentPath . $uploadFileName);
-                unset($getID3);
-                $duration = $videoFileInfo['playtime_seconds'];
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFilePlaylistRelation($fileId, $playlistId);
-            }
-            else
-            {
-                $pathAppendix = "spool/other/bg_all";
-                $contentPath = $this->PrepareSpoolPath($pathAppendix);
-                $uploadFileName = str_replace(" ", "", $uploadFileName);
-                $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-                $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
-
-                $duration = 0;
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFilePlaylistRelation($fileId, $playlistId);
             }
 
-            $inserted = $insertedStatus['status'];
-            if(($moved === true) && ($inserted == true))
-            {
-                $answ['status'] = 'ok';
-            }
-            else if(($moved === true)  && ($inserted === false))
-            {
-                $answ['status'] = 'err';
-                $answ['error'] = 'Cant insert row to db: ' . $insertedStatus['query'] .
-                ". Page PlaylistController.php";
-                error_log($answ['error']);
-            }
-            else if($moved === false)
-            {
-                if(($type != "audio") && ($type != "image") && ($type != "video"))
-                    $answ['status'] = 'err';
-                $answ['error'] = 'Incorect file mime type. ' . $mime;
-                error_log($answ['error']);
-            }
+            $fileInstance = new File();
+            $fileInstance->attributes = [
+              'name' => $movedFileInfo['name'],
+              'duration' => $duration,
+              'mime' => $mime,
+              'path' => $movedFileInfo['path'],
+              'link' => $movedFileInfo['link'],
+              'visibility' => 0,
+              'id_user' => $userId
+            ];
+            $fileInstance->save();
+
+            $fileToPlaylistInstance = new FileToPlaylist();
+
+            $fileToPlaylist = Yii::app()->db->createCommand()
+              ->select('MAX(`order`) as `maxOrder`')
+              ->from('file_to_playlist ftp')
+              ->where('id_playlist=:id', [':id'=>$playlistId])
+              ->queryRow();
+
+            $order = isset($fileToPlaylist['maxOrder']) ? $fileToPlaylist['maxOrder'] : 0;
+
+            $fileToPlaylistInstance = new FileToPlaylist();
+            $fileToPlaylistInstance->attributes = [
+                'id_file' => $fileInstance->id,
+                'id_playlist' => $playlistId,
+                'order' => $order
+            ];
+
+            $answ['status'] = 'ok';
         }
         echo(json_encode($answ));
     }
@@ -333,108 +283,6 @@ class PlaylistsController extends Controller
                 isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
                 $_SERVER['SERVER_NAME']
         );
-    }
-
-    private function CyrillicToTransLite($textcyr)
-    {
-        $cyr  = array('Р°','Р±','РІ','Рі','Рґ','e','Рµ','С”','Р¶','Р·','Рё','С–','С—','Р№','Рє','Р»','Рј','РЅ','Рѕ','Рї','СЂ','СЃ','С‚','Сѓ',
-                'С„','С…','С†','С‡','С€','С‰','СЉ','СЊ', 'СЋ','СЏ','Рђ','Р‘','Р’','Р“','Р”','Р•','Р–','Р—','Р�','Р™','Рљ','Р›','Рњ','Рќ','Рћ','Рџ','Р ','РЎ','Рў','РЈ',
-                'Р¤','РҐ','Р¦','Р§','РЁ','Р©','РЄ','Р¬', 'Р®','РЇ' );
-        $lat = array( 'a','b','v','g','d','e','e','e','zh','z','i','i','i','y','k','l','m','n','o','p','r','s','t','u',
-                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y' ,'yu' ,'ya','A','B','V','G','D','E','Zh',
-                'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' );
-        $translit = str_replace($cyr, $lat, $textcyr);
-
-        $unwanted_array = array('Е '=>'S', 'ЕЎ'=>'s', 'ЕЅ'=>'Z', 'Еѕ'=>'z', 'ГЂ'=>'A', 'ГЃ'=>'A', 'Г‚'=>'A', 'Гѓ'=>'A', 'Г„'=>'A', 'Г…'=>'A', 'Г†'=>'A', 'Г‡'=>'C', 'Г€'=>'E', 'Г‰'=>'E',
-                'ГЉ'=>'E', 'Г‹'=>'E', 'ГЊ'=>'I', 'ГЌ'=>'I', 'ГЋ'=>'I', 'ГЏ'=>'I', 'Г‘'=>'N', 'Г’'=>'O', 'Г“'=>'O', 'Г”'=>'O', 'Г•'=>'O', 'Г–'=>'O', 'Г�'=>'O', 'Г™'=>'U',
-                'Гљ'=>'U', 'Г›'=>'U', 'Гњ'=>'U', 'Гќ'=>'Y', 'Гћ'=>'B', 'Гџ'=>'Ss', 'Г '=>'a', 'ГЎ'=>'a', 'Гў'=>'a', 'ГЈ'=>'a', 'Г¤'=>'a', 'ГҐ'=>'a', 'Г¦'=>'a', 'Г§'=>'c',
-                'ГЁ'=>'e', 'Г©'=>'e', 'ГЄ'=>'e', 'Г«'=>'e', 'Г¬'=>'i', 'Г­'=>'i', 'Г®'=>'i', 'ГЇ'=>'i', 'Г°'=>'o', 'Г±'=>'n', 'ГІ'=>'o', 'Гі'=>'o', 'Гґ'=>'o', 'Гµ'=>'o',
-                'Г¶'=>'o', 'Гё'=>'o', 'Г№'=>'u', 'Гє'=>'u', 'Г»'=>'u', 'ГЅ'=>'y', 'ГЅ'=>'y', 'Гѕ'=>'b', 'Гї'=>'y' );
-        $translit = strtr($translit, $unwanted_array);
-
-        $translit = preg_replace('/[^\p{L}\p{N}\s\.]/u', '', $translit);
-
-        $cyr  = array('а','б','в','г','д','e','ж','з','и','й','к','л','м','н','о','п','р','с','т','у',
-                'ф','х','ц','ч','ш','щ','ъ','ь', 'ю','я','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У',
-                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ю','Я' );
-
-        $lat = array( 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u',
-                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y' ,'yu' ,'ya','A','B','V','G','D','E','Zh',
-                'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' );
-
-        $translit = str_replace($cyr, $lat, $translit);
-
-        return $translit;
-    }
-
-    private function PrepareSpoolPath($extPathAppendix)
-    {
-        $pathAppendix = $extPathAppendix;
-        $pathAppendix = explode("/", $pathAppendix);
-
-        $contentPath = $_SERVER["DOCUMENT_ROOT"];
-
-        foreach($pathAppendix as $folder)
-        {
-            $contentPath .= "/" . $folder;
-            if (!file_exists($contentPath) && !is_dir($contentPath))
-            {
-                mkdir($contentPath);
-            }
-        }
-
-        $contentPath .= "/";
-        return $contentPath;
-    }
-
-    private function InsertFile($extFileName, $extFilePath, $extFileLink, $extFileMime, $extDuration, $extAuthor)
-    {
-        $fileName = $extFileName;
-        $filePath = $extFilePath;
-        $fileLink = $extFileLink;
-        $fileMime = $extFileMime;
-        $duration = $extDuration;
-        $author = $extAuthor;
-
-        $visibility = 0; //0 - means not to show in heap (only for playlist)
-        $execution = array();
-        $sql = "INSERT INTO `file` (`name`, `duration`, `mime`, `path`, `link`, `visibility`, `author`) " .
-                "VALUES ('" . $fileName . "', '" . $duration . "', " .
-                "'" . $fileMime . "', '" . $filePath . "', '" . $fileLink . "', " .
-                "" . $visibility . ", '" . $author . "');";
-        $execution['query'] = $sql;
-        $connection = Yii::app()->db;
-        $connection->active=true;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $execution['status'] = $command->execute();
-        $execution['id'] = Yii::app()->db->getLastInsertID();
-        $connection->active=false;
-        return $execution;
-    }
-
-    private function InsertFilePlaylistRelation($extFileId, $extPlaylistId)
-    {
-        $fileId = $extFileId;
-        $playlistId = $extPlaylistId;
-
-        $model = $this->loadModel($playlistId);
-
-        if($model->files == "") {
-            $model->files = $fileId;
-        } else {
-            $model->files .= "," . $fileId;
-        }
-
-        if(!$model->save()) {
-            error_log(json_encode(CHtml::errorSummary($model)));
-            print_r($model->getErrors());
-            exit;
-        }
-
-        return true;
     }
 
     /**

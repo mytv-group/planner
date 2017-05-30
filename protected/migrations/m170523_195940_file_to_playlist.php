@@ -18,15 +18,29 @@ class m170523_195940_file_to_playlist extends CDbMigration
     if (!isset($fileToPlaylistTable)) {
         $this->execute('CREATE TABLE `file_to_playlist` (
              `id` int(11) NOT NULL AUTO_INCREMENT,
-             `id_file` int(11) NOT NULL,
+             `id_file` bigint(20) NOT NULL,
              `id_playlist` int(11) NOT NULL,
              `order` int(11) NOT NULL,
              PRIMARY KEY (`id`),
              KEY `id_file` (`id_file`),
-             KEY `id_playlist` (`id_playlist`),
-             CONSTRAINT `file_fk` FOREIGN KEY (`id_file`) REFERENCES `file`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-             CONSTRAINT `playlist_fk` FOREIGN KEY (`id_playlist`) REFERENCES `playlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+             KEY `id_playlist` (`id_playlist`)
            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;');
+
+        $ii++;
+        echo $ii;
+        echo PHP_EOL.PHP_EOL;
+
+        $this->execute('ALTER TABLE `file_to_playlist`
+            ADD CONSTRAINT `file_fk` FOREIGN KEY (`id_file`)
+            REFERENCES `file`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;');
+
+        $ii++;
+        echo $ii;
+        echo PHP_EOL.PHP_EOL;
+
+        $this->execute('ALTER TABLE `file_to_playlist`
+            ADD CONSTRAINT `playlist_fk` FOREIGN KEY (`id_playlist`)
+            REFERENCES `playlists`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;');
 
         $ii++;
         echo $ii;
@@ -64,6 +78,9 @@ class m170523_195940_file_to_playlist extends CDbMigration
                 ));
                 $order++;
             }
+
+            echo 'FILE_ID: ' . $fileId;
+            echo PHP_EOL.PHP_EOL;
         }
     }
 
@@ -80,6 +97,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
     }
 
     $fileTable = Yii::app()->db->schema->getTable('file');
+    $fileTableColumns = $fileTable->getColumnNames();
     $userTable = Yii::app()->db->schema->getTable('user');
 
     if (isset($fileTable)
@@ -95,7 +113,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
         echo PHP_EOL.PHP_EOL;
     }
 
-    if (isset($fileTable)) {
+    if (isset($fileTable) && isset($fileTableColumns['author'])) {
         $this->dropColumn('file', 'author');
         $ii++;
         echo $ii;

@@ -273,4 +273,103 @@ class PointService extends CApplicationComponent
             }
         }
     }
+
+    private function prapareScreenshot($file, $destPath, $url)
+    {
+        if (strpos($file, 'screenshot') > -1) {
+            $nameParts = explode("_", $file);
+            $timestamp = intval($nameParts[1]);
+            if ($timestamp != 0) { //somescript uploading img from point
+                if ($timestamp < (time() - 100)) {// img uploaded gather than 100 seconds ago
+                    $newFileName = str_replace(strval($timestamp), "0", $file);
+                    $imgDest = $destPath.DIRECTORY_SEPARATOR.$newFileName;
+                    rename ($destPath.DIRECTORY_SEPARATOR.$file, $imgDest);
+                    $answ = $this->receiveScreenshot($destPath, $url);
+                    unlink($destPath.DIRECTORY_SEPARATOR.$newFileName);
+                    return $answ;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function receiveScreenshot($destPath, $url)
+    {
+        $imgDest = $destPath.'/screenshot_'.time().'.jpg';
+        try {
+            file_put_contents($imgDest, file_get_contents($url));
+            $imgUrl = str_replace(YiiBase::getPathOfAlias('webroot'), Yii::app()->baseUrl, $imgDest);
+            return $imgUrl;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function checkIpOnline($ip)
+    {
+        $appendPath = '/spool/vpn-stat.txt';
+        $contentPath = YiiBase::getPathOfAlias('webroot');
+        $vpnStatFilePath = $contentPath.$appendPath;
+
+        $res = false;
+        $handle = @fopen($vpnStatFilePath, "r");
+        if ($handle) {
+            while (($buffer = fgets($handle)) !== false) {
+                $bufArr = explode(",", $buffer);
+
+                if (isset($bufArr[0])) {
+                    $searchedIp = $bufArr[0];
+                    if ($ip == $searchedIp) {
+                        $res = true;
+                        break;
+                    }
+                }
+            }
+            fclose($handle);
+        }
+        return $res;
+    }
+
+    public function getPointScreen($pointId, $pointIp)
+    {
+        //$url = 'http://DOMAIN_NAME/images/screenshot.jpg';
+        $url = 'http://'.$pointIp.'/screenshot.jpg';
+        $appendPath = '/spool/points/'.$pointId;
+        $contentPath = YiiBase::getPathOfAlias('webroot');
+        $imgPath = $contentPath.$appendPath;
+
+        //maybe this dir doesnt exist
+        $pathAppendix = explode("/", $appendPath);
+        foreach($pathAppendix as $folder) {
+            $contentPath .= "/" . $folder;
+            if (!file_exists($contentPath) && !is_dir($contentPath)) {
+                mkdir($contentPath);
+            }
+        }
+
+        $files = scandir($imgPath);
+        if (($files) > 0) {
+            $entrance = false;
+            foreach ($files as $file) {
+                $res = $this->prapareScreenshot($file, $imgPath, $url);
+                if ($res != false) {
+                    $entrance = true;
+                    return $res;
+                }
+            }
+
+            if (!$entrance) {
+                $res = $this->receiveScreenshot($imgPath, $url);
+                if ($res != false) {
+                    return $res;
+                }
+            }
+        } else  {
+            $res = $this->receiveScreenshot($imgPath, $url);
+            if ($res != false) {
+                return $res;
+            }
+        }
+    }
 }

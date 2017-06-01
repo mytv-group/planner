@@ -40,7 +40,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
 
         $this->execute('ALTER TABLE `file_to_playlist`
             ADD CONSTRAINT `playlist_fk` FOREIGN KEY (`id_playlist`)
-            REFERENCES `playlists`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;');
+            REFERENCES `playlists`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;');
 
         $ii++;
         echo $ii;

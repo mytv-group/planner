@@ -5,143 +5,80 @@
 
 <h1>Monitorings</h1>
 
+<div class="container-fluid">
+    <div class="row">
+        <h4 class="alert alert-danger" role="alert">Expired playlists</h4>
+    </div>
 
-<?php
+    <div class="row">
+        <div class="playlists-list container-fluid">
+            <?php $this->widget('zii.widgets.CListView', array(
+              'dataProvider' => Playlists::model()->searchByExpiration('CURDATE()'),
+              'itemView' => '_playlists_view',
+              'sortableAttributes'=>array(
+                  'id',
+                  'name',
+              ),
+              'pager' => [
+                  'firstPageLabel'=>'&laquo;',
+                  'prevPageLabel'=>'&lsaquo;',
+                  'nextPageLabel'=>'&rsaquo;',
+                  'lastPageLabel'=>'&raquo;',
+                  'maxButtonCount'=>'5',
+                  'cssFile'=>Yii::app()->getBaseUrl(true).'/css/pager.css'
+              ],
+            )); ?>
+        </div>
+    </div>
 
-function isPointOnline ($ip){
-    $monitoringModel = new Monitoring();
-    return $monitoringModel->checkIpOnline($ip);
-}
+    <div class="row">
+        <h4 class="alert alert-warning" role="alert">Expiring this week playlists</h4>
+    </div>
 
-$this->widget('zii.widgets.grid.CGridView', array(
-        'id'=>'point-grid',
-        'dataProvider'=>$pointModel,
-        'columns'=>array(
-                'id',
-                'name',
-                'ip',
-                'volume',
-                'sync_time',
-                'update_time',
-                array(
-                    'name' => 'sync',
-                    'value' => function($data,$row){
-                        return('<div class="switch">
-                            <input type="checkbox" '.($data->sync ? 'checked' : '').' disabled="disabled">
-                            <label>
-                              <span class="fontawesome-ok"></span>
-                              <span class="fontawesome-remove"></span>
-                              <div></div>
-                            </label>
-                          </div>');
-                    },
-                    'type'  => 'raw',
-                ),
-                array(
-                    'name' => 'status',
-                    'value' => function($data, $row){
-                        $isOnline = isPointOnline($data->ip);
-                        $glyphicon = $isOnline ? 'glyphicon-globe' : 'glyphicon-eye-close';
-                        $btnType = $isOnline ? 'btn-success' : 'btn-danger';
+    <div class="row">
+        <div class="playlists-list container-fluid">
+            <?php $this->widget('zii.widgets.CListView', array(
+              'dataProvider' => Playlists::model()->searchByExpiration('CURDATE() + INTERVAL 7 DAY', 'CURDATE()'),
+              'itemView' => '_playlists_view',
+              'sortableAttributes'=>array(
+                  'id',
+                  'name',
+              ),
+              'pager' => [
+                  'firstPageLabel'=>'&laquo;',
+                  'prevPageLabel'=>'&lsaquo;',
+                  'nextPageLabel'=>'&rsaquo;',
+                  'lastPageLabel'=>'&raquo;',
+                  'maxButtonCount'=>'5',
+                  'cssFile'=>Yii::app()->getBaseUrl(true).'/css/pager.css'
+              ],
+            )); ?>
+        </div>
+    </div>
 
-                        return '<button type="button" class="btn '.$btnType.' btn-sm" disabled>
-                              <span class="glyphicon '.$glyphicon.'" aria-hidden="true"></span>
-                            </button>';
-                    },
-                    'type'  => 'raw',
-                ),
-                array(
-                    'name' => 'screen',
-                    'value' => function($data, $row){
-                        return '<button type="button" class="btn btn-default btn-sm ShowPointScreenBut" ' .
-                                    'data-id="'.$data->id.'" data-ip="'.$data->ip.'">
-                                  <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
-                                </button>';
-                    },
-                    'type'  => 'raw',
-                ),
-                array(
-                    'name' => 'ctrl',
-                    'value' => function($data, $row){
-                        $viewBut = '<form action="/point/'.$data->id.'" type="post" class="btn-group">'.
-                                        '<button type="submit" class="btn btn-default btn-sm">'.
-                                          '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>'.
-                                        '</button>'.
-                                    '</form>';
+    <div class="row">
+        <h4 class="alert alert-danger" role="alert">Points without planned content</h4>
+    </div>
 
-                        $editBut = '<form action="/point/update/' . $data->id . '" type="post" class="btn-group">' .
-                                        '<button type="submit" class="btn btn-default btn-sm">' .
-                                            '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>' .
-                                        '</button>' .
-                                    '</form>';
-
-                        $delBut = '<form action="/monitoring/deletePoint/' . $data->id . '" type="post" class="delete-point btn-group">' .
-                                        '<button type="submit" class="btn btn-danger btn-sm">' .
-                                            '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' .
-                                        '</button>' .
-                                    '</form>';
-
-                        return $viewBut . $editBut . $delBut;
-                    },
-                    'type'  => 'raw',
-                ),
-        ),
-));
-
-$this->widget('zii.widgets.grid.CGridView', array(
-        'id'=>'playlists-grid',
-        'dataProvider'=>$playlistModel,
-        'columns'=>array(
-                'name',
-                array(
-                    'name' => 'type',
-                    'value' => function($data, $row) {
-                        if (isset(Playlists::$types[$data->type])) {
-                            return Playlists::$types[$data->type];
-                        }
-
-                        return 'unknown';
-                    },
-                    'type'  => 'raw',
-                ),
-                'fromDatetime',
-                'toDatetime',
-                'fromTime',
-                'toTime',
-                array(
-                    'name' => 'every',
-                    'value' => function($data, $row){
-                        if ($data->type == 2) //1 - bg, 2 - adv
-                            return $data->every;
-                        else
-                            return '';
-                    },
-                    'type'  => 'raw',
-                ),
-                array(
-                    'name' => 'ctrl',
-                    'value' => function($data, $row){
-                        $viewBut = '<form action="/playlists/'.$data->id.'" type="post" class="btn-group">'.
-                                        '<button type="submit" class="btn btn-default btn-sm">'.
-                                          '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>'.
-                                        '</button>'.
-                                    '</form>';
-
-                        $editBut = '<form action="/playlists/update/' . $data->id . '" type="post" class="btn-group">' .
-                                    '<button type="submit" class="btn btn-default btn-sm">' .
-                                    '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>' .
-                                    '</button>' .
-                                    '</form>';
-
-                        $delBut = '<form action="/monitoring/deletePlaylist/' . $data->id . '" type="post" class="delete-playlist btn-group">' .
-                                    '<button type="submit" class="btn btn-danger btn-sm">' .
-                                    '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' .
-                                    '</button>' .
-                                    '</form>';
-
-                        return $viewBut . $editBut . $delBut;
-                    },
-                    'type'  => 'raw',
-                ),
-        ),
-));
+    <div class="row">
+        <div class="point-list container-fluid">
+            <?php $this->widget('zii.widgets.CListView', array(
+              'dataProvider' => Point::model()->searchWithoutContent(),
+              'itemView' => '_points_view',
+              'sortableAttributes'=>array(
+                  'id',
+                  'name',
+                  'ip',
+              ),
+              'pager' => [
+                  'firstPageLabel'=>'&laquo;',
+                  'prevPageLabel'=>'&lsaquo;',
+                  'nextPageLabel'=>'&rsaquo;',
+                  'lastPageLabel'=>'&raquo;',
+                  'maxButtonCount'=>'5',
+                  'cssFile'=>Yii::app()->getBaseUrl(true).'/css/pager.css'
+              ],
+            )); ?>
+        </div>
+    </div>
+</div>

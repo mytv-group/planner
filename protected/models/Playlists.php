@@ -117,10 +117,30 @@ class Playlists extends CActiveRecord
     public function search()
     {
         $criteria=new CDbCriteria;
-        $criteria->compare('name',$this->name,true);
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
             $criteria->compare('author', Yii::app()->user->username);
+        }
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+        ));
+    }
+
+    public function searchByExpiration($expirationTo, $expirationFrom = null)
+    {
+        $criteria=new CDbCriteria;
+
+        if (Yii::app()->user->role != User::ROLE_ADMIN) {
+            $criteria->compare('author', Yii::app()->user->username);
+        }
+
+        $expirationToExpression = new CDbExpression($expirationTo);
+        $criteria->addCondition('`toDatetime` < '.$expirationToExpression);
+
+        if ($expirationFrom !== null) {
+            $expirationFromExpression = new CDbExpression($expirationFrom);
+            $criteria->addCondition('`toDatetime` >= '.$expirationFromExpression);
         }
 
         return new CActiveDataProvider($this, array(

@@ -28,7 +28,7 @@ class PointController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('index','view'),
+                'actions'=>array('index','view','ajaxGetPointScreen'),
                 'users'=>array('@'),
                 'roles'=>array('pointViewUser'),
             ),
@@ -210,6 +210,22 @@ class PointController extends Controller
         ));
     }
 
+    public function actionAjaxGetPointScreen()
+    {
+      $answ = array('err', '');
+      if (isset($_POST['pointId']) && isset($_POST['pointIp'])) {
+          $pointId = $_POST['pointId'];
+          $pointIp = $_POST['pointIp'];
+
+          $res = Yii::app()->pointService->getPointScreen($pointId, $pointIp);
+
+          $answ=['ok', $res];
+
+      }
+
+      echo json_encode($answ);
+    }
+
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
@@ -236,8 +252,8 @@ class PointController extends Controller
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-switch.min.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/point.js' );
+            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pointScreen.js' );
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointVolume.js' );
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');

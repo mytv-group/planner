@@ -29,3 +29,24 @@
     height: 280px;
     border: none;
 }
+
+.playlists-list .row-header, .points-list .row-header {
+    padding: 2px;
+}
+
+.playlists-list .row-list-view, .points-list .row-list-view {
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-top-width: 1px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.playlists-list .row-list-view:nth-child(even), .points-list .row-list-view:nth-child(even){
+    background-color: #eee;
+}
+
+.playlists-list .col, .points-list .col {
+    overflow: hidden;
+}

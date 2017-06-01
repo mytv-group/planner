@@ -91,6 +91,8 @@ class Point extends CActiveRecord
             'TVschedule' => 'TV turn on Schedule',
             'channels' => 'Channels',
             'sync' => 'Syncronized',
+            'status' => 'Status',
+            'screen' => 'Screen',
             'screen_id' => "Screen",
             'ctrl' => "Controls"
         );
@@ -110,11 +112,24 @@ class Point extends CActiveRecord
      */
     public function search()
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
         $criteria=new CDbCriteria;
         $criteria->compare('name',$this->name,true);
         $criteria->compare('ip',$this->ip,true);
+
+        if (Yii::app()->user->role != User::ROLE_ADMIN) {
+            $criteria->compare('id_user', Yii::app()->user->id);
+        }
+
+        $answ = new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+        ));
+
+        return $answ;
+    }
+
+    public function searchWithoutContent()
+    {
+        $criteria=new CDbCriteria;
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
             $criteria->compare('id_user', Yii::app()->user->id);

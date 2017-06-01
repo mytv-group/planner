@@ -214,66 +214,70 @@ class PlaylistsController extends Controller
         $answ = array();
         $answ['status'] = 'err';
 
-        if (isset($_POST['data'])) {
-            $playlistId = intval($_POST['data']['playlistId']);
-            $uploadInfo = $_POST['data']['file'];
-            $uploadFileUrl = $uploadInfo['url'];
-            $uploadFileName = $uploadInfo['name'];
-            $siteUrl = $this->CurrUrl();
-            $siteDir = $_SERVER["DOCUMENT_ROOT"];
-            $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
-
-            $mime = urldecode($uploadInfo['type']);
-            $mimeArr = explode("/", $mime);
-            $type = $mimeArr[0];
-
-            $userId = Yii::app()->user->id;
-            $duration = 0;
-
-            $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
-
-            if (($type === "audio") || ($type == "video")) {
-                $getID3 = new getID3;
-                $fileInfo = $getID3->analyze($movedFileInfo['path']);
-                unset($getID3);
-
-                $duration = $fileInfo['playtime_seconds'];
-            } else if($type == "image") {
-                $duration = 10;
-            }
-
-            $fileInstance = new File();
-            $fileInstance->attributes = [
-              'name' => $movedFileInfo['name'],
-              'duration' => $duration,
-              'mime' => $mime,
-              'path' => $movedFileInfo['path'],
-              'link' => $movedFileInfo['link'],
-              'visibility' => 0,
-              'id_user' => $userId
-            ];
-            $fileInstance->save();
-
-            $fileToPlaylistInstance = new FileToPlaylist();
-
-            $fileToPlaylist = Yii::app()->db->createCommand()
-              ->select('MAX(`order`) as `maxOrder`')
-              ->from('file_to_playlist ftp')
-              ->where('id_playlist=:id', [':id'=>$playlistId])
-              ->queryRow();
-
-            $order = isset($fileToPlaylist['maxOrder']) ? $fileToPlaylist['maxOrder'] : 0;
-
-            $fileToPlaylistInstance = new FileToPlaylist();
-            $fileToPlaylistInstance->attributes = [
-                'id_file' => $fileInstance->id,
-                'id_playlist' => $playlistId,
-                'order' => $order
-            ];
-
-            $answ['status'] = 'ok';
+        if (!isset($_POST['data'])) {
+            echo json_encode($answ);
+            Yii::app()->end();
         }
-        echo(json_encode($answ));
+
+        $playlistId = intval($_POST['data']['playlistId']);
+        $uploadInfo = $_POST['data']['file'];
+        $uploadFileUrl = $uploadInfo['url'];
+        $uploadFileName = $uploadInfo['name'];
+        $siteUrl = $this->CurrUrl();
+        $siteDir = $_SERVER["DOCUMENT_ROOT"];
+        $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
+
+        $mime = urldecode($uploadInfo['type']);
+        $mimeArr = explode("/", $mime);
+        $type = $mimeArr[0];
+
+        $userId = Yii::app()->user->id;
+        $duration = 0;
+
+        $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
+
+        if (($type === "audio") || ($type == "video")) {
+            $getID3 = new getID3;
+            $fileInfo = $getID3->analyze($movedFileInfo['path']);
+            unset($getID3);
+
+            $duration = $fileInfo['playtime_seconds'];
+        } else if($type == "image") {
+            $duration = 10;
+        }
+
+        $fileInstance = new File();
+        $fileInstance->attributes = [
+          'name' => $movedFileInfo['name'],
+          'duration' => $duration,
+          'mime' => $mime,
+          'path' => $movedFileInfo['path'],
+          'link' => $movedFileInfo['link'],
+          'visibility' => 0,
+          'id_user' => $userId
+        ];
+        $fileInstance->save();
+
+        $fileToPlaylist = Yii::app()->db->createCommand()
+          ->select('MAX(`order`) as `maxOrder`')
+          ->from('file_to_playlist ftp')
+          ->where('id_playlist=:id', [':id'=>$playlistId])
+          ->queryRow();
+
+        $order = isset($fileToPlaylist['maxOrder']) ? $fileToPlaylist['maxOrder'] : 0;
+
+        $fileToPlaylistInstance = new FileToPlaylist;
+        $fileToPlaylistInstance->attributes = [
+            'id_file' => $fileInstance->id,
+            'id_playlist' => $playlistId,
+            'order' => $order
+        ];
+        $fileToPlaylistInstance->save();
+
+        $answ['status'] = 'ok';
+
+        echo json_encode($answ);
+        Yii::app()->end();
     }
 
     private function CurrUrl()

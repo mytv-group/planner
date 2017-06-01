@@ -49,7 +49,7 @@ $this->menu=array(
 
     <div id='filesPreviewContainer' style='display:block;'>
     <?php
-        $filesToPreview = $model->GetFilesInPlaylist($model->id);
+        $filesToPreview = $model->relatedFiles;
 
         printf("<ul id='sortable' class='unstyled list-unstyled'>");
 
@@ -61,8 +61,9 @@ $this->menu=array(
             $mime = $val['mime'];
             $link = $val['link'];
             $name = $val['name'];
-            $mimeType = $val['mimeType'];
-            $mimeFormat = $val['mimeFormat'];
+            $mime = explode('/', $val['mime']);
+            $mimeType = $mime[0];
+            $mimeFormat = $mime[1];
 
             printf("<li data-fileid='%s'>", $fileid);
 

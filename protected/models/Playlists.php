@@ -69,6 +69,8 @@ class Playlists extends CActiveRecord
     {
         return array(
             'stream' => array(self::HAS_MANY, 'Stream', 'playlist_id'),
+            'filesToPlaylist'=>array(self::HAS_MANY, 'FileToPlaylist', ['id_playlist' => 'id']),
+            'relatedFiles'=>array(self::HAS_MANY, 'File', ['id_file'=>'id'],'through'=>'filesToPlaylist'),
         );
     }
 
@@ -146,42 +148,6 @@ class Playlists extends CActiveRecord
         } else {
             return self::model()->findAllByAttributes(['author' => Yii::app()->user->name]);
         }
-    }
-
-    public function GetFilesInPlaylist($id)
-    {
-        $model = self::model()->findByPk($id);
-        $connection = Yii::app()->db;
-        $connection->active=true;
-
-        $avaliableFiles = $model->files;
-        $filesToPreview = array();
-
-        if(strlen($avaliableFiles) > 0)
-        {
-            $sql = "SELECT `id`, `name`, `mime`, `link`".
-                "FROM `file` WHERE `id` IN (".$avaliableFiles.")".
-                "ORDER BY FIELD(`id`,".$avaliableFiles.");";
-
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-            while(($row=$dataReader->read())!==false)
-            {
-                $mimeArr = explode("/",$row['mime']);
-                $filesToPreview[] = array(
-                        'id' => $row['id'],
-                        'nameFull' => $row['name'],
-                        'name' => substr($row['name'], 13, strlen($row['name'])),
-                        'mime' => $row['mime'],
-                        'mimeType' => $mimeArr[0],
-                        'mimeFormat' => $mimeArr[1],
-                        'link' => $row['link']
-                );
-            }
-        }
-
-        $connection->active=false;
-        return $filesToPreview;
     }
 
     public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)

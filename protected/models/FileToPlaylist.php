@@ -24,8 +24,8 @@ class FileToPlaylist extends CActiveRecord
   public function rules()
   {
     return [
-      ['id_file, id_playlist', 'required'],
-      ['id_file, id_playlist', 'numerical', 'integerOnly'=>true],
+      ['id_file, id_playlist, order', 'required'],
+      ['id_file, id_playlist, order', 'numerical', 'integerOnly'=>true],
     ];
   }
 

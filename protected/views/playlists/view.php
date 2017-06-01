@@ -4,12 +4,12 @@
 
 
 $this->menu=array(
-	array('label'=>'List', 'url'=>array('index')),
-	array('label'=>'Create', 'url'=>array('create')),
-	array('label'=>'Update', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete', 'url'=>'#',
-			'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),
-			'confirm'=>'Are you sure you want to delete this item?')),
+    array('label'=>'List', 'url'=>array('index')),
+    array('label'=>'Create', 'url'=>array('create')),
+    array('label'=>'Update', 'url'=>array('update', 'id'=>$model->id)),
+    array('label'=>'Delete', 'url'=>'#',
+            'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),
+            'confirm'=>'Are you sure you want to delete this item?')),
 );
 ?>
 
@@ -27,7 +27,7 @@ $this->renderPartial('_form', [
 
     <div id='filesPreviewContainer' style='display:block;'>
     <?php
-        $filesToPreview = $model->GetFilesInPlaylist($model->id);
+        $filesToPreview = $model->relatedFiles;
 
         printf("<ul id='sortable' class='unstyled list-unstyled'>");
 
@@ -39,8 +39,9 @@ $this->renderPartial('_form', [
             $mime = $val['mime'];
             $link = $val['link'];
             $name = $val['name'];
-            $mimeType = $val['mimeType'];
-            $mimeFormat = $val['mimeFormat'];
+            $mime = explode('/', $val['mime']);
+            $mimeType = $mime[0];
+            $mimeFormat = $mime[1];
 
             printf("<li data-fileid='%s'>", $fileid);
 

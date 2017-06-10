@@ -25,7 +25,7 @@ class AdminController extends Controller
                 'roles'=>array('heapViewUser'),
             ),
             array('allow',
-                'actions'=>array('uploadfile', 'createnewfolder', 'rename', 'move'),
+                'actions'=>array('upload', 'createnewfolder', 'rename', 'move'),
                 'users'=>array('@'),
                 'roles'=>array('heapEditUser'),
             ),
@@ -546,103 +546,67 @@ class AdminController extends Controller
     /**
      * Proccessing uploaded file
      */
-    public function actionUploadfile()
+    public function actionUpload()
     {
         $answ = array();
         $answ['status'] = 'err';
-        if (isset($_POST['data'])) {
-            $folderId = $_POST['data']['folderId'];
-            $uploadInfo = $_POST['data']['file'];
-            $uploadFileUrl = $uploadInfo['url'];
-            $uploadFileName = $uploadInfo['name'];
-            $siteUrl = $this->CurrUrl();
-            $siteDir = $_SERVER["DOCUMENT_ROOT"];
-            $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
 
-            $mime = urldecode($uploadInfo['type']);
-            $mimeArr = explode("/", $mime);
-            $type = $mimeArr[0];
-            $moved = false;
-            $insertedStatus['status'] = false;
-            $contentPath = "";
-
-            if ($type == "audio") {
-                list($moved, $uploadFileName, $contentPath, $pathAppendix)
-                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
-
-                $getID3 = new getID3;
-                $audioFileInfo = $getID3->analyze($contentPath . $uploadFileName);
-                unset($getID3);
-
-                $duration = $audioFileInfo['playtime_seconds'];
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
-            } else if ($type == "image") {
-                list($moved, $uploadFileName, $contentPath, $pathAppendix)
-                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
-
-                $duration = 10;
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
-            } else if ($type == "video") {
-                list($moved, $uploadFileName, $contentPath, $pathAppendix)
-                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
-
-                $getID3 = new getID3;
-                $videoFileInfo = $getID3->analyze($contentPath . $uploadFileName);
-                unset($getID3);
-                $duration = $videoFileInfo['playtime_seconds'];
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
-            } else {
-                list($moved, $uploadFileName, $contentPath, $pathAppendix)
-                  = $this->moveToSpool("spool/audio/bg_all", $uploadFileName, $uploadFilePath);
-                $duration = 0;
-
-                $insertedStatus = $this->InsertFile($uploadFileName,
-                        $contentPath . $uploadFileName, $siteUrl . "/" . $pathAppendix . "/" . $uploadFileName,
-                        $mime, $duration, Yii::app()->user->name);
-                $fileId = $insertedStatus['id'];
-                $insertedStatus1 = $this->InsertFileFolderRelation($fileId, $folderId);
-            }
-
-            $inserted = $insertedStatus['status'];
-            if(($moved === true) && ($inserted == true)) {
-                $answ['status'] = 'ok';
-            } else if(($moved === true)  && ($inserted === false)) {
-                $answ['status'] = 'err';
-                $answ['error'] = 'Cant insert row to db: ' . $insertedStatus['query'] .
-                ". Page AdminController.php";
-                error_log($answ['error']);
-            } else if($moved === false) {
-                if(($type != "audio") && ($type != "image") && ($type != "video"))
-                    $answ['status'] = 'err';
-                $answ['error'] = 'Incorect file mime type. ' . $mime;
-                error_log($answ['error']);
-            }
+        if (!isset($_POST['data'])) {
+            echo json_encode($answ);
+            Yii::app()->end();
         }
-        echo(json_encode($answ));
-    }
 
-    private function moveToSpool($pathAppendix, $uploadFileName, $uploadFilePath)
-    {
-        $contentPath = $this->PrepareSpoolPath($pathAppendix);
-        $uploadFileName = str_replace(" ", "", $uploadFileName);
-        $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
-        $moved = rename($uploadFilePath, $contentPath . $uploadFileName);
+        $folderId = intval($_POST['data']['folderId']);
+        $uploadInfo = $_POST['data']['file'];
+        $uploadFileUrl = $uploadInfo['url'];
+        $uploadFileName = $uploadInfo['name'];
+        $siteUrl = $this->CurrUrl();
+        $siteDir = $_SERVER["DOCUMENT_ROOT"];
+        $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
 
-        return [$moved, $uploadFileName, $contentPath, $pathAppendix];
+        $mime = urldecode($uploadInfo['type']);
+        $mimeArr = explode("/", $mime);
+        $type = $mimeArr[0];
+
+        $userId = Yii::app()->user->id;
+        $duration = 0;
+
+        $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
+
+        if (($type === "audio") || ($type == "video")) {
+            $getID3 = new getID3;
+            $fileInfo = $getID3->analyze($movedFileInfo['path']);
+            unset($getID3);
+
+            $duration = $fileInfo['playtime_seconds'];
+        } else if($type == "image") {
+            $duration = 10;
+        }
+
+        $fileInstance = new File();
+        $fileInstance->attributes = [
+          'name' => $movedFileInfo['name'],
+          'duration' => $duration,
+          'mime' => $mime,
+          'path' => $movedFileInfo['path'],
+          'link' => $movedFileInfo['link'],
+          'visibility' => 0,
+          'id_user' => $userId
+        ];
+        $fileInstance->save();
+
+        $fileToFolderInstance = new FileToFolder;
+        $fileToFolderInstance->attributes = [
+            'id_file' => $fileInstance->id,
+            'id_folder' => $folderId,
+            'id_author' => Yii::app()->user->username
+        ];
+        $fileToFolderInstance->save();
+
+        $answ['status'] = 'ok';
+
+        echo json_encode($answ);
+        Yii::app()->end();
     }
 
     private function CurrUrl()
@@ -690,96 +654,9 @@ class AdminController extends Controller
         return $translit;
     }
 
-    private function PrepareSpoolPath($extPathAppendix)
-    {
-        $pathAppendix = $extPathAppendix;
-        $pathAppendix = explode("/", $pathAppendix);
-
-        $contentPath = $_SERVER["DOCUMENT_ROOT"];
-
-        foreach($pathAppendix as $folder) {
-            $contentPath .= "/" . $folder;
-            if (!file_exists($contentPath) && !is_dir($contentPath)) {
-                mkdir($contentPath);
-            }
-        }
-
-        $contentPath .= "/";
-        return $contentPath;
-    }
-
-    private function InsertFile($extFileName, $extFilePath, $extFileLink, $extFileMime, $extDuration, $extAuthor)
-    {
-        $fileName = $extFileName;
-        $filePath = $extFilePath;
-        $fileLink = $extFileLink;
-        $fileMime = $extFileMime;
-        $duration = $extDuration;
-        $author = $extAuthor;
-
-        $sql = "SELECT MAX(`id`) FROM `folder` WHERE 1";
-        $connection = Yii::app()->db;
-        $connection->active=true;
-        $command = $connection->createCommand($sql);
-        $dataReader=$command->query();
-        $id = 0;
-
-        if(($row=$dataReader->read())!==false) {
-            $id = $row['MAX(`id`)'];
-            $id++;
-        }
-
-        $sql = "SELECT MAX(`id`) FROM `file` WHERE 1";
-        $connection = Yii::app()->db;
-        $connection->active=true;
-        $command = $connection->createCommand($sql);
-        $dataReader=$command->query();
-
-        if(($row = $dataReader->read()) !== false) {
-            $MAXid = $row['MAX(`id`)'];
-            $MAXid++;
-            if($MAXid > $id) {
-                $id = $MAXid;
-            }
-        }
-
-        $visibility = 1; //0 - means not to show in heap (only for playlist)
-        $execution = array();
-        $sql = "INSERT INTO `file` (`id`, `name`, `duration`, `mime`, `path`, `link`, `visibility`, `author`) " .
-                "VALUES (".$id.", '" . $fileName . "', '" . $duration . "', " .
-                "'" . $fileMime . "', '" . $filePath . "', '" . $fileLink . "', " .
-                "" . $visibility . ", '" . $author . "');";
-        $execution['query'] = $sql;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $execution['status'] = $command->execute();
-        $execution['id'] = Yii::app()->db->getLastInsertID();
-        $connection->active=false;
-        return $execution;
-    }
-
-    private function InsertFileFolderRelation($extFileId, $extFolderId)
-    {
-        $fileId = $extFileId;
-        $folderId = $extFolderId;
-
-        $execution = array();
-        $sql = "INSERT INTO `file_to_folder` (`id_file`, `id_folder`, `id_author`) " .
-                "VALUES (".$fileId.", ".$folderId.", '".Yii::app()->user->name."');";
-
-        $execution['query'] = $sql;
-        $connection = Yii::app()->db;
-        $connection->active=true;
-        $command = Yii::app()->db->createCommand($sql);
-        $execution['status'] = $command->execute();
-        $connection->active=false;
-        return $execution;
-    }
-
     public function beforeAction($action) {
         if( parent::beforeAction($action) ) {
             $cs = Yii::app()->clientScript;
-
 
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
             $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/vendor/jquery.ui.widget.js' );

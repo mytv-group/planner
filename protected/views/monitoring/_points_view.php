@@ -58,7 +58,7 @@
   </div>
 
   <div class="col col-md-1">
-    <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+    <?php echo CHtml::link(CHtml::encode($data->id), array('/point/view', 'id'=>$data->id)); ?>
   </div>
 
   <div class="col col-md-1">

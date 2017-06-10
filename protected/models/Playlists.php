@@ -71,6 +71,8 @@ class Playlists extends CActiveRecord
             'stream' => array(self::HAS_MANY, 'Stream', 'playlist_id'),
             'filesToPlaylist'=>array(self::HAS_MANY, 'FileToPlaylist', ['id_playlist' => 'id']),
             'relatedFiles'=>array(self::HAS_MANY, 'File', ['id_file'=>'id'],'through'=>'filesToPlaylist'),
+            'playlistToPoint'=>array(self::HAS_MANY,'PlaylistToPoint', ['id_playlist' => 'id']),
+            'point'=>array(self::HAS_ONE,'Point', ['id_point'=>'id'],'through'=>'playlistToPoint'),
         );
     }
 

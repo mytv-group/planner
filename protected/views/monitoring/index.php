@@ -57,11 +57,11 @@
     </div>
 
     <div class="row">
-        <h4 class="alert alert-danger" role="alert">Points without planned content</h4>
+        <h4 class="alert alert-danger" role="alert">Points without planned background content</h4>
     </div>
 
     <div class="row">
-        <div class="point-list container-fluid">
+        <div class="points-list container-fluid">
             <?php $this->widget('zii.widgets.CListView', array(
               'dataProvider' => Point::model()->searchWithoutContent(),
               'itemView' => '_points_view',

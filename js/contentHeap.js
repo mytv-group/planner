@@ -3,7 +3,7 @@ $(document).ready(function(e){
         folderSrc = document.location.origin + '/admin/getfoldercontent/',
         viewSrc = document.location.origin + '/admin/view/',
         createFolderSrc = document.location.origin + '/admin/createnewfolder/',
-        moveFileSrc = document.location.origin + '/admin/uploadfile/',
+        moveFileSrc = document.location.origin + '/admin/upload/',
         deleteNodeSrc = document.location.origin + '/admin/delete/',
         renameNodeSrc = document.location.origin + '/admin/rename/',
         moveNodeNodeSrc = document.location.origin + '/admin/move/',

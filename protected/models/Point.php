@@ -120,11 +120,9 @@ class Point extends CActiveRecord
             $criteria->compare('id_user', Yii::app()->user->id);
         }
 
-        $answ = new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
         ));
-
-        return $answ;
     }
 
     public function searchWithoutContent()
@@ -132,14 +130,44 @@ class Point extends CActiveRecord
         $criteria=new CDbCriteria;
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $criteria->compare('id_user', Yii::app()->user->id);
+            $criteria->compare('author', Yii::app()->user->username);
         }
 
-        $answ = new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-        ));
+        $criteria->addCondition('`toDatetime` < '.new CDbExpression('NOW()'));
+        $criteria->addCondition('`type` = '.array_search('Background', Playlists::$types));
 
-        return $answ;
+        $playlists = Playlists::model()->findAll($criteria);
+
+        $points = [];
+
+        foreach ($playlists as $playlist) {
+            if (!empty($playlist->point)) {
+                $points[] = $playlist->point;
+            }
+        }
+
+        return new CArrayDataProvider($points, array(
+            'keyField' => 'id',
+            'sort' => array(
+                'attributes' => array(
+                    'id' => array(
+                        'asc'=>'id',
+                        'desc'=>'id DESC',
+                        'label' => 'ID'
+                    ),
+                    'name' => array(
+                        'asc'=>'name',
+                        'desc'=>'name DESC',
+                        'label' => 'Name'
+                    ),
+                    'ip' => array(
+                        'asc'=>'ip',
+                        'desc'=>'ip DESC',
+                        'label' => 'IP'
+                    ),
+                ),
+            )
+        ));
     }
 
     /**

@@ -1,5 +1,5 @@
 $(document).ready(function(e){
-  $(".point-list").on("click", '.show-point-screen', function(e){
+  $(".points-list").on("click", '.show-point-screen', function(e){
       var this$ = $(this),
         pointId = this$.data("id"),
         pointIp = this$.data("ip");

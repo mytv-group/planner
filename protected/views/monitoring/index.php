@@ -57,7 +57,7 @@
     </div>
 
     <div class="row">
-        <h4 class="alert alert-danger" role="alert">Points without planned background content</h4>
+        <h4 class="alert alert-danger" role="alert">Points with expired background playlists</h4>
     </div>
 
     <div class="row">

@@ -99,7 +99,7 @@ class PointController extends Controller
                 'ip' => $model->ip
             ]);
 
-            Yii::app()->spool->prepareFilesForSync(intval($point->id));
+            Yii::app()->spool->prepareFilesForSync(intval($model->id));
 
             $this->redirect(['point/view','id'=>$model->id]);
         } else {
@@ -141,7 +141,7 @@ class PointController extends Controller
                 'ip' => $model->ip
             ]);
 
-            Yii::app()->spool->prepareFilesForSync(intval($point->id));
+            Yii::app()->spool->prepareFilesForSync(intval($model->id));
 
             $CM = Yii::app()->contentManager;
             if (isset($model->content)
@@ -167,6 +167,7 @@ class PointController extends Controller
     {
         $this->loadModel($id)->delete();
         Yii::app()->pointService->deleteRelations(intval($id));
+        Yii::app()->spool->removeSpoolPath(intval($id));
 
         if(!isset($_GET['ajax'])) {
             $model = new Point('search');

@@ -56,4 +56,8 @@ $(document).ready(function () {
         hideFunctionality($(e.target).val(), 200);
     });
 
+    $('.delete-playlist').on('submit', function() {
+        return confirm('Do you really want to delete playlist?');
+    });
+
 });

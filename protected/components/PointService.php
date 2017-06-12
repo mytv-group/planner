@@ -237,40 +237,40 @@ class PointService extends CApplicationComponent
             "`id_point` = :id_point",
             [':id_point' => $id]
         );
-
-        $this->removeSpoolPath($id);
     }
 
     public function sendRequestForUpdate($ip)
     {
-        if(defined('HTTP_REQUEST_TO_POINT')) {
-            $requestData = array(
-                "update_need" => true
-            );
+        if (!defined('HTTP_REQUEST_TO_POINT')) {
+            return;
+        }
 
-            $requestAddr = 'http://' . $ip . "/sc_upd";
+        $requestData = array(
+            "update_need" => true
+        );
 
-            try {
-                $client = new EHttpClient($requestAddr, [
-                    'maxredirects' => 3,
-                    'timeout' => 10,
-                    'adapter' => 'EHttpClientAdapterCurl'
-                ]);
+        $requestAddr = 'http://' . $ip . "/sc_upd";
 
-                $client->setParameterGet($requestData);
-                $response = $client->request();
-                $body = "";
-                if ($response->isSuccessful()) {
-                    $body = $response->getBody();
-                } else {
-                    $body = $response->getRawBody();
-                }
-            } catch (Exception $ex) {
-                error_log("http request exception - " . json_encode($ex) . ". " .
-                        "IP - " . $requestAddr . ", " .
-                        "Post - " . json_encode($requestData)
-                );
+        try {
+            $client = new EHttpClient($requestAddr, [
+                'maxredirects' => 3,
+                'timeout' => 10,
+                'adapter' => 'EHttpClientAdapterCurl'
+            ]);
+
+            $client->setParameterGet($requestData);
+            $response = $client->request();
+            $body = "";
+            if ($response->isSuccessful()) {
+                $body = $response->getBody();
+            } else {
+                $body = $response->getRawBody();
             }
+        } catch (Exception $ex) {
+            error_log("http request exception - " . json_encode($ex) . ". " .
+                    "IP - " . $requestAddr . ", " .
+                    "Post - " . json_encode($requestData)
+            );
         }
     }
 

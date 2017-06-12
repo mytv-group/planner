@@ -26,8 +26,8 @@ if((APPLICATION_ENV === 'dev')
 }
 
 if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-    define('SYMLINK', "1");
-    define('HTTP_REQUEST_TO_POINT', "1");
+    define('SYMLINK', 1);
+    define('HTTP_REQUEST_TO_POINT', 1);
 }
 
 require_once($yii);

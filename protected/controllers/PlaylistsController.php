@@ -295,20 +295,20 @@ class PlaylistsController extends Controller
     public function actionDeletefilefrompl()
     {
         $answ["status"] = 'err';
-        if(isset($_POST["data"]) && isset($_POST["data"]["file"]) && isset($_POST["data"]["plid"]) &&
-                ($_POST["data"]["file"] != '') && ($_POST["data"]["plid"] != ''))
-        {
+        if (isset($_POST["data"])
+            && isset($_POST["data"]["file"])
+            && isset($_POST["data"]["plid"])
+            && ($_POST["data"]["file"] != '')
+            && ($_POST["data"]["plid"] != '')
+        ) {
             $fileId = $_POST["data"]["file"];
             $playlistId = $_POST["data"]["plid"];
 
             $execution = $this->DeleteFileFromPlaylist($fileId, $playlistId);
 
-            if($execution)
-            {
+            if ($execution) {
                 $answ["status"] = 'ok';
-            }
-            else
-            {
+            } else {
                 $answ["status"] = 'err';
                 $answ["error"] = "Delete query failed. " . $execution . ". " .  $sql;
             }
@@ -382,15 +382,24 @@ class PlaylistsController extends Controller
             $playlistId = $_POST['playlistId'];
             $heapItemId = $_POST['id'];
 
-            $insertedStatus = $this->InsertFilePlaylistRelation($heapItemId, $playlistId);
-            $inserted = $insertedStatus;
+            $fileToPlaylist = Yii::app()->db->createCommand()
+              ->select('MAX(`order`) as `maxOrder`')
+              ->from('file_to_playlist ftp')
+              ->where('id_playlist=:id', [':id'=>$playlistId])
+              ->queryRow();
 
-            if($inserted == true)
-            {
+            $order = isset($fileToPlaylist['maxOrder']) ? $fileToPlaylist['maxOrder'] : 0;
+
+            $fileToPlaylistInstance = new FileToPlaylist;
+            $fileToPlaylistInstance->attributes = [
+                'id_file' => $heapItemId,
+                'id_playlist' => $playlistId,
+                'order' => $order
+            ];
+
+            if ($fileToPlaylistInstance->save()) {
                 $answ['status'] = 'ok';
-            }
-            else if($inserted === false)
-            {
+            } else if($inserted === false) {
                 $answ['status'] = 'err';
                 $answ['error'] = 'Cant insert row to db: ' . $insertedStatus['query'] .
                 ". Page PlaylistController.php";

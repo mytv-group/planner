@@ -12,16 +12,12 @@
       <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?></b>
     </div>
 
-    <div class="col col-md-1">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
 
     <div class="col col-md-1">
       <b><?php echo CHtml::encode($model->getAttributeLabel('ip')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('volume')); ?></b>
     </div>
 
     <div class="col col-md-1">
@@ -61,16 +57,12 @@
     <?php echo CHtml::link(CHtml::encode($data->id), array('/point/view', 'id'=>$data->id)); ?>
   </div>
 
-  <div class="col col-md-1">
+  <div class="col col-md-2">
     <?php echo CHtml::encode($data->name); ?>
   </div>
 
   <div class="col col-md-1">
     <?php echo CHtml::encode($data->ip); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->volume); ?>
   </div>
 
   <div class="col col-md-1">

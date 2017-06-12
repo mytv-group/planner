@@ -139,10 +139,17 @@ class Point extends CActiveRecord
         $playlists = Playlists::model()->findAll($criteria);
 
         $points = [];
+        $pointIds = [];
 
         foreach ($playlists as $playlist) {
-            if (!empty($playlist->point)) {
-                $points[] = $playlist->point;
+            $ii = 0;
+            $playlistPoints = $playlist->points;
+            while (!empty($playlistPoints[$ii])) {
+                if (!isset($pointIds[$playlistPoints[$ii]->id]) ) {
+                    $pointIds[$playlistPoints[$ii]->id] = '';
+                    $points[] = $playlistPoints[$ii];
+                }
+                $ii++;
             }
         }
 

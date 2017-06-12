@@ -175,9 +175,8 @@ $this->menu=array(
                 Uncheck all in folder
             </span>
 
-            <span class="btn btn-default btn-dialog-heap fileinput-button">
+            <span class="btn btn-default btn-dialog-heap choose-files-button">
                 <span>Choose files</span>
-                <input id="addFiles" type="input">
             </span>
         </p>
         </div>');

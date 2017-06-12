@@ -5,7 +5,7 @@ $(document).ready(function () {
     'use strict';
 
     var deleteFileSrc = document.location.origin + '/playlists/deletefilefrompl/',
-        addfilefromheapSrc = document.location.origin + '/playlists/addfilefromheap/',
+        addfilefromheapSrc = document.location.origin + '/playlists/addFileFromHeap/',
         folderSrc = document.location.origin + '/admin/getfoldercontent/',
         viewSrc = document.location.origin + '/admin/view/',
         Playlist_name = $("#Playlist_name"),
@@ -482,8 +482,8 @@ $(document).ready(function () {
                 });
 
                 $("div.HeapItem").on('dblclick', function(e){
-                    var el = $(e.target);
-                    if(el.data('type') == 'file') {
+                    var el = $(this);
+                    if (el.data('type') == 'file') {
                         var link = el.data("link"),
                             mime = el.data("mime"),
                             mimeArr = mime.split("/"),
@@ -491,7 +491,7 @@ $(document).ready(function () {
 
                         mime = mimeArr[1];
 
-                        if(type == 'video'){
+                        if (type == 'video'){
                             dialogVideoPreview.data('link', link);
                             dialogVideoPreview.data('mime', mime);
                             dialogVideoPreview.dialog({
@@ -527,20 +527,18 @@ $(document).ready(function () {
         });
     }
 
-    $("input#addFiles").on("click", function(e){
+    $(".choose-files-button").on("click", function(e){
         var playlistId = playlistIdTag.val();
         $.each($(".heapitemnode:checked"), function(i, item){
             var itemId = $(item).data("id");
-            var pV = {
-                id: itemId,
-                playlistId: playlistId
-            };
-            console.log(pV);
 
             $.ajax({
               url: addfilefromheapSrc,
               type: "POST",
-              data: pV,
+              data: {
+                  id: itemId,
+                  playlistId: playlistId
+              },
               dataType: "json",
             }).done(function(e){
                 console.log(e);

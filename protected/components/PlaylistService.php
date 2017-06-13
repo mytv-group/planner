@@ -2,38 +2,36 @@
 
 class PlaylistService extends CApplicationComponent
 {
-    public $db;
+    public $playlist;
 
-    private function getDb()
+    private function getPlaylist()
     {
-        return $this->db->__invoke();
+        return $this->playlist->__invoke();
     }
 
-    public function deleteALLFilesFromPlaylist($playlistId, $files)
+    public function deletePlaylistFiles($playlistId)
     {
-        $relatedFiles = $files;
+        $playlistModel = $this->getPlaylist();
+        $playlist = $playlistModel->findByPk($playlistId);
 
-        //remove net relations
-        $connection = $this->getDb();
-        $connection->active=true;
+        if ($playlist && $playlist->filesToPlaylist) {
+            $filesToPlaylist = $playlist->filesToPlaylist;
+        }
 
-        foreach ($relatedFiles as $key => $fileId) {
+        foreach ($filesToPlaylist as $item) {
+            $item->delete();
+        }
+
+        $files = [];
+
+        if ($playlist && $playlist->relatedFiles) {
+            $files = $playlist->relatedFiles;
+        }
+
+        foreach ($files as $file) {
             //if file visibilyty 0 (only for current pl), delete it
-            $sql = "SELECT `path`, `visibility` FROM `file` WHERE `id` = ".$fileId.";";
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-            $visibility = 0;
-            $path = '';
-            if (($row=$dataReader->read()) !== false) {
-                $visibility = $row['visibility'];
-                $path = $row['path'];
-            }
-
-            if ($visibility == 0) {
-                $sql = "DELETE FROM `file` WHERE " .
-                        "`id` = " . $fileId . ";";
-                $command = Yii::app()->db->createCommand($sql);
-                $execution = $command->execute();
+            if ($file->visibility == 0) {
+                $file->delete();
 
                 if (file_exists($path)){
                     try {
@@ -46,7 +44,6 @@ class PlaylistService extends CApplicationComponent
                 }
             }
         }
-        $connection->active=false;
 
         return;
     }

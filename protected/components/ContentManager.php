@@ -34,10 +34,15 @@ class ContentManager extends CApplicationComponent
             $fromTime = $row['fromTime'];
             $toTime = $row['toTime'];
 
-            $files = $row['files'];
             $type = $row['type'];
-            $playlistId = $row['id_playlist'];
+            $playlistId = intval($row['id_playlist']);
             $authorId = $row['id-author'];
+
+            $files = [];
+            $playlistInstance = Playlists::model()->findByPk($playlistId);
+            if ($playlistInstance && $playlistInstance->relatedFiles) {
+                $files = $playlistInstance->relatedFiles;
+            }
 
             /* if today starts showing check broadcasting is later showing begin */
             if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
@@ -62,14 +67,14 @@ class ContentManager extends CApplicationComponent
             }
         }
 
-        foreach ( $blocksArr as &$block ) {
-            if($block ['type'] == 3) {
+        foreach ($blocksArr as &$block) {
+            if ($block ['type'] == 3) {
                 $sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
 
                 $command=$connection->createCommand($sql);
                 $rows=$command->queryAll();
 
-                if($rows) {
+                if ($rows) {
                     $duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;
                     $block ["filesWithDuration"] = array ();
                     foreach ($rows as $row) {
@@ -88,27 +93,19 @@ class ContentManager extends CApplicationComponent
                     $block ["duration"] = $duration;
                 }
             } else {
-                $files = implode ( "','", explode ( ",", $block ['files'] ) );
                 $from = $block ['from'];
-
-                $sql = "SELECT `id`, `duration`, `name` ".
-                        "FROM `file` WHERE `id` IN ('" . $files . "') ".
-                        "ORDER BY FIELD(`id`,'".$files."');";
-
-                $command=$connection->createCommand($sql);
-                $rows=$command->queryAll();
 
                 $duration = 0;
                 $block ["filesWithDuration"] = array ();
-                foreach($rows as $row) {
-                    $duration += $row['duration'];
+                foreach($files as $file) {
+                    $duration += $file->duration;
                     $block ["filesWithDuration"] [] = array (
-                        $row['duration'],
-                        $row['name'],
-                        $row['duration'] . " "
-                            . $row['name'] . " "
-                            . "duration:" . $row['duration'] . ";"
-                            . "file:" . $row['id'] . ";"
+                        $file->duration,
+                        $file->name,
+                        $file->duration . " "
+                            . $file->name . " "
+                            . "duration:" . $file->duration . ";"
+                            . "file:" . $file->id . ";"
                             . "pl:" . $block['playlistId'] . ";"
                             . "author:" . $block['authorId'] . " "
                             . "" . $this->eol /*ready to output str*/
@@ -144,28 +141,26 @@ class ContentManager extends CApplicationComponent
         foreach ($rows as $row) {
             $fromDatetime = date_create ( $row['fromDatetime']);
             $toDatetime = date_create ( $row['toDatetime']);
+            $playlistId = intval($row['id_playlist']);
+
+            $files = [];
+            $playlistInstance = Playlists::model()->findByPk($playlistId);
+            if ($playlistInstance && $playlistInstance->relatedFiles) {
+                $files = $playlistInstance->relatedFiles;
+            }
 
             $every = $row['every'];
-            $files = $row['files'];
-            $files = implode ( "','", explode ( ",", $files ) );
-
-            $sql = "SELECT `id`, `duration`, `name` ".
-                "FROM `file` WHERE `id` IN ('" . $files . "') ".
-                "ORDER BY FIELD(`id`,'".$files."');";
-
-            $command=$connection->createCommand($sql);
-            $rows2=$command->queryAll();
 
             $duration = 0;
             $filesWithDuration = array ();
-            foreach ($rows2 as $row2) {
-                $duration += $row2 ['duration'];
+            foreach ($files as $file) {
+                $duration += $file->duration;
                 $filesWithDuration [] = array (
-                    $row2['duration'],
-                    $row2['name'],
-                    $row2['duration'] . " " . $row2['name'] . " "
-                        . "duration:" . $row2['duration'] . ";"
-                        . "file:" . $row2['id'] . ";"
+                    $file->duration,
+                    $file->name,
+                    $file->duration . " " . $file->name . " "
+                        . "duration:" . $file->duration . ";"
+                        . "file:" . $file->id . ";"
                         . "pl:" . $row['id_playlist'] . ";"
                         . "author:" . $row['id-author'] . ""
                         . $this->eol /*ready to output str*/
@@ -182,7 +177,7 @@ class ContentManager extends CApplicationComponent
 
             $curTime = clone $startTime;
 
-            while ( $curTime < $endTime ) {
+            while ($curTime < $endTime) {
                 $endBlockTime = clone $curTime;
                 $endBlockTime->add ( new DateInterval ( 'PT' . $duration . 'S' ) );
 

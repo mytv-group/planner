@@ -75,9 +75,9 @@ return array(
         ),
         'playlistService' => array(
             'class'=>'PlaylistService',
-            'db' => function() {
-                return Yii::app()->db;
-            }
+            'playlist' => function() {
+                return Playlists::model();
+            },
         ),
         'pointService' => array(
             'class'=>'PointService',

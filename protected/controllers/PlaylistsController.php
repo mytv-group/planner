@@ -79,6 +79,7 @@ class PlaylistsController extends Controller
     {
         $model=new Playlists();
         $model->type = 1; // for radioButtonList default value
+        $model->files = '';
         $stream = new Stream();
 
         // Uncomment the following line if AJAX validation is needed
@@ -120,8 +121,10 @@ class PlaylistsController extends Controller
 
         if (isset($_POST['Playlists'])) {
             $playlists = $_POST['Playlists'];
-            if (isset($_POST['Stream']['url']) &&
-                    ($playlists['type'] == 3)) { //2 - stream
+            $playlists['files'] = '';
+            if (isset($_POST['Stream']['url'])
+                 && ($playlists['type'] == 3)
+            ) { //2 - stream
 
                 $exitstStream = Stream::model()->findByAttributes(
                     array('playlist_id' => $id)
@@ -171,21 +174,15 @@ class PlaylistsController extends Controller
     public function actionDelete($id)
     {
         $model = $this->loadModel($id);
-        $files = trim($model->files);
-        $model->delete();
-        if (isset($files) && ($files != '')) {
-            $filesArr = explode(",", $files);
-            Yii::app()->playlistService->deleteALLFilesFromPlaylist($id, $filesArr);
-        }
 
-        PlaylistToPoint::model()->deleteAllByAttributes([
-            'id_playlist' => $id,
-        ]);
+        Yii::app()->playlistService->deletePlaylistFiles($id);
+
+        $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax'])) {
+        if (!isset($_GET['ajax'])) {
             $this->redirect(array('playlists/index'),array(
-                    'model'=>$model
+                'model'=>$model
             ));
         }
     }

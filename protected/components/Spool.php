@@ -103,25 +103,15 @@ class Spool extends CApplicationComponent
             $channelDir = $pointDir . DIRECTORY_SEPARATOR . $playlistToPoint->channel_type;
             $channelFullDir = $this->prepareSpoolPath($channelDir);
 
-            $plFiles = explode(",", $pl->files);
-
-            foreach ($plFiles as $fileId) {
-                if ($fileId != '') {
-                    $file = $fileModel->findByPk($fileId);
-
-                    if (empty($file)) {
-                        continue;
-                    }
-
-                    $symlinkPath = $channelFullDir . $file->name;
-                    if (!file_exists($symlinkPath)
-                        && file_exists($file->path)
-                    ) {
-                        if (defined('SYMLINK')) {
-                            symlink($file->path, $symlinkPath);
-                        } else {
-                            copy($file->path, $symlinkPath);
-                        }
+            foreach ($pl->relatedFiles as $file) {
+                $symlinkPath = $channelFullDir . $file->name;
+                if (!file_exists($symlinkPath)
+                    && file_exists($file->path)
+                ) {
+                    if (defined('SYMLINK')) {
+                        symlink($file->path, $symlinkPath);
+                    } else {
+                        copy($file->path, $symlinkPath);
                     }
                 }
             }

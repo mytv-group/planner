@@ -32,7 +32,7 @@ $('.search-form form').submit(function(){
     </div><!-- search-form -->
 </div>
 
-<div class="points-list container-fluid">
+<div class="point-list container-fluid">
 <?php
   $this->widget('zii.widgets.CListView', [
       'dataProvider' => $model->search(),

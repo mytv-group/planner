@@ -13,10 +13,6 @@
       <b>#</b>
     </div>
 
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?></b>
-    </div>
-
     <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
@@ -25,12 +21,9 @@
       <b><?php echo CHtml::encode($model->getAttributeLabel('type')); ?></b>
     </div>
 
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('fromDatetime')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('toDatetime')); ?></b>
+    <div class="col col-md-3">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('fromDatetime')); ?> -
+      <?php echo CHtml::encode($model->getAttributeLabel('toDatetime')); ?></b>
     </div>
 
     <div class="col col-md-1">
@@ -58,12 +51,8 @@
     <b><?= $index + 1 ?></b>
   </div>
 
-  <div class="col col-md-1">
-    <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-  </div>
-
   <div class="col col-md-2">
-    <?php echo CHtml::encode($data->name); ?>
+    <?php echo CHtml::link(CHtml::encode($data->name), array('view', 'id'=>$data->id)); ?>
   </div>
 
   <div class="col col-md-1">
@@ -77,11 +66,8 @@
     ?>
   </div>
 
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->fromDatetime); ?>
-  </div>
-
-  <div class="col col-md-1">
+  <div class="col col-md-3">
+    <?php echo CHtml::encode($data->fromDatetime); ?> -
     <?php echo CHtml::encode($data->toDatetime); ?>
   </div>
 

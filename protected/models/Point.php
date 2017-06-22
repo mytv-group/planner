@@ -127,29 +127,28 @@ class Point extends CActiveRecord
 
     public function searchWithoutContent()
     {
-        $criteria=new CDbCriteria;
+        $pointCriteria=new CDbCriteria;
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
             $criteria->compare('author', Yii::app()->user->username);
         }
 
-        $criteria->addCondition('`toDatetime` < '.new CDbExpression('NOW()'));
-        $criteria->addCondition('`type` = '.array_search('Background', Playlists::$types));
-
-        $playlists = Playlists::model()->findAll($criteria);
-
+        $allPoints = Point::model()->findAll($pointCriteria);
         $points = [];
-        $pointIds = [];
 
-        foreach ($playlists as $playlist) {
-            $ii = 0;
-            $playlistPoints = $playlist->points;
-            while (!empty($playlistPoints[$ii])) {
-                if (!isset($pointIds[$playlistPoints[$ii]->id]) ) {
-                    $pointIds[$playlistPoints[$ii]->id] = '';
-                    $points[] = $playlistPoints[$ii];
+        foreach ($allPoints as $point) {
+            $playlists = $point->playlists;
+
+            $count = count($playlists);
+            $expired = 0;
+            foreach ($playlists as $playlist) {
+                if (date_create($playlist->toDatetime) < new DateTime('now')) {
+                    $expired++;
                 }
-                $ii++;
+            }
+
+            if ($count === $expired) {
+                $points[] = $point;
             }
         }
 
@@ -186,90 +185,5 @@ class Point extends CActiveRecord
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
-    }
-
-    public function GetPointPlaylistNames($id)
-    {
-        $model = self::model()->findByPk($id);
-        $connection = Yii::app()->db;
-        $connection->active=true;
-
-        $avaliableChannels = $model->channels;
-        $playlists = array();
-
-        if(strlen($avaliableChannels) > 0)
-        {
-            $sql = "SELECT `id`, `name` FROM `playlists` WHERE `id` IN (".$avaliableChannels.");";
-
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-            while(($row=$dataReader->read())!==false)
-            {
-                $playlists[] = array(
-                        'id' => $row['id'],
-                        'name' => $row['name']
-                );
-            }
-        }
-
-        $connection->active=false;
-        return $playlists;
-    }
-
-    public function GetUserAvaliablePlaylist()
-    {
-        $userName = Yii::app()->user->name;
-        $connection = Yii::app()->db;
-        $connection->active=true;
-
-        $playlists = array();
-
-        $sql = "SELECT `id`, `name`, `fromDatetime`, `toDatetime`, `fromTime`,`toTime`, ".
-            "`sun`,`mon`,`tue`,`wed`,`thu`,`fri`,`sat` FROM `playlists` WHERE `author` = '".$userName."';";
-
-        $command = $connection->createCommand($sql);
-        $dataReader=$command->query();
-        while(($row=$dataReader->read())!==false)
-        {
-            $weedDays = "";
-            if($row['sun']) { $weedDays .= 'Sun '; }
-            if($row['mon']) { $weedDays .= 'Mon '; }
-            if($row['tue']) { $weedDays .= 'Tue '; }
-            if($row['wed']) { $weedDays .= 'Wed '; }
-            if($row['thu']) { $weedDays .= 'Thu '; }
-            if($row['fri']) { $weedDays .= 'Fri '; }
-            if($row['sat']) { $weedDays .= 'Sat '; }
-
-            $playlists[] = array(
-                'id' => $row['id'],
-                'name' => $row['name'],
-                'fromDatetime' => $row['fromDatetime'],
-                'toDatetime' => $row['toDatetime'],
-                'fromTime' => $row['fromTime'],
-                'toTime' => $row['toTime'],
-                'weekDays' => $weedDays
-            );
-        }
-
-        $connection->active=false;
-        return $playlists;
-    }
-
-    private function PrepareSpoolPath($extPathAppendix)
-    {
-        $pathAppendix = $extPathAppendix;
-        $pathAppendix = explode("/", $pathAppendix);
-
-        $contentPath = $_SERVER["DOCUMENT_ROOT"];
-
-        foreach($pathAppendix as $folder) {
-            $contentPath .= "/" . $folder;
-            if (!file_exists($contentPath) && !is_dir($contentPath)) {
-                mkdir($contentPath);
-            }
-        }
-
-        $contentPath .= "/";
-        return $contentPath;
     }
 }

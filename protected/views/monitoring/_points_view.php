@@ -8,32 +8,24 @@
       <b>#</b>
     </div>
 
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?></b>
-    </div>
-
     <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
 
     <div class="col col-md-1">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('status')); ?></b>
+    </div>
+
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('ip')); ?></b>
     </div>
 
-    <div class="col col-md-1">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('sync_time')); ?></b>
     </div>
 
-    <div class="col col-md-1">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('update_time')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('sync')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('status')); ?></b>
     </div>
 
     <div class="col col-md-1">
@@ -41,7 +33,7 @@
     </div>
 
     <?php if ($user->checkAccess ("pointViewUser")): ?>
-      <div class="col col-md-2">
+      <div class="col col-md-1">
         <b><?php echo CHtml::encode($model->getAttributeLabel('options')); ?></b>
       </div>
     <?php endif; ?>
@@ -53,47 +45,35 @@
     <b><?= $index + 1 ?></b>
   </div>
 
-  <div class="col col-md-1">
-    <?php echo CHtml::link(CHtml::encode($data->id), array('/point/view', 'id'=>$data->id)); ?>
-  </div>
-
   <div class="col col-md-2">
-    <?php echo CHtml::encode($data->name); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->ip); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->sync_time); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->update_time); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?= '<div class="switch">
-          <input type="checkbox" '.($data->sync ? 'checked' : '').' disabled="disabled">
-          <label>
-            <span class="fontawesome-ok"></span>
-            <span class="fontawesome-remove"></span>
-            <div></div>
-          </label>
-        </div>';
+    <?php echo CHtml::link(CHtml::encode($data->name),
+        array('/point/view', 'id'=>$data->id));
     ?>
   </div>
 
   <div class="col col-md-1">
     <?php
-        $isOnline = Yii::app()->pointService->checkIpOnline($data->ip);
-        $glyphicon = $isOnline ? 'glyphicon-globe' : 'glyphicon-eye-close';
-        $btnType = $isOnline ? 'btn-success' : 'btn-danger';
-        echo '<button type="button" class="btn '.$btnType.' btn-sm" disabled>
-              <span class="glyphicon '.$glyphicon.'" aria-hidden="true"></span>
-            </button>';
+      if ($data->sync) {
+          echo '<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>';
+      }
     ?>
+    <?php
+        if (Yii::app()->pointService->checkIpOnline($data->ip)) {
+            echo '<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>';
+        }
+    ?>
+  </div>
+
+  <div class="col col-md-2">
+    <?php echo CHtml::encode($data->ip); ?>
+  </div>
+
+  <div class="col col-md-2">
+    <?php echo CHtml::encode($data->sync_time); ?>
+  </div>
+
+  <div class="col col-md-2">
+    <?php echo CHtml::encode($data->update_time); ?>
   </div>
 
   <div class="col col-md-1">
@@ -105,7 +85,7 @@
   </div>
 
   <?php if (Yii::app ()->user->checkAccess ("pointViewUser")): ?>
-    <div class="col-md-2">
+    <div class="col-md-1">
       <div class="btn-group">
         <?php if (Yii::app ()->user->checkAccess ("pointViewUser")): ?>
           <form action="/point/view/<?= $data->id ?>" type="post" class="btn-group">
@@ -123,13 +103,6 @@
           </form>
         <?php endif; ?>
 
-        <?php if (Yii::app()->user->checkAccess ("pointUser")): ?>
-          <form action="/point/delete/<?= $data->id ?>" method="post" class="btn-group delete-point">
-            <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </button>
-          </form>
-        <?php endif; ?>
       </div>
    </div>
   <?php endif; ?>

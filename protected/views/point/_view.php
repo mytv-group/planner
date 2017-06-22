@@ -8,15 +8,15 @@
       <b>#</b>
     </div>
 
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
 
     <div class="col col-md-1">
+      <b><?php echo CHtml::encode($model->getAttributeLabel('status')); ?></b>
+    </div>
+
+    <div class="col col-md-2">
       <b><?php echo CHtml::encode($model->getAttributeLabel('ip')); ?></b>
     </div>
 
@@ -24,20 +24,9 @@
       <b><?php echo CHtml::encode($model->getAttributeLabel('volume')); ?></b>
     </div>
 
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('sync_time')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('update_time')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('sync')); ?></b>
-    </div>
-
-    <div class="col col-md-1">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('status')); ?></b>
+    <div class="col col-md-2">
+      <p><b><u><?php echo CHtml::encode($model->getAttributeLabel('sync_time')); ?></u></b> / </p> 
+      <p><b><?php echo CHtml::encode($model->getAttributeLabel('update_time')); ?></b></p>
     </div>
 
     <div class="col col-md-1">
@@ -57,15 +46,24 @@
     <b><?= $index + 1 ?></b>
   </div>
 
-  <div class="col col-md-1">
-    <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+  <div class="col col-md-2">
+    <?php echo CHtml::link(CHtml::encode($data->name), array('view', 'id'=>$data->id)); ?>
   </div>
 
   <div class="col col-md-1">
-    <?php echo CHtml::encode($data->name); ?>
+    <?php
+      if ($data->sync) {
+          echo '<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>';
+      }
+    ?>
+    <?php
+        if (Yii::app()->pointService->checkIpOnline($data->ip)) {
+            echo '<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>';
+        }
+    ?>
   </div>
 
-  <div class="col col-md-1">
+  <div class="col col-md-2">
     <?php echo CHtml::encode($data->ip); ?>
   </div>
 
@@ -73,35 +71,9 @@
     <?php echo CHtml::encode($data->volume); ?>
   </div>
 
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->sync_time); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?php echo CHtml::encode($data->update_time); ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?= '<div class="switch">
-          <input type="checkbox" '.($data->sync ? 'checked' : '').' disabled="disabled">
-          <label>
-            <span class="fontawesome-ok"></span>
-            <span class="fontawesome-remove"></span>
-            <div></div>
-          </label>
-        </div>';
-    ?>
-  </div>
-
-  <div class="col col-md-1">
-    <?php
-        $isOnline = Yii::app()->pointService->checkIpOnline($data->ip);
-        $glyphicon = $isOnline ? 'glyphicon-globe' : 'glyphicon-eye-close';
-        $btnType = $isOnline ? 'btn-success' : 'btn-danger';
-        echo '<button type="button" class="btn '.$btnType.' btn-sm" disabled>
-              <span class="glyphicon '.$glyphicon.'" aria-hidden="true"></span>
-            </button>';
-    ?>
+  <div class="col col-md-2">
+    <p><u><?php echo CHtml::encode($data->sync_time); ?></u></p>
+    <p><?php echo CHtml::encode($data->update_time); ?></p>
   </div>
 
   <div class="col col-md-1">

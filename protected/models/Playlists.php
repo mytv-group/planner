@@ -348,7 +348,6 @@ class Playlists extends CActiveRecord
         return $advArr;
     }
 
-
     /**
      *
      */

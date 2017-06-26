@@ -130,7 +130,7 @@ class Point extends CActiveRecord
         $pointCriteria=new CDbCriteria;
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $pointCriteria->compare('author', Yii::app()->user->username);
+            $pointCriteria->compare('id_user', Yii::app()->user->id);
         }
 
         $allPoints = Point::model()->findAll($pointCriteria);

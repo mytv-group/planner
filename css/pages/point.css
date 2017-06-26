@@ -30,11 +30,11 @@ select {
     max-width:245px;
 }
 
-.point-list .row-header {
+.points-list .row-header {
     padding: 2px;
 }
 
-.point-list .row-list-view {
+.points-list .row-list-view {
     border-color: #e5e5e5 #eee #eee;
     border-style: solid;
     border-top-width: 1px;
@@ -43,11 +43,11 @@ select {
     padding: 2px;
 }
 
-.point-list .row-list-view:nth-child(even) {
+.points-list .row-list-view:nth-child(even) {
     background-color: #eee;
 }
 
-.point-list .col {
+.points-list .col {
     overflow: hidden;
 }
 

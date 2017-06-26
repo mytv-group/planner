@@ -47,148 +47,152 @@ class AdminController extends Controller
 
    public function actionGetfoldercontent()
    {
-        if(isset($_GET['id']) && isset($_GET['type'])) {
-            $connection = Yii::app()->db;
-            $connection->active=true;
-            $userName = Yii::app()->user->name;
-            $type = $_GET['type'];
+        if (!isset($_GET['id']) || !isset($_GET['type'])) {
+            http_response_code(400);
+            header("Status: 400 Bad Request");
+            $answ = "Not all nessesary params sent. Get: ".json_encode($_GET) . ".";
+            echo(json_encode($answ));
+            exit;
+        }
 
-            $folderid = $_GET['id'];
-            $folderName = "Root node";
-            if($folderid == '#') {
-                $folderid = 0;
+        $connection = Yii::app()->db;
+        $connection->active=true;
+        $userName = Yii::app()->user->name;
+        $type = $_GET['type'];
 
-                if($type == 'treeGeneral') {
-                    $folderName = "General content";
-                } else if($type == 'treePrivate') {
-                    $folderName = "Private content";
-                }
-            } else {
-                $sql = "SELECT `name` FROM `folder` WHERE `id` = " . $folderid . ";";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
+        $folderid = $_GET['id'];
+        $folderName = "Root node";
+        if ($folderid == '#') {
+            $folderid = 0;
 
-                if(($row=$dataReader->read())!==false) {
-                    $folderName = $row['name'];
-                }
-            }
-
-            $tree = array();
-
-            if($type == 'treeGeneral') {
-                $adminName = 'admin';
-                $sql = "SELECT `id`, `name`, `path` FROM `folder` WHERE `author` = '".$adminName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-                $relatedNodes = array();
-                $d = array();
-
-                while(($row=$dataReader->read())!==false) {
-                    $d[] = array(
-                            'id' => intval($row['id']),
-                            'text' => $row['name'],
-                            'type' => 'folder',
-                            'parent' => intval($row['path']),
-                    );
-                }
-
-                $sql = "SELECT `id_file`, `id_folder` FROM `file_to_folder` WHERE `id_author` = '".$adminName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-
-                while(($row=$dataReader->read())!==false) {
-                    $sql = "SELECT `name` FROM `file` WHERE `id` = ".$row['id_file'].";";
-                    $command = $connection->createCommand($sql);
-                    $dataReader1=$command->query();
-
-                    if(($row1 = $dataReader1->read()) !== false) {
-                        $name = substr($row1['name'], 13, strlen($row1['name']) - 13);
-                        $d[] = array(
-                                'id' => intval($row['id_file']),
-                                'text' => $name,
-                                'type' => 'file',
-                                'parent' => intval($row['id_folder']),
-                        );
-                    }
-                }
-
-                if(count($d) > 0) {
-                    $relatedNodes = $this->makeRecursive($d);
-                } else {
-                    $relatedNodes = false;
-                }
-
-                $connection->active=false;
-                $tree[] = array(
-                    "id" => (string)$folderid,
-                    "text" => $folderName,
-                    "state" => array(
-                        "opened" => true
-                    ),
-                    'type' => 'folder',
-                    'children' => $relatedNodes
-                );
-
+            if ($type == 'treeGeneral') {
+                $folderName = "General content";
             } else if($type == 'treePrivate') {
-                $sql = "SELECT `id`, `name`, `path` FROM `folder` WHERE `author` = '".$userName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-                $relatedNodes = array();
-                $d = array();
+                $folderName = "Private content";
+            }
+        } else {
+            $sql = "SELECT `name` FROM `folder` WHERE `id` = " . $folderid . ";";
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
 
-                while(($row = $dataReader->read()) !== false) {
-                    $d[] = array(
+            if(($row=$dataReader->read())!==false) {
+                $folderName = $row['name'];
+            }
+        }
+
+        $tree = array();
+
+        if ($type == 'treeGeneral') {
+            $adminName = 'admin';
+            $sql = "SELECT `id`, `name`, `path` FROM `folder` WHERE `author` = '".$adminName."';";
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
+            $relatedNodes = array();
+            $d = array();
+
+            while (($row=$dataReader->read())!==false) {
+                $d[] = array(
                         'id' => intval($row['id']),
                         'text' => $row['name'],
                         'type' => 'folder',
                         'parent' => intval($row['path']),
-                    );
-                }
-
-                $sql = "SELECT `id_file`, `id_folder` FROM `file_to_folder` WHERE `id_author` = '".$userName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-
-                while(($row = $dataReader->read()) !== false) {
-                    $sql = "SELECT `name` FROM `file` WHERE `id` = ".$row['id_file'].";";
-                    $command = $connection->createCommand($sql);
-                    $dataReader1=$command->query();
-
-                    if(($row1 = $dataReader1->read()) !== false) {
-                        $name = substr($row1['name'], 13, strlen($row1['name']) - 13);
-                        $d[] = array(
-                                'id' => intval($row['id_file']),
-                                'text' => $name,
-                                'type' => 'file',
-                                'parent' => intval($row['id_folder']),
-                        );
-                    }
-                }
-
-                if(count($d) > 0) {
-                    $relatedNodes = $this->makeRecursive($d);
-                } else {
-                    $relatedNodes = false;
-                }
-
-                $connection->active=false;
-                $tree[] = array(
-                    "id" => (string)$folderid,
-                    "text" => $folderName,
-                    "state" => array(
-                        "opened" => true,
-                        "selected" => true
-                    ),
-                    'type' => 'folder',
-                    'children' => $relatedNodes
                 );
             }
 
-            //error_log(json_encode($tree));
-            echo json_encode($tree);
-        } else {
-            echo false;
+            $sql = "SELECT `id_file`, `id_folder` FROM `file_to_folder` WHERE `id_author` = '".$adminName."';";
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
+
+            while (($row=$dataReader->read())!==false) {
+                $sql = "SELECT `name` FROM `file` WHERE `id` = ".$row['id_file'].";";
+                $command = $connection->createCommand($sql);
+                $dataReader1=$command->query();
+
+                if (($row1 = $dataReader1->read()) !== false) {
+                    $name = substr($row1['name'], 13, strlen($row1['name']) - 13);
+                    $d[] = array(
+                            'id' => intval($row['id_file']),
+                            'text' => $name,
+                            'type' => 'file',
+                            'parent' => intval($row['id_folder']),
+                    );
+                }
+            }
+
+            if (count($d) > 0) {
+                $relatedNodes = $this->makeRecursive($d);
+            } else {
+                $relatedNodes = false;
+            }
+
+            $connection->active=false;
+            $tree[] = array(
+                "id" => (string)$folderid,
+                "text" => $folderName,
+                "state" => array(
+                    "opened" => true
+                ),
+                'type' => 'folder',
+                'children' => $relatedNodes
+            );
+
+        } else if ($type == 'treePrivate') {
+            $sql = "SELECT `id`, `name`, `path` FROM `folder` WHERE `author` = '".$userName."';";
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
+            $relatedNodes = array();
+            $d = array();
+
+            while(($row = $dataReader->read()) !== false) {
+                $d[] = array(
+                    'id' => intval($row['id']),
+                    'text' => $row['name'],
+                    'type' => 'folder',
+                    'parent' => intval($row['path']),
+                );
+            }
+
+            $sql = "SELECT `id_file`, `id_folder` FROM `file_to_folder` WHERE `id_author` = '".$userName."';";
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
+
+            while(($row = $dataReader->read()) !== false) {
+                $sql = "SELECT `name` FROM `file` WHERE `id` = ".$row['id_file'].";";
+                $command = $connection->createCommand($sql);
+                $dataReader1=$command->query();
+
+                if(($row1 = $dataReader1->read()) !== false) {
+                    $name = substr($row1['name'], 13, strlen($row1['name']) - 13);
+                    $d[] = array(
+                        'id' => intval($row['id_file']),
+                        'text' => $name,
+                        'type' => 'file',
+                        'parent' => intval($row['id_folder']),
+                    );
+                }
+            }
+
+            if(count($d) > 0) {
+                $relatedNodes = $this->makeRecursive($d);
+            } else {
+                $relatedNodes = false;
+            }
+
+            $connection->active=false;
+            $tree[] = array(
+                "id" => (string)$folderid,
+                "text" => $folderName,
+                "state" => array(
+                    "opened" => true,
+                    "selected" => true
+                ),
+                'type' => 'folder',
+                'children' => $relatedNodes
+            );
         }
+
+        //error_log(json_encode($tree));
+        echo json_encode($tree);
     }
 
     public function actionView()

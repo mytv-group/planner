@@ -124,6 +124,8 @@ class Playlists extends CActiveRecord
             $criteria->compare('author', Yii::app()->user->username);
         }
 
+        $criteria->compare('name', $this->name, true);
+
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
         ));

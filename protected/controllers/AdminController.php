@@ -93,10 +93,10 @@ class AdminController extends Controller
             foreach ($files as $file) {
                 $name = substr($file->name, 13, strlen($file->name) - 13);
                 $d[] = array(
-                        'id' => intval($file->id),
-                        'text' => $name,
-                        'type' => 'file',
-                        'parent' => intval($folder->id),
+                    'id' => intval($file->id),
+                    'text' => $name,
+                    'type' => 'file',
+                    'parent' => intval($folder->id),
                 );
             }
         }
@@ -107,7 +107,7 @@ class AdminController extends Controller
             $relatedNodes = false;
         }
 
-        $tree[] = array(
+        $tree = [[
             "id" => (string)$folderId,
             "text" => $folderName,
             "state" => array(
@@ -115,7 +115,7 @@ class AdminController extends Controller
             ),
             'type' => 'folder',
             'children' => $relatedNodes
-        );
+        ]];
 
         echo json_encode($tree);
     }

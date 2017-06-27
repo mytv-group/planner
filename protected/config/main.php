@@ -108,6 +108,18 @@ return array(
                 return File::model();
             }
         ),
+        'heap' => array(
+            'class'=>'Heap',
+            'file' => function() {
+                return File::model();
+            },
+            'fileToFolder' => function() {
+                return FileToFolder::model();
+            },
+            'folder' => function() {
+                return Folder::model();
+            },
+        ),
     ),
     'params'=>array(
         'adminEmail'=>'webmaster@example.com',

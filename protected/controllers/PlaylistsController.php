@@ -57,17 +57,17 @@ class PlaylistsController extends Controller
      */
     public function actionView($id)
     {
-        $model=$this->loadModel($id);
+        $model = $this->loadModel($id);
         $author = $model->author;
         $stream = new Stream();
 
-        if(count($model->stream) > 0) {
-            $stream = $model->stream[0];
+        if ($model->stream) {
+            $stream = $model->stream;
         }
 
         $this->render('view',array(
-            'model'=>$model,
-            'stream'=>$stream,
+            'model' => $model,
+            'stream' => $stream,
         ));
     }
 
@@ -77,34 +77,45 @@ class PlaylistsController extends Controller
      */
     public function actionCreate()
     {
-        $model=new Playlists();
+        $model = new Playlists();
         $model->type = 1; // for radioButtonList default value
         $model->files = '';
         $stream = new Stream();
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        if (isset($_POST['Playlists'])
+            && ($_POST['Playlists']['type'] != 3)
+        ) {
+            $model->attributes = $_POST['Playlists'];
+            if ($model->save()) {
+                $this->redirect(['update','id'=>$model->id]);
+            }
+        }
 
-        if(isset($_POST['Playlists'])) {
-            $model->attributes=$_POST['Playlists'];
-            if($model->save()) {
-                if(isset($_POST['Stream']['url']) &&
-                        ($_POST['Playlists']['type'] == 3)) { //2 - stream
-                    $stream->attributes = array(
-                        'playlist_id' => $model->id,
-                        'url' => $_POST['Stream']['url'],
-                    );
-                    $stream->save();
-                    $this->redirect(array('view','id'=>$model->id));
-                }
+        if (isset($_POST['Playlists'])
+            && ($_POST['Playlists']['type'] == 3)
+        ) {
+            $model->attributes = $_POST['Playlists'];
+            $stream->attributes = [
+                'playlist_id' => 0, // stub because $model->id unexist until $model->save()
+                'url' => $_POST['Stream']['url'],
+            ];
 
-                $this->redirect(array('update','id'=>$model->id));
+            if ($model->validate() && $stream->validate()) {
+                $model->save();
+
+                $stream->attributes = [
+                    'playlist_id' => $model->id,
+                    'url' => $_POST['Stream']['url'],
+                ];
+
+                $stream->save();
+                $this->redirect(['update','id'=>$model->id]);
             }
         }
 
         $this->render('create',array(
-            'model'=>$model,
-            'stream'=>$stream
+            'model' => $model,
+            'stream' => $stream
         ));
     }
 
@@ -115,54 +126,45 @@ class PlaylistsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model=$this->loadModel($id);
-        $author = $model->author;
-        $stream = new Stream();
+        $model = $this->loadModel($id);
+        $stream = $model->stream;
 
-        if (isset($_POST['Playlists'])) {
-            $playlists = $_POST['Playlists'];
-            $playlists['files'] = '';
-            if (isset($_POST['Stream']['url'])
-                 && ($playlists['type'] == 3)
-            ) { //2 - stream
-
-                $exitstStream = Stream::model()->findByAttributes(
-                    array('playlist_id' => $id)
-                );
-
-                if(!empty($exitstStream)) {
-                    $stream = $exitstStream;
-                }
-
-                $stream->attributes = array(
-                    'playlist_id' => $id,
-                    'url' => $_POST['Stream']['url']
-                );
-                $stream->save();
-                $playlists['files'] = '';
-            } else {
-                $stream->deleteAll(
-                     "`playlist_id` = :playlist_id",
-                    array('playlist_id' => $id)
-                );
-            }
-            $model->attributes=$playlists;
-
-            if ($author) {
-                $model->author = $author;
-            }
-
-            if($model->save())
-                $this->redirect(array('view','id'=>$model->id));
+        if (empty($stream)) {
+            $stream = new Stream;
         }
 
-        if (count($model->stream) > 0) {
-            $stream = $model->stream[0];
+        if (isset($_POST['Playlists'])) {
+            $model->attributes = $_POST['Playlists'];
+
+            if (isset($_POST['Stream']['url'])
+                 && ($_POST['Playlists']['type'] == 3)
+            ) {
+
+                $stream->attributes = [
+                    'playlist_id' => $model->id,
+                    'url' => $_POST['Stream']['url']
+                ];
+
+                if ($model->validate() && $stream->validate()) {
+                    $model->save();
+                    $stream->save();
+                    $this->redirect(array('view','id'=>$model->id));
+                }
+
+            } else {
+                if ($model->stream) {
+                    $stream->delete();
+                }
+
+                if ($model->save()) {
+                    $this->redirect(array('view','id'=>$model->id));
+                }
+            }
         }
 
         $this->render('update',array(
-            'model'=>$model,
-            'stream'=>$stream,
+            'model' => $model,
+            'stream' => $stream,
         ));
     }
 

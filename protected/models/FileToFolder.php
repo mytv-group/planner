@@ -42,7 +42,9 @@ class FileToFolder extends CActiveRecord
      */
     public function relations()
     {
-        return array();
+        return array(
+            'file' => array(self::BELONGS_TO, 'File', array('id_file' => 'id')),
+        );
     }
 
     /**

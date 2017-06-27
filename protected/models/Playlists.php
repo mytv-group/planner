@@ -47,8 +47,6 @@ class Playlists extends CActiveRecord
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('name, fromDatetime, toDatetime, type, fromTime, toTime, author', 'required'),
             array('name', 'length', 'max'=>100),
@@ -68,7 +66,7 @@ class Playlists extends CActiveRecord
     public function relations()
     {
         return array(
-            'stream' => array(self::HAS_MANY, 'Stream', 'playlist_id'),
+            'stream' => array(self::HAS_ONE, 'Stream', 'playlist_id'),
             'filesToPlaylist'=>array(self::HAS_MANY, 'FileToPlaylist', ['id_playlist' => 'id']),
             'relatedFiles'=>array(self::HAS_MANY, 'File', ['id_file'=>'id'],'through'=>'filesToPlaylist'),
             'playlistToPoint'=>array(self::HAS_MANY,'PlaylistToPoint', ['id_playlist' => 'id']),

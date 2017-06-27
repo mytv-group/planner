@@ -64,6 +64,27 @@ select {
   display: none;
 }
 
+.points-list .status-glyph {
+    padding: 2px;
+    font-size: 18px;
+}
+
+.points-list .is-up-to-date {
+    color: #3c763d;
+}
+
+.points-list .is-waiting-sync {
+    color: #fba61f;
+}
+
+.points-list .is-online {
+    color: #3c763d;
+}
+
+.points-list .is-offline {
+    color: #a94442;
+}
+
 #add-content-file-btn {
   z-index:1;
   position:absolute;

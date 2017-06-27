@@ -25,7 +25,7 @@
     </div>
 
     <div class="col col-md-2">
-      <p><b><u><?php echo CHtml::encode($model->getAttributeLabel('sync_time')); ?></u></b> / </p> 
+      <p><b><u><?php echo CHtml::encode($model->getAttributeLabel('sync_time')); ?></u></b> / </p>
       <p><b><?php echo CHtml::encode($model->getAttributeLabel('update_time')); ?></b></p>
     </div>
 
@@ -52,13 +52,16 @@
 
   <div class="col col-md-1">
     <?php
-      if ($data->sync) {
-          echo '<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>';
-      }
-    ?>
-    <?php
+        if ($data->sync) {
+            echo '<span class="is-up-to-date status-glyph glyphicon glyphicon-ok-circle" aria-hidden="true"></span>';
+        } else {
+            echo '<span class="is-waiting-sync status-glyph glyphicon glyphicon-refresh" aria-hidden="true"></span>';
+        }
+
         if (Yii::app()->pointService->checkIpOnline($data->ip)) {
-            echo '<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>';
+            echo '<span class="is-online status-glyph glyphicon glyphicon-globe" aria-hidden="true"></span>';
+        } else {
+            echo '<span class="is-offline status-glyph glyphicon glyphicon-off" aria-hidden="true"></span>';
         }
     ?>
   </div>

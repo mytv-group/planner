@@ -26,6 +26,7 @@
 
     <?php if(!$isView): ?>
         <?php echo $form->errorSummary($model); ?>
+        <?php  echo $form->errorSummary($stream); ?>
     <?php endif; ?>
 
     <div class="row">

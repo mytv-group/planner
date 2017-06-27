@@ -20,12 +20,12 @@ class AdminController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('index','view','getfoldercontent'),
+                'actions'=>array('index','view','getFolderContent'),
                 'users'=>array('@'),
                 'roles'=>array('heapViewUser'),
             ),
             array('allow',
-                'actions'=>array('upload', 'createnewfolder', 'rename', 'move'),
+                'actions'=>array('upload', 'createNewFolder', 'rename', 'move'),
                 'users'=>array('@'),
                 'roles'=>array('heapEditUser'),
             ),
@@ -45,7 +45,7 @@ class AdminController extends Controller
         $this->render("index");
     }
 
-   public function actionGetfoldercontent()
+   public function actionGetFolderContent()
    {
         if (!isset($_GET['id']) || !isset($_GET['type'])) {
             http_response_code(400);
@@ -77,164 +77,52 @@ class AdminController extends Controller
             $author = Yii::app()->user->username;
         }
 
-        $folders = Folder::model()->findAllByAttributes(['author' => $author]);
+        $items = Yii::app()->heap->getHeapContent($folderId, $author);
 
-        $d = [];
-
-        foreach ($folders as $folder) {
-            $d[] = array(
-                    'id' => intval($folder->id),
-                    'text' => $folder->name,
-                    'type' => 'folder',
-                    'parent' => intval($folder->path),
-            );
-
-            $files = $folder->files;
-            foreach ($files as $file) {
-                $name = substr($file->name, 13, strlen($file->name) - 13);
-                $d[] = array(
-                    'id' => intval($file->id),
-                    'text' => $name,
-                    'type' => 'file',
-                    'parent' => intval($folder->id),
-                );
-            }
-        }
-
-        if (count($d) > 0) {
-            $relatedNodes = $this->makeRecursive($d);
-        } else {
-            $relatedNodes = false;
-        }
-
-        $tree = [[
-            "id" => (string)$folderId,
+        echo json_encode([[
+            "id" => $folderId,
             "text" => $folderName,
             "state" => array(
                 "opened" => true
             ),
             'type' => 'folder',
-            'children' => $relatedNodes
-        ]];
+            'children' => (count($items) > 0)
+                ? $this->makeRecursive($items)
+                : false
+        ]]);
 
-        echo json_encode($tree);
+        Yii::app()->end();
     }
 
     public function actionView()
     {
-        if(isset($_POST['id']) && isset($_POST['type'])) {
-            $folderid = $_POST['id'];
-            $type = $_POST['type'];
-
-            $connection = Yii::app()->db;
-            $connection->active=true;
-
-            if($folderid == '#') {
-                $folderid = 0;
-            }
-
-            $userName = Yii::app()->user->name;
-            $adminName = 'admin';
-
-            if ($type == 'treeGeneral') {
-                $sql = "SELECT `id`, `name`, `path` FROM `folder` WHERE `path` = ".$folderid." AND ".
-                    "`author` = '".$adminName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-                $relatedNodes = array();
-                $d = array();
-
-                while(($row=$dataReader->read())!==false) {
-                    $d[] = array(
-                            'id' => intval($row['id']),
-                            'text' => $row['name'],
-                            'type' => 'folder',
-                            'parent' => intval($row['path']),
-                    );
-                }
-
-                $sql = "SELECT `id_file`, `id_folder` FROM `file_to_folder` WHERE " .
-                        "`id_folder` = '".$folderid."' AND ".
-                        "`id_author` = '".$adminName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-
-                while(($row = $dataReader->read()) !== false) {
-                    $sql = "SELECT `name`, `mime`, `link` FROM `file` WHERE `id` = ".$row['id_file'].";";
-                    $command = $connection->createCommand($sql);
-                    $dataReader1=$command->query();
-
-                    if(($row1 = $dataReader1->read()) !== false) {
-                        $name = substr($row1['name'], 13, strlen($row1['name']) - 13);
-                        $d[] = array(
-                            'id' => intval($row['id_file']),
-                            'text' => $name,
-                            'type' => 'file',
-                            'mime' => $row1['mime'],
-                            'link' => $row1['link'],
-                            'parent' => intval($row['id_folder']),
-                        );
-                    }
-                }
-
-                $connection->active=false;
-                $answ = array();
-                $answ['status'] = 'ok';
-            } else if($type == 'treePrivate') {
-                $sql = "SELECT `id`, `name`, `path` FROM `folder` WHERE `path` = ".$folderid." AND ".
-                        "`author` = '".$userName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-                $relatedNodes = array();
-                $d = array();
-
-                while(($row = $dataReader->read()) !== false) {
-                    $d[] = array(
-                        'id' => intval($row['id']),
-                        'text' => $row['name'],
-                        'type' => 'folder',
-                        'parent' => intval($row['path']),
-                    );
-                }
-
-                $sql = "SELECT `id_file`, `id_folder` FROM `file_to_folder` WHERE " .
-                    "`id_folder` = '".$folderid."' AND ".
-                    "`id_author` = '".$userName."';";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-
-                while(($row = $dataReader->read()) !== false) {
-                    $sql = "SELECT `name`, `mime`, `link` FROM `file` WHERE `id` = ".$row['id_file'].";";
-                    $command = $connection->createCommand($sql);
-                    $dataReader1=$command->query();
-
-                    if(($row1 = $dataReader1->read()) !== false) {
-                        $name = substr($row1['name'], 13, strlen($row1['name']) - 13);
-                        $d[] = array(
-                            'id' => intval($row['id_file']),
-                            'text' => $name,
-                            'type' => 'file',
-                            'mime' => $row1['mime'],
-                            'link' => $row1['link'],
-                            'parent' => intval($row['id_folder']),
-                        );
-                    }
-                }
-
-                $connection->active=false;
-                $answ = array();
-                $answ['status'] = 'ok';
-            }
-
-            if(empty($d)) {
-                $answ['data'] = 0;
-            } else {
-                $answ['data'] = $d;
-            }
-            echo json_encode($answ);
-        } else {
-            echo false;
+        if (!isset($_POST['id']) || !isset($_POST['type'])) {
+            http_response_code(400);
+            header("Status: 400 Bad Request");
+            $answ = "Not all nessesary params sent. $_POST: ".json_encode($_GET) . ".";
+            echo(json_encode($answ));
+            exit;
         }
+
+        $folderId = $_POST['id'];
+        $type = $_POST['type'];
+
+        if ($folderId == '#') {
+            $folderId = 0;
+        }
+
+        $author = 'admin';
+        if ($type == 'treePrivate') {
+            $author = Yii::app()->user->username;
+        }
+
+        $items = Yii::app()->heap->getFolderContent($folderId, $author);
+
+        echo json_encode([
+            'status' =>'ok',
+            'data' => empty($items) ? 0 : $items
+        ]);
+        Yii::app()->end();
     }
 
     function makeRecursive($d, $r = 0, $pk = 'parent', $k = 'id', $c = 'children')
@@ -249,227 +137,207 @@ class AdminController extends Controller
         return $m[$r];//[0]; // remove [0] if there could be more than one root nodes
     }
 
-    public function actionCreatenewfolder() {
-        if(isset($_POST['foldername']) && isset($_POST['folderpath'])) {
-            $foldername = $_POST['foldername'];
-            $folderpath = $_POST['folderpath'];
-
-            $sql = "SELECT MAX(`id`) FROM `folder` WHERE 1";
-            $connection = Yii::app()->db;
-            $connection->active=true;
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-            $id = 0;
-
-            if(($row = $dataReader->read()) !== false) {
-                $id = $row['MAX(`id`)'];
-                $id++;
-            }
-
-            $sql = "SELECT MAX(`id`) FROM `file` WHERE 1";
-            $connection = Yii::app()->db;
-            $connection->active=true;
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-
-            if(($row = $dataReader->read())!==false) {
-                $MAXid = $row['MAX(`id`)'];
-                $MAXid++;
-                if($MAXid > $id)
-                {
-                    $id = $MAXid;
-                }
-            }
-
-            $userName = Yii::app()->user->name;
-            $sql = "INSERT INTO `folder` (`id`,`name`, `path`, `author`) " .
-                "VALUES (".$id.", '" . $foldername . "', ".$folderpath.", '".$userName."');";
-            $command = Yii::app()->db->createCommand($sql);
-            $command->execute();
-
-            $insertId = Yii::app()->db->getLastInsertID();
-            $answ = array();
-            $answ['status'] = 'ok';
-            $answ['nodeid'] = $insertId;
-            echo json_encode($answ);
-        } else {
-            $answ = array();
-            $answ['status'] = 'err';
-            $answ['error'] = 'Incorrect params input. Page AdminController';
-            echo json_encode($answ);
+    public function actionCreateNewFolder()
+    {
+        if (!isset($_POST['foldername']) || !isset($_POST['folderpath'])) {
+            http_response_code(400);
+            header("Status: 400 Bad Request");
+            $answ = "Not all nessesary params sent. POST: ".json_encode($_POST) . ".";
+            echo(json_encode($answ));
+            exit;
         }
+
+        $folderName = $_POST['foldername'];
+        $folderPath = intval($_POST['folderpath']);
+
+        $folder = new Folder;
+        $folder->attributes = [
+            'name' => $folderName,
+            'path' => $folderPath,
+            'author' => Yii::app()->user->name
+        ];
+
+        $folder->save();
+
+        $answ = [
+            'status' => 'ok',
+            'nodeid' => $folder->id
+        ];
+        echo json_encode($answ);
     }
 
     public function actionDelete()
     {
-        if (isset($_POST['type']) && isset($_POST['id'])) {
-            $type = $_POST['type'];
-            $id = $_POST['id'];
+        if (!isset($_POST['type']) || !isset($_POST['id'])) {
+            http_response_code(400);
+            header("Status: 400 Bad Request");
+            $answ = "Not all nessesary params sent. POST: ".json_encode($_POST) . ".";
+            echo(json_encode($answ));
+            exit;
+        }
 
-            if ($type == 'file') {
-                $connection = Yii::app()->db;
-                $connection->active=true;
+        $type = $_POST['type'];
+        $id = intval($_POST['id']);
 
-                $sql = "SELECT `path` FROM `file` WHERE `id` = ".$id.";";
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
+        if ($type == 'file') {
+            $connection = Yii::app()->db;
+            $connection->active=true;
 
-                $sql = "DELETE FROM `file` WHERE `id` = " . $id . ";";
+            $sql = "SELECT `path` FROM `file` WHERE `id` = ".$id.";";
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
 
-                $command = $connection->createCommand($sql);
-                $command->execute();
+            $sql = "DELETE FROM `file` WHERE `id` = " . $id . ";";
 
-                $sql = "DELETE FROM `file_to_folder` WHERE `id_file` = ".$id.";";
+            $command = $connection->createCommand($sql);
+            $command->execute();
 
-                $command = $connection->createCommand($sql);
-                $command->execute();
+            $sql = "DELETE FROM `file_to_folder` WHERE `id_file` = ".$id.";";
 
-                $connection->active=false;
+            $command = $connection->createCommand($sql);
+            $command->execute();
 
-                if ((($row=$dataReader->read()) !== false)
-                  && (file_exists($row['path']))
-                ) {
-                    unlink($row['path']);
-                }
-            } else if($type == 'folder') {
-                $children = $_POST['children'];
+            $connection->active=false;
 
-                $connection = Yii::app()->db;
-                $connection->active=true;
+            if ((($row=$dataReader->read()) !== false)
+              && (file_exists($row['path']))
+            ) {
+                unlink($row['path']);
+            }
+        } else if($type == 'folder') {
+            $children = $_POST['children'];
 
-                $sql = "DELETE FROM `folder` WHERE `id` = " . $id . ";";
+            $connection = Yii::app()->db;
+            $connection->active=true;
 
-                $command = $connection->createCommand($sql);
-                $command->execute();
+            $sql = "DELETE FROM `folder` WHERE `id` = " . $id . ";";
 
-                if($children != 0) {
-                    foreach ($children as $key => $id) {
-                        $sql = "SELECT `id` FROM `folder` WHERE `id` = ".$id.";";
-                        $connection = Yii::app()->db;
-                        $connection->active = true;
+            $command = $connection->createCommand($sql);
+            $command->execute();
+
+            if($children != 0) {
+                foreach ($children as $key => $id) {
+                    $sql = "SELECT `id` FROM `folder` WHERE `id` = ".$id.";";
+                    $connection = Yii::app()->db;
+                    $connection->active = true;
+                    $command = $connection->createCommand($sql);
+                    $dataReader=$command->query();
+
+                    if(($row=$dataReader->read()) !== false) {
+                        $sql = "DELETE FROM `folder` WHERE `id` = " . $id . ";";
                         $command = $connection->createCommand($sql);
-                        $dataReader=$command->query();
+                        $command->execute();
+                    } else {
+                        $sql = "DELETE FROM `file` WHERE `id` = " . $id . " AND `visibility` = '1';";
+                        $command = $connection->createCommand($sql);
+                        $command->execute();
 
-                        if(($row=$dataReader->read()) !== false) {
-                            $sql = "DELETE FROM `folder` WHERE `id` = " . $id . ";";
-                            $command = $connection->createCommand($sql);
-                            $command->execute();
-                        } else {
-                            $sql = "DELETE FROM `file` WHERE `id` = " . $id . " AND `visibility` = '1';";
-                            $command = $connection->createCommand($sql);
-                            $command->execute();
+                        $sql = "DELETE FROM `file_to_folder` WHERE `id_file` = ".$id.";";
 
-                            $sql = "DELETE FROM `file_to_folder` WHERE `id_file` = ".$id.";";
-
-                            $command = $connection->createCommand($sql);
-                            $command->execute();
-                        }
+                        $command = $connection->createCommand($sql);
+                        $command->execute();
                     }
                 }
-
-                $connection->active=false;
             }
 
-            $answ = array();
-            $answ['status'] = 'ok';
-            echo json_encode($answ);
-        } else {
-            $answ = array();
-            $answ['status'] = 'err';
-            $answ['error'] = 'Incorrect params input. Page AdminController';
-            echo json_encode($answ);
+            $connection->active=false;
         }
+
+        echo json_encode(['status' => 'ok']);
     }
 
     public function actionRename()
     {
-        if(isset($_POST['type']) && isset($_POST['id']) && isset($_POST['name'])) {
-            $type = $_POST['type'];
-            $id = $_POST['id'];
-            $name = $_POST['name'];
+        if (!isset($_POST['type'])
+            || !isset($_POST['id'])
+            || !isset($_POST['name'])
+        ) {
+            http_response_code(400);
+            header("Status: 400 Bad Request");
+            $answ = "Not all nessesary params sent. POST: ".json_encode($_POST) . ".";
+            echo(json_encode($answ));
+            exit;
+        }
 
-            if($type == 'file') {
-                $connection = Yii::app()->db;
-                $connection->active=true;
+        $type = $_POST['type'];
+        $id = intval($_POST['id']);
+        $name = $_POST['name'];
 
-                $sql = "SELECT `name` FROM `file` WHERE `id` = '".$id."'";
+        if ($type == 'file') {
+            $connection = Yii::app()->db;
+            $connection->active=true;
 
-                $command = $connection->createCommand($sql);
-                $dataReader=$command->query();
-                $prevName = '';
+            $sql = "SELECT `name` FROM `file` WHERE `id` = '".$id."'";
 
-                if(($row=$dataReader->read())!==false) {
-                    $prevName = $row['name'];
-                }
+            $command = $connection->createCommand($sql);
+            $dataReader=$command->query();
+            $prevName = '';
 
-                $nameUID = substr($prevName, 0, 13);
-                $name = $nameUID . $name;
-
-                $sql = "UPDATE `file` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
-                $command = $connection->createCommand($sql);
-                $command->execute();
-
-                $connection->active=false;
-            } else if(($type == 'folder') || ($type == 'default')) {
-                $connection = Yii::app()->db;
-                $connection->active=true;
-
-                $sql = "UPDATE `folder` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
-                $command = $connection->createCommand($sql);
-                $command->execute();
-
-                $connection->active=false;
+            if(($row=$dataReader->read())!==false) {
+                $prevName = $row['name'];
             }
 
-            $answ = array();
-            $answ['status'] = 'ok';
-            echo json_encode($answ);
-        } else {
-            $answ = array();
-            $answ['status'] = 'err';
-            $answ['error'] = 'Incorrect params input. Page AdminController';
-            echo json_encode($answ);
+            $nameUID = substr($prevName, 0, 13);
+            $name = $nameUID . $name;
+
+            $sql = "UPDATE `file` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
+            $command = $connection->createCommand($sql);
+            $command->execute();
+
+            $connection->active=false;
+        } else if(($type == 'folder') || ($type == 'default')) {
+            $connection = Yii::app()->db;
+            $connection->active=true;
+
+            $sql = "UPDATE `folder` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
+            $command = $connection->createCommand($sql);
+            $command->execute();
+
+            $connection->active=false;
         }
+
+        echo json_encode(['status' => 'ok']);
     }
 
     public function actionMove()
     {
-        if(isset($_POST['type']) && isset($_POST['id']) && isset($_POST['parent'])) {
-            $type = $_POST['type'];
-            $id = $_POST['id'];
-            $parent = $_POST['parent'];
-
-            if($type == 'file') {
-                $connection = Yii::app()->db;
-                $connection->active=true;
-
-                $sql = "UPDATE `file_to_folder` SET `id_folder` = '" . $parent . "' WHERE `id_file` = '".$id."';";
-                $command = $connection->createCommand($sql);
-                $command->execute();
-
-                $connection->active=false;
-            } else if(($type == 'folder') || ($type == 'default')) {
-                $connection = Yii::app()->db;
-                $connection->active=true;
-
-                $sql = "UPDATE `folder` SET `path` = '" . $parent . "' WHERE `id` = '".$id."';";
-                $command = $connection->createCommand($sql);
-                $command->execute();
-
-                $connection->active=false;
-            }
-
-            $answ = array();
-            $answ['status'] = 'ok';
-            echo json_encode($answ);
+        if (!isset($_POST['type'])
+            || !isset($_POST['id'])
+            || !isset($_POST['parent'])
+        ) {
+            http_response_code(400);
+            header("Status: 400 Bad Request");
+            $answ = "Not all nessesary params sent. POST: ".json_encode($_POST) . ".";
+            echo(json_encode($answ));
+            exit;
         }
-        else
-        {
-            $answ = array();
-            $answ['status'] = 'err';
-            $answ['error'] = 'Incorrect params input. Page AdminController';
-            echo json_encode($answ);
+
+        $type = $_POST['type'];
+        $id = intval($_POST['id']);
+        $parent = $_POST['parent'];
+
+        if ($type == 'file') {
+            $id = $id * -1;
+            $connection = Yii::app()->db;
+            $connection->active=true;
+
+            $sql = "UPDATE `file_to_folder` SET `id_folder` = '" . $parent . "' WHERE `id_file` = '".$id."';";
+            $command = $connection->createCommand($sql);
+            $command->execute();
+
+            $connection->active=false;
+        } else if(($type == 'folder') || ($type == 'default')) {
+            $connection = Yii::app()->db;
+            $connection->active=true;
+
+            $sql = "UPDATE `folder` SET `path` = '" . $parent . "' WHERE `id` = '".$id."';";
+            $command = $connection->createCommand($sql);
+            $command->execute();
+
+            $connection->active=false;
         }
+
+        echo json_encode(['status' => 'ok']);
     }
 
     /**

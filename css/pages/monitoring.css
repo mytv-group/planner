@@ -50,3 +50,45 @@
 .playlists-list .col, .points-list .col {
     overflow: hidden;
 }
+
+.points-list .row-header {
+    padding: 2px;
+}
+
+.points-list .row-list-view {
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-top-width: 1px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.points-list .row-list-view:nth-child(even) {
+    background-color: #eee;
+}
+
+.points-list .col {
+    overflow: hidden;
+}
+
+.points-list .status-glyph {
+    padding: 2px;
+    font-size: 18px;
+}
+
+.points-list .is-up-to-date {
+    color: #3c763d;
+}
+
+.points-list .is-waiting-sync {
+    color: #fba61f;
+}
+
+.points-list .is-online {
+    color: #3c763d;
+}
+
+.points-list .is-offline {
+    color: #a94442;
+}

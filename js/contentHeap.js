@@ -1,8 +1,8 @@
 $(document).ready(function(e){
     var url = document.location.origin + '/uploader/',
-        folderSrc = document.location.origin + '/admin/get-folder-content/',
+        folderSrc = document.location.origin + '/admin/getFolderContent/',
         viewSrc = document.location.origin + '/admin/view/',
-        createFolderSrc = document.location.origin + '/admin/create-new-folder/',
+        createFolderSrc = document.location.origin + '/admin/createNewFolder/',
         moveFileSrc = document.location.origin + '/admin/upload/',
         deleteNodeSrc = document.location.origin + '/admin/delete/',
         renameNodeSrc = document.location.origin + '/admin/rename/',

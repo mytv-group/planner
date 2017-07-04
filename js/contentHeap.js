@@ -278,6 +278,52 @@ $(document).ready(function(e){
             },
         },
         "plugins" : [ "dnd", "contextmenu", "types"],
+        "contextmenu": {
+               items: function (node) {
+                   var menu = {
+                       Rename: {
+                           label: "Rename",
+                           action: function (data) {
+                               var inst = $.jstree.reference(data.reference),
+                                   obj = inst.get_node(data.reference);
+                               inst.edit(obj);
+                           }
+                       },
+                       Delete: {
+                           label: "Delete",
+                           action: function (data) {
+                               var inst = $.jstree.reference(data.reference),
+                                   obj = inst.get_node(data.reference);
+                               if(inst.is_selected(obj)) {
+                                   inst.delete_node(inst.get_selected());
+                               }
+                               else {
+                                   inst.delete_node(obj);
+                               }
+                           }
+                       }
+                   }
+
+                   if (node.type === 'file') {
+                       return menu;
+                   }
+
+                   if (node.type === 'folder') {
+                       return $.extend(menu, {
+                           Create: {
+                               label: "Create",
+                               action: function (data) {
+                                   var inst = $.jstree.reference(data.reference),
+                                       obj = inst.get_node(data.reference);
+                                   inst.create_node(obj, {}, "last", function (new_node) {
+                                       setTimeout(function () { inst.edit(new_node); },0);
+                                   });
+                               }
+                           },
+                       });
+                   }
+               }
+           }
     });
 
     /*=======================================================================

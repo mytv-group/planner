@@ -105,7 +105,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
     ) {
         try {
           $this->execute('UPDATE `file`
-            LEFT JOIN `user` ON `file`.`author`= `user`.`username` COLLATE utf8_unicode_ci
+            JOIN `user` ON `file`.`author`= `user`.`username` COLLATE utf8_unicode_ci
             SET `file`.`id_user`  = `user`.`id`');
         } catch(Exception $e) {}
         $ii++;

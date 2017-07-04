@@ -494,7 +494,7 @@ class PlaylistsController extends Controller
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jTreeThemes/default/style.min.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
-
+            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/partial/playlists-list.css');
             Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/playlists.css');
 
             return true;

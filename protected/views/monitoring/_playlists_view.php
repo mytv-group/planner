@@ -14,7 +14,8 @@
     </div>
 
     <div class="col col-md-2">
-      <b><?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
+      <b><?php echo CHtml::encode($model->getAttributeLabel('id')); ?>,
+      <?php echo CHtml::encode($model->getAttributeLabel('name')); ?></b>
     </div>
 
     <div class="col col-md-1">
@@ -55,7 +56,8 @@
   </div>
 
   <div class="col col-md-2">
-    <?php echo CHtml::link(CHtml::encode($data->name), array('/playlists/view', 'id'=>$data->id)); ?>
+    <?php echo CHtml::link(CHtml::encode($data->id) . ', ' . CHtml::encode($data->name), 
+        array('/playlists/view', 'id'=>$data->id)); ?>
   </div>
 
   <div class="col col-md-1">

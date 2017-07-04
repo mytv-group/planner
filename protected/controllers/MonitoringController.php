@@ -57,6 +57,9 @@ class MonitoringController extends Controller
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/switch/switch.css');
+      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/partial/points-list.css');
+      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/partial/playlists-list.css');
+      Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/partial/screen-shot-box.css');
       Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/monitoring.css');
 
       return true;

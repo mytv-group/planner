@@ -33,7 +33,7 @@ class Heap extends CApplicationComponent
             foreach ($filesToFolder as $item) {
                 $file = $item->file;
                 $rootFiles[] = [
-                    'id' => intval($file->id) * -1,
+                    'id' => intval($file->id),
                     'text' => substr($file->name, 13, strlen($file->name) - 13),
                     'type' => 'file',
                     'mime' => $file->mime,
@@ -57,7 +57,7 @@ class Heap extends CApplicationComponent
             $files = $folder->files;
             foreach ($files as $file) {
                 $d[] = [
-                    'id' => intval($file->id) * -1,
+                    'id' => intval($file->id),
                     'text' => substr($file->name, 13, strlen($file->name) - 13),
                     'type' => 'file',
                     'mime' => $file->mime,
@@ -96,7 +96,7 @@ class Heap extends CApplicationComponent
         foreach ($filesToFolder as $item) {
             $file = $item->file;
             $items[] = [
-                'id' => intval($file->id) * -1,
+                'id' => intval($file->id),
                 'text' => substr($file->name, 13, strlen($file->name) - 13),
                 'type' => 'file',
                 'mime' => $file->mime,
@@ -106,5 +106,48 @@ class Heap extends CApplicationComponent
         }
 
         return $items;
+    }
+
+    public function deleteFile($fileId, $user)
+    {
+        $this->getFileToFolder()->deleteAllByAttributes([
+            'id_file' => $fileId,
+            'id_author' => $user->username
+        ]);
+
+        $files = $this->getFile()->findByAttributes([
+            'id' => $fileId,
+            'id_user' => $user->id
+        ]);
+
+        foreach ($files as $file) {
+            if (isset($file->path) && file_exists($file->path)) {
+                unlink($file->path);
+            }
+        }
+
+        $this->getFile()->deleteAllByAttributes([
+            'id' => $fileId,
+            'id_user' => $user->id
+        ]);
+    }
+
+    public function deleteFolder($folderId, $user)
+    {
+
+        $content = $this->getHeapContent($folderId, $user->username);
+
+        foreach ($content as $item) {
+            if ($item['type'] === 'file') {
+                $this->deleteFile($item['id'], $user);
+            }
+
+            if ($item['type'] === 'folder') {
+                $this->getFileToFolder()->deleteAllByAttributes([
+                    'id_folder' => $item['id'],
+                    'id_author' => $user->username
+                ]);
+            }
+        }
     }
 }

@@ -262,6 +262,8 @@ class PointController extends Controller
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/switch/switch.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/partial/points-list.css');
+            $cs->registerCssFile(Yii::app()->baseUrl.'/css/partial/screen-shot-box.css');
             $cs->registerCssFile(Yii::app()->baseUrl.'/css/pages/point.css');
 
             return true;

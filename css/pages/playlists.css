@@ -162,27 +162,6 @@ table{
     overflow: hidden;
 }
 
-.playlist-list .row-header {
-    padding: 2px;
-}
-
-.playlist-list .row-list-view {
-    border-color: #e5e5e5 #eee #eee;
-    border-style: solid;
-    border-top-width: 1px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    padding: 2px;
-}
-
-.playlist-list .row-list-view:nth-child(even) {
-    background-color: #eee;
-}
-
-.playlist-list .col {
-    overflow: hidden;
-}
-
 .row-menu {
   margin: 0;
 }

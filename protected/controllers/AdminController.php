@@ -77,13 +77,15 @@ class AdminController extends Controller
             $author = Yii::app()->user->username;
         }
 
-        $items = Yii::app()->heap->getHeapContent($folderId, $author);
+        $items = Yii::app()->heap->getHeapContent($author);
         $content = [];
 
         foreach ($items as $item) {
             if ($item['type'] === 'folder') {
                 $item['id'] *= -1;
             }
+
+            $item['parent'] *= -1;
 
             $content[] = $item;
         }
@@ -96,7 +98,7 @@ class AdminController extends Controller
             ),
             'type' => 'folder',
             'children' => (count($content) > 0)
-                ? $this->makeRecursive($content)
+                ? Yii::app()->heap->buildTree($content)
                 : false
         ]]);
 
@@ -135,18 +137,6 @@ class AdminController extends Controller
         Yii::app()->end();
     }
 
-    function makeRecursive($d, $r = 0, $pk = 'parent', $k = 'id', $c = 'children')
-    {
-        $m = array();
-        foreach ($d as $e) {
-            isset($m[$e[$pk]]) ?: $m[$e[$pk]] = array();
-            isset($m[$e[$k]]) ?: $m[$e[$k]] = array();
-            $m[$e[$pk]][] = array_merge($e, array($c => &$m[$e[$k]]));
-        }
-
-        return $m[$r];//[0]; // remove [0] if there could be more than one root nodes
-    }
-
     public function actionCreateNewFolder()
     {
         if (!isset($_POST['foldername']) || !isset($_POST['folderpath'])) {
@@ -158,7 +148,7 @@ class AdminController extends Controller
         }
 
         $folderName = $_POST['foldername'];
-        $folderPath = intval($_POST['folderpath']);
+        $folderPath = intval($_POST['folderpath']) * -1;
 
         $folder = new Folder;
         $folder->attributes = [
@@ -306,7 +296,7 @@ class AdminController extends Controller
             Yii::app()->end();
         }
 
-        $folderId = intval($_POST['data']['folderId']);
+        $folderId = intval($_POST['data']['folderId']) * -1;
         $uploadInfo = $_POST['data']['file'];
         $uploadFileUrl = $uploadInfo['url'];
         $uploadFileName = $uploadInfo['name'];

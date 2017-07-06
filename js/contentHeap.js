@@ -104,7 +104,6 @@ $(document).ready(function(e){
         }
         RefreshDropZone(selectedjsTreeNode, 'treePrivate');
     }).on("create_node.jstree", function(e, data){
-        //tree.jstree.node
         var node = data.node,
             parentId = data.parent,
             folderName = node.text;
@@ -131,38 +130,6 @@ $(document).ready(function(e){
             console.log(e);
         });
         RefreshDropZone(selectedjsTreeNode,'treePrivate');
-    }).on("paste.jstree", function(e, data){
-        var node = data.node,
-        type = node.type,
-        id = node.id,
-        newParent = node.parent,
-        parentNode = $("#" + newParent + "_anchor");
-
-        if(parentNode.hasClass('jstree-folder')){
-            var pV = {
-                type: type,
-                id: id,
-                parent: newParent
-            };
-
-            $.ajax({
-              url: moveNodeNodeSrc,
-              type: "POST",
-              data: pV,
-              dataType: "json",
-            }).done(function(e){
-                if(e['status'] == 'err') {
-                    console.log(e['error']);
-                }
-            }).fail(function(e){
-                console.log(e);
-            });
-
-            RefreshDropZone(selectedjsTreeNode, 'treePrivate');
-        } else {
-            alert("Incorrect action");
-            treePrivate.jstree("refresh");
-        }
     }).on("delete_node.jstree", function(e, data){
         var node = data.node,
             type = node.type,
@@ -247,8 +214,6 @@ $(document).ready(function(e){
             alert("Incorrect action");
             treePrivate.jstree("refresh");
         }
-    }).on("copy_node.jstree", function(e, data){
-        alert("Copying nodes is condemned. Performing cutting and pasting instead");
     }).jstree({
         "types" : {
             "folder" : {
@@ -280,6 +245,12 @@ $(document).ready(function(e){
         "plugins" : [ "dnd", "contextmenu", "types"],
         "contextmenu": {
                items: function (node) {
+                   if ((node.type === 'folder')
+                       && (node.parent === '#')
+                   ) {
+                       return [];
+                   }
+
                    var menu = {
                        Rename: {
                            label: "Rename",

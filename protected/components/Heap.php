@@ -21,28 +21,8 @@ class Heap extends CApplicationComponent
         return $this->fileToFolder->__invoke();
     }
 
-    public function getHeapContent($folderId, $user)
+    public function getHeapContent($user)
     {
-        $rootFiles = [];
-        if ($folderId === 0) {
-            $filesToFolder = $this->getFileToFolder()->findAllByAttributes([
-                'id_folder' => $folderId,
-                'id_author' => $user
-            ]);
-
-            foreach ($filesToFolder as $item) {
-                $file = $item->file;
-                $rootFiles[] = [
-                    'id' => intval($file->id),
-                    'text' => substr($file->name, 13, strlen($file->name) - 13),
-                    'type' => 'file',
-                    'mime' => $file->mime,
-                    'link' => $file->link,
-                    'parent' => 0,
-                ];
-            }
-        }
-
         $folders = $this->getFolder()->findAllByAttributes(['author' => $user]);
 
         $d = [];
@@ -67,7 +47,63 @@ class Heap extends CApplicationComponent
             }
         }
 
-        return array_merge($d, $rootFiles);
+        $folderId = 0;
+
+        $filesToFolder = $this->getFileToFolder()->findAllByAttributes([
+            'id_folder' => $folderId,
+            'id_author' => $user
+        ]);
+
+        foreach ($filesToFolder as $item) {
+            $file = $item->file;
+            $d[] = [
+                'id' => intval($file->id),
+                'text' => substr($file->name, 13, strlen($file->name) - 13),
+                'type' => 'file',
+                'mime' => $file->mime,
+                'link' => $file->link,
+                'parent' => 0,
+            ];
+        }
+
+        return $d;
+    }
+
+    function buildTree($d, $r = 0, $pk = 'parent', $k = 'id', $c = 'children')
+    {
+        $m = array();
+        foreach ($d as $e) {
+            isset($m[$e[$pk]]) ?: $m[$e[$pk]] = array();
+            isset($m[$e[$k]]) ?: $m[$e[$k]] = array();
+            $m[$e[$pk]][] = array_merge($e, array($c => &$m[$e[$k]]));
+        }
+
+        return $m[$r];//[0]; // remove [0] if there could be more than one root nodes
+    }
+
+    function findBranch($tree, $searchId, $key = 'id', $children = 'children')
+    {
+        $searchedBranch = [];
+        foreach ($tree as $branch) {
+            if ($branch[$key] === $searchId) {
+                $searchedBranch = isset($branch[$children]) ? $branch[$children] : [];
+                break;
+            } else {
+                $searchedBranch = $this->findBranch($branch[$children], $searchId);
+            }
+        }
+
+        return $searchedBranch;
+    }
+
+    function treeToFlat($tree, &$flat = [], $children = 'children')
+    {
+        foreach ($tree as $branch) {
+            $flat[] = $branch;
+            $flat = array_merge($this->treeToFlat($branch[$children], $flat));
+        }
+
+        return $flat;
     }
 
     public function getFolderContent($folderId, $user)
@@ -134,20 +170,27 @@ class Heap extends CApplicationComponent
 
     public function deleteFolder($folderId, $user)
     {
+        $content = $this->getHeapContent($user->username);
+        $tree = Yii::app()->heap->buildTree($content);
+        $children = $this->findBranch($tree, $folderId);
+        $flat = $this->treeToFlat($children);
 
-        $content = $this->getHeapContent($folderId, $user->username);
-
-        foreach ($content as $item) {
+        foreach ($flat as $item) {
             if ($item['type'] === 'file') {
                 $this->deleteFile($item['id'], $user);
             }
 
             if ($item['type'] === 'folder') {
-                $this->getFileToFolder()->deleteAllByAttributes([
-                    'id_folder' => $item['id'],
-                    'id_author' => $user->username
+                $this->getFolder()->deleteAllByAttributes([
+                    'id' => $item['id'],
+                    'author' => $user->username
                 ]);
             }
         }
+
+        $this->getFolder()->deleteAllByAttributes([
+            'id' => $folderId,
+            'author' => $user->username
+        ]);
     }
 }

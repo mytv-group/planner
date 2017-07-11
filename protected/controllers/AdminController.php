@@ -231,6 +231,7 @@ class AdminController extends Controller
         } else if(($type == 'folder') || ($type == 'default')) {
             $connection = Yii::app()->db;
             $connection->active=true;
+            $id = $id *-1;
 
             $sql = "UPDATE `folder` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
             $command = $connection->createCommand($sql);

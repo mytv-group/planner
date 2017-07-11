@@ -187,8 +187,6 @@ $(document).ready(function(e){
         newParent = node.parent,
         parentNode = $("a#" + newParent + "_anchor").find("i");
 
-        console.log(parentNode);
-
         if(parentNode.hasClass('jstree-folder')){
             var pV = {
                 type: type,

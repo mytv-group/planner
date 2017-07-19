@@ -50,9 +50,22 @@ $(document).ready(function(e){
                 }));
             });
 
-            $.when.apply($, dfdArr).then(function() {
-                location.reload();
-            });
+            var counter = 0;
+            var interval = setInterval(function() {
+                if (dfdArr.length === data.result.files.length) {
+                    clearInterval(interval);
+                    $.when.apply($, dfdArr).then(function() {
+                        location.reload();
+                    });
+
+                }
+
+                if (counter > 500) {
+                    clearInterval(interval);
+                    location.reload();
+                }
+                counter++;
+            }, 100);
         },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);

@@ -9,6 +9,9 @@ $(document).ready(function(e){
         moveNodeNodeSrc = document.location.origin + '/admin/move/',
         selectedjsTreeNode = 0;
 
+    var dfdArr = [];
+    var filesCount = 0;
+
     $("#fileupload").fileupload({
         url: url,
         dataType: 'json',
@@ -16,7 +19,6 @@ $(document).ready(function(e){
         maxFileSize: 2500000000,
         dropZone: $('#dropzoneHeap'),
         done: function (e, data) {
-            var dfdArr = [];
             $.each(data.result.files, function (index, file) {
                 var pV = {
                     data:{
@@ -50,22 +52,11 @@ $(document).ready(function(e){
                 }));
             });
 
-            var counter = 0;
-            var interval = setInterval(function() {
-                if (dfdArr.length === data.result.files.length) {
-                    clearInterval(interval);
-                    $.when.apply($, dfdArr).then(function() {
-                        location.reload();
-                    });
-
-                }
-
-                if (counter > 500) {
-                    clearInterval(interval);
+            if (dfdArr.length === data.originalFiles.length) {
+                $.when.apply($, dfdArr).then(function() {
                     location.reload();
-                }
-                counter++;
-            }, 100);
+                });
+            }
         },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -73,6 +64,10 @@ $(document).ready(function(e){
                 'width',
                 progress + '%'
             );
+        },
+        stop: function (e, data) {
+            dfdArr = [];
+            filesCount = 0;
         }
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');

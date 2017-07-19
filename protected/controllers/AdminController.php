@@ -161,7 +161,7 @@ class AdminController extends Controller
 
         $answ = [
             'status' => 'ok',
-            'nodeid' => $folder->id
+            'nodeid' => $folder->id  * -1
         ];
         echo json_encode($answ);
     }

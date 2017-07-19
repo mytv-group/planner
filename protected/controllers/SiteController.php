@@ -108,12 +108,11 @@ class SiteController extends Controller
   }
 
   public function beforeAction($action) {
-    if( parent::beforeAction($action) ) {
-      /* @var $cs CClientScript */
-      $cs = Yii::app()->clientScript;
-      $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.css');
-      $cs->registerCssFile(Yii::app()->baseUrl.'/css/pages/site.css');
-      return true;
+    if (parent::beforeAction($action)) {
+          $cs = Yii::app()->clientScript;
+          $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.css');
+          $cs->registerCssFile(Yii::app()->baseUrl.'/css/pages/site.css');
+          return true;
     }
     return false;
   }

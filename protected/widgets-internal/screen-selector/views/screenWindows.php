@@ -11,7 +11,15 @@
 
               <?php $widget = null;
                   if(isset($window->widget) && ($isActive)) {
-                      $widget = $window->widget;
+                      $showcases = $window->showcases;
+
+                      foreach ($showcases as $showcase) {
+                          if (($showcase->id_point === $pointId)
+                            && ($showcase->widget)
+                          ) {
+                              $widget = $showcase->widget;
+                          }
+                      }
                   }
               ?>
 

@@ -243,10 +243,23 @@ $(document).ready(function(e){
         "plugins" : [ "dnd", "contextmenu", "types"],
         "contextmenu": {
                items: function (node) {
+                   var createMenuItem = {
+                       Create: {
+                           label: "Create",
+                           action: function (data) {
+                               var inst = $.jstree.reference(data.reference),
+                                   obj = inst.get_node(data.reference);
+                               inst.create_node(obj, {}, "last", function (new_node) {
+                                   setTimeout(function () { inst.edit(new_node); },0);
+                               });
+                           }
+                       },
+                   };
+
                    if ((node.type === 'folder')
                        && (node.parent === '#')
                    ) {
-                       return [];
+                       return createMenuItem;
                    }
 
                    var menu = {
@@ -278,18 +291,7 @@ $(document).ready(function(e){
                    }
 
                    if (node.type === 'folder') {
-                       return $.extend(menu, {
-                           Create: {
-                               label: "Create",
-                               action: function (data) {
-                                   var inst = $.jstree.reference(data.reference),
-                                       obj = inst.get_node(data.reference);
-                                   inst.create_node(obj, {}, "last", function (new_node) {
-                                       setTimeout(function () { inst.edit(new_node); },0);
-                                   });
-                               }
-                           },
-                       });
+                       return $.extend(menu, createMenuItem);
                    }
                }
            }

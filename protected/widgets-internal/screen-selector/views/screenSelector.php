@@ -37,7 +37,7 @@
         ]); ?>
     <? endif; ?>
 
-    <? foreach ($screens as $screen): ?>
+    <? /* <? foreach ($screens as $screen): ?>
         <?php if (isset($screen->windows)): ?>
             <?php $this->render('screenWindows', [
                 'isActive' => false,
@@ -48,5 +48,5 @@
                 'postName' => $postName
             ]); ?>
         <?php endif; ?>
-    <? endforeach; ?>
+    <? endforeach; */?>
 </div>

@@ -12,6 +12,7 @@ Allow from all
 </IfModule>
 
 #SetEnv APPLICATION_ENV "dev"
+#SetEnv APPLICATION_ENV "production"
 
 php_value upload_max_filesize 2048M
 php_value max_file_uploads 20

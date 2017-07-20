@@ -300,17 +300,35 @@ class PlaylistsController extends Controller
             && ($_POST["data"]["file"] != '')
             && ($_POST["data"]["plid"] != '')
         ) {
-            $fileId = $_POST["data"]["file"];
-            $playlistId = $_POST["data"]["plid"];
+            $fileId = intval($_POST["data"]["file"]);
+            $playlistId = intval($_POST["data"]["plid"]);
 
-            $execution = $this->DeleteFileFromPlaylist($fileId, $playlistId);
+            $model = $this->loadModel($playlistId);
+            $filesToPlaylist = $model->filesToPlaylist;
 
-            if ($execution) {
-                $answ["status"] = 'ok';
-            } else {
-                $answ["status"] = 'err';
-                $answ["error"] = "Delete query failed. " . $execution . ". " .  $sql;
+            foreach ($filesToPlaylist as $fileToPlaylist) {
+                if (!isset($fileToPlaylist->file)) {
+                    $fileToPlaylist->delete();
+                }
+
+                $file = $fileToPlaylist->file;
+
+                if ((intval($file->id) === $fileId) && (intval($file->visibility) === 0)) {
+                    $file->delete();
+                    $fileToPlaylist->delete();
+
+                    if (file_exists($file->path)) {
+                        try {
+                            unlink($file->path);
+                        } catch (Exception $e) {
+                            throw new CHttpException(500,'Internal Server Error');
+                        }
+                    }
+                } else if ((intval($file->id) === $fileId) && (intval($file->visibility) === 1)) {
+                    $fileToPlaylist->delete();
+                }
             }
+            $answ["status"] = 'ok';
         }
         else
         {

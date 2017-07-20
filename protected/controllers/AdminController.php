@@ -331,7 +331,7 @@ class AdminController extends Controller
           'mime' => $mime,
           'path' => $movedFileInfo['path'],
           'link' => $movedFileInfo['link'],
-          'visibility' => 0,
+          'visibility' => 1,
           'id_user' => $userId
         ];
         $fileInstance->save();

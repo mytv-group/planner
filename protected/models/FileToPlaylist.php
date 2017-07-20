@@ -35,8 +35,8 @@ class FileToPlaylist extends CActiveRecord
   public function relations()
   {
     return array(
-      'file' => array(self::BELONGS_TO, 'File', array('id' => 'id_file')),
-      'playlist' => array(self::BELONGS_TO, 'Playlists', array('id' => 'id_playlist')),
+      'file' => array(self::BELONGS_TO, 'File', array('id_file' => 'id')),
+      'playlist' => array(self::BELONGS_TO, 'Playlists', array('id_playlist' => 'id')),
     );
   }
 

@@ -130,15 +130,19 @@ class Heap extends CApplicationComponent
         ]);
 
         foreach ($filesToFolder as $item) {
-            $file = $item->file;
-            $items[] = [
-                'id' => intval($file->id),
-                'text' => substr($file->name, 13, strlen($file->name) - 13),
-                'type' => 'file',
-                'mime' => $file->mime,
-                'link' => $file->link,
-                'parent' => 0,
-            ];
+            if(isset($item->file)) {
+                $file = $item->file;
+                $items[] = [
+                    'id' => intval($file->id),
+                    'text' => substr($file->name, 13, strlen($file->name) - 13),
+                    'type' => 'file',
+                    'mime' => $file->mime,
+                    'link' => $file->link,
+                    'parent' => 0,
+                ];
+            } else {
+                $item->delete();
+            }
         }
 
         return $items;

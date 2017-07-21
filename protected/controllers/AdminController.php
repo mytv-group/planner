@@ -30,7 +30,7 @@ class AdminController extends Controller
                 'roles'=>array('heapEditUser'),
             ),
             array('allow',
-                'actions'=>array('delete', 'dropAllContent'),
+                'actions'=>array('delete', 'dropAllContent', 'migrate'),
                 'users'=>array('@'),
                 'roles'=>array('heapUser'),
             ),
@@ -348,6 +348,18 @@ class AdminController extends Controller
 
         echo json_encode($answ);
         Yii::app()->end();
+    }
+
+    public function actionMigrate() {
+        $commandPath = Yii::app()->getBasePath() . DIRECTORY_SEPARATOR . 'commands';
+        $runner = new CConsoleCommandRunner();
+        $runner->addCommands($commandPath);
+        $commandPath = Yii::getFrameworkPath() . DIRECTORY_SEPARATOR . 'cli' . DIRECTORY_SEPARATOR . 'commands';
+        $runner->addCommands($commandPath);
+        $args = array('yiic', 'migrate', '--interactive=0');
+        ob_start();
+        $runner->run($args);
+        echo htmlentities(ob_get_clean(), null, Yii::app()->charset);
     }
 
     private function CurrUrl()

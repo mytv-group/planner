@@ -32,7 +32,7 @@ class SiteController extends Controller
       if (Yii::app()->user->isGuest) {
           $this->redirect("/site/login");
       } else {
-          $this->redirect('/admin/index');
+          $this->redirect('/monitoring/index');
       }
   }
 

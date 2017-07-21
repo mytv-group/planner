@@ -1,12 +1,12 @@
 $(document).ready(function(e){
     var url = document.location.origin + '/uploader/',
-        folderSrc = document.location.origin + '/admin/getFolderContent/',
-        viewSrc = document.location.origin + '/admin/view/',
-        createFolderSrc = document.location.origin + '/admin/createNewFolder/',
-        moveFileSrc = document.location.origin + '/admin/upload/',
-        deleteNodeSrc = document.location.origin + '/admin/delete/',
-        renameNodeSrc = document.location.origin + '/admin/rename/',
-        moveNodeNodeSrc = document.location.origin + '/admin/move/',
+        folderSrc = document.location.origin + '/heap/getFolderContent/',
+        viewSrc = document.location.origin + '/heap/view/',
+        createFolderSrc = document.location.origin + '/heap/createNewFolder/',
+        moveFileSrc = document.location.origin + '/heap/upload/',
+        deleteNodeSrc = document.location.origin + '/heap/delete/',
+        renameNodeSrc = document.location.origin + '/heap/rename/',
+        moveNodeNodeSrc = document.location.origin + '/heap/move/',
         selectedjsTreeNode = 0;
 
     var dfdArr = [];

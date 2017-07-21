@@ -28,13 +28,13 @@ $mm = $this->widget ( 'zii.widgets.CMenu', array (
         array (
             'label' => 'Content Heap',
             'url' => array (
-                '/admin'
+                '/heap'
             ),
             'visible' => ! Yii::app ()->user->isGuest &&
               Yii::app ()->user->checkAccess ( "heapViewUser" ),
             'itemOptions' => array(
                 'class' => 'list-group-item',
-                'data-url'=> '/admin'
+                'data-url'=> '/heap'
             )
         ),
 

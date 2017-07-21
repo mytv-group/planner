@@ -1,7 +1,7 @@
 $(document).ready(function(e){
     var url = document.location.origin + '/uploader/',
         moveFileSrc = document.location.origin + '/playlists/upload/',
-        viewSrc = document.location.origin + '/admin/view/',
+        viewSrc = document.location.origin + 'heap/view/',
         playlistIdTag = $("#playlistId");
 
     $("#fileupload").fileupload({

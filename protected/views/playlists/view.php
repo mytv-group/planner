@@ -38,7 +38,7 @@ $this->renderPartial('_form', [
             $fileid = $val['id'];
             $mime = $val['mime'];
             $link = $val['link'];
-            $name = $val['name'];
+            $name = substr($val['name'], 13, strlen($val['name']));
             $mime = explode('/', $val['mime']);
             $mimeType = $mime[0];
             $mimeFormat = $mime[1];

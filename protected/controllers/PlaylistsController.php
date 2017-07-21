@@ -411,7 +411,7 @@ class PlaylistsController extends Controller
             $fileToPlaylistInstance->attributes = [
                 'id_file' => $heapItemId,
                 'id_playlist' => $playlistId,
-                'order' => $order
+                'order' => ++$order
             ];
 
             if ($fileToPlaylistInstance->save()) {
@@ -428,30 +428,34 @@ class PlaylistsController extends Controller
 
     public function actionSetFileOrder()
     {
-        $answ = [];
-        $answ['status'] = 'err';
-        if(isset($_POST['files']) && isset($_POST['playlistId']))
-        {
-            $playlistId = $_POST['playlistId'];
-            $files = $_POST['files'];
-
-            $model = $this->loadModel($playlistId);
-            $model->files = implode(',', $files);
-
-            if($model->validate()){
-                $model->save();
-                if($model->save())
-                {
-                    $answ['status'] = 'ok';
-                }
-            }
-            else
-            {
-                error_log(json_encode(CHtml::errorSummary($model)));
-            }
-
+        if (!isset($_POST['files']) || !isset($_POST['playlistId'])) {
+            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
         }
-        echo(json_encode($answ));
+
+        $playlistId = $_POST['playlistId'];
+        $files = $_POST['files'];
+
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("id_playlist=".$playlistId);
+        $criteria->addInCondition('id_file', $files);
+        FileToPlaylist::model()->deleteAll($criteria);
+
+        for($ii = 0; $ii < count($files); $ii++) {
+            $fileToPlaylist = new FileToPlaylist;
+            $fileToPlaylist->attributes = [
+                'id_file' => $files[$ii],
+                'id_playlist' => $playlistId,
+                'order' => $ii
+            ];
+
+            if ($fileToPlaylist->validate()) {
+                 $fileToPlaylist->save();
+            } else {
+                return json_encode(CHtml::errorSummary($model));
+            }
+        }
+
+        return json_encode(['status' => 'ok']);
     }
 
     /**

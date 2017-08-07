@@ -385,7 +385,11 @@ class InterfaceController extends Controller
             $statistic->id_file = $idFile;
             $statistic->id_playlist = $idPlaylist;
             $statistic->id_author = $idAuthor;
-            $statistic->save();
+            if(!$statistic->save()) {
+                http_response_code(400);
+                echo sprintf("Saving failed. ". json_encode($statistic->getErrors()));
+                exit;
+            }
         }
 
         echo 'ok';

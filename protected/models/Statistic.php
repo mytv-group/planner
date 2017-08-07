@@ -30,8 +30,8 @@ class Statistic extends CActiveRecord
     public function rules()
     {
         return array(
-            array('id, dt_playback, duration, channel, file_name, id_file, id_playlist, id_author', 'required'),
-            array('id, channel, id_file, id_playlist, id_author', 'numerical', 'integerOnly'=>true),
+            array('dt_playback, duration, channel, file_name, id_file, id_playlist, id_author', 'required'),
+            array('channel, id_file, id_playlist, id_author', 'numerical', 'integerOnly'=>true),
             array('duration', 'numerical'),
             array('file_name', 'length', 'max'=>45),
             array('dt', 'safe'),

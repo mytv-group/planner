@@ -49,8 +49,7 @@ class InterfaceController extends Controller
         $day = substr((string)$pointDate, 6, 2);
 
         $pointDateStr =  $year . "-" . $month . "-" . $day;
-        $pointDatetimeStr =  $year . "-" . $month . "-" . $day. " 23:59:59";
-        $pointDateTimestamp = strtotime($day . "-" . $month . "-" . $year);
+        $pointDateTimestamp = strtotime($pointDateStr);
         $weekDay = strtolower(date('D', $pointDateTimestamp));
 
         if(!is_int($pointId) || !is_int($pointChannel) || !is_int($pointDate))
@@ -75,7 +74,7 @@ class InterfaceController extends Controller
 
         /* background or stream */
         if (($pointChannel === 1) || (($pointChannel === 3))) {
-            $bg = $CM->GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay);
+            $bg = $CM->GetBGContentArr($pointId, $pointChannel, $pointDateStr, $weekDay);
 
             if (count($bg) === 0) {
                 http_response_code(404);
@@ -97,7 +96,7 @@ class InterfaceController extends Controller
                 }
             }
         } else if ($pointChannel === 2) { /*advertising*/
-            $adv = $CM->GetAdvContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay);
+            $adv = $CM->GetAdvContentArr($pointId, $pointChannel, $pointDateStr, $weekDay);
 
             if (count($adv) === 0) {
                 http_response_code(404);

@@ -28,8 +28,8 @@ class ContentManager extends CApplicationComponent
 
         $blocksArr = array ();
         foreach ($rows as $row) {
-            $fromDatetime = date_create ( $row['fromDatetime'] );
-            $toDatetime = date_create ( $row['toDatetime'] );
+            $fromDatetime = date_create ($row['fromDatetime'] . ' ' . $row['fromTime']);
+            $toDatetime = date_create ($row['toDatetime'] . ' ' . $row['toTime']);
 
             $fromTime = $row['fromTime'];
             $toTime = $row['toTime'];
@@ -45,25 +45,17 @@ class ContentManager extends CApplicationComponent
             }
 
             /* if today starts showing check broadcasting is later showing begin */
-            if (($fromDatetime < $toDatetime) && ($fromTime < $toTime)) {
-                if (((date_format ( $fromDatetime, "Y-m-d" ) != $pointDateStr)
-                    && (date_format ( $toDatetime, "Y-m-d" ) != $pointDateStr))
-                    || ((date_format ( $fromDatetime, "Y-m-d" ) == $pointDateStr)
-                    && (strtotime ( date_format ( $fromDatetime, "h:i:s" ) ) < strtotime ( $fromTime )))
-                    || ((date_format ( $toDatetime, "Y-m-d" ) == $pointDateStr)
-                    && (strtotime ( date_format ( $toDatetime, "h:i:s" ) ) > strtotime ( $toTime )))
-                ) {
-                    $blocksArr [] = array (
-                        'from' => $fromTime,
-                        'to' => $toTime,
-                        'fromDateTime' => new DateTime ( $fromTime ),
-                        'toDateTime' => new DateTime ( $toTime ),
-                        'files' => $files,
-                        'type' => $type,
-                        'playlistId' => $playlistId,
-                        'authorId' => $authorId
-                    );
-                }
+            if (($fromDatetime <= $toDatetime)) {
+                $blocksArr [] = array (
+                    'from' => $fromTime,
+                    'to' => $toTime,
+                    'fromDateTime' => new DateTime ( $fromTime ),
+                    'toDateTime' => new DateTime ( $toTime ),
+                    'files' => $files,
+                    'type' => $type,
+                    'playlistId' => $playlistId,
+                    'authorId' => $authorId
+                );
             }
         }
 

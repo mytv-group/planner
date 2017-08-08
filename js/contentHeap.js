@@ -16,7 +16,7 @@ $(document).ready(function(e){
         url: url,
         dataType: 'json',
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png|webm|ogg|wav|avi|mov|mkv|mp3|mp4|swf)$/i,
-        maxFileSize: 2500000000,
+        maxFileSize: 4096*1000*1000,
         dropZone: $('#dropzoneHeap'),
         done: function (e, data) {
             $.each(data.result.files, function (index, file) {

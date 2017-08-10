@@ -89,6 +89,7 @@ class ContentManager extends CApplicationComponent
 
                 $duration = 0;
                 $block ["filesWithDuration"] = array ();
+                $files = $block['files'];
                 foreach($files as $file) {
                     $duration += $file->duration;
                     $block ["filesWithDuration"] [] = array (

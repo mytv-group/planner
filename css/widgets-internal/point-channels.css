@@ -1,0 +1,12 @@
+input.channel-playlist {
+    display: none;
+}
+
+.channel-playlist-item-template {
+    display: none;
+}
+
+.channel-btn {
+    min-width: 160px;
+    text-align: left;
+}

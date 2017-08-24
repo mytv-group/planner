@@ -1,0 +1,20 @@
+input {
+    max-width:415px;
+}
+
+.buttons input {
+    max-width:215px;
+}
+
+#preview-box {
+    position: absolute;
+    display: none;
+    border: 1px solid #eee;
+    padding: 1px;
+    background-color: rgba(240, 240, 240, 0.7);
+    overflow: hidden;
+}
+
+#preview-box.is-active {
+    display: block;
+}

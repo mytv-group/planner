@@ -1,0 +1,29 @@
+.row-menu {
+    margin: 0px;
+    padding: 5px 0 0px;
+}
+
+.channel-type {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.channel-type--1 {
+    color: #6e7bc1;
+}
+
+.channel-type--2 {
+    color: #cc0000;
+}
+
+.channel-type--3 {
+    color: #629635;
+}
+
+.form-control {
+    max-width: 245px;
+}
+
+.statistic-form-note {
+    font-size: 10px;
+}

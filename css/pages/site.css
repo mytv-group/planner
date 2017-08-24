@@ -1,0 +1,78 @@
+@font-face {
+    font-family: RalewayThin;
+    src: url('/fonts/Raleway-Thin.ttf');
+}
+
+.login-form {
+    font-family: RalewayThin,Helvetica,sans-serif !important;
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    text-align:center;
+    background-color:#fff;
+    overflow-x: hidden;
+    background-color: white;
+    background-image: url('/images/login-bg.png');
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@media all and (min-width: 650px) {
+    .login-form {
+        background-size: 100% 100%;
+        background-position: left top;
+    }
+}
+
+.login-form__logo {
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    width: 150px;
+    height: 150px;
+    background-image: url('/images/Logo_RTV_middle_watered.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.login-form__content {
+    position: absolute;
+    left: 5%;
+    top: 20%;
+    width: 90%;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+    color: #fff;
+    padding-bottom: 10px;
+}
+
+@media all and (min-width: 650px) {
+    .login-form__content {
+        width: 400px;
+        left: calc(50% - 200px);
+        top: 22%;
+    }
+}
+
+.login-form .form-control {
+    font-family: RalewayRegular,Helvetica,sans-serif !important;
+    margin: 0px auto;
+    max-width: 340px;
+}
+
+.login-form .buttons, .login-form a {
+    font-family: RalewayRegular,Helvetica,sans-serif !important;
+}
+
+.login-form a {
+    color: #4dadff;
+}
+
+.login-form .errorMessage {
+    color: #ff7070;
+    padding: 5px 0 0;
+    font-weight: bold;
+}

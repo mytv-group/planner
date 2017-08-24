@@ -1,0 +1,54 @@
+.btn-group{
+  margin-bottom:2px;
+}
+
+.PointPlaylistsInView {
+  padding:10px;
+}
+
+input {
+  max-width:415px;
+}
+
+select {
+  max-width:615px;
+}
+
+.buttons input {
+  max-width:215px;
+}
+
+.form {
+    margin: 10px auto;
+}
+
+.form .form-control {
+    max-width:415px;
+}
+
+.buttons input.form-control {
+    max-width:245px;
+}
+
+.row-menu {
+  margin: 0;
+}
+
+.items .empty {
+  margin: 15px -25px;
+  display: block;
+}
+
+.delete-point input {
+  display: none;
+}
+
+#add-content-file-btn {
+  z-index:1;
+  position:absolute;
+  opacity: 0;
+}
+
+#add-content-btn {
+  z-index:2;
+}

@@ -210,7 +210,7 @@ class PointService extends CApplicationComponent
         $this->updatePointTVschedule($attr['id'], $attr['tvScheduleFrom'], $attr['tvScheduleTo']);
         $this->updateShowcases($attr['id'], $attr['showcases']);
         $this->updateChannels($attr['id'], $attr['channels']);
-        $this->sendRequestForUpdate($attr['ip']);
+        $this->sendRequestForUpdate($attr['id'], $attr['ip']);
     }
 
     public function deleteRelations($id)
@@ -239,36 +239,29 @@ class PointService extends CApplicationComponent
         );
     }
 
-    public function sendRequestForUpdate($ip)
+    public function sendRequestForUpdate($id, $ip)
     {
-        if (!defined('HTTP_REQUEST_TO_POINT')) {
-            return;
-        }
+        $interactionUrl = Yii::app()->params['interactionUrl'];
+        $action = '/point/updateContent';
 
-        $requestData = array(
-            "update_need" => true
-        );
-
-        $requestAddr = 'http://' . $ip . "/sc_upd";
+        $requestData = [
+            'id' => $id,
+            'ip' => ip2long($ip)
+        ];
 
         try {
-            $client = new EHttpClient($requestAddr, [
+            $client = new EHttpClient($interactionUrl . $action, [
                 'maxredirects' => 3,
-                'timeout' => 10,
+                'timeout' => 2,
                 'adapter' => 'EHttpClientAdapterCurl'
             ]);
 
             $client->setParameterGet($requestData);
+
             $response = $client->request();
-            $body = "";
-            if ($response->isSuccessful()) {
-                $body = $response->getBody();
-            } else {
-                $body = $response->getRawBody();
-            }
         } catch (Exception $ex) {
             error_log("http request exception - " . json_encode($ex) . ". " .
-                    "IP - " . $requestAddr . ", " .
+                    "IP - " . $interactionUrl + $action . ", " .
                     "Post - " . json_encode($requestData)
             );
         }

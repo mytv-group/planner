@@ -50,11 +50,15 @@ return array(
         'errorHandler'=>array(
             'errorAction'=>'site/error',
         ),
+        'sentry'=>array(
+            'class'=>'ext.yii-sentry.components.RSentryClient',
+            'dsn'=>'https://cfcf1647999740bda98522d36c9cf793:8943953122494a0fa72cba1e161f7b1f@sentry.io/207801',
+        ),
         'log'=>array(
             'class'=>'CLogRouter',
             'routes'=>array(
                 array(
-                    'class'=>'CFileLogRoute',
+                    'class'=>'ext.yii-sentry.components.RSentryLogRoute',
                     'levels'=>'error, warning',
                 ),
             ),
@@ -124,5 +128,6 @@ return array(
     'params'=>array(
         'adminEmail'=>'webmaster@example.com',
         'weatherApiKey'=>'1be0ed3547cbc0a415058b881eac9494',
+        'interactionUrl' => 'http://127.0.0.1:1337'
     ),
 );

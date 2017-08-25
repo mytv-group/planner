@@ -50,22 +50,15 @@ return array(
         'errorHandler'=>array(
             'errorAction'=>'site/error',
         ),
-<<<<<<< HEAD
-=======
         'sentry'=>array(
             'class'=>'ext.yii-sentry.components.RSentryClient',
             'dsn'=>'https://cfcf1647999740bda98522d36c9cf793:8943953122494a0fa72cba1e161f7b1f@sentry.io/207801',
         ),
->>>>>>> 59920864a350bf9d020476949f393e35adb13b38
         'log'=>array(
             'class'=>'CLogRouter',
             'routes'=>array(
                 array(
-<<<<<<< HEAD
-                    'class'=>'CFileLogRoute',
-=======
                     'class'=>'ext.yii-sentry.components.RSentryLogRoute',
->>>>>>> 59920864a350bf9d020476949f393e35adb13b38
                     'levels'=>'error, warning',
                 ),
             ),

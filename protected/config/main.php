@@ -128,9 +128,6 @@ return array(
     'params'=>array(
         'adminEmail'=>'webmaster@example.com',
         'weatherApiKey'=>'1be0ed3547cbc0a415058b881eac9494',
-<<<<<<< HEAD
-=======
         'interactionUrl' => 'http://127.0.0.1:1337'
->>>>>>> 59920864a350bf9d020476949f393e35adb13b38
     ),
 );

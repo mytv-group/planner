@@ -243,31 +243,28 @@ class PointController extends Controller
         return $model;
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            /* @var $cs CClientScript */
-            $cs = Yii::app()->clientScript;
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-switch.min.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/point.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pointScreen.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/point/pointVolume.js' );
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/switch/switch.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/partial/points-list.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/partial/screen-shot-box.css');
-            $cs->registerCssFile(Yii::app()->baseUrl.'/css/pages/point.css');
-
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/lib/jquery.datetimepicker.js');
+        Yii::app()->assets->register('/js/bootstrap/bootstrap-switch.min.js');
+
+        Yii::app()->assets->register('/js/menuDecorator.js');
+        Yii::app()->assets->register('/js/pages/point/point.js');
+        Yii::app()->assets->register('/js/pointScreen.js');
+
+        Yii::app()->assets->register('/js/pages/point/pointVolume.js' );
+
+        Yii::app()->assets->register('/css/jquery.datetimepicker.css');
+        Yii::app()->assets->register('/css/bootstrap/bootstrap-switch.min.css');
+        Yii::app()->assets->register('/css/switch/switch.css');
+        Yii::app()->assets->register('/css/partial/points-list.css');
+        Yii::app()->assets->register('/css/partial/screen-shot-box.css');
+        Yii::app()->assets->register('/css/pages/point.css');
+
+        return true;
     }
 }

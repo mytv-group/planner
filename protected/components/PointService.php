@@ -258,12 +258,7 @@ class PointService extends CApplicationComponent
 
             $client->setParameterGet($requestData);
             $response = $client->request();
-        } catch (Exception $ex) {
-            error_log("http request exception - " . json_encode($ex) . ". " .
-                    "IP - " . $interactionUrl . $action . ", " .
-                    "Post - " . json_encode($requestData)
-            );
-        }
+        } catch (Exception $ex) { }
     }
 
     private function prapareScreenshot($file, $destPath, $url)

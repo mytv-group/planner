@@ -144,28 +144,24 @@ class StatisticController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']) && $_POST['ajax']==='statistic-form')
+        if (isset($_POST['ajax']) && $_POST['ajax']==='statistic-form')
         {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            $cs = Yii::app()->clientScript;
-
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-
-            //$cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/statistic.js' );
-
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/statistic.css');
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/menuDecorator.js');
+        //Yii::app()->assets->register(Yii::app()->getBaseUrl() . '/js/statistic.js' );
+
+        Yii::app()->assets->register('/css/pages/statistic.css');
+
+        return true;
     }
 }

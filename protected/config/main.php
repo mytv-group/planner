@@ -46,7 +46,10 @@ return array(
                 'admin/user/<id>' => 'admin/user',
             ),
         ),
-        'db'=> include(dirname(__FILE__).'/db.php'),
+        'db' => include(dirname(__FILE__).'/db.php'),
+        'clientScript'=>array(
+            'packages'=>include(dirname(__FILE__).'/packages.php'),
+        ),
         'errorHandler'=>array(
             'errorAction'=>'site/error',
         ),
@@ -61,14 +64,6 @@ return array(
                     'class'=>'ext.yii-sentry.components.RSentryLogRoute',
                     'levels'=>'error, warning',
                 ),
-            ),
-        ),
-        'clientScript'=>array(
-            'packages'=>array(
-                'jquery'=>array(
-                    'baseUrl'=>'/',
-                    'js'=>array('js/lib/jquery-1.11.0.js'),
-                )
             ),
         ),
         'pointInfo'=>array(
@@ -123,6 +118,18 @@ return array(
             'folder' => function() {
                 return Folder::model();
             },
+        ),
+        'assets' => array(
+            'class'=>'AssetManagerHelper',
+            'assetManager' => function() {
+                return Yii::app()->assetManager;
+            },
+            'clientScript' => function() {
+                return Yii::app()->clientScript;
+            },
+            'basePath' => function() {
+                return INDEX_PATH;
+            }
         ),
     ),
     'params'=>array(

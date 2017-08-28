@@ -486,41 +486,36 @@ class PlaylistsController extends Controller
         }
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            /* @var $cs CClientScript */
-            $cs = Yii::app()->clientScript;
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery.datetimepicker.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/vendor/jquery.ui.widget.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/jquery.fileupload.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/jquery.iframe-transport.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/jPlayer/jquery.jplayer.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/jsTree/jstree.min.js');
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap-switch.min.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlist.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistOrder.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistFileUpload.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/playlists/playlistHeapAndPreview.js' );
-
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap-switch.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.bootstrap.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jTreeThemes/default/style.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.datetimepicker.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/partial/playlists-list.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/playlists.css');
-
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/lib/jquery.datetimepicker.js');
+        Yii::app()->assets->register('/js/fileuploader/vendor/jquery.ui.widget.js');
+        Yii::app()->assets->register('/js/fileuploader/jquery.fileupload.js');
+        Yii::app()->assets->register('/js/fileuploader/jquery.iframe-transport.js');
+        Yii::app()->assets->register('/js/jPlayer/jquery.jplayer.min.js');
+        Yii::app()->assets->register('/js/jsTree/jstree.min.js');
+        Yii::app()->assets->register('/js/bootstrap/bootstrap-switch.min.js');
+
+        Yii::app()->assets->register('/js/menuDecorator.js');
+
+        Yii::app()->assets->register('/js/pages/playlists/playlist.js' );
+        Yii::app()->assets->register('/js/pages/playlists/playlistOrder.js' );
+        Yii::app()->assets->register('/js/pages/playlists/playlistFileUpload.js' );
+        Yii::app()->assets->register('/js/pages/playlists/playlistHeapAndPreview.js' );
+
+        Yii::app()->assets->register('/css/bootstrap/bootstrap-switch.min.css');
+        Yii::app()->assets->register('/css/jquery.fileupload.bootstrap.css');
+        Yii::app()->assets->register('/css/jquery.fileupload.css');
+        Yii::app()->assets->register('/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');
+        Yii::app()->assets->register('/css/jTreeThemes/default/style.min.css');
+        Yii::app()->assets->register('/css/jquery.datetimepicker.css');
+        Yii::app()->assets->register('/css/partial/playlists-list.css');
+        Yii::app()->assets->register('/css/pages/playlists.css');
+
+        return true;
     }
 }

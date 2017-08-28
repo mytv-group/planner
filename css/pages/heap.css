@@ -1,42 +1,42 @@
+.heap__tree-container {
+    display: flex;
+}
+
 #progress{
-	width:465px;
-	margin-top:15px;
-	margin-bottom:15px;
+    width:465px;
+    margin-top:15px;
+    margin-bottom:15px;
 }
 
 .Options {
-	border:none; 
-	width: 100%;	
+    border:none;
+    width: 100%;
 }
 
 .Tree {
-	width:255px;
-	float:left;
-	overflow:auto; 
-	/*border:1px solid silver;*/ 
-	height:470px;
+    flex: 1;
+    overflow:auto;
+    min-height:470px;
 }
 
 .SubTree {
-	width:100%;
-	overflow:auto; 
-	border:1px solid silver; 
-	height:234px;
+    width:100%;
+    overflow:auto;
+    border:1px solid silver;
+    height:234px;
 }
 
 .Heap {
-	overflow:auto; 
-	border:none; 
-	float:left;
-	display:inline;
-	border:1px solid silver; 
-	height:470px;
-	margin-left:5px;
-	width: calc(100% - 260px - 10px);	
+    overflow:auto;
+    border:none;
+    flex: 2;
+    border:1px solid silver;
+    min-height:470px;
+    margin-left:5px;
 }
 
 #dropzoneHeap {
-	padding:10px;
+    padding:10px;
     background: rgb(255, 255, 255);
 }
 #dropzoneHeap.in {
@@ -55,21 +55,21 @@
 }
 
 .HeapItem {
-	padding:5px;
-	width: 100%;
-	border-bottom:solid 1px darkgrey;
-    overflow: hidden;	
+    padding:5px;
+    width: 100%;
+    border-bottom:solid 1px darkgrey;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .HeapItemFolder {
-	padding:5px;
-	width: 100%;
-	border-bottom:solid 1px darkgrey;	
-	background-color:#fce667;	
+    padding:5px;
+    width: 100%;
+    border-bottom:solid 1px darkgrey;
+    background-color:#fce667;
 }
 
 .HeapItem:hover, .HeapItemFolder:hover  {
-	background-color:#b7e4ff;		
+    background-color:#b7e4ff;
 }

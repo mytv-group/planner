@@ -361,7 +361,7 @@ class HeapController extends Controller
 
     private function CyrillicToTransLite($textcyr)
     {
-        iconv("utf-8", "cp1251//IGNORE", $textcyr);
+        iconv("utf-8", "ISO-8859-1//TRANSLIT", $text);
 
         $cyr  = array('Р°','Р±','РІ','Рі','Рґ','e','Рµ','С”','Р¶','Р·','Рё','С–','С—','Р№','Рє','Р»','Рј','РЅ','Рѕ','Рї','СЂ','СЃ','С‚','Сѓ',
                 'С„','С…','С†','С‡','С€','С‰','СЉ','СЊ', 'СЋ','СЏ','Рђ','Р‘','Р’','Р“','Р”','Р•','Р–','Р—','Р�','Р™','Рљ','Р›','Рњ','Рќ','Рћ','Рџ','Р ','РЎ','Рў','РЈ',
@@ -395,29 +395,26 @@ class HeapController extends Controller
         return $translit;
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            $cs = Yii::app()->clientScript;
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/vendor/jquery.ui.widget.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/jquery.fileupload.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/fileuploader/jquery.iframe-transport.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/jsTree/jstree.min.js');
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/jPlayer/jquery.jplayer.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/contentHeap.js' );
-
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.bootstrap.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jquery.fileupload.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jTreeThemes/default/style.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/heap.css');
-
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/fileuploader/vendor/jquery.ui.widget.js');
+        Yii::app()->assets->register('/js/fileuploader/jquery.fileupload.js');
+        Yii::app()->assets->register('/js/fileuploader/jquery.iframe-transport.js');
+        Yii::app()->assets->register('/js/jsTree/jstree.min.js');
+        Yii::app()->assets->register('/js/jPlayer/jquery.jplayer.min.js');
+
+        Yii::app()->assets->register('/js/contentHeap.js');
+
+        Yii::app()->assets->register('/css/jquery.fileupload.bootstrap.css');
+        Yii::app()->assets->register('/css/jquery.fileupload.css');
+        Yii::app()->assets->register('/css/jTreeThemes/default/style.min.css');
+        Yii::app()->assets->register('/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');
+        Yii::app()->assets->register('/css/pages/heap.css');
+
+        return true;
     }
 }

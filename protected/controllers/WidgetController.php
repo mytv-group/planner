@@ -141,7 +141,7 @@ class WidgetController extends Controller
     public function loadModel($id)
     {
         $model=Widget::model()->findByPk($id);
-        if($model===null)
+        if ($model===null)
             throw new CHttpException(404,'The requested page does not exist.');
         return $model;
     }
@@ -159,21 +159,15 @@ class WidgetController extends Controller
         }
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            $cs = Yii::app()->clientScript;
-
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/widget/widget.js' );
-
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/widget.css');
-
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/pages/widget/widget.js');
+        Yii::app()->assets->register('/css/pages/widget.css');
+
+        return true;
     }
 }

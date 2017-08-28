@@ -1,18 +1,14 @@
 <?php
 
 date_default_timezone_set('Europe/Kiev');
-
-// change the following paths if necessary
-$yii=dirname(__FILE__).'/framework/yii.php';
-$config=dirname(__FILE__).'/protected/config/main.php';
+define('INDEX_PATH', dirname(__FILE__));
 
 // Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ?
-                getenv('APPLICATION_ENV') : 'production'));
+defined('APPLICATION_ENV') || define('APPLICATION_ENV',
+    (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
+);
 
-if((APPLICATION_ENV === 'dev')
+if ((APPLICATION_ENV === 'dev')
   || (isset($_COOKIE['debug']) && ($_COOKIE['debug'] === '1'))
 ) {
     error_reporting(E_ALL);
@@ -28,6 +24,10 @@ if((APPLICATION_ENV === 'dev')
 if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
     define('SYMLINK', 1);
 }
+
+// change the following paths if necessary
+$yii=dirname(__FILE__).'/framework/yii.php';
+$config=dirname(__FILE__).'/protected/config/main.php';
 
 require_once($yii);
 

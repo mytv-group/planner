@@ -195,16 +195,16 @@ class UserController extends Controller
         return $model;
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            $cs = Yii::app()->clientScript;
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/user.js' );
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/menuDecorator.js');
+        Yii::app()->assets->register('/js/user.js');
+
+        return true;
     }
 
     /**

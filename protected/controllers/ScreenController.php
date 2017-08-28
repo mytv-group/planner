@@ -191,26 +191,18 @@ class ScreenController extends Controller
         }
     }
 
-    public function beforeAction($action) {
-        if( parent::beforeAction($action) ) {
-            $cs = Yii::app()->clientScript;
-
-            
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/lib/jquery-ui-1.10.4.min.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/bootstrap/bootstrap.min.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/menuDecorator.js' );
-
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/screen/screen.js' );
-            $cs->registerScriptFile( Yii::app()->getBaseUrl() . '/js/pages/screen/screenBlockProto.js' );
-
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/custom-theme/jquery-ui-1.10.4.custom.css');
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/bootstrap/bootstrap.min.css');
-
-            Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/pages/screen.css');
-
-            return true;
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return false;
+
+        Yii::app()->assets->register('/js/menuDecorator.js' );
+        Yii::app()->assets->register('/js/pages/screen/screen.js' );
+        Yii::app()->assets->register('/js/pages/screen/screenBlockProto.js' );
+
+        Yii::app()->assets->register('/css/pages/screen.css');
+
+        return true;
     }
 }

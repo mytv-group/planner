@@ -138,7 +138,6 @@ class WeatherWidget extends AbstractWidget
 
         imagecopy($image, $icon, $icoPosX, $icoPosY, 0, 0, imagesx($icon), imagesx($icon));
         putenv('GDFONTPATH=' . dirname(Yii::app()->basePath)
-          . DIRECTORY_SEPARATOR . 'css'
           . DIRECTORY_SEPARATOR . 'fonts');
         $font = getenv('GDFONTPATH') . DIRECTORY_SEPARATOR . 'arialbd.ttf';
 

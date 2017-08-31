@@ -39,12 +39,6 @@
         <?php echo $form->error($model,'ip'); ?>
     </div>
 
-    <?php $this->renderPartial('sections/_volume', [
-        'model' => $model,
-        'form' => $form,
-        'isView' => $isView
-    ]); ?>
-
     <div class="row">
         <?= $form->labelEx($model, 'TVschedule'); ?>
         <?php $this->widget('tvScheduleWidget', [

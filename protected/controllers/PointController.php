@@ -249,21 +249,15 @@ class PointController extends Controller
             return false;
         }
 
-        Yii::app()->assets->register('/js/lib/jquery.datetimepicker.js');
-        Yii::app()->assets->register('/js/bootstrap/bootstrap-switch.min.js');
+        Yii::app()->assets->registerPackage('bootstrap-switch');
+        Yii::app()->assets->registerPackage('datetimepicker');
+        Yii::app()->assets->registerPackage('switch');
 
-        Yii::app()->assets->register('/js/menuDecorator.js');
-        Yii::app()->assets->register('/js/pages/point/point.js');
         Yii::app()->assets->register('/js/pointScreen.js');
 
-        Yii::app()->assets->register('/js/pages/point/pointVolume.js' );
-
-        Yii::app()->assets->register('/css/jquery.datetimepicker.css');
-        Yii::app()->assets->register('/css/bootstrap/bootstrap-switch.min.css');
-        Yii::app()->assets->register('/css/switch/switch.css');
         Yii::app()->assets->register('/css/partial/points-list.css');
         Yii::app()->assets->register('/css/partial/screen-shot-box.css');
-        Yii::app()->assets->register('/css/pages/point.css');
+
 
         return true;
     }

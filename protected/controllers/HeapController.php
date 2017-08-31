@@ -401,19 +401,9 @@ class HeapController extends Controller
             return false;
         }
 
-        Yii::app()->assets->register('/js/fileuploader/vendor/jquery.ui.widget.js');
-        Yii::app()->assets->register('/js/fileuploader/jquery.fileupload.js');
-        Yii::app()->assets->register('/js/fileuploader/jquery.iframe-transport.js');
-        Yii::app()->assets->register('/js/jsTree/jstree.min.js');
-        Yii::app()->assets->register('/js/jPlayer/jquery.jplayer.min.js');
-
-        Yii::app()->assets->register('/js/contentHeap.js');
-
-        Yii::app()->assets->register('/css/jquery.fileupload.bootstrap.css');
-        Yii::app()->assets->register('/css/jquery.fileupload.css');
-        Yii::app()->assets->register('/css/jTreeThemes/default/style.min.css');
-        Yii::app()->assets->register('/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');
-        Yii::app()->assets->register('/css/pages/heap.css');
+        Yii::app()->assets->registerPackage('js-tree');
+        Yii::app()->assets->registerPackage('j-player');
+        Yii::app()->assets->registerPackage('fileuploader');
 
         return true;
     }

@@ -1,0 +1,46 @@
+.main-menu {
+    margin: 0 5px;
+}
+
+.main-menu > ul {
+    padding: 0;
+}
+
+.main-menu > ul > li {
+    background-color: rgba(13, 174, 228, 0.15);
+}
+
+.main-menu > ul > li > a {
+    color: #1B82A5;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.main-menu > ul > li > a:hover {
+    text-decoration:none;
+}
+
+.main-menu > ul > li:active{
+    color:#fff;
+}
+
+.operations-menu{
+    margin: 5px auto 0px !important;
+}
+
+.operations-menu > li {
+    font-weight: bold;
+    background-color: rgba(13, 174, 228, 0.15);
+}
+
+.operations-menu > li > a {
+    color: #177493;
+}
+
+.operations-menu > li > a:hover {
+    text-decoration:none;
+}
+
+.hidden-on-load{
+    display: none;
+}

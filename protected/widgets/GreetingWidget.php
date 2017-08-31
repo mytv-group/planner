@@ -94,7 +94,6 @@ class GreetingWidget extends AbstractWidget
         imagecopy($image, $bg, 0, 0, 0, 0, 500, 300);
         imagecopy($image, $logo, 220, 224, 0, 0, imagesx($logo), imagesx($logo));
         putenv('GDFONTPATH=' . dirname(Yii::app()->basePath)
-          . DIRECTORY_SEPARATOR . 'css'
           . DIRECTORY_SEPARATOR . 'fonts');
 
         $font = getenv('GDFONTPATH') . DIRECTORY_SEPARATOR . 'arialbd.ttf';

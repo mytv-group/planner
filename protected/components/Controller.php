@@ -25,6 +25,24 @@ class Controller extends CController
         if (defined('YII_DEBUG') && YII_DEBUG) {
             Yii::app()->assetManager->forceCopy = true;
         }
+
+        Yii::app()->assets->registerPackage('jq');
+        Yii::app()->assets->registerPackage('jquery-ui');
+        Yii::app()->assets->registerPackage('bootstrap');
+        Yii::app()->assets->registerPackage('menu-decorator');
+
         return parent::beforeAction($action);
+    }
+
+    protected function afterRender($view, &$output){
+        foreach (['js', 'css'] as $dim) {
+            $name = str_replace('controller', '', strtolower(get_class($this)));
+            $file = '/' . $dim . '/pages/' . $name . '.' . $dim;
+            if (file_exists(INDEX_PATH . $file)) {
+                Yii::app()->assets->register($file);
+            }
+        }
+
+        return parent::afterRender($view, $output);
     }
 }

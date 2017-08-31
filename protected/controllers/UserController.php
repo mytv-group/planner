@@ -195,18 +195,6 @@ class UserController extends Controller
         return $model;
     }
 
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
-        Yii::app()->assets->register('/js/menuDecorator.js');
-        Yii::app()->assets->register('/js/user.js');
-
-        return true;
-    }
-
     /**
      * Performs the AJAX validation.
      * @param User $model the model to be validated

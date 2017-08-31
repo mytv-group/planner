@@ -492,29 +492,17 @@ class PlaylistsController extends Controller
             return false;
         }
 
-        Yii::app()->assets->register('/js/lib/jquery.datetimepicker.js');
-        Yii::app()->assets->register('/js/fileuploader/vendor/jquery.ui.widget.js');
-        Yii::app()->assets->register('/js/fileuploader/jquery.fileupload.js');
-        Yii::app()->assets->register('/js/fileuploader/jquery.iframe-transport.js');
-        Yii::app()->assets->register('/js/jPlayer/jquery.jplayer.min.js');
-        Yii::app()->assets->register('/js/jsTree/jstree.min.js');
-        Yii::app()->assets->register('/js/bootstrap/bootstrap-switch.min.js');
+        Yii::app()->assets->registerPackage('bootstrap-switch');
+        Yii::app()->assets->registerPackage('datetimepicker');
+        Yii::app()->assets->registerPackage('fileuploader');
+        Yii::app()->assets->registerPackage('j-player');
+        Yii::app()->assets->registerPackage('js-tree');
 
-        Yii::app()->assets->register('/js/menuDecorator.js');
-
-        Yii::app()->assets->register('/js/pages/playlists/playlist.js' );
         Yii::app()->assets->register('/js/pages/playlists/playlistOrder.js' );
         Yii::app()->assets->register('/js/pages/playlists/playlistFileUpload.js' );
         Yii::app()->assets->register('/js/pages/playlists/playlistHeapAndPreview.js' );
 
-        Yii::app()->assets->register('/css/bootstrap/bootstrap-switch.min.css');
-        Yii::app()->assets->register('/css/jquery.fileupload.bootstrap.css');
-        Yii::app()->assets->register('/css/jquery.fileupload.css');
-        Yii::app()->assets->register('/css/jPlayerSkin/blue.monday/jplayer.blue.monday.css');
-        Yii::app()->assets->register('/css/jTreeThemes/default/style.min.css');
-        Yii::app()->assets->register('/css/jquery.datetimepicker.css');
         Yii::app()->assets->register('/css/partial/playlists-list.css');
-        Yii::app()->assets->register('/css/pages/playlists.css');
 
         return true;
     }

@@ -158,16 +158,4 @@ class WidgetController extends Controller
             Yii::app()->end();
         }
     }
-
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
-        Yii::app()->assets->register('/js/pages/widget/widget.js');
-        Yii::app()->assets->register('/css/pages/widget.css');
-
-        return true;
-    }
 }

@@ -422,15 +422,7 @@ class NetController extends Controller
             return false;
         }
 
-        Yii::app()->assets->register('/js/lib/jquery.datetimepicker.js');
-
-        Yii::app()->assets->register('/js/menuDecorator.js');
-
-        Yii::app()->assets->register('/js/pages/net/network.js');
-
-        Yii::app()->assets->register('/css/jquery.datetimepicker.css');
-
-        Yii::app()->assets->register('/css/pages/net.css');
+        Yii::app()->assets->registerPackage('datetimepicker');
 
         return true;
     }

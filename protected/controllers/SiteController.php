@@ -107,15 +107,4 @@ class SiteController extends Controller
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
-
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
-        Yii::app()->assets->register('/css/pages/site.css');
-
-        return true;
-    }
 }

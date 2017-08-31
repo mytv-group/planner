@@ -50,17 +50,14 @@ class MonitoringController extends Controller
             return false;
         }
 
-        Yii::app()->assets->register('/js/bootstrap/bootstrap-switch.min.js');
+        Yii::app()->assets->registerPackage('bootstrap-switch');
+        Yii::app()->assets->registerPackage('switch');
 
-        Yii::app()->assets->register('/js/pages/monitoring/monitoring.js');
         Yii::app()->assets->register('/js/pointScreen.js');
 
-        Yii::app()->assets->register('/css/bootstrap/bootstrap-switch.min.css');
-        Yii::app()->assets->register('/css/switch/switch.css');
         Yii::app()->assets->register('/css/partial/points-list.css');
         Yii::app()->assets->register('/css/partial/playlists-list.css');
         Yii::app()->assets->register('/css/partial/screen-shot-box.css');
-        Yii::app()->assets->register('/css/pages/monitoring.css');
 
         return true;
     }

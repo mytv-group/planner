@@ -150,18 +150,4 @@ class StatisticController extends Controller
             Yii::app()->end();
         }
     }
-
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
-        Yii::app()->assets->register('/js/menuDecorator.js');
-        //Yii::app()->assets->register(Yii::app()->getBaseUrl() . '/js/statistic.js' );
-
-        Yii::app()->assets->register('/css/pages/statistic.css');
-
-        return true;
-    }
 }

@@ -133,5 +133,5 @@ $mm = $this->widget ( 'zii.widgets.CMenu', array (
 
 $this->widget ('zii.widgets.CMenu', array (
     'items' => $this->menu,
-    'htmlOptions'=>array('class'=>'OperationsMenu list-group HiddenOnLoad'),
+    'htmlOptions'=>array('class'=>'list-group operations-menu hidden-on-load'),
 ));

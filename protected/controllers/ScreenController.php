@@ -197,11 +197,7 @@ class ScreenController extends Controller
             return false;
         }
 
-        Yii::app()->assets->register('/js/menuDecorator.js' );
-        Yii::app()->assets->register('/js/pages/screen/screen.js' );
         Yii::app()->assets->register('/js/pages/screen/screenBlockProto.js' );
-
-        Yii::app()->assets->register('/css/pages/screen.css');
 
         return true;
     }

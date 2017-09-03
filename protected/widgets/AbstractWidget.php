@@ -63,15 +63,15 @@ abstract class AbstractWidget extends CWidget
     public function showData()
     {
         $file = dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput();
-        /*if (file_exists ($file)) {
+        if (file_exists ($file)) {
             $fileCreated = filemtime (dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . $this->getOutput());
 
             if ((time() - $fileCreated) > $this->imageCacheTime) {
                 $this->generateImage();
             }
-        } else {*/
+        } else {
             $this->generateImage();
-        //}
+        }
 
         return ['img' => $this->getOutput()];
     }

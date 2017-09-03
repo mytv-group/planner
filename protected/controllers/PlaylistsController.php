@@ -502,7 +502,7 @@ class PlaylistsController extends Controller
         Yii::app()->assets->register('/js/pages/playlists/playlistFileUpload.js' );
         Yii::app()->assets->register('/js/pages/playlists/playlistHeapAndPreview.js' );
 
-        Yii::app()->assets->register('/css/partial/playlists-list.css');
+        Yii::app()->assets->register('/css/common/playlists-list.css');
 
         return true;
     }

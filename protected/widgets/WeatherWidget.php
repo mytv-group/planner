@@ -12,7 +12,7 @@ class WeatherWidget extends AbstractWidget
     private $celsiusMin = 273.15;
     protected $imageCacheTime = 60;
     private $weekDays = [
-        '', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'
+        'Нд', 'Пн', 'Вв', 'Ср', 'Чт', 'Пт', 'Сб'
     ];
 
     private $imageSizeX = 400;

@@ -54,7 +54,7 @@ $this->menu=[
     <?php if (count($point->tv) > 0): ?>
       <div class="row">
           <?= $form->labelEx($point, 'TVschedule'); ?>
-          <?php $this->widget('tvScheduleWidget', [
+          <?php $this->widget('TvScheduleWidget', [
               'tvBlocks' => $point->tv,
               'editable' => false,
               'postName' => "NetApplications[Points][".$point->id."]"

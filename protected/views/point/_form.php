@@ -41,7 +41,7 @@
 
     <div class="row">
         <?= $form->labelEx($model, 'TVschedule'); ?>
-        <?php $this->widget('tvScheduleWidget', [
+        <?php $this->widget('TvScheduleWidget', [
             'tvBlocks' => $model->tv,
             'editable' => !$isView
         ]); ?>

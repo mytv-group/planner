@@ -56,7 +56,7 @@ $this->menu=[
 
 <div class="row">
     <?= $form->labelEx($model, 'TVschedule'); ?>
-    <?php $this->widget('tvScheduleWidget', [
+    <?php $this->widget('TvScheduleWidget', [
         'tvBlocks' => [],
         'editable' => true,
         'postName' => 'NetApplications'

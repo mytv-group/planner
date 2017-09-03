@@ -9,6 +9,7 @@ return array(
         'application.components.*',
         'application.modules.rbac.controllers.RbacController',
         'application.widgets.*',
+        'application.widgets-internal.*',
         'application.widgets-internal.tv-schedule.*',
         'application.widgets-internal.point-channels.*',
         'application.widgets-internal.screen-selector.*',

@@ -60,7 +60,7 @@ $this->menu=[
 
     <div class="row">
         <?= $form->labelEx($point, 'TVschedule'); ?>
-        <?php $this->widget('tvScheduleWidget', [
+        <?php $this->widget('TvScheduleWidget', [
             'tvBlocks' => $point->tv,
             'editable' => true,
             'postName' => "NetApplications[Points][".$point->id."]"

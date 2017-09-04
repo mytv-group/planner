@@ -36,7 +36,12 @@ class LogoWidget extends AbstractWidget
 
     protected function generateImage()
     {
-        $image = @imagecreatetruecolor(600, 300);
+        $width = 600;
+        $height = 300;
+        if (isset($this->config->width)) { $width = $this->config->width; }
+        if (isset($this->config->height)) { $height = $this->config->height; }
+
+        $image = @imagecreatetruecolor($width, $height);
         imagesavealpha($image, true);
         if (!$image) {
             throw new Error (implode('',
@@ -53,7 +58,7 @@ class LogoWidget extends AbstractWidget
 
         $bg = imagecreatefrompng($bg);
 
-        imagecopy($image, $bg, 0, 0, 0, 0, 600, 300);
+        imagecopy($image, $bg, 0, 0, 0, 0, $width, $height);
 
         if (isset($this->config->rotation)
             && is_int(intval($this->config->rotation))

@@ -36,7 +36,6 @@ $(document).ready(function(e){
             },
             dataType: "json",
       }).done(function(answ){
-        console.log(answ);
         if ((answ != null) && (answ[0] == 'ok')){
           curScreenBox$.find('.ScreenShotImg').attr('src', answ[1])
         } else if((answ != null) && (answ[0] == 'pending')) {
@@ -48,6 +47,7 @@ $(document).ready(function(e){
                     if (resp.url) {
                         clearInterval(interval);
                         curScreenBox$.find('.ScreenShotImg').attr('src', resp.url);
+                        return;
                     }
 
                     if (intervalCounter > MAX_INTERVAL_COUNTER) {

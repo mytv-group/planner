@@ -1,4 +1,4 @@
-var MAX_INTERVAL_COUNTER = 3000;
+var MAX_INTERVAL_COUNTER = 15000;
 
 $(document).ready(function(e){
   $(".points-list").on("click", '.show-point-screen', function(e){
@@ -46,7 +46,10 @@ $(document).ready(function(e){
                 }).done(function(resp) {
                     if (resp.url) {
                         clearInterval(interval);
-                        curScreenBox$.find('.ScreenShotImg').attr('src', resp.url);
+                        curScreenBox$
+                            .removeClass('ScreenShotBoxBgLoading')
+                            .removeClass('ScreenShotBoxBgUnavaliable')
+                            .find('.ScreenShotImg').attr('src', resp.url);
                         return;
                     }
 

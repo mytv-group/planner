@@ -1,11 +1,12 @@
 var MAX_INTERVAL_COUNTER = 15000;
+var INTERVAL_STEP = 500;
 
 $(document).ready(function(e){
   $(".points-list").on("click", '.show-point-screen', function(e){
       var this$ = $(this),
         pointId = this$.data("id"),
         pointIp = this$.data("ip"),
-        intervalCounter = 100;
+        intervalCounter = 0;
 
     if((this$.data('clicked') == 'false') ||
         (this$.data('clicked') == undefined)){
@@ -59,7 +60,7 @@ $(document).ready(function(e){
                           .removeClass('ScreenShotBoxBgLoading')
                           .addClass('ScreenShotBoxBgUnavaliable');
                     }
-                    intervalCounter*=2;
+                    intervalCounter+=INTERVAL_STEP;
                 }).fail(function(answ) {
                     if (intervalCounter > MAX_INTERVAL_COUNTER) {
                         clearInterval(interval);
@@ -67,9 +68,9 @@ $(document).ready(function(e){
                           .removeClass('ScreenShotBoxBgLoading')
                           .addClass('ScreenShotBoxBgUnavaliable');
                     }
-                    intervalCounter*=2;
+                    intervalCounter+=INTERVAL_STEP;
                 });
-            }, intervalCounter);
+            }, INTERVAL_STEP);
         }
         else {
           curScreenBox$

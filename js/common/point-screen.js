@@ -1,8 +1,11 @@
+var MAX_INTERVAL_COUNTER = 3000;
+
 $(document).ready(function(e){
   $(".points-list").on("click", '.show-point-screen', function(e){
       var this$ = $(this),
         pointId = this$.data("id"),
-        pointIp = this$.data("ip");
+        pointIp = this$.data("ip"),
+        intervalCounter = 100;
 
     if((this$.data('clicked') == 'false') ||
         (this$.data('clicked') == undefined)){
@@ -34,9 +37,38 @@ $(document).ready(function(e){
             dataType: "json",
       }).done(function(answ){
         console.log(answ);
-        if((answ != null) && (answ[0] == 'ok')){
+        if ((answ != null) && (answ[0] == 'ok')){
           curScreenBox$.find('.ScreenShotImg').attr('src', answ[1])
-        } else {
+        } else if((answ != null) && (answ[0] == 'pending')) {
+            var interval = setInterval(function() {
+                $.ajax({
+                    url: 'http://' + window.location.host + "/point/getScreenshotUrl?pointId=" + pointId,
+                    dataType: "json"
+                }).done(function(resp) {
+                    if (resp.url) {
+                        clearInterval(interval);
+                        curScreenBox$.find('.ScreenShotImg').attr('src', resp.url);
+                    }
+
+                    if (intervalCounter > MAX_INTERVAL_COUNTER) {
+                        clearInterval(interval);
+                        curScreenBox$
+                          .removeClass('ScreenShotBoxBgLoading')
+                          .addClass('ScreenShotBoxBgUnavaliable');
+                    }
+                    intervalCounter*=2;
+                }).fail(function(answ) {
+                    if (intervalCounter > MAX_INTERVAL_COUNTER) {
+                        clearInterval(interval);
+                        curScreenBox$
+                          .removeClass('ScreenShotBoxBgLoading')
+                          .addClass('ScreenShotBoxBgUnavaliable');
+                    }
+                    intervalCounter*=2;
+                });
+            }, intervalCounter);
+        }
+        else {
           curScreenBox$
             .removeClass('ScreenShotBoxBgLoading')
             .addClass('ScreenShotBoxBgUnavaliable');

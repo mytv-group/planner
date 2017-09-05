@@ -26,26 +26,34 @@ class PointController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',
-                'actions'=>array('index','view','ajaxGetPointScreen'),
-                'users'=>array('@'),
-                'roles'=>array('pointViewUser'),
-            ),
-            array('allow',
-                'actions'=>array('create', 'update'),
-                'users'=>array('@'),
-                'roles'=>array('pointEditUser'),
-            ),
-            array('allow',
-                'actions'=>array('delete'),
-                'users'=>array('@'),
-                'roles'=>array('pointUser'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',
+                'actions'=>['index',
+                    'view',
+                    'ajaxGetPointScreen',
+                    'getScreenshotUrl'
+                ],
+                'users'=>['@'],
+                'roles'=>['pointViewUser'],
+            ],
+            ['allow',
+                'actions'=>[
+                    'create',
+                    'update',
+                    'sendReload'
+                ],
+                'users'=>['@'],
+                'roles'=>['pointEditUser'],
+            ],
+            ['allow',
+                'actions'=>['delete'],
+                'users'=>['@'],
+                'roles'=>['pointUser'],
+            ],
+            ['deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     /**
@@ -213,18 +221,52 @@ class PointController extends Controller
 
     public function actionAjaxGetPointScreen()
     {
-      $answ = array('err', '');
-      if (isset($_POST['pointId']) && isset($_POST['pointIp'])) {
-          $pointId = $_POST['pointId'];
-          $pointIp = $_POST['pointIp'];
+        if (!isset($_POST['pointId'])
+          || !isset($_POST['pointIp'])
+        ) {
+            echo json_encode(['err', '']);
+            return;
+        }
 
-          $res = Yii::app()->pointService->getPointScreen($pointId, $pointIp);
+        $pointId = $_POST['pointId'];
+        $pointIp = $_POST['pointIp'];
 
-          $answ=['ok', $res];
+        if ($pointIp === '0.0.0.0') {
+            Yii::app()->spool->removeScreenshots($pointId);
+            Yii::app()->pointService->sendRequestForScreen($pointId);
+            echo json_encode(['pending']);
+            return;
+        }
 
-      }
+        $res = Yii::app()->pointService->getPointScreen($pointId, $pointIp);
 
-      echo json_encode($answ);
+        echo json_encode(['ok', $res]);
+    }
+
+    public function actionGetScreenshotUrl($pointId)
+    {
+        if (!isset($_GET['pointId'])) {
+            echo json_encode(0);
+            return;
+        }
+
+        $url = Yii::app()->spool->getScreenshotUrl($pointId);
+
+        if(empty($url)) {
+            echo json_encode(0);
+            exit;
+        }
+
+        echo json_encode([
+            'url' => $url
+        ]);
+        exit;
+    }
+
+    public function actionSendReload($pointId)
+    {
+        Yii::app()->pointService->sendRequestForReload($pointId);
+        echo json_encode(1);
     }
 
     /**

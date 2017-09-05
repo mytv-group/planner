@@ -29,7 +29,15 @@ $(document).ready(function(e){
         }
     });
 
-    $('.delete-point').on('submit', function() {
-        return confirm('Do you really want to delete point?');
+    $('#Point_reload').on('click', function() {
+        if (confirm('Do you really want to reload point?')) {
+            var pointId = $(this).data('point-id');
+            $.ajax({
+                url: 'http://' + window.location.host + "/point/sendReload?pointId=" + pointId,
+                dataType: "json"
+            }).done(function() {
+                alert("Point reload request sent");
+            });
+        }
     });
 });

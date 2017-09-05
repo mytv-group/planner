@@ -261,7 +261,53 @@ class PointService extends CApplicationComponent
         } catch (Exception $ex) { }
     }
 
-    private function prapareScreenshot($file, $destPath, $url)
+    public function sendRequestForScreen($id)
+    {
+        $interactionUrl = Yii::app()->params['interactionUrl'];
+        $action = '/point/getScreenshot';
+
+        $requestData = [
+            'id' => $id
+        ];
+
+        try {
+            $client = new EHttpClient($interactionUrl . $action, [
+                'maxredirects' => 3,
+                'timeout' => 2,
+                'adapter' => 'EHttpClientAdapterCurl'
+            ]);
+
+            $client->setParameterGet($requestData);
+            $response = $client->request();
+        } catch (Exception $ex) { }
+
+        return;
+    }
+
+    public function sendRequestForReload($id)
+    {
+        $interactionUrl = Yii::app()->params['interactionUrl'];
+        $action = '/point/broadcastReload';
+
+        $requestData = [
+            'id' => $id
+        ];
+
+        try {
+            $client = new EHttpClient($interactionUrl . $action, [
+                'maxredirects' => 3,
+                'timeout' => 2,
+                'adapter' => 'EHttpClientAdapterCurl'
+            ]);
+
+            $client->setParameterGet($requestData);
+            $response = $client->request();
+        } catch (Exception $ex) { }
+
+        return;
+    }
+
+    private function prepareScreenshot($file, $destPath, $url)
     {
         if (strpos($file, 'screenshot') > -1) {
             $nameParts = explode("_", $file);
@@ -339,7 +385,7 @@ class PointService extends CApplicationComponent
         if (($files) > 0) {
             $entrance = false;
             foreach ($files as $file) {
-                $res = $this->prapareScreenshot($file, $imgPath, $url);
+                $res = $this->prepareScreenshot($file, $imgPath, $url);
                 if ($res != false) {
                     $entrance = true;
                     return $res;

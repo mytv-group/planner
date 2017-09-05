@@ -166,6 +166,42 @@ class Spool extends CApplicationComponent
         ];
     }
 
+    public function putScreenshot($pointId, $tmpPath, $name)
+    {
+        $pointDir = $this->getPointsPath() . $pointId;
+        $path = $this->prepareSpoolPath($pointDir) . DIRECTORY_SEPARATOR . $name;
+
+        move_uploaded_file($tmpPath, $path);
+
+        return;
+    }
+
+    public function removeScreenshots($pointId, $name = 'screenshot.png')
+    {
+        $pointDir = $this->getPointsPath() . $pointId;
+        $path = $this->prepareSpoolPath($pointDir) . DIRECTORY_SEPARATOR . $name;
+
+        try {
+            if (file_exists ($path)) {
+                unlink($path);
+            }
+        } catch (Exception $e) {}
+
+        return;
+    }
+
+    public function getScreenshotUrl($pointId, $name = 'screenshot.png')
+    {
+        $pointDir = $this->getPointsPath() . $pointId;
+        $path = INDEX_PATH .'/'.$pointDir.'/'.$name;
+
+        if (!file_exists ($path)) {
+            return;
+        }
+
+        return Yii::app()->getBaseUrl(true).'/'.$pointDir.'/'.$name;;
+    }
+
     private function serverUrl()
     {
         return sprintf(

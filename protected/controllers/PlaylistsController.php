@@ -36,7 +36,7 @@ class PlaylistsController extends Controller
                 'roles'=>array('playlistViewUser'),
             ),
             array('allow',
-                'actions'=>array('create','upload','addfilefromheap','setFileOrder', 'update','upload'),
+                'actions'=>array('create','upload','addfilefromheap','setFileOrder', 'update'),
                 'users'=>array('@'),
                 'roles'=>array('playlistEditUser'),
             ),

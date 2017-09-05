@@ -69,6 +69,12 @@
       <div class="row">
           <input id="add-content-file-btn" class="btn btn-default" type="file" name="Point[content]" />
           <input id="add-content-btn" class="btn btn-default" type="button" name="content" value="Add content" />
+
+          <?php echo CHtml::button('Reload', [
+              'id'=>'Point_reload',
+              'class'=>'btn btn-danger',
+              'data-point-id'=>$model->id
+          ]); ?>
       </div>
     <?php endif; ?>
 

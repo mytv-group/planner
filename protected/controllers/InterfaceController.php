@@ -17,7 +17,8 @@ class InterfaceController extends Controller
                     'getPointSchedule',
                     'getTVschedule',
                     'setSync',
-                    'postStatistics'
+                    'postStatistics',
+                    'storeScreens'
                 ],
                 'users'=>['*'],
             ],
@@ -435,6 +436,26 @@ class InterfaceController extends Controller
         }
 
         echo json_encode($responce);
+        exit;
+    }
+
+    public function actionStoreScreen()
+    {
+        if (!isset($_FILES['screen'])
+            || !isset($_FILES['screen']['tmp_name'])
+            || !isset($_POST['id'])
+        ) {
+            http_response_code(400);
+            echo sprintf('Not all params sent');
+            exit;
+        }
+
+        $id = Yii::app()->request->getParam('id');
+        $screen = $_FILES['screen']['tmp_name'];
+
+        Yii::app()->spool->putScreenshot($id, $screen, 'screenshot.png');
+
+        echo json_encode(1);
         exit;
     }
 }

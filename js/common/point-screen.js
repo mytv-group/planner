@@ -1,4 +1,4 @@
-var MAX_INTERVAL_COUNTER = 15000;
+var MAX_INTERVAL_COUNTER = 20000;
 var INTERVAL_STEP = 500;
 
 $(document).ready(function(e){
@@ -48,7 +48,6 @@ $(document).ready(function(e){
                     if (resp.url) {
                         clearInterval(interval);
                         curScreenBox$
-                            .removeClass('ScreenShotBoxBgLoading')
                             .removeClass('ScreenShotBoxBgUnavaliable')
                             .find('.ScreenShotImg').attr('src', resp.url);
                         return;

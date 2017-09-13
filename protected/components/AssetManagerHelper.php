@@ -68,9 +68,14 @@ class AssetManagerHelper extends CApplicationComponent
         $publishedCssFiles = [];
         foreach ($cssArray as $file) {
             $path = $basePath . $file;
+            $exists = file_exists($assetManager->getPublishedPath($path));
             $publishedCss = $assetManager->publish($path, false, -1, YII_DEBUG);
             $clientScript->registerCssFile($publishedCss);
-            $publishedCssFiles[] = $publishedCss;
+            $publishedCssFiles[] = [
+                'exists' => $exists,
+                'origin' => $file,
+                'published' => $publishedCss
+            ];
         }
 
         foreach ($jsArray as $file) {
@@ -90,18 +95,27 @@ class AssetManagerHelper extends CApplicationComponent
             ];
         }
 
-        foreach ($publishedCssFiles as $cssFile) {
+        foreach ($publishedCssFiles as $item) {
+            $cssFile = $item['published'];
             $filePath = $this->getBasePath() . $cssFile;
 
-            $str = file_get_contents($filePath);
+            $offset = 0;
+            $maxlen = 1000; //just 1000B
+            $allStr = '';
+
+            while ($str = file_get_contents($filePath, false, null, $offset, $maxlen)) {
+                $allStr .= $str;
+                $offset += $maxlen;
+            }
+
             foreach ($publishedFiles as $file) {
-                if (strpos($str, $file['published']) === false) {
-                    $str = str_replace('../' . $file['origin'], $file['published'], $str);
-                    $str = str_replace($file['origin'], $file['published'], $str);
+                if (!$item['exists']) {
+                    $allStr = str_replace('../' . $file['origin'], $file['published'], $allStr);
+                    $allStr = str_replace($file['origin'], $file['published'], $allStr);
                 }
             }
 
-            file_put_contents($filePath, $str);
+            file_put_contents($filePath, $allStr);
         }
     }
 }

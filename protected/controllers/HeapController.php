@@ -207,37 +207,21 @@ class HeapController extends Controller
         $name = $_POST['name'];
 
         if ($type == 'file') {
-            $connection = Yii::app()->db;
-            $connection->active=true;
-
-            $sql = "SELECT `name` FROM `file` WHERE `id` = '".$id."'";
-
-            $command = $connection->createCommand($sql);
-            $dataReader=$command->query();
-            $prevName = '';
-
-            if(($row=$dataReader->read())!==false) {
-                $prevName = $row['name'];
-            }
+            $prevName = File::model()->findByPk( $id )->name;
 
             $nameUID = substr($prevName, 0, 13);
             $name = $nameUID . $name;
 
-            $sql = "UPDATE `file` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
-            $command = $connection->createCommand($sql);
-            $command->execute();
-
-            $connection->active=false;
+            File::model()->updateByPk($id, array(
+                'name'=> $name
+            ));
         } else if(($type == 'folder') || ($type == 'default')) {
-            $connection = Yii::app()->db;
-            $connection->active=true;
             $id = $id *-1;
 
-            $sql = "UPDATE `folder` SET `name` = '" . $name . "' WHERE `id` = '".$id."';";
-            $command = $connection->createCommand($sql);
-            $command->execute();
+            Folder::model()->updateByPk($id, array(
+                'name'=>$name
+            ));
 
-            $connection->active=false;
         }
 
         echo json_encode(['status' => 'ok']);

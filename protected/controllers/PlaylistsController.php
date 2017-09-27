@@ -349,27 +349,19 @@ class PlaylistsController extends Controller
         $model->save();
 
         //if file visibilyty 0 (only for current pl), delete it
-        $connection = Yii::app()->db;
-        $connection->active=true;
-        $sql = "SELECT `path`, `visibility` FROM `file` WHERE `id` = ".$fileId.";";
-        $command = $connection->createCommand($sql);
-        $dataReader=$command->query();
+        $query = File::model()->findByPk($fileId);
         $visibility = 0;
         $path = '';
-        if(($row=$dataReader->read())!==false)
+        if($query)
         {
-            $visibility = $row['visibility'];
-            $path = $row['path'];
+            $visibility = $query->visibility;
+            $path = $query->path;
         }
 
         $execution = false;
         if($visibility == 0)
         {
-            $sql = "DELETE FROM `file` WHERE " .
-                    "`id` = " . $fileId . ";";
-            $command = Yii::app()->db->createCommand($sql);
-            $execution = $command->execute();
-
+            File::model()->deleteByPk($fileId);
             try
             {
                 unlink($path);
@@ -385,7 +377,6 @@ class PlaylistsController extends Controller
         {
             $execution = true;
         }
-        $connection->active=false;
 
         return $execution;
     }
@@ -416,9 +407,9 @@ class PlaylistsController extends Controller
 
             if ($fileToPlaylistInstance->save()) {
                 $answ['status'] = 'ok';
-            } else if($inserted === false) {
+            } else {
                 $answ['status'] = 'err';
-                $answ['error'] = 'Cant insert row to db: ' . $insertedStatus['query'] .
+                $answ['error'] = 'Cant insert row to db: ' .
                 ". Page PlaylistController.php";
                 error_log($answ['error']);
             }

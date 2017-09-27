@@ -23,8 +23,8 @@ class ContentManager extends CApplicationComponent
             "AND `t2`.`channel_type` = '" . $pointChannel . "' " .
             "ORDER BY `fromTime`;";
 
-        $command=$connection->createCommand($sql);
-        $rows=$command->queryAll();
+        $command = $connection->createCommand($sql);
+        $rows = $command->queryAll();
 
         $blocksArr = array ();
         foreach ($rows as $row) {

@@ -349,13 +349,13 @@ class PlaylistsController extends Controller
         $model->save();
 
         //if file visibilyty 0 (only for current pl), delete it
-        $query = File::model()->findByPk($fileId);
+        $file = File::model()->findByPk($fileId);
         $visibility = 0;
         $path = '';
-        if($query)
+        if($file)
         {
-            $visibility = $query->visibility;
-            $path = $query->path;
+            $visibility = $file->visibility;
+            $path = $file->path;
         }
 
         $execution = false;

@@ -220,11 +220,7 @@ class HeapController extends Controller
         } else if(($type == 'folder') || ($type == 'default')) {
             $id = $id *-1;
 
-            Folder::model()->updateByPk($id, array(
-
-                'name'=>$name
-
-            ));
+            Folder::model()->updateByPk($id, array('name'=>$name));
 
         }
 

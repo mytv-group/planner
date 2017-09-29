@@ -61,19 +61,18 @@ class ContentManager extends CApplicationComponent
 
         foreach ($blocksArr as &$block) {
             if ($block ['type'] == 3) {
-                $sql = "SELECT `url` FROM `stream` WHERE `playlist_id` = '" . $block['playlistId'] . "';";
+                $blockPlaylistId = $block['playlistId'];
 
-                $command=$connection->createCommand($sql);
-                $rows=$command->queryAll();
+                $streams = Stream::model()->findAllByAttributes(['playlist_id' => $blockPlaylistId]);
 
-                if ($rows) {
+                if ($streams) {
                     $duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;
                     $block ["filesWithDuration"] = array ();
-                    foreach ($rows as $row) {
+                    foreach ($streams as $stream) {
                         $block ["filesWithDuration"] [] = array (
                                 $duration + 5, //5 seconds above just not to have mute between turns
-                                $row['url'],
-                                $duration . " " . $row['url'] . " "
+                                $stream->url,
+                                $duration . " " . $stream->url . " "
                                     . "duration:0;"
                                     . "file:0;"
                                     . "pl:" . $block['playlistId'] . ";"

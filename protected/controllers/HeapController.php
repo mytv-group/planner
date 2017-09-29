@@ -207,14 +207,16 @@ class HeapController extends Controller
         $name = $_POST['name'];
 
         if ($type == 'file') {
-            $prevName = File::model()->findByPk( $id )->name;
+            $prevName = uniqid();
+
+            if ($file = File::model()->findByPk( $id )) {
+                $prevName = $file->name;
+            }
 
             $nameUID = substr($prevName, 0, 13);
             $name = $nameUID . $name;
             File::model()->updateByPk($id, array(
-
                 'name'=> $name
-
             ));
 
         } else if(($type == 'folder') || ($type == 'default')) {

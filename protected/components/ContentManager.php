@@ -61,13 +61,9 @@ class ContentManager extends CApplicationComponent
 
         foreach ($blocksArr as &$block) {
             if ($block ['type'] == 3) {
-                $blockPlayId = $block['playlistId'];
+                $blockPlaylistId = $block['playlistId'];
 
-                $streams = Stream::model()->findAll(array(
-
-                    "condition"=>"playlist_id = $blockPlayId"
-
-                ));
+                $streams = Stream::model()->findAllByAttributes(['playlist_id' => $blockPlaylistId]);
 
                 if ($streams) {
                     $duration = $block ['toDateTime']->getTimestamp() - $block ['fromDateTime']->getTimestamp();;

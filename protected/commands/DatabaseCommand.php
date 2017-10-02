@@ -55,12 +55,6 @@ class DatabaseCommand extends CConsoleCommand
                 ->query();
         }
 
-        $partitionsArray[] = $currentPartition;
-        $currentPartition += $partitionStep;
-        $partitionsArray[] = $currentPartition;
-        $currentPartition += $partitionStep;
-        $partitionsArray[] = $currentPartition;
-
         $diff = array_values(array_diff($partitionsArray, $existPartitions));
 
         foreach ($diff as $newPartition) {

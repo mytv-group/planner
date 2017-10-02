@@ -32,15 +32,15 @@ class Widget extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('name, description, show_duration, periodicity', 'required'),
-            array('show_duration, periodicity, offset', 'numerical', 'integerOnly'=>true),
-            array('name', 'length', 'max'=>255),
-            array('created_dt, config', 'safe'),
+        return [
+            ['name, description, show_duration, periodicity', 'required'],
+            ['show_duration, periodicity, offset', 'numerical', 'integerOnly'=>true],
+            ['name', 'length', 'max'=>255],
+            ['created_dt, config', 'safe'],
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('name, created_dt', 'safe', 'on'=>'search'),
-        );
+            ['name, created_dt', 'safe', 'on'=>'search'],
+        ];
     }
 
     /**
@@ -48,9 +48,9 @@ class Widget extends CActiveRecord
      */
     public function relations()
     {
-        return array(
-            'widgetToChannels' => array(self::HAS_MANY, 'WidgetToChannel', 'widget_id'),
-        );
+        return [
+            'widgetToChannels' => [self::HAS_MANY, 'WidgetToChannel', 'widget_id'],
+        ];
     }
 
     /**
@@ -58,7 +58,7 @@ class Widget extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'description' => 'Description',
@@ -67,7 +67,7 @@ class Widget extends CActiveRecord
             'periodicity' => 'Periodicity',
             'config' => 'Config',
             'created_dt' => 'Created Date',
-        );
+        ];
     }
 
     public function search()
@@ -77,9 +77,9 @@ class Widget extends CActiveRecord
         $criteria->compare('id',$this->id);
         $criteria->compare('name',$this->name,true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     public function getInfo()

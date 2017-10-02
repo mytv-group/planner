@@ -29,14 +29,14 @@ class Screen extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('name, width, height, user_id', 'required'),
-            array('width, height', 'numerical', 'integerOnly'=>true),
-            array('name', 'length', 'max'=>255),
+        return [
+            ['name, width, height, user_id', 'required'],
+            ['width, height', 'numerical', 'integerOnly'=>true],
+            ['name', 'length', 'max'=>255],
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, name, width, height', 'safe', 'on'=>'search'),
-        );
+            ['id, name, width, height', 'safe', 'on'=>'search'],
+        ];
     }
 
     /**
@@ -46,10 +46,10 @@ class Screen extends CActiveRecord
     {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
-        return array(
-            'windows' => array(self::HAS_MANY, 'Window', 'screen_id'),
-            'showcases' => array(self::HAS_MANY, 'Showcase', 'id_window')
-        );
+        return [
+            'windows' => [self::HAS_MANY, 'Window', 'screen_id'],
+            'showcases' => [self::HAS_MANY, 'Showcase', 'id_window']
+        ];
     }
 
     /**
@@ -57,12 +57,12 @@ class Screen extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'width' => 'Width',
             'height' => 'Height',
-        );
+        ];
     }
 
     public function getInfo() {
@@ -108,9 +108,9 @@ class Screen extends CActiveRecord
             $criteria->compare('user_id',Yii::app()->user->id);
         }
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

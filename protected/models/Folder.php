@@ -24,12 +24,12 @@ class Folder extends CActiveRecord
      */
     public function rules()
     {
-        return array(
-            array('name, path, author', 'required'),
-            array('path', 'numerical', 'integerOnly'=>true),
-            array('name, author', 'length', 'max'=>255),
-            array('name', 'safe', 'on'=>'search'),
-        );
+        return [
+            ['name, path, author', 'required'],
+            ['path', 'numerical', 'integerOnly'=>true],
+            ['name, author', 'length', 'max'=>255],
+            ['name', 'safe', 'on'=>'search'],
+        ];
     }
 
     /**
@@ -37,10 +37,10 @@ class Folder extends CActiveRecord
      */
     public function relations()
     {
-        return array(
-            'fileToFolder' => array(self::HAS_MANY, 'FileToFolder', 'id_folder'),
-            'files'=>array(self::HAS_MANY, 'File', ['id_file'=>'id'],'through'=>'fileToFolder'),
-        );
+        return [
+            'fileToFolder' => [self::HAS_MANY, 'FileToFolder', 'id_folder'],
+            'files'=>[self::HAS_MANY, 'File', ['id_file'=>'id'],'through'=>'fileToFolder'],
+        ];
     }
 
     /**
@@ -48,12 +48,12 @@ class Folder extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'path' => 'Path',
             'author' => 'Author',
-        );
+        ];
     }
 
     /**
@@ -79,9 +79,9 @@ class Folder extends CActiveRecord
         $criteria->compare('path',$this->path);
         $criteria->compare('author',$this->author,true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

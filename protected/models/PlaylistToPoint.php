@@ -26,13 +26,13 @@ class PlaylistToPoint extends CActiveRecord
   {
     // NOTE: you should only define rules for those attributes that
     // will receive user inputs.
-    return array(
-      array('id_point, id_playlist, channel_type', 'required'),
-      array('id_point, id_playlist, channel_type', 'numerical', 'integerOnly'=>true),
+    return [
+      ['id_point, id_playlist, channel_type', 'required'],
+      ['id_point, id_playlist, channel_type', 'numerical', 'integerOnly'=>true],
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
-      array('id, id_point, id_playlist, channel_type', 'safe', 'on'=>'search'),
-    );
+      ['id, id_point, id_playlist, channel_type', 'safe', 'on'=>'search'],
+    ];
   }
 
   /**
@@ -42,9 +42,9 @@ class PlaylistToPoint extends CActiveRecord
   {
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
-    return array(
-      'playlist' => array(self::HAS_ONE, 'Playlists', array('id' => 'id_playlist')),
-    );
+    return [
+      'playlist' => [self::HAS_ONE, 'Playlists', ['id' => 'id_playlist']],
+    ];
   }
 
   /**
@@ -52,12 +52,12 @@ class PlaylistToPoint extends CActiveRecord
    */
   public function attributeLabels()
   {
-    return array(
+    return [
       'id' => 'ID',
       'id_point' => 'Id Point',
       'id_playlist' => 'Id Playlist',
       'channel_type' => 'Channel Type',
-    );
+    ];
   }
 
   /**
@@ -83,9 +83,9 @@ class PlaylistToPoint extends CActiveRecord
     $criteria->compare('id_playlist',$this->id_playlist);
     $criteria->compare('channel_type',$this->channel_type);
 
-    return new CActiveDataProvider($this, array(
+    return new CActiveDataProvider($this, [
       'criteria'=>$criteria,
-    ));
+    ]);
   }
 
   /**

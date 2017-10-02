@@ -16,10 +16,10 @@ class PlaylistsController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -29,26 +29,26 @@ class PlaylistsController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',
-                'actions'=>array('index','view'),
-                'users'=>array('@'),
-                'roles'=>array('playlistViewUser'),
-            ),
-            array('allow',
-                'actions'=>array('create','upload','addfilefromheap','setFileOrder', 'update'),
-                'users'=>array('@'),
-                'roles'=>array('playlistEditUser'),
-            ),
-            array('allow',
-                'actions'=>array('delete','deletefilefrompl'),
-                'users'=>array('@'),
-                'roles'=>array('playlistUser'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',
+                'actions'=>['index','view'],
+                'users'=>['@'],
+                'roles'=>['playlistViewUser'],
+            ],
+            ['allow',
+                'actions'=>['create','upload','addfilefromheap','setFileOrder', 'update'],
+                'users'=>['@'],
+                'roles'=>['playlistEditUser'],
+            ],
+            ['allow',
+                'actions'=>['delete','deletefilefrompl'],
+                'users'=>['@'],
+                'roles'=>['playlistUser'],
+            ],
+            ['deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     /**
@@ -65,10 +65,10 @@ class PlaylistsController extends Controller
             $stream = $model->stream;
         }
 
-        $this->render('view',array(
+        $this->render('view',[
             'model' => $model,
             'stream' => $stream,
-        ));
+        ]);
     }
 
     /**
@@ -113,10 +113,10 @@ class PlaylistsController extends Controller
             }
         }
 
-        $this->render('create',array(
+        $this->render('create',[
             'model' => $model,
             'stream' => $stream
-        ));
+        ]);
     }
 
     /**
@@ -148,7 +148,7 @@ class PlaylistsController extends Controller
                 if ($model->validate() && $stream->validate()) {
                     $model->save();
                     $stream->save();
-                    $this->redirect(array('view','id'=>$model->id));
+                    $this->redirect(['view','id'=>$model->id]);
                 }
 
             } else {
@@ -157,15 +157,15 @@ class PlaylistsController extends Controller
                 }
 
                 if ($model->save()) {
-                    $this->redirect(array('view','id'=>$model->id));
+                    $this->redirect(['view','id'=>$model->id]);
                 }
             }
         }
 
-        $this->render('update',array(
+        $this->render('update',[
             'model' => $model,
             'stream' => $stream,
-        ));
+        ]);
     }
 
     /**
@@ -183,9 +183,9 @@ class PlaylistsController extends Controller
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
-            $this->redirect(array('playlists/index'),array(
+            $this->redirect(['playlists/index'],[
                 'model'=>$model
-            ));
+            ]);
         }
     }
 
@@ -200,9 +200,9 @@ class PlaylistsController extends Controller
         if(isset($_GET['Playlists']))
             $model->attributes=$_GET['Playlists'];
 
-        $this->render('index',array(
+        $this->render('index',[
             'model'=>$model,
-        ));
+        ]);
     }
 
     /**
@@ -210,7 +210,7 @@ class PlaylistsController extends Controller
      */
     public function actionUpload()
     {
-        $answ = array();
+        $answ = [];
         $answ['status'] = 'err';
 
         if (!isset($_POST['data'])) {
@@ -338,61 +338,9 @@ class PlaylistsController extends Controller
         echo(json_encode($answ));
     }
 
-    public function DeleteFileFromPlaylist($fileId, $playlistId)
-    {
-        $model = $this->loadModel($playlistId);
-
-        $files = explode(",", $model->files);
-        $fileIdArr[] = $fileId;
-        $filesToSave = array_diff($files, $fileIdArr);
-        $model->files = implode(",", $filesToSave);
-        $model->save();
-
-        //if file visibilyty 0 (only for current pl), delete it
-        $connection = Yii::app()->db;
-        $connection->active=true;
-        $sql = "SELECT `path`, `visibility` FROM `file` WHERE `id` = ".$fileId.";";
-        $command = $connection->createCommand($sql);
-        $dataReader=$command->query();
-        $visibility = 0;
-        $path = '';
-        if(($row=$dataReader->read())!==false)
-        {
-            $visibility = $row['visibility'];
-            $path = $row['path'];
-        }
-
-        $execution = false;
-        if($visibility == 0)
-        {
-            $sql = "DELETE FROM `file` WHERE " .
-                    "`id` = " . $fileId . ";";
-            $command = Yii::app()->db->createCommand($sql);
-            $execution = $command->execute();
-
-            try
-            {
-                unlink($path);
-            }
-            catch (Exception $e)
-            {
-                error_log("Unlink failed. Exception - " . json_encode($e).
-                "Path - " . $path
-                );
-            }
-        }
-        else
-        {
-            $execution = true;
-        }
-        $connection->active=false;
-
-        return $execution;
-    }
-
     public function actionAddfilefromheap()
     {
-        $answ = array();
+        $answ = [];
         $answ['status'] = 'err';
         if(isset($_POST['id']) && isset($_POST['playlistId']))
         {

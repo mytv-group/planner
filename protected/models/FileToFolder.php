@@ -27,14 +27,14 @@ class FileToFolder extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('id_file, id_folder, id_author', 'required'),
-            array('dt', 'default',
+        return [
+            ['id_file, id_folder, id_author', 'required'],
+            ['dt', 'default',
                     'value' => new CDbExpression('NOW()'),
-                    'setOnEmpty'=>false,'on'=>'insert'),
-            array('id_file, id_folder', 'numerical', 'integerOnly'=>true),
-            array('id_author', 'length', 'max'=>100),
-        );
+                    'setOnEmpty'=>false,'on'=>'insert'],
+            ['id_file, id_folder', 'numerical', 'integerOnly'=>true],
+            ['id_author', 'length', 'max'=>100],
+        ];
     }
 
     /**
@@ -42,9 +42,9 @@ class FileToFolder extends CActiveRecord
      */
     public function relations()
     {
-        return array(
-            'file' => array(self::BELONGS_TO, 'File', array('id_file' => 'id')),
-        );
+        return [
+            'file' => [self::BELONGS_TO, 'File', ['id_file' => 'id']],
+        ];
     }
 
     /**
@@ -52,13 +52,13 @@ class FileToFolder extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'id_file' => 'Id File',
             'id_folder' => 'Id Folder',
             'id_author' => 'Id Author',
             'dt' => 'Dt',
-        );
+        ];
     }
 
     /**
@@ -85,9 +85,9 @@ class FileToFolder extends CActiveRecord
         $criteria->compare('id_author',$this->id_author,true);
         $criteria->compare('dt',$this->dt,true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

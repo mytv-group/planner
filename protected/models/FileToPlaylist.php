@@ -34,10 +34,10 @@ class FileToPlaylist extends CActiveRecord
    */
   public function relations()
   {
-    return array(
-      'file' => array(self::BELONGS_TO, 'File', array('id_file' => 'id')),
-      'playlist' => array(self::BELONGS_TO, 'Playlists', array('id_playlist' => 'id')),
-    );
+    return [
+      'file' => [self::BELONGS_TO, 'File', ['id_file' => 'id']],
+      'playlist' => [self::BELONGS_TO, 'Playlists', ['id_playlist' => 'id']],
+    ];
   }
 
   /**
@@ -45,11 +45,11 @@ class FileToPlaylist extends CActiveRecord
    */
   public function attributeLabels()
   {
-    return array(
+    return [
       'id' => 'ID',
       'id_file' => 'Id File',
       'id_playlist' => 'Id Playlist'
-    );
+    ];
   }
 
   /**
@@ -72,9 +72,9 @@ class FileToPlaylist extends CActiveRecord
     $criteria->compare('id_file',$this->id_file);
     $criteria->compare('id_playlist',$this->id_playlist);
 
-    return new CActiveDataProvider($this, array(
+    return new CActiveDataProvider($this, [
       'criteria'=>$criteria,
-    ));
+    ]);
   }
 
   /**

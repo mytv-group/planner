@@ -31,15 +31,15 @@ class User extends CActiveRecord
    */
   public function rules()
   {
-    return array(
-      array('username, password, name, role', 'required'),
-      array('blocked', 'numerical', 'integerOnly'=>true),
-      array('username', 'length', 'max'=>100),
-      array('password, name', 'length', 'max'=>255),
+    return [
+      ['username, password, name, role', 'required'],
+      ['blocked', 'numerical', 'integerOnly'=>true],
+      ['username', 'length', 'max'=>100],
+      ['password, name', 'length', 'max'=>255],
       // The following rule is used by search().
       // @todo Please remove those attributes that should not be searched.
-      array('id, username, password, name, blocked', 'safe', 'on'=>'search'),
-    );
+      ['id, username, password, name, blocked', 'safe', 'on'=>'search'],
+    ];
   }
 
   /**
@@ -49,11 +49,11 @@ class User extends CActiveRecord
   {
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
-    return array(
-      'pointtouser' => array(self::HAS_MANY, 'PointToUser', array('user_id' => 'id')),
-      'pointsavaliable' => array(self::HAS_MANY, 'Point', array('point_id' => 'id'), 'through'=>'pointtouser'),
-      'screens' => array(self::HAS_MANY, 'Screen', array('user_id' => 'id')),
-    );
+    return [
+      'pointtouser' => [self::HAS_MANY, 'PointToUser', ['user_id' => 'id']],
+      'pointsavaliable' => [self::HAS_MANY, 'Point', ['point_id' => 'id'], 'through'=>'pointtouser'],
+      'screens' => [self::HAS_MANY, 'Screen', ['user_id' => 'id']],
+    ];
   }
 
   /**
@@ -61,7 +61,7 @@ class User extends CActiveRecord
    */
   public function attributeLabels()
   {
-    return array(
+    return [
       'id' => 'ID',
       'username' => 'Username',
       'password' => 'Password',
@@ -69,7 +69,7 @@ class User extends CActiveRecord
       'name' => 'Name',
       'blocked' => 'Blocked',
       'role' => 'Role',
-    );
+    ];
   }
 
   /**
@@ -97,9 +97,9 @@ class User extends CActiveRecord
     $criteria->compare('blocked',$this->blocked);
     $criteria->compare('role',$this->role);
 
-    $activeRecord = new CActiveDataProvider($this, array(
+    $activeRecord = new CActiveDataProvider($this, [
       'criteria'=>$criteria,
-    ));
+    ]);
     return $activeRecord;
   }
 

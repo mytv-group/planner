@@ -175,7 +175,7 @@ class InterfaceController extends Controller
             {
                 $onOffArr[count($onOffArr) - 1][1] = $to;
             } else {
-                $onOffArr[] = array($from, $to);
+                $onOffArr[] = [$from, $to];
             }
         }
 

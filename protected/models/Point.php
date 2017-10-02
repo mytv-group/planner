@@ -32,26 +32,26 @@ class Point extends CActiveRecord
      */
     public function rules()
     {
-        return array(
-            array('name, username, ip, screen_id', 'required'),
-            array('volume, TV, screen_id, id_user', 'numerical', 'integerOnly'=>true),
-            array('name, username', 'length', 'max'=>255),
-            array('sync', 'boolean'),
-            array('sync', 'default',
+        return [
+            ['name, username, ip, screen_id', 'required'],
+            ['volume, TV, screen_id, id_user', 'numerical', 'integerOnly'=>true],
+            ['name, username', 'length', 'max'=>255],
+            ['sync', 'boolean'],
+            ['sync', 'default',
                     'value'=> false,
-                    'setOnEmpty' => true, 'on'=>'insert'),
-            array('id_user', 'default',
+                    'setOnEmpty' => true, 'on'=>'insert'],
+            ['id_user', 'default',
                     'value'=> Yii::app()->user->id,
-                    'setOnEmpty' => true, 'on'=>'insert'),
-            array('update_time', 'default',
+                    'setOnEmpty' => true, 'on'=>'insert'],
+            ['update_time', 'default',
                     'value' => new CDbExpression('NOW()'),
-                    'setOnEmpty'=>false,'on'=>'insert'),
-            array('update_time', 'default',
+                    'setOnEmpty'=>false,'on'=>'insert'],
+            ['update_time', 'default',
                     'value' => new CDbExpression('NOW()'),
-                    'setOnEmpty' => false, 'on'=>'update'),
-            array('content', 'file', 'types'=>'zip', 'allowEmpty'=>true),
-            array('name', 'safe', 'on'=>'search'),
-        );
+                    'setOnEmpty' => false, 'on'=>'update'],
+            ['content', 'file', 'types'=>'zip', 'allowEmpty'=>true],
+            ['name', 'safe', 'on'=>'search'],
+        ];
     }
 
 
@@ -60,16 +60,16 @@ class Point extends CActiveRecord
      */
     public function relations()
     {
-        return array(
-            'showcases'=>array(self::HAS_MANY, 'Showcase', 'id_point'),
-            'widgets'=>array(self::HAS_MANY, 'Widget', ['id_widget'=>'id'],'through'=>'showcases'),
-            'playlistToPoint'=>array(self::HAS_MANY,'PlaylistToPoint', ['id_point' => 'id']),
-            'playlists'=>array(self::HAS_MANY,'Playlists', ['id_playlist'=>'id'],'through'=>'playlistToPoint'),
-            'pointToNet'=>array(self::HAS_MANY, 'PointToNet', 'id_point'),
-            'net'=>array(self::HAS_MANY, 'Net', ['id_net'=>'id'],'through'=>'pointToNet'),
-            'screen'=>array(self::BELONGS_TO, 'Screen', 'screen_id'),
-            'tv'=>array(self::HAS_MANY, 'TvSchedule', 'id_point')
-        );
+        return [
+            'showcases'=>[self::HAS_MANY, 'Showcase', 'id_point'],
+            'widgets'=>[self::HAS_MANY, 'Widget', ['id_widget'=>'id'],'through'=>'showcases'],
+            'playlistToPoint'=>[self::HAS_MANY,'PlaylistToPoint', ['id_point' => 'id']],
+            'playlists'=>[self::HAS_MANY,'Playlists', ['id_playlist'=>'id'],'through'=>'playlistToPoint'],
+            'pointToNet'=>[self::HAS_MANY, 'PointToNet', 'id_point'],
+            'net'=>[self::HAS_MANY, 'Net', ['id_net'=>'id'],'through'=>'pointToNet'],
+            'screen'=>[self::BELONGS_TO, 'Screen', 'screen_id'],
+            'tv'=>[self::HAS_MANY, 'TvSchedule', 'id_point']
+        ];
     }
 
     /**
@@ -77,7 +77,7 @@ class Point extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'username' => 'Username',
@@ -95,7 +95,7 @@ class Point extends CActiveRecord
             'screen' => 'Screen',
             'screen_id' => "Screen",
             'ctrl' => "Controls"
-        );
+        ];
     }
 
     /**
@@ -120,9 +120,9 @@ class Point extends CActiveRecord
             $criteria->compare('id_user', Yii::app()->user->id);
         }
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     public function searchWithoutContent()
@@ -152,28 +152,28 @@ class Point extends CActiveRecord
             }
         }
 
-        return new CArrayDataProvider($points, array(
+        return new CArrayDataProvider($points, [
             'keyField' => 'id',
-            'sort' => array(
-                'attributes' => array(
-                    'id' => array(
+            'sort' => [
+                'attributes' => [
+                    'id' => [
                         'asc'=>'id',
                         'desc'=>'id DESC',
                         'label' => 'ID'
-                    ),
-                    'name' => array(
+                    ],
+                    'name' => [
                         'asc'=>'name',
                         'desc'=>'name DESC',
                         'label' => 'Name'
-                    ),
-                    'ip' => array(
+                    ],
+                    'ip' => [
                         'asc'=>'ip',
                         'desc'=>'ip DESC',
                         'label' => 'IP'
-                    ),
-                ),
-            )
-        ));
+                    ],
+                ],
+            ]
+        ]);
     }
 
     /**

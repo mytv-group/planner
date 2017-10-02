@@ -30,13 +30,13 @@ class PointToUser extends CActiveRecord
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
-		return array(
-			array('point_id, user_id', 'required'),
-			array('point_id, user_id', 'numerical', 'integerOnly'=>true),
+		return [
+			['point_id, user_id', 'required'],
+			['point_id, user_id', 'numerical', 'integerOnly'=>true],
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, point_id, user_id, time', 'safe', 'on'=>'search'),
-		);
+			['id, point_id, user_id, time', 'safe', 'on'=>'search'],
+		];
 	}
 
 	/**
@@ -46,10 +46,10 @@ class PointToUser extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-			'point' => array(self::BELONGS_TO, 'Point', 'point_id'),
-			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
-		);
+		return [
+			'point' => [self::BELONGS_TO, 'Point', 'point_id'],
+			'user' => [self::BELONGS_TO, 'User', 'user_id'],
+		];
 	}
 
 	/**
@@ -57,12 +57,12 @@ class PointToUser extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
+		return [
 			'id' => 'ID',
 			'point_id' => 'Point',
 			'user_id' => 'User',
 			'time' => 'Time',
-		);
+		];
 	}
 
 	/**
@@ -88,9 +88,9 @@ class PointToUser extends CActiveRecord
 		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('time',$this->time,true);
 
-		return new CActiveDataProvider($this, array(
+		return new CActiveDataProvider($this, [
 			'criteria'=>$criteria,
-		));
+		]);
 	}
 
 	/**

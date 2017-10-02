@@ -13,10 +13,10 @@ class UserController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             //'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -26,26 +26,26 @@ class UserController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',
-                'actions'=>array('index','view'),
-                'users'=>array('@'),
-                'roles'=>array('userViewUser'),
-            ),
-            array('allow',
-                'actions'=>array('create', 'update'),
-                'users'=>array('@'),
-                'roles'=>array('userEditorUser'),
-            ),
-            array('allow',
-                'actions'=>array('delete'),
-                'users'=>array('@'),
-                'roles'=>array('admin'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',
+                'actions'=>['index','view'],
+                'users'=>['@'],
+                'roles'=>['userViewUser'],
+            ],
+            ['allow',
+                'actions'=>['create', 'update'],
+                'users'=>['@'],
+                'roles'=>['userEditorUser'],
+            ],
+            ['allow',
+                'actions'=>['delete'],
+                'users'=>['@'],
+                'roles'=>['admin'],
+            ],
+            ['deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     /**
@@ -54,9 +54,9 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
-        $this->render('view',array(
+        $this->render('view',[
             'model'=>$this->loadModel($id),
-        ));
+        ]);
     }
 
     /**
@@ -70,7 +70,7 @@ class UserController extends Controller
         if (isset($_POST['User'])) {
             $model->attributes= $_POST['User'];
             if ($model->save()) {
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view','id'=>$model->id]);
             }
         }
 
@@ -81,10 +81,10 @@ class UserController extends Controller
             }
         }
 
-        $this->render('create',array(
+        $this->render('create',[
             'model'=>$model,
             'rolesList'=>$rolesList,
-        ));
+        ]);
     }
 
     /**
@@ -99,7 +99,7 @@ class UserController extends Controller
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
             if($model->save())
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view','id'=>$model->id]);
         }
 
         $rolesList = [];
@@ -109,10 +109,10 @@ class UserController extends Controller
             }
         }
 
-        $this->render('update',array(
+        $this->render('update',[
                 'model'=>$model,
                 'rolesList'=>$rolesList,
-        ));
+        ]);
     }
 
     /**
@@ -128,7 +128,7 @@ class UserController extends Controller
         if(!isset($_GET['ajax'])){
             $model=new User('search');
             $model->unsetAttributes();  // clear any default values
-            $this->redirect(array('user/index'));
+            $this->redirect(['user/index']);
         }
     }
 
@@ -142,9 +142,9 @@ class UserController extends Controller
         if (isset($_GET['User']))
             $model->attributes=$_GET['User'];
 
-        $this->render('index',array(
+        $this->render('index',[
             'model'=>$model,
-        ));
+        ]);
     }
 
     public function RoleSrting($role)

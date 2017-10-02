@@ -13,10 +13,10 @@ class PointController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -68,9 +68,9 @@ class PointController extends Controller
             $model->attributes = $_GET['Point'];
         }
 
-        $this->render('index',array(
+        $this->render('index',[
             'model'=>$model,
-        ));
+        ]);
     }
 
     /**
@@ -181,9 +181,9 @@ class PointController extends Controller
             $model = new Point('search');
             $model->unsetAttributes();
 
-            $this->redirect(array('point/index'), array(
+            $this->redirect(['point/index'], [
                 'model' => $model
-            ));
+            ]);
         }
     }
 
@@ -211,12 +211,12 @@ class PointController extends Controller
           ['user_id' => Yii::app()->user->id]
         );
 
-        $this->render($view, array(
+        $this->render($view, [
             'model'=>$model,
             'playlists' => $playlists,
             'screens' => $screens,
             'widgets' => $widgets
-        ));
+        ]);
     }
 
     public function actionAjaxGetPointScreen()

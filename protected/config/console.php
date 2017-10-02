@@ -1,25 +1,23 @@
 <?php
 
-// This is the configuration for yiic console application.
-// Any writable CConsoleApplication properties can be configured here.
-return array(
-  'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-  'name'=>'My Console Application',
-
-  // preloading 'log' component
-  'preload'=>array('log'),
-
-  // application components
-  'components'=>array(
-    'db' => include(dirname(__FILE__).'/db.php'),
-    'log'=>array(
-      'class'=>'CLogRouter',
-      'routes'=>array(
-        array(
-          'class'=>'CFileLogRoute',
-          'levels'=>'error, warning',
-        ),
-      ),
-    ),
-  ),
-);
+return [
+    'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+    'name'=>'RTV Web-server Console',
+    'preload'=>['log'],
+    'components'=>[
+        'db' => include('db.php'),
+        'log'=>[
+            'class'=>'CLogRouter',
+            'routes'=>[
+                [
+                    'class'=>'CFileLogRoute',
+                    'levels'=>'error, warning',
+                ],
+            ],
+        ],
+    ],
+    'params'=>[
+        'partitionStartTimestamp' => 1483221600,
+        'partitionStep' => 2419200 // 1 month
+    ],
+];

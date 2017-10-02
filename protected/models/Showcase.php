@@ -20,10 +20,10 @@ class Showcase extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('id_point, id_window, id_widget', 'required'),
-            array('id_point, id_window, id_widget', 'numerical', 'integerOnly'=>true),
-        );
+        return [
+            ['id_point, id_window, id_widget', 'required'],
+            ['id_point, id_window, id_widget', 'numerical', 'integerOnly'=>true],
+        ];
     }
 
     /**
@@ -33,11 +33,11 @@ class Showcase extends CActiveRecord
     {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
-        return array(
-            'point' => array(self::BELONGS_TO, 'Point', 'id_point'),
-            'window' => array(self::BELONGS_TO, 'Window', 'id_window'),
-            'widget' => array(self::BELONGS_TO, 'Widget', 'id_widget'),
-        );
+        return [
+            'point' => [self::BELONGS_TO, 'Point', 'id_point'],
+            'window' => [self::BELONGS_TO, 'Window', 'id_window'],
+            'widget' => [self::BELONGS_TO, 'Widget', 'id_widget'],
+        ];
     }
 
     /**
@@ -45,13 +45,13 @@ class Showcase extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'id_point' => 'Id Point',
             'window_id' => 'Id Window',
             'playlists' => 'Playlists',
             'adv' => 'Adv',
-        );
+        ];
     }
 
     /**
@@ -76,9 +76,9 @@ class Showcase extends CActiveRecord
         $criteria->compare('id_point',$this->id_point);
         $criteria->compare('window_id',$this->window_id);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

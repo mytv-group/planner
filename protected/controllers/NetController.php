@@ -13,10 +13,10 @@ class NetController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -58,9 +58,9 @@ class NetController extends Controller
      */
     public function actionView($id)
     {
-        $this->render('view',array(
+        $this->render('view',[
             'model'=>$this->loadModel($id),
-        ));
+        ]);
     }
 
     /**
@@ -369,7 +369,7 @@ class NetController extends Controller
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : ['index']);
     }
 
     /**
@@ -383,9 +383,9 @@ class NetController extends Controller
             $model->attributes = $_GET['Net'];
         }
 
-        $this->render('index', array(
+        $this->render('index', [
             'model'=>$model,
-        ));
+        ]);
     }
 
     /**

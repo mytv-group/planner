@@ -32,13 +32,13 @@ class Net extends CActiveRecord
   {
     // NOTE: you should only define rules for those attributes that
     // will receive user inputs.
-    return array(
-      array('name, id_user', 'required'),
-      array('id_user', 'numerical', 'integerOnly'=>true),
-      array('name', 'length', 'max'=>255),
-      array('dt_created', 'safe'),
-      array('name', 'safe', 'on'=>'search'),
-    );
+    return [
+      ['name, id_user', 'required'],
+      ['id_user', 'numerical', 'integerOnly'=>true],
+      ['name', 'length', 'max'=>255],
+      ['dt_created', 'safe'],
+      ['name', 'safe', 'on'=>'search'],
+    ];
   }
 
   /**
@@ -46,11 +46,11 @@ class Net extends CActiveRecord
    */
   public function relations()
   {
-    return array(
-      'user' => array(self::BELONGS_TO, 'User', 'id_user'),
-      'pointsToNet' => array(self::HAS_MANY, 'PointToNet', 'id_net'),
-      'points'=>array(self::HAS_MANY,'Point', ['id_point'=>'id'],'through'=>'pointsToNet'),
-    );
+    return [
+      'user' => [self::BELONGS_TO, 'User', 'id_user'],
+      'pointsToNet' => [self::HAS_MANY, 'PointToNet', 'id_net'],
+      'points'=>[self::HAS_MANY,'Point', ['id_point'=>'id'],'through'=>'pointsToNet'],
+    ];
   }
 
   /**
@@ -58,7 +58,7 @@ class Net extends CActiveRecord
    */
   public function attributeLabels()
   {
-    return array(
+    return [
       'id' => 'ID',
       'name' => 'Name',
       'id_user' => 'User',
@@ -68,7 +68,7 @@ class Net extends CActiveRecord
       'TVschedule' => 'TV turn on Schedule',
       'channels' => 'Channels',
       'screen_id' => "Screen",
-    );
+    ];
   }
 
   /**
@@ -93,12 +93,12 @@ class Net extends CActiveRecord
         $criteria->compare('id_user', Yii::app()->user->id);
     }
 
-    return new CActiveDataProvider($this, array(
+    return new CActiveDataProvider($this, [
       'criteria'=>$criteria,
       'pagination' => [
           'pageSize'=> 10,
       ]
-    ));
+    ]);
   }
 
   /**

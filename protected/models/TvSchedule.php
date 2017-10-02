@@ -27,10 +27,10 @@ class TvSchedule extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('id_point, dt_from, dt_to, id_user', 'required'),
-            array('id_point, id_user', 'numerical', 'integerOnly'=>true),
-        );
+        return [
+            ['id_point, dt_from, dt_to, id_user', 'required'],
+            ['id_point, id_user', 'numerical', 'integerOnly'=>true],
+        ];
     }
 
     /**
@@ -38,7 +38,7 @@ class TvSchedule extends CActiveRecord
      */
     public function relations()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,13 +46,13 @@ class TvSchedule extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'id_point' => 'Point',
             'dt_from' => 'From',
             'dt_to' => 'To',
             'id_user' => 'Author',
-        );
+        ];
     }
 
     /**
@@ -79,9 +79,9 @@ class TvSchedule extends CActiveRecord
         $criteria->compare('to',$this->to,true);
         $criteria->compare('author',$this->author,true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
           'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

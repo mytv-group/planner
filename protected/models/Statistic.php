@@ -29,16 +29,16 @@ class Statistic extends CActiveRecord
      */
     public function rules()
     {
-        return array(
-            array('dt_playback, duration, channel, file_name, id_file, id_playlist, id_author', 'required'),
-            array('channel, id_file, id_playlist, id_author', 'numerical', 'integerOnly'=>true),
-            array('duration', 'numerical'),
-            array('file_name', 'length', 'max'=>45),
-            array('dt', 'safe'),
+        return [
+            ['dt_playback, duration, channel, file_name, id_file, id_playlist, id_author', 'required'],
+            ['channel, id_file, id_playlist, id_author', 'numerical', 'integerOnly'=>true],
+            ['duration', 'numerical'],
+            ['file_name', 'length', 'max'=>45],
+            ['dt', 'safe'],
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, dt_playback, duration, channel, file_name, id_file, id_playlist, id_author, dt', 'safe', 'on'=>'search'),
-        );
+            ['id, dt_playback, duration, channel, file_name, id_file, id_playlist, id_author, dt', 'safe', 'on'=>'search'],
+        ];
     }
 
     /**
@@ -46,11 +46,11 @@ class Statistic extends CActiveRecord
      */
     public function relations()
     {
-        return array(
-            'point'=>array(self::HAS_ONE, 'Point', array('id'=>'id_point')),
-            'playlist'=>array(self::HAS_ONE, 'Playlists', array('id'=>'id_playlist')),
-            'file'=>array(self::HAS_ONE, 'File', 'id_file')
-        );
+        return [
+            'point'=>[self::HAS_ONE, 'Point', ['id'=>'id_point']],
+            'playlist'=>[self::HAS_ONE, 'Playlists', ['id'=>'id_playlist']],
+            'file'=>[self::HAS_ONE, 'File', 'id_file']
+        ];
     }
 
     /**
@@ -58,7 +58,7 @@ class Statistic extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'dt_playback' => 'Playback datetime',
             'duration' => 'Duration',
             'channel' => 'Channel',
@@ -67,7 +67,7 @@ class Statistic extends CActiveRecord
             'id_playlist' => 'Id Playlist',
             'id_author' => 'Id Author',
             'dt' => 'Dt',
-        );
+        ];
     }
 
     /**
@@ -126,10 +126,10 @@ class Statistic extends CActiveRecord
             $criteria->compare('id_point', $ids);
         }
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria' => $criteria,
             'pagination' => $pagination,
-        ));
+        ]);
     }
 
     /**

@@ -13,10 +13,10 @@ class StatisticController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -26,16 +26,16 @@ class StatisticController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view', 'export'),
-                'users'=>array('@'),
-                'roles'=>array('statisticsUser'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=>['index','view', 'export'],
+                'users'=>['@'],
+                'roles'=>['statisticsUser'],
+            ],
+            ['deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     /**
@@ -118,9 +118,9 @@ class StatisticController extends Controller
               exit;
          }
 
-         $this->render('index',array(
+         $this->render('index',[
              'model'=>$model,
-         ));
+         ]);
      }
 
     /**

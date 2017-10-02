@@ -9,18 +9,18 @@ class SiteController extends Controller
      */
     public function actions()
     {
-        return array(
+        return [
             // captcha action renders the CAPTCHA image displayed on the contact page
-            'captcha'=>array(
+            'captcha'=>[
                 'class'=>'CCaptchaAction',
                 'backColor'=>0xFFFFFF,
-            ),
+            ],
             // page action renders "static" pages stored under 'protected/views/site/pages'
             // They can be accessed via: index.php?r=site/page&view=FileName
-            'page'=>array(
+            'page'=>[
                 'class'=>'CViewAction',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -70,7 +70,7 @@ class SiteController extends Controller
                 $this->refresh();
             }
         }
-        $this->render('contact',array('model'=>$model));
+        $this->render('contact',['model'=>$model]);
     }
 
     /**
@@ -96,7 +96,7 @@ class SiteController extends Controller
         }
 
         // display the login form
-        $this->render('login', array('model'=>$model));
+        $this->render('login', ['model'=>$model]);
     }
 
     /**

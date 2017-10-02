@@ -1,10 +1,10 @@
 <?php
 
-return array(
+return [
     'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
     'name'=>'RTV Web-server 2.0',
-    'preload'=>array('log'),
-    'import'=>array(
+    'preload'=>['log'],
+    'import'=>[
         'application.models.*',
         'application.components.*',
         'application.modules.rbac.controllers.RbacController',
@@ -15,71 +15,78 @@ return array(
         'application.widgets-internal.screen-selector.*',
         'application.widgets-internal.choose-widget-dialog.*',
         'application.widgets-internal.choose-playlist-dialog.*',
-    ),
+    ],
     'theme'=>'basic',
-    'modules'=>array(
-        'gii'=>array(
+    'modules'=>[
+        'gii'=>[
             'class'=>'system.gii.GiiModule',
             'password'=>'ass',
-            'ipFilters'=>array('127.0.0.1','::1'),
-            'generatorPaths'=>array(
+            'ipFilters'=>['127.0.0.1','::1'],
+            'generatorPaths'=>[
                 'bootstrap.gii',
-            ),
-        ),
-    ),
-    'components'=>array(
-        'user'=>array(
+            ],
+        ],
+    ],
+    'components'=>[
+        'user'=>[
             'class' => 'WebUser',
             'allowAutoLogin'=>true,
-        ),
-        'authManager' => array(
+        ],
+        'authManager' => [
             'class' => 'PhpAuthManager',
-            'defaultRoles' => array('guest'),
-        ),
-        'urlManager'=>array(
+            'defaultRoles' => ['guest'],
+        ],
+        'urlManager'=>[
             'urlFormat'=>'path',
             'showScriptName'=>false,
             'caseSensitive'=>true,
-            'rules'=>array(
+            'rules'=>[
                 '<controller:\w+>/<id:\d+>'=>'<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-                'admin/user/<id>' => 'admin/user',
-            ),
-        ),
-        'db' => include(dirname(__FILE__).'/db.php'),
-        'clientScript'=>array(
-            'packages'=>include(dirname(__FILE__).'/packages.php'),
-        ),
-        'errorHandler'=>array(
+                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>'
+            ],
+        ],
+        'db' => include('db.php'),
+        'clientScript'=>[
+            'packages'=>include('packages.php'),
+        ],
+        'errorHandler'=>[
             'errorAction'=>'site/error',
-        ),
-        'sentry'=>array(
+        ],
+        'sentry'=>[
+            'enabled'=>in_array(
+                $_SERVER['SERVER_NAME'], include('sentry-to-log-domains.php')
+            ),
             'class'=>'ext.yii-sentry.components.RSentryClient',
             'dsn'=>'https://cfcf1647999740bda98522d36c9cf793:8943953122494a0fa72cba1e161f7b1f@sentry.io/207801',
-        ),
-        'log'=>array(
+            'options'=>[
+                'tags'=>[
+                    'server'=>$_SERVER['SERVER_NAME']
+                ]
+            ]
+        ],
+        'log'=>[
             'class'=>'CLogRouter',
-            'routes'=>array(
-                array(
+            'routes'=>[
+                [
                     'class'=>'ext.yii-sentry.components.RSentryLogRoute',
                     'levels'=>'error, warning',
-                ),
-            ),
-        ),
-        'pointInfo'=>array(
+                ],
+            ],
+        ],
+        'pointInfo'=>[
             'class'=>'PointInfoRequester',
-        ),
-        'contentManager'=>array(
+        ],
+        'contentManager'=>[
             'class'=>'ContentManager',
-        ),
-        'playlistService' => array(
+        ],
+        'playlistService' => [
             'class'=>'PlaylistService',
             'playlist' => function() {
                 return Playlists::model();
             },
-        ),
-        'pointService' => array(
+        ],
+        'pointService' => [
             'class'=>'PointService',
             'user' => function() {
                 return Yii::app()->user;
@@ -93,8 +100,8 @@ return array(
             'playlistToPoint' => function() {
                 return PlaylistToPoint::model();
             },
-        ),
-        'spool' => array(
+        ],
+        'spool' => [
             'class'=>'Spool',
             'spoolPointsPath' => 'spool'. DIRECTORY_SEPARATOR . 'points' . DIRECTORY_SEPARATOR,
             'spoolAudioPath' => 'spool'. DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR,
@@ -107,8 +114,8 @@ return array(
             'file' => function() {
                 return File::model();
             }
-        ),
-        'heap' => array(
+        ],
+        'heap' => [
             'class'=>'Heap',
             'file' => function() {
                 return File::model();
@@ -119,8 +126,8 @@ return array(
             'folder' => function() {
                 return Folder::model();
             },
-        ),
-        'assets' => array(
+        ],
+        'assets' => [
             'class'=>'AssetManagerHelper',
             'assetManager' => function() {
                 return Yii::app()->assetManager;
@@ -131,11 +138,11 @@ return array(
             'basePath' => function() {
                 return INDEX_PATH;
             }
-        ),
-    ),
-    'params'=>array(
+        ],
+    ],
+    'params'=>[
         'adminEmail'=>'webmaster@example.com',
         'weatherApiKey'=>'1be0ed3547cbc0a415058b881eac9494',
         'interactionUrl' => 'http://127.0.0.1:1337'
-    ),
-);
+    ],
+];

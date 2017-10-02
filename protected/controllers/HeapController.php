@@ -10,34 +10,34 @@ class HeapController extends Controller
 
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     public function accessRules()
     {
-        return array(
-            array('allow',
-                'actions'=>array('index','view','getFolderContent'),
-                'users'=>array('@'),
-                'roles'=>array('heapViewUser'),
-            ),
-            array('allow',
-                'actions'=>array('upload', 'createNewFolder', 'rename', 'move'),
-                'users'=>array('@'),
-                'roles'=>array('heapEditUser'),
-            ),
-            array('allow',
-                'actions'=>array('delete', 'dropAllContent'),
-                'users'=>array('@'),
-                'roles'=>array('heapUser'),
-            ),
-            array('deny',
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',
+                'actions'=>['index','view','getFolderContent'],
+                'users'=>['@'],
+                'roles'=>['heapViewUser'],
+            ],
+            ['allow',
+                'actions'=>['upload', 'createNewFolder', 'rename', 'move'],
+                'users'=>['@'],
+                'roles'=>['heapEditUser'],
+            ],
+            ['allow',
+                'actions'=>['delete', 'dropAllContent'],
+                'users'=>['@'],
+                'roles'=>['heapUser'],
+            ],
+            ['deny',
+                'users'=>['*'],
+            ],
+        ];
     }
 
     public function actionIndex()
@@ -93,9 +93,9 @@ class HeapController extends Controller
         echo json_encode([[
             "id" => $folderId,
             "text" => $folderName,
-            "state" => array(
+            "state" => [
                 "opened" => true
-            ),
+            ],
             'type' => 'folder',
             'children' => (count($content) > 0)
                 ? Yii::app()->heap->buildTree($content)
@@ -289,7 +289,7 @@ class HeapController extends Controller
      */
     public function actionUpload()
     {
-        $answ = array();
+        $answ = [];
         $answ['status'] = 'err';
 
         if (!isset($_POST['data'])) {
@@ -363,32 +363,32 @@ class HeapController extends Controller
     {
         iconv("utf-8", "ISO-8859-1//TRANSLIT", $text);
 
-        $cyr  = array('Р°','Р±','РІ','Рі','Рґ','e','Рµ','С”','Р¶','Р·','Рё','С–','С—','Р№','Рє','Р»','Рј','РЅ','Рѕ','Рї','СЂ','СЃ','С‚','Сѓ',
+        $cyr  = ['Р°','Р±','РІ','Рі','Рґ','e','Рµ','С”','Р¶','Р·','Рё','С–','С—','Р№','Рє','Р»','Рј','РЅ','Рѕ','Рї','СЂ','СЃ','С‚','Сѓ',
                 'С„','С…','С†','С‡','С€','С‰','СЉ','СЊ', 'СЋ','СЏ','Рђ','Р‘','Р’','Р“','Р”','Р•','Р–','Р—','Р�','Р™','Рљ','Р›','Рњ','Рќ','Рћ','Рџ','Р ','РЎ','Рў','РЈ',
-                'Р¤','РҐ','Р¦','Р§','РЁ','Р©','РЄ','Р¬', 'Р®','РЇ' );
-        $lat = array( 'a','b','v','g','d','e','e','e','zh','z','i','i','i','y','k','l','m','n','o','p','r','s','t','u',
+                'Р¤','РҐ','Р¦','Р§','РЁ','Р©','РЄ','Р¬', 'Р®','РЇ' ];
+        $lat = [ 'a','b','v','g','d','e','e','e','zh','z','i','i','i','y','k','l','m','n','o','p','r','s','t','u',
                 'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y' ,'yu' ,'ya','A','B','V','G','D','E','Zh',
                 'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' );
+                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' ];
         $translit = str_replace($cyr, $lat, $textcyr);
 
-        $unwanted_array = array('Е '=>'S', 'ЕЎ'=>'s', 'ЕЅ'=>'Z', 'Еѕ'=>'z', 'ГЂ'=>'A', 'ГЃ'=>'A', 'Г‚'=>'A', 'Гѓ'=>'A', 'Г„'=>'A', 'Г…'=>'A', 'Г†'=>'A', 'Г‡'=>'C', 'Г€'=>'E', 'Г‰'=>'E',
+        $unwanted_array = ['Е '=>'S', 'ЕЎ'=>'s', 'ЕЅ'=>'Z', 'Еѕ'=>'z', 'ГЂ'=>'A', 'ГЃ'=>'A', 'Г‚'=>'A', 'Гѓ'=>'A', 'Г„'=>'A', 'Г…'=>'A', 'Г†'=>'A', 'Г‡'=>'C', 'Г€'=>'E', 'Г‰'=>'E',
                 'ГЉ'=>'E', 'Г‹'=>'E', 'ГЊ'=>'I', 'ГЌ'=>'I', 'ГЋ'=>'I', 'ГЏ'=>'I', 'Г‘'=>'N', 'Г’'=>'O', 'Г“'=>'O', 'Г”'=>'O', 'Г•'=>'O', 'Г–'=>'O', 'Г�'=>'O', 'Г™'=>'U',
                 'Гљ'=>'U', 'Г›'=>'U', 'Гњ'=>'U', 'Гќ'=>'Y', 'Гћ'=>'B', 'Гџ'=>'Ss', 'Г '=>'a', 'ГЎ'=>'a', 'Гў'=>'a', 'ГЈ'=>'a', 'Г¤'=>'a', 'ГҐ'=>'a', 'Г¦'=>'a', 'Г§'=>'c',
                 'ГЁ'=>'e', 'Г©'=>'e', 'ГЄ'=>'e', 'Г«'=>'e', 'Г¬'=>'i', 'Г­'=>'i', 'Г®'=>'i', 'ГЇ'=>'i', 'Г°'=>'o', 'Г±'=>'n', 'ГІ'=>'o', 'Гі'=>'o', 'Гґ'=>'o', 'Гµ'=>'o',
-                'Г¶'=>'o', 'Гё'=>'o', 'Г№'=>'u', 'Гє'=>'u', 'Г»'=>'u', 'ГЅ'=>'y', 'ГЅ'=>'y', 'Гѕ'=>'b', 'Гї'=>'y' );
+                'Г¶'=>'o', 'Гё'=>'o', 'Г№'=>'u', 'Гє'=>'u', 'Г»'=>'u', 'ГЅ'=>'y', 'ГЅ'=>'y', 'Гѕ'=>'b', 'Гї'=>'y' ];
         $translit = strtr($translit, $unwanted_array);
 
         $translit = preg_replace('/[^\p{L}\p{N}\s\.]/u', '', $translit);
 
-        $cyr  = array('а','б','в','г','д','e','ж','з','и','й','к','л','м','н','о','п','р','с','т','у',
+        $cyr  = ['а','б','в','г','д','e','ж','з','и','й','к','л','м','н','о','п','р','с','т','у',
                 'ф','х','ц','ч','ш','щ','ъ','ь', 'ы', 'ю','я','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У',
-                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ы', 'Ю','Я' );
+                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ы', 'Ю','Я' ];
 
-        $lat = array( 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u',
+        $lat = [ 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u',
                 'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y', 'u', 'yu' ,'ya','A','B','V','G','D','E','Zh',
                 'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y', 'U', 'Yu' ,'Ya' );
+                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y', 'U', 'Yu' ,'Ya' ];
 
         $translit = str_replace($cyr, $lat, $translit);
 

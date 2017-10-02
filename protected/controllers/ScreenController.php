@@ -13,10 +13,10 @@ class ScreenController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             //'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -26,26 +26,26 @@ class ScreenController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view'),
-                'users'=>array('@'),
-                'roles'=>array('screenViewUser'),
-            ),
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions'=>array('create','update'),
-                'users'=>array('@'),
-                'roles'=>array('screenEditUser'),
-            ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions'=>array('delete'),
-                'users'=>array('@'),
-                'roles'=>array('screenUser'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=>['index','view'],
+                'users'=>['@'],
+                'roles'=>['screenViewUser'],
+            ],
+            ['allow', // allow authenticated user to perform 'create' and 'update' actions
+                'actions'=>['create','update'],
+                'users'=>['@'],
+                'roles'=>['screenEditUser'],
+            ],
+            ['allow', // allow admin user to perform 'admin' and 'delete' actions
+                'actions'=>['delete'],
+                'users'=>['@'],
+                'roles'=>['screenUser'],
+            ],
+            ['deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     /**
@@ -54,9 +54,9 @@ class ScreenController extends Controller
      */
     public function actionView($id)
     {
-        $this->render('view',array(
+        $this->render('view',[
             'model'=>$this->loadModel($id),
-        ));
+        ]);
     }
 
     /**
@@ -77,12 +77,12 @@ class ScreenController extends Controller
 
             $model->attributes=$attributes;
             if($model->save())
-                $this->redirect(array('update','id'=>$model->id));
+                $this->redirect(['update','id'=>$model->id]);
         }
 
-        $this->render('create',array(
+        $this->render('create',[
             'model'=>$model,
-        ));
+        ]);
     }
 
     /**
@@ -103,13 +103,13 @@ class ScreenController extends Controller
             if($model->save()){
                 if(isset($_POST['Blocks'])){
                     $blocks = $_POST['Blocks'];
-                    Window::model()->deleteAllByAttributes(array('screen_id'=>$model->id));
+                    Window::model()->deleteAllByAttributes(['screen_id'=>$model->id]);
 
                     foreach ($blocks as $name => $block)
                     {
                         $windowModel = new Window;
                         $windowParams = explode(",", $block);
-                        $window = array(
+                        $window = [
                             'screen_id'=>$model->id,
                             'name'=>$name,
                             'height'=>$windowParams[1],
@@ -117,21 +117,21 @@ class ScreenController extends Controller
                             'top'=>$windowParams[3],
                             'left'=>$windowParams[2],
                             'authorId'=>Yii::app()->user->getId()
-                        );
+                        ];
                         $windowModel->attributes = $window;
                         $windowModel->save();
                     }
                 }
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view','id'=>$model->id]);
             }
 
         }
 
-        $windows = Window::model()->findAllByAttributes(array('screen_id'=>$model->id));
-        $this->render('update',array(
+        $windows = Window::model()->findAllByAttributes(['screen_id'=>$model->id]);
+        $this->render('update',[
             'model'=>$model,
             'windows'=>$windows,
-        ));
+        ]);
     }
 
     /**
@@ -145,7 +145,7 @@ class ScreenController extends Controller
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : ['index']);
     }
 
     /**
@@ -158,9 +158,9 @@ class ScreenController extends Controller
         if(isset($_GET['Screen']))
             $model->attributes=$_GET['Screen'];
 
-        $this->render('index',array(
+        $this->render('index',[
             'model'=>$model,
-        ));
+        ]);
     }
 
     /**

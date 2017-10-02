@@ -26,14 +26,14 @@ class Stream extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('playlist_id, url', 'required'),
-            array('playlist_id', 'numerical', 'integerOnly'=>true),
-            array('url', 'length', 'min'=>5),
-            array('url', 'length', 'max'=>255),
-            array('created_dt', 'safe'),
-            array('id, url', 'safe', 'on'=>'search'),
-        );
+        return [
+            ['playlist_id, url', 'required'],
+            ['playlist_id', 'numerical', 'integerOnly'=>true],
+            ['url', 'length', 'min'=>5],
+            ['url', 'length', 'max'=>255],
+            ['created_dt', 'safe'],
+            ['id, url', 'safe', 'on'=>'search'],
+        ];
     }
 
     /**
@@ -41,7 +41,7 @@ class Stream extends CActiveRecord
      */
     public function relations()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -49,12 +49,12 @@ class Stream extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'playlist_id' => 'Playlist',
             'url' => 'Url',
             'created_dt' => 'Created Dt',
-        );
+        ];
     }
 
     /**
@@ -80,9 +80,9 @@ class Stream extends CActiveRecord
         $criteria->compare('url',$this->url,true);
         $criteria->compare('created_dt',$this->created_dt,true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

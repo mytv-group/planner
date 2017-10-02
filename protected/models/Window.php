@@ -32,14 +32,14 @@ class Window extends CActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('screen_id, name, top, left, width, height, authorId', 'required'),
-            array('screen_id, top, left, width, height, authorId', 'numerical', 'integerOnly'=>true),
-            array('name', 'length', 'max'=>25),
+        return [
+            ['screen_id, name, top, left, width, height, authorId', 'required'],
+            ['screen_id, top, left, width, height, authorId', 'numerical', 'integerOnly'=>true],
+            ['name', 'length', 'max'=>25],
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('name', 'safe', 'on'=>'search'),
-        );
+            ['name', 'safe', 'on'=>'search'],
+        ];
     }
 
     /**
@@ -49,10 +49,10 @@ class Window extends CActiveRecord
     {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
-        return array(
-            'showcases' => array(self::HAS_MANY, 'Showcase', 'id_window'),
-            'widget' => array(self::HAS_ONE, 'Widget', ['id_widget'=>'id'],'through'=>'showcases'),
-        );
+        return [
+            'showcases' => [self::HAS_MANY, 'Showcase', 'id_window'],
+            'widget' => [self::HAS_ONE, 'Widget', ['id_widget'=>'id'],'through'=>'showcases'],
+        ];
     }
 
     /**
@@ -60,7 +60,7 @@ class Window extends CActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'top' => 'Top',
@@ -68,7 +68,7 @@ class Window extends CActiveRecord
             'width' => 'Width',
             'height' => 'Height',
             'authorId' => 'Author',
-        );
+        ];
     }
 
     public function getInfo() {
@@ -110,9 +110,9 @@ class Window extends CActiveRecord
         $criteria=new CDbCriteria;
         $criteria->compare('name',$this->name,true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     /**

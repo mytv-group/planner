@@ -13,10 +13,10 @@ class WidgetController extends Controller
      */
     public function filters()
     {
-        return array(
+        return [
             'accessControl', // perform access control for CRUD operations
             //'postOnly + delete', // we only allow deletion via POST request
-        );
+        ];
     }
 
     /**
@@ -26,26 +26,26 @@ class WidgetController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',
-                'actions'=>array('index','preview'),
-                'users'=>array('@'),
-                'roles'=>array('widgetViewUser'),
-            ),
-            array('allow',
-                'actions'=>array('update', 'copy'),
-                'users'=>array('@'),
-                'roles'=>array('widgetEditUser'),
-            ),
-            array('allow',
-                'actions'=>array('delete'),
-                'users'=>array('@'),
-                'roles'=>array('widgetUser'),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
+        return [
+            ['allow',
+                'actions'=>['index','preview'],
+                'users'=>['@'],
+                'roles'=>['widgetViewUser'],
+            ],
+            ['allow',
+                'actions'=>['update', 'copy'],
+                'users'=>['@'],
+                'roles'=>['widgetEditUser'],
+            ],
+            ['allow',
+                'actions'=>['delete'],
+                'users'=>['@'],
+                'roles'=>['widgetUser'],
+            ],
+            ['deny',  // deny all users
+                'users'=>['*'],
+            ],
+        ];
     }
 
     public function actionIndex()
@@ -56,9 +56,9 @@ class WidgetController extends Controller
         if(isset($_GET['Widget']))
             $model->attributes=$_GET['Widget'];
 
-        $this->render('index',array(
+        $this->render('index',[
             'model'=>$model,
-        ));
+        ]);
     }
 
     public function actionPreview($id)
@@ -95,10 +95,10 @@ class WidgetController extends Controller
             }
         }
 
-        $this->render('update',array(
+        $this->render('update',[
             'model' => $model,
             'action' => 'Update'
-        ));
+        ]);
     }
 
     public function actionCopy($id)
@@ -119,10 +119,10 @@ class WidgetController extends Controller
             }
         }
 
-        $this->render('update',array(
+        $this->render('update',[
             'model' => $model,
             'action' => 'Copy'
-        ));
+        ]);
     }
 
     public function actionDelete($id)

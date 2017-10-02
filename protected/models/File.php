@@ -10,13 +10,13 @@ class File extends CActiveRecord
     public function rules()
     {
         return [
-            array('name, duration, mime, path, link, visibility, id_user', 'required'),
-            array('visibility, id_user', 'numerical', 'integerOnly'=>true),
-            array('duration', 'length', 'max'=>20),
-            array('date_created', 'default', 'value' => date('Y-m-d H:i:s')),
-            array('mime', 'length', 'max'=>100),
-            array('path, link', 'length', 'max'=>255),
-            array('name', 'safe', 'on'=>'search'),
+            ['name, duration, mime, path, link, visibility, id_user', 'required'],
+            ['visibility, id_user', 'numerical', 'integerOnly'=>true],
+            ['duration', 'length', 'max'=>20],
+            ['date_created', 'default', 'value' => date('Y-m-d H:i:s')],
+            ['mime', 'length', 'max'=>100],
+            ['path, link', 'length', 'max'=>255],
+            ['name', 'safe', 'on'=>'search'],
         ];
     }
 
@@ -27,7 +27,7 @@ class File extends CActiveRecord
 
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'duration' => 'Duration',
@@ -35,7 +35,7 @@ class File extends CActiveRecord
             'mime' => 'Mime type',
             'link' => 'Link',
             'date_created' => 'Date Created'
-        );
+        ];
     }
 
     public function search()
@@ -43,9 +43,9 @@ class File extends CActiveRecord
         $criteria=new CDbCriteria;
         $criteria->compare('name', $this->name, true);
 
-        return new CActiveDataProvider($this, array(
+        return new CActiveDataProvider($this, [
           'criteria'=>$criteria,
-        ));
+        ]);
     }
 
     public static function model($className=__CLASS__)

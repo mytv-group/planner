@@ -30,10 +30,10 @@ class PointToNet extends CActiveRecord
   {
     // NOTE: you should only define rules for those attributes that
     // will receive user inputs.
-    return array(
-      array('id_point, id_net', 'required'),
-      array('id_point, id_net', 'numerical', 'integerOnly'=>true),
-    );
+    return [
+      ['id_point, id_net', 'required'],
+      ['id_point, id_net', 'numerical', 'integerOnly'=>true],
+    ];
   }
 
   /**
@@ -43,10 +43,10 @@ class PointToNet extends CActiveRecord
   {
     // NOTE: you may need to adjust the relation name and the related
     // class name for the relations automatically generated below.
-    return array(
-      'net' => array(self::BELONGS_TO, 'Net', 'id_net'),
-      'point' => array(self::BELONGS_TO, 'Point', 'id_point'),
-    );
+    return [
+      'net' => [self::BELONGS_TO, 'Net', 'id_net'],
+      'point' => [self::BELONGS_TO, 'Point', 'id_point'],
+    ];
   }
 
   /**
@@ -54,12 +54,12 @@ class PointToNet extends CActiveRecord
    */
   public function attributeLabels()
   {
-    return array(
+    return [
       'id' => 'ID',
       'id_point' => 'Id Point',
       'id_net' => 'Id Net',
       'dt_created' => 'Dt Created',
-    );
+    ];
   }
 
   /**
@@ -85,9 +85,9 @@ class PointToNet extends CActiveRecord
     $criteria->compare('id_net',$this->id_net);
     $criteria->compare('dt_created',$this->dt_created,true);
 
-    return new CActiveDataProvider($this, array(
+    return new CActiveDataProvider($this, [
       'criteria'=>$criteria,
-    ));
+    ]);
   }
 
   /**

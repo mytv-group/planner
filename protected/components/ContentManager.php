@@ -4,7 +4,7 @@ class ContentManager extends CApplicationComponent
 {
     private $eol = YII_DEBUG ? '<br>' : PHP_EOL;
 
-    public function GetBGContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
+    public function GetBgContentArr($pointId, $pointChannel, $pointDatetimeStr, $weekDay)
     {
         $connection = Yii::app()->db;
 

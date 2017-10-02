@@ -12,7 +12,7 @@ class InterfaceController extends Controller
     {
         return [
             [
-                'allow',  // allow all users to perform 'index' and 'view' actions
+                'allow',
                 'actions'=> [
                     'getPointSchedule',
                     'getTVschedule',
@@ -23,7 +23,7 @@ class InterfaceController extends Controller
                 'users'=>['*'],
             ],
             [
-                'deny',  // deny all users
+                'deny',
                 'users'=>['*'],
             ],
         ];
@@ -53,8 +53,7 @@ class InterfaceController extends Controller
         $pointDateTimestamp = strtotime($pointDateStr);
         $weekDay = strtolower(date('D', $pointDateTimestamp));
 
-        if(!is_int($pointId) || !is_int($pointChannel) || !is_int($pointDate))
-        {
+        if(!is_int($pointId) || !is_int($pointChannel) || !is_int($pointDate)) {
             http_response_code(400);
             echo sprintf("Some of params is incorrect (shound be integer). "
                 ."Received pointId: %s, pointChannel: %s, pointDate: %s",
@@ -63,8 +62,7 @@ class InterfaceController extends Controller
             exit;
         }
 
-        if(($pointDate > 20250101) || ($pointDate < 20150101))
-        {
+        if (($pointDate > 20250101) || ($pointDate < 20150101)) {
             http_response_code(400);
             echo sprintf("Incorrect date (shound be integer and formated as YYYY/mm/dd). Received pointDate: %s",
                 $pointDate);
@@ -75,7 +73,7 @@ class InterfaceController extends Controller
 
         /* background or stream */
         if (($pointChannel === 1) || (($pointChannel === 3))) {
-            $bg = $CM->GetBGContentArr($pointId, $pointChannel, $pointDateStr, $weekDay);
+            $bg = $CM->GetBgContentArr($pointId, $pointChannel, $pointDateStr, $weekDay);
 
             if (count($bg) === 0) {
                 http_response_code(404);
@@ -86,8 +84,7 @@ class InterfaceController extends Controller
                 exit;
             }
 
-            for ($ii = 0; $ii < count($bg); $ii++)
-            {
+            for ($ii = 0; $ii < count($bg); $ii++) {
                 $completeSrt .= $CM->GenerateContentBlock($bg[$ii]);
 
                 if (($ii > 0)

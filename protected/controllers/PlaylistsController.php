@@ -30,22 +30,26 @@ class PlaylistsController extends Controller
     public function accessRules()
     {
         return [
-            ['allow',
+            [
+                'allow',
                 'actions'=>['index','view'],
                 'users'=>['@'],
                 'roles'=>['playlistViewUser'],
             ],
-            ['allow',
+            [
+                'allow',
                 'actions'=>['create','upload','addfilefromheap','setFileOrder', 'update'],
                 'users'=>['@'],
                 'roles'=>['playlistEditUser'],
             ],
-            ['allow',
+            [
+                'allow',
                 'actions'=>['delete','deletefilefrompl'],
                 'users'=>['@'],
                 'roles'=>['playlistUser'],
             ],
-            ['deny',  // deny all users
+            [
+                'deny',
                 'users'=>['*'],
             ],
         ];

@@ -22,7 +22,7 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 )); ?>
 
 <p>
-    <div class="row">
+    <div class="login-form__row">
         <?php echo $form->labelEx($model,'username'); ?>
         <?php echo $form->textField($model,'username', ['class'=>"form-control"]); ?>
         <?php echo $form->error($model,'username'); ?>
@@ -30,7 +30,7 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 </p>
 
 <p>
-    <div class="row">
+    <div class="login-form__row">
         <?php echo $form->labelEx($model,'password'); ?>
         <?php echo $form->passwordField($model, 'password', ['class'=>"form-control"]); ?>
         <?php echo $form->error($model,'password'); ?>

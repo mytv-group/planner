@@ -7,7 +7,7 @@ return [
     'jquery-ui' => [
         'pathFromRoot' => '/protected/extensions/packages/jquery-ui/',
         'js' => ['jquery-ui-1.10.4.min.js'],
-        'css' => ['jquery-ui-1.10.4.min.css'],
+        'css' => ['jquery-ui-1.10.4.css'],
         'files' => [
             'images/animated-overlay.gif',
             'images/ui-bg_diagonals-thick_18_b81900_40x40.png',

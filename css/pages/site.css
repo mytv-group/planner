@@ -20,6 +20,10 @@
     background-position: center;
 }
 
+.login-form__row {
+    margin: 10px;
+}
+
 @media all and (min-width: 650px) {
     .login-form {
         background-size: 100% 100%;

@@ -13,7 +13,7 @@
     <div class="row">
         <div class="playlists-list container-fluid">
             <?php $this->widget('zii.widgets.CListView', array(
-              'dataProvider' => Playlists::model()->searchByExpiration('CURDATE()'),
+              'dataProvider' => Yii::app()->playlistsRepository->searchByExpiration('CURDATE()'),
               'itemView' => '_playlists_view',
               'sortableAttributes'=>array(
                   'id',
@@ -38,7 +38,7 @@
     <div class="row">
         <div class="playlists-list container-fluid">
             <?php $this->widget('zii.widgets.CListView', array(
-              'dataProvider' => Playlists::model()->searchByExpiration('CURDATE() + INTERVAL 7 DAY', 'CURDATE()'),
+              'dataProvider' => Yii::app()->playlistsRepository->searchByExpiration('CURDATE() + INTERVAL 7 DAY', 'CURDATE()'),
               'itemView' => '_playlists_view',
               'sortableAttributes'=>array(
                   'id',

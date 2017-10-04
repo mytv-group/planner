@@ -98,7 +98,7 @@ class PointController extends Controller
 
         if($model->save()) {
             $postPoint = $_POST['Point'];
-            Yii::app()->pointService->updateRelations([
+            Yii::app()->pointsRepository->updateRelations([
                 'id' => intval($model->id),
                 'tvScheduleFrom' => isset($postPoint["tvScheduleFrom"]) ? $postPoint["tvScheduleFrom"] : [],
                 'tvScheduleTo' => isset($postPoint["tvScheduleTo"]) ? $postPoint["tvScheduleTo"] : [],
@@ -140,7 +140,7 @@ class PointController extends Controller
         if ($model->validate() && $model->save()) {
             $postPoint = $_POST['Point'];
 
-            Yii::app()->pointService->updateRelations([
+            Yii::app()->pointsRepository->updateRelations([
                 'id' => intval($model->id),
                 'tvScheduleFrom' => isset($postPoint["tvScheduleFrom"]) ? $postPoint["tvScheduleFrom"] : [],
                 'tvScheduleTo' => isset($postPoint["tvScheduleTo"]) ? $postPoint["tvScheduleTo"] : [],
@@ -174,7 +174,7 @@ class PointController extends Controller
     public function actionDelete($id)
     {
         $this->loadModel($id)->delete();
-        Yii::app()->pointService->deleteRelations(intval($id));
+        Yii::app()->pointsRepository->deleteRelations(intval($id));
         Yii::app()->spool->removeSpoolPath(intval($id));
 
         if(!isset($_GET['ajax'])) {
@@ -193,7 +193,7 @@ class PointController extends Controller
         $playlists = [];
         // dont need for view
         if ($view !== 'view') {
-            $allPlaylists = Playlists::getUserPlaylists();
+            $allPlaylists = Yii::app()->playlistsRepository->getUserPlaylists();
             foreach ($allPlaylists as $playlist) {
                 $playlists[$playlist['type']][] = $playlist;
             }
@@ -233,12 +233,12 @@ class PointController extends Controller
 
         if ($pointIp === '0.0.0.0') {
             Yii::app()->spool->removeScreenshots($pointId);
-            Yii::app()->pointService->sendRequestForScreen($pointId);
+            Yii::app()->pointsRepository->sendRequestForScreen($pointId);
             echo json_encode(['pending']);
             return;
         }
 
-        $res = Yii::app()->pointService->getPointScreen($pointId, $pointIp);
+        $res = Yii::app()->pointsRepository->getPointScreen($pointId, $pointIp);
 
         echo json_encode(['ok', $res]);
     }
@@ -265,7 +265,7 @@ class PointController extends Controller
 
     public function actionSendReload($pointId)
     {
-        Yii::app()->pointService->sendRequestForReload($pointId);
+        Yii::app()->pointsRepository->sendRequestForReload($pointId);
         echo json_encode(1);
     }
 

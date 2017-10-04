@@ -50,7 +50,12 @@ $this->menu=array(
 
     </div>
 
-    <div id='filesPreviewContainer' style='display:block;'>
+    <div class='shuffle-controls'>
+        <button class='btn btn-default'>Shuffle</button>
+        <button class='btn btn-default'>Random order on request</button>
+    </div>
+
+    <div id='filesPreviewContainer'>
     <?php
         $filesToPreview = $model->relatedFiles;
 

@@ -3,22 +3,6 @@
 /**
  * This is the model class for table "playlists".
  *
- * The followings are the available columns in table 'playlists':
- * @property integer $id
- * @property string $name
- * @property string $files
- * @property string $fromDatetime
- * @property string $toDatetime
- * @property string $fromTime
- * @property string $toTime
- * @property integer $sun
- * @property integer $mon
- * @property integer $tue
- * @property integer $wed
- * @property integer $thu
- * @property integer $fri
- * @property integer $sat
- * @property string $author
  */
 class Playlists extends CActiveRecord
 {
@@ -48,12 +32,11 @@ class Playlists extends CActiveRecord
     public function rules()
     {
         return [
-            ['name, fromDatetime, toDatetime, type, fromTime, toTime, author', 'required'],
+            ['name, fromDatetime, toDatetime, type, order, fromTime, toTime, id_user', 'required'],
             ['name', 'length', 'max'=>100],
-            ['files', 'length', 'max'=>65000],
-            ['author', 'length', 'max'=>255],
             ['sun, mon, tue, wed, thu, fri, sat', 'boolean'],
             ['type','in','range'=>['1','2','3'],'allowEmpty'=>false],
+            ['order','in','range'=>['ASC','DESC','RANDOM'],'allowEmpty'=>false],
             ['fromDatetime, toDatetime', 'type', 'type'=>'date', 'dateFormat'=>'yyyy-MM-dd'],
             ['fromTime, toTime, every', 'type', 'type'=>'time', 'timeFormat'=>'hh:mm:ss'],
             ['name', 'safe', 'on'=>'search'],
@@ -82,10 +65,10 @@ class Playlists extends CActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'files' => 'Files',
             'fromDatetime' => 'From Date',
             'toDatetime' => 'To Date',
             'type' => 'Type',
+            'order' => 'Order',
             'fromTime' => 'Start Broadcasting',
             'toTime' => 'End Broadcasting',
             'every' => 'Every',
@@ -96,7 +79,7 @@ class Playlists extends CActiveRecord
             'thu' => 'Thu',
             'fri' => 'Fri',
             'sat' => 'Sat',
-            'author' => 'Author',
+            'id_user' => 'Author',
             'weekDays' => 'Week Days',
             'ctrl' => 'Controls'
         ];
@@ -119,7 +102,7 @@ class Playlists extends CActiveRecord
         $criteria=new CDbCriteria;
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $criteria->compare('author', Yii::app()->user->username);
+            $criteria->compare('id_user', Yii::app()->user->id);
         }
 
         $criteria->compare('name', $this->name, true);
@@ -134,7 +117,7 @@ class Playlists extends CActiveRecord
         $criteria=new CDbCriteria;
 
         if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $criteria->compare('author', Yii::app()->user->username);
+            $criteria->compare('id_user', Yii::app()->user->id);
         }
 
         $expirationToExpression = new CDbExpression($expirationTo);
@@ -159,16 +142,5 @@ class Playlists extends CActiveRecord
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
-    }
-
-    public static function getUserPlaylists()
-    {
-        if (in_array(Yii::app()->user->role,
-          [User::ROLE_ADMIN])
-        ) {
-            return self::model()->findAll();
-        } else {
-            return self::model()->findAllByAttributes(['author' => Yii::app()->user->name]);
-        }
     }
 }

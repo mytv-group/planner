@@ -62,7 +62,6 @@ class PlaylistsController extends Controller
     public function actionView($id)
     {
         $model = $this->loadModel($id);
-        $author = $model->author;
         $stream = new Stream();
 
         if ($model->stream) {
@@ -83,7 +82,6 @@ class PlaylistsController extends Controller
     {
         $model = new Playlists();
         $model->type = 1; // for radioButtonList default value
-        $model->files = '';
         $stream = new Stream();
 
         if (isset($_POST['Playlists'])
@@ -181,7 +179,7 @@ class PlaylistsController extends Controller
     {
         $model = $this->loadModel($id);
 
-        Yii::app()->playlistService->deletePlaylistFiles($id);
+        Yii::app()->playlistsRepository->deletePlaylistFiles($id);
 
         $model->delete();
 

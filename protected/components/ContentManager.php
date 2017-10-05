@@ -12,21 +12,21 @@ class ContentManager extends CApplicationComponent
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
         $rows = Yii::app()->db->createCommand()
-            ->select('t3.id, files, type, fromDatetime, toDatetime, fromTime, toTime, id_playlist, t4.id id-author')
-            ->from('playlist_to_point t2')
-            ->join('playlists t3', '')
-            ->join('user t4', '')
+            ->select('playlists.id, files, type, fromDatetime, toDatetime, fromTime, toTime, id_playlist, user.id id-author')
+            ->from('playlist_to_point')
+            ->join('playlists', '')
+            ->join('user', '')
             ->where(array(
                 'and',
-                't2.id_playlist = t3.id',
-                't3.author = t4.username',
-                't2.id_point = :pointID',
-                't3.fromDatetime <= :pointDatetimeStr',
-                't3.toDatetime >= :pointDatetimeStr',
-                't3.'.$weekDay." = '1'",
-                't2.channel_type = :pointChannel'
+                'playlist_to_point.id_playlist = playlists.id',
+                'playlists.author = user.username',
+                'playlist_to_point.id_point = :pointId',
+                'playlists.fromDatetime <= :pointDatetimeStr',
+                'playlists.toDatetime >= :pointDatetimeStr',
+                'playlists.'.$weekDay.' = 1',
+                'playlist_to_point.channel_type = :pointChannel'
             ), array(
-                ':pointID' => $pointId,
+                ':pointId' => $pointId,
                 ':pointDatetimeStr' => $pointDatetimeStr,
                 ':pointChannel' => $pointChannel
             ))
@@ -123,25 +123,25 @@ class ContentManager extends CApplicationComponent
         $connection = Yii::app()->db;
 
         $rows = Yii::app()->db->createCommand()
-            ->select('files, fromDatetime, toDatetime, fromTime, toTime, every, id_playlist, t4.id id-author')
-            ->from('playlist_to_point t2')
-            ->join('playlists t3', '')
-            ->join('user t4', '')
-            ->where(array(
+            ->select('files, fromDatetime, toDatetime, fromTime, toTime, every, id_playlist, user.id id-author')
+            ->from('playlist_to_point')
+            ->join('playlists', '')
+            ->join('user', '')
+            ->where([
                 'and',
-                't2.id_playlist = t3.id',
-                't3.author = t4.username',
-                't2.id_point = :pointID',
-                't3.fromDatetime <= :pointDatetimeStr',
-                't3.toDatetime >= :pointDatetimeStr',
-                't3.'.$weekDay." = '1'",
-                't3.type = 2',
-                't2.channel_type = :pointChannel'
-            ), array(
-                ':pointID' => $pointId,
+                'playlist_to_point.id_playlist = playlists.id',
+                'playlists.author = user.username',
+                'playlist_to_point.id_point = :pointId',
+                'playlists.fromDatetime <= :pointDatetimeStr',
+                'playlists.toDatetime >= :pointDatetimeStr',
+                'playlists.'.$weekDay.' = 1',
+                'playlists.type = 2',
+                'playlist_to_point.channel_type = :pointChannel'
+            ], [
+                ':pointId' => $pointId,
                 ':pointDatetimeStr' => $pointDatetimeStr,
                 ':pointChannel' => $pointChannel
-            ))
+            ])
             ->queryAll();
 
         $advArr = array ();

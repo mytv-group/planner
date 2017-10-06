@@ -16,7 +16,7 @@ class ContentManager extends CApplicationComponent
             ->from('playlist_to_point')
             ->join('playlists', '')
             ->join('user', '')
-            ->where(array(
+            ->where([
                 'and',
                 'playlist_to_point.id_playlist = playlists.id',
                 'playlists.author = user.username',
@@ -25,11 +25,11 @@ class ContentManager extends CApplicationComponent
                 'playlists.toDatetime >= :pointDatetimeStr',
                 'playlists.'.$weekDay.' = 1',
                 'playlist_to_point.channel_type = :pointChannel'
-            ), array(
+            ], [
                 ':pointId' => $pointId,
                 ':pointDatetimeStr' => $pointDatetimeStr,
                 ':pointChannel' => $pointChannel
-            ))
+            ])
             ->order('fromTime')
             ->queryAll();
 

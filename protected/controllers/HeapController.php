@@ -128,7 +128,7 @@ class HeapController extends Controller
         }
 
         $folderId *= -1;
-        $items = Yii::app()->heap->getFolderContent($folderId, $author);
+        $items = Yii::app()->folderRepository->getFolderContent($folderId, $author);
 
         echo json_encode([
             'status' =>'ok',
@@ -180,10 +180,10 @@ class HeapController extends Controller
         $id = intval($_POST['id']);
 
         if ($type === 'file') {
-            Yii::app()->heap->deleteFile($id, Yii::app()->user);
+            Yii::app()->fileRepository->deleteFile($id, Yii::app()->user);
         } else if($type === 'folder') {
             $id = $id * -1;
-            Yii::app()->heap->deleteFolder($id, Yii::app()->user);
+            Yii::app()->folderRepository->deleteFolder($id, Yii::app()->user);
         }
 
         echo json_encode(['status' => 'ok']);

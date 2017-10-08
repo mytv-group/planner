@@ -1,5 +1,6 @@
-<?
-class PhpAuthManager extends CPhpAuthManager{
+<?php
+
+class AuthManager extends CPhpAuthManager{
     public function init()
     {
         if ($this->authFile === null) {

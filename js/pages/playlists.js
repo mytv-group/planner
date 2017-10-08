@@ -10,7 +10,7 @@ $(document).ready(function () {
     var moveFileSrc = origin + '/playlists/upload/';
     var deleteFileSrc = origin + '/playlists/deletefilefrompl/';
     var addfilefromheapSrc = origin + '/playlists/addfilefromheap/';
-    var folderSrc = origin + '/heap/getfoldercontent/';
+    var folderSrc = origin + '/heap/get-folder-content/';
     var viewSrc = origin + '/heap/view/';
     var Playlist_name = $("#Playlist_name");
     var playlistIdTag = $("#playlistId");

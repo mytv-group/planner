@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     var deleteFileSrc = document.location.origin + '/playlists/deletefilefrompl/',
         addfilefromheapSrc = document.location.origin + '/playlists/addFileFromHeap/',
-        folderSrc = document.location.origin + '/heap/getfoldercontent/',
+        folderSrc = document.location.origin + '/heap/get-folder-content/',
         viewSrc = document.location.origin + '/heap/view/',
         Playlist_name = $("#Playlist_name"),
         playlistIdTag = $("#playlistId"),

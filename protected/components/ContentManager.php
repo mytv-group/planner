@@ -12,14 +12,14 @@ class ContentManager extends CApplicationComponent
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
         $rows = Yii::app()->db->createCommand()
-            ->select('playlists.id, files, type, fromDatetime, toDatetime, fromTime, toTime, id_playlist, user.id id-author')
+            ->select('playlists.id, files, type, fromDatetime, toDatetime, fromTime, toTime, id_playlist, id_user, user.id')
             ->from('playlist_to_point')
             ->join('playlists', '')
             ->join('user', '')
             ->where([
                 'and',
                 'playlist_to_point.id_playlist = playlists.id',
-                'playlists.author = user.username',
+                'playlists.id_user = user.id',
                 'playlist_to_point.id_point = :pointId',
                 'playlists.fromDatetime <= :pointDatetimeStr',
                 'playlists.toDatetime >= :pointDatetimeStr',
@@ -43,7 +43,7 @@ class ContentManager extends CApplicationComponent
 
             $type = $row['type'];
             $playlistId = intval($row['id_playlist']);
-            $authorId = $row['id-author'];
+            $authorId = $row['id_user'];
 
             $files = [];
             $playlistInstance = Playlists::model()->findByPk($playlistId);
@@ -123,14 +123,14 @@ class ContentManager extends CApplicationComponent
         $connection = Yii::app()->db;
 
         $rows = Yii::app()->db->createCommand()
-            ->select('files, fromDatetime, toDatetime, fromTime, toTime, every, id_playlist, user.id id-author')
+            ->select('files, fromDatetime, toDatetime, fromTime, toTime, every, id_playlist, id_user, user.id')
             ->from('playlist_to_point')
             ->join('playlists', '')
             ->join('user', '')
             ->where([
                 'and',
                 'playlist_to_point.id_playlist = playlists.id',
-                'playlists.author = user.username',
+                'playlists.id_user = user.id',
                 'playlist_to_point.id_point = :pointId',
                 'playlists.fromDatetime <= :pointDatetimeStr',
                 'playlists.toDatetime >= :pointDatetimeStr',
@@ -169,7 +169,7 @@ class ContentManager extends CApplicationComponent
                         . "duration:" . $file->duration . ";"
                         . "file:" . $file->id . ";"
                         . "pl:" . $row['id_playlist'] . ";"
-                        . "author:" . $row['id-author'] . ""
+                        . "author:" . $row['id_user'] . ""
                         . $this->eol /*ready to output str*/
                 );
             }

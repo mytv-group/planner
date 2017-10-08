@@ -18,6 +18,12 @@ class Playlists extends CActiveRecord
         3 => 'strm'
     ];
 
+    public static $filesOrder = [
+        'ASC' => 'Ascending',
+        'DESC' => 'Descending',
+        'RANDOM' => 'Random'
+    ];
+
     /**
      * @return string the associated database table name
      */
@@ -32,11 +38,11 @@ class Playlists extends CActiveRecord
     public function rules()
     {
         return [
-            ['name, fromDatetime, toDatetime, type, order, fromTime, toTime, id_user', 'required'],
+            ['name, fromDatetime, toDatetime, type, files_order, fromTime, toTime, id_user', 'required'],
             ['name', 'length', 'max'=>100],
             ['sun, mon, tue, wed, thu, fri, sat', 'boolean'],
             ['type','in','range'=>['1','2','3'],'allowEmpty'=>false],
-            ['order','in','range'=>['ASC','DESC','RANDOM'],'allowEmpty'=>false],
+            ['files_order','in','range'=>['ASC','DESC','RANDOM'],'allowEmpty'=>false],
             ['fromDatetime, toDatetime', 'type', 'type'=>'date', 'dateFormat'=>'yyyy-MM-dd'],
             ['fromTime, toTime, every', 'type', 'type'=>'time', 'timeFormat'=>'hh:mm:ss'],
             ['name', 'safe', 'on'=>'search'],
@@ -68,7 +74,7 @@ class Playlists extends CActiveRecord
             'fromDatetime' => 'From Date',
             'toDatetime' => 'To Date',
             'type' => 'Type',
-            'order' => 'Order',
+            'files_order' => 'Order',
             'fromTime' => 'Start Broadcasting',
             'toTime' => 'End Broadcasting',
             'every' => 'Every',
@@ -101,32 +107,11 @@ class Playlists extends CActiveRecord
     {
         $criteria=new CDbCriteria;
 
-        if (Yii::app()->user->role != User::ROLE_ADMIN) {
+        if (!Yii::app()->user->isAdmin()) {
             $criteria->compare('id_user', Yii::app()->user->id);
         }
 
         $criteria->compare('name', $this->name, true);
-
-        return new CActiveDataProvider($this, [
-            'criteria'=>$criteria,
-        ]);
-    }
-
-    public function searchByExpiration($expirationTo, $expirationFrom = null)
-    {
-        $criteria=new CDbCriteria;
-
-        if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $criteria->compare('id_user', Yii::app()->user->id);
-        }
-
-        $expirationToExpression = new CDbExpression($expirationTo);
-        $criteria->addCondition('`toDatetime` < '.$expirationToExpression);
-
-        if ($expirationFrom !== null) {
-            $expirationFromExpression = new CDbExpression($expirationFrom);
-            $criteria->addCondition('`toDatetime` >= '.$expirationFromExpression);
-        }
 
         return new CActiveDataProvider($this, [
             'criteria'=>$criteria,

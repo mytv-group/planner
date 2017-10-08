@@ -179,6 +179,15 @@ table{
   overflow-x: hidden;
 }
 
+.row-with-padding {
+    padding-bottom:1em;
+}
+
+.radiobutton-label {
+    display: inline !important;
+    padding: 2px 15px 2px 2px;
+}
+
 #filesPreviewContainer {
-    
+
 }

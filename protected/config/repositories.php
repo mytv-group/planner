@@ -21,5 +21,17 @@ return [
         'playlistToPoint' => function() {
             return PlaylistToPoint::model();
         },
+    ],
+    'fileRepository' => [
+        'class'=>'FileRepository',
+        'fileToFolder' => function() {
+            return FileToFolder::model();
+        }
+    ],
+    'folderRepository' => [
+        'class'=>'FolderRepository',
+        'fileToFolder' => function() {
+            return FileToFolder::model();
+        }
     ]
 ];

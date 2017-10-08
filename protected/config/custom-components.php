@@ -21,6 +21,18 @@ return [
             return File::model();
         }
     ],
+    'heap' => [
+        'class'=>'Heap',
+        'file' => function() {
+            return File::model();
+        },
+        'fileToFolder' => function() {
+            return FileToFolder::model();
+        },
+        'folder' => function() {
+            return Folder::model();
+        },
+    ],
     'assets' => [
         'class'=>'AssetManagerHelper',
         'assetManager' => function() {

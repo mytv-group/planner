@@ -11,20 +11,27 @@ class ContentManager extends CApplicationComponent
         $pointDate = new DateTime($pointDatetimeStr);
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
-        $sql = "SELECT `t3`.`id`, `files`, `type`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `id_playlist`, `t4`.`id` AS 'id-author' FROM `playlist_to_point` AS `t2` " .
-            "JOIN `playlists` AS `t3` " .
-            "JOIN `user` AS `t4` " .
-            "ON `t2`.`id_playlist` = `t3`.`id` " .
-            "AND `t3`.`author` = `t4`.`username` " .
-            "AND `t2`.`id_point` = '" . $pointId . "' " .
-            "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
-            "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
-            "AND `t3`.`" . $weekDay . "` = '1' " .
-            "AND `t2`.`channel_type` = '" . $pointChannel . "' " .
-            "ORDER BY `fromTime`;";
-
-        $command = $connection->createCommand($sql);
-        $rows = $command->queryAll();
+        $rows = Yii::app()->db->createCommand()
+            ->select('playlists.id, files, type, fromDatetime, toDatetime, fromTime, toTime, id_playlist, user.id id-author')
+            ->from('playlist_to_point')
+            ->join('playlists', '')
+            ->join('user', '')
+            ->where([
+                'and',
+                'playlist_to_point.id_playlist = playlists.id',
+                'playlists.author = user.username',
+                'playlist_to_point.id_point = :pointId',
+                'playlists.fromDatetime <= :pointDatetimeStr',
+                'playlists.toDatetime >= :pointDatetimeStr',
+                'playlists.'.$weekDay.' = 1',
+                'playlist_to_point.channel_type = :pointChannel'
+            ], [
+                ':pointId' => $pointId,
+                ':pointDatetimeStr' => $pointDatetimeStr,
+                ':pointChannel' => $pointChannel
+            ])
+            ->order('fromTime')
+            ->queryAll();
 
         $blocksArr = array ();
         foreach ($rows as $row) {
@@ -115,19 +122,27 @@ class ContentManager extends CApplicationComponent
     {
         $connection = Yii::app()->db;
 
-        $sql = "SELECT `files`, `fromDatetime`, `toDatetime`, `fromTime`, `toTime`, `every`, `id_playlist`, `t4`.`id` AS 'id-author' FROM `playlist_to_point` AS `t2` " .
-            "JOIN `playlists` AS `t3` " .
-            "JOIN `user` AS `t4` " .
-            "ON `t2`.`id_playlist` = `t3`.`id` " .
-            "AND `t3`.`author` = `t4`.`username` " .
-            "AND `t2`.`id_point` = '" . $pointId . "' " .
-            "AND `t3`.`fromDatetime` <= '" . $pointDatetimeStr . "' " .
-            "AND `t3`.`toDatetime` >= '" . $pointDatetimeStr . "' " .
-            "AND `t2`.`channel_type` = '" . $pointChannel . "' " .
-            "AND `t3`.`" . $weekDay . "` = '1' " . "AND `t3`.`type` = '2';";
-
-        $command=$connection->createCommand($sql);
-        $rows=$command->queryAll();
+        $rows = Yii::app()->db->createCommand()
+            ->select('files, fromDatetime, toDatetime, fromTime, toTime, every, id_playlist, user.id id-author')
+            ->from('playlist_to_point')
+            ->join('playlists', '')
+            ->join('user', '')
+            ->where([
+                'and',
+                'playlist_to_point.id_playlist = playlists.id',
+                'playlists.author = user.username',
+                'playlist_to_point.id_point = :pointId',
+                'playlists.fromDatetime <= :pointDatetimeStr',
+                'playlists.toDatetime >= :pointDatetimeStr',
+                'playlists.'.$weekDay.' = 1',
+                'playlists.type = 2',
+                'playlist_to_point.channel_type = :pointChannel'
+            ], [
+                ':pointId' => $pointId,
+                ':pointDatetimeStr' => $pointDatetimeStr,
+                ':pointChannel' => $pointChannel
+            ])
+            ->queryAll();
 
         $advArr = array ();
         foreach ($rows as $row) {

@@ -135,7 +135,7 @@ class NetController extends Controller
                             $point->save();
                         }
 
-                        Yii::app()->pointService->updateRelations([
+                        Yii::app()->pointsRepository->updateRelations([
                             'id' => intval($point->id),
                             'tvScheduleFrom' => isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
                             'tvScheduleTo' => isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : [],
@@ -153,7 +153,7 @@ class NetController extends Controller
         }
 
         $playlists = [];
-        $allPlaylists = Playlists::getUserPlaylists();
+        $allPlaylists =  Yii::app()->playlistsRepository->getUserPlaylists();
         foreach ($allPlaylists as $playlist) {
                 $playlists[$playlist['type']][] = $playlist;
         }
@@ -188,8 +188,8 @@ class NetController extends Controller
                         $point->sync = 0;
                         $point->save();
 
-                        $ps = Yii::app()->pointService;
-                        $ps->addPointTVschedule(
+                        $pr = Yii::app()->pointsRepository;
+                        $pr->addPointTvSchedule(
                             intval($point->id),
                             isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
                             isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : []
@@ -215,12 +215,12 @@ class NetController extends Controller
                             }
                         }
 
-                        $ps->addChannels(
+                        $pr->addChannels(
                             intval($point->id),
                             $filteredChannels
                         );
-                        $ps->sendRequestForUpdate($point->ip);
-                        $ps->prepareFilesForSync(intval($point->id));
+                        $pr->sendRequestForUpdate($point->ip);
+                        $pr->prepareFilesForSync(intval($point->id));
                     }
                 }
 
@@ -229,7 +229,7 @@ class NetController extends Controller
         }
 
         $playlists = [];
-        $allPlaylists = Playlists::getUserPlaylists();
+        $allPlaylists = Yii::app()->playlistsRepository->getUserPlaylists();
         foreach ($allPlaylists as $playlist) {
                 $playlists[$playlist['type']][] = $playlist;
         }
@@ -313,7 +313,7 @@ class NetController extends Controller
                         $point->sync = 0;
                         $point->save();
 
-                        Yii::app()->pointService->updateRelations([
+                        Yii::app()->pointsRepository->updateRelations([
                             'id' => intval($point->id),
                             'tvScheduleFrom' => isset($attr["tvScheduleFrom"]) ? $attr["tvScheduleFrom"] : [],
                             'tvScheduleTo' => isset($attr["tvScheduleTo"]) ? $attr["tvScheduleTo"] : [],
@@ -331,7 +331,7 @@ class NetController extends Controller
         }
 
         $playlists = [];
-        $allPlaylists = Playlists::getUserPlaylists();
+        $allPlaylists = Yii::app()->playlistsRepository->getUserPlaylists();
         foreach ($allPlaylists as $playlist) {
             $playlists[$playlist['type']][] = $playlist;
         }

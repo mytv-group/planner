@@ -3,22 +3,6 @@
 /**
  * This is the model class for table "playlists".
  *
- * The followings are the available columns in table 'playlists':
- * @property integer $id
- * @property string $name
- * @property string $files
- * @property string $fromDatetime
- * @property string $toDatetime
- * @property string $fromTime
- * @property string $toTime
- * @property integer $sun
- * @property integer $mon
- * @property integer $tue
- * @property integer $wed
- * @property integer $thu
- * @property integer $fri
- * @property integer $sat
- * @property string $author
  */
 class Playlists extends CActiveRecord
 {
@@ -32,6 +16,12 @@ class Playlists extends CActiveRecord
         1 => 'bg',
         2 => 'adv',
         3 => 'strm'
+    ];
+
+    public static $filesOrder = [
+        'ASC' => 'Ascending',
+        'DESC' => 'Descending',
+        'RANDOM' => 'Random'
     ];
 
     /**
@@ -48,12 +38,11 @@ class Playlists extends CActiveRecord
     public function rules()
     {
         return [
-            ['name, fromDatetime, toDatetime, type, fromTime, toTime, author', 'required'],
+            ['name, fromDatetime, toDatetime, type, files_order, fromTime, toTime, id_user', 'required'],
             ['name', 'length', 'max'=>100],
-            ['files', 'length', 'max'=>65000],
-            ['author', 'length', 'max'=>255],
             ['sun, mon, tue, wed, thu, fri, sat', 'boolean'],
             ['type','in','range'=>['1','2','3'],'allowEmpty'=>false],
+            ['files_order','in','range'=>['ASC','DESC','RANDOM'],'allowEmpty'=>false],
             ['fromDatetime, toDatetime', 'type', 'type'=>'date', 'dateFormat'=>'yyyy-MM-dd'],
             ['fromTime, toTime, every', 'type', 'type'=>'time', 'timeFormat'=>'hh:mm:ss'],
             ['name', 'safe', 'on'=>'search'],
@@ -82,10 +71,10 @@ class Playlists extends CActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'files' => 'Files',
             'fromDatetime' => 'From Date',
             'toDatetime' => 'To Date',
             'type' => 'Type',
+            'files_order' => 'Order',
             'fromTime' => 'Start Broadcasting',
             'toTime' => 'End Broadcasting',
             'every' => 'Every',
@@ -96,7 +85,7 @@ class Playlists extends CActiveRecord
             'thu' => 'Thu',
             'fri' => 'Fri',
             'sat' => 'Sat',
-            'author' => 'Author',
+            'id_user' => 'Author',
             'weekDays' => 'Week Days',
             'ctrl' => 'Controls'
         ];
@@ -118,32 +107,11 @@ class Playlists extends CActiveRecord
     {
         $criteria=new CDbCriteria;
 
-        if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $criteria->compare('author', Yii::app()->user->username);
+        if (!Yii::app()->user->isAdmin()) {
+            $criteria->compare('id_user', Yii::app()->user->id);
         }
 
         $criteria->compare('name', $this->name, true);
-
-        return new CActiveDataProvider($this, [
-            'criteria'=>$criteria,
-        ]);
-    }
-
-    public function searchByExpiration($expirationTo, $expirationFrom = null)
-    {
-        $criteria=new CDbCriteria;
-
-        if (Yii::app()->user->role != User::ROLE_ADMIN) {
-            $criteria->compare('author', Yii::app()->user->username);
-        }
-
-        $expirationToExpression = new CDbExpression($expirationTo);
-        $criteria->addCondition('`toDatetime` < '.$expirationToExpression);
-
-        if ($expirationFrom !== null) {
-            $expirationFromExpression = new CDbExpression($expirationFrom);
-            $criteria->addCondition('`toDatetime` >= '.$expirationFromExpression);
-        }
 
         return new CActiveDataProvider($this, [
             'criteria'=>$criteria,
@@ -159,16 +127,5 @@ class Playlists extends CActiveRecord
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
-    }
-
-    public static function getUserPlaylists()
-    {
-        if (in_array(Yii::app()->user->role,
-          [User::ROLE_ADMIN])
-        ) {
-            return self::model()->findAll();
-        } else {
-            return self::model()->findAllByAttributes(['author' => Yii::app()->user->name]);
-        }
     }
 }

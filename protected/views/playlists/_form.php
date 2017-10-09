@@ -69,15 +69,28 @@
         </table>
     </div>
 
-    <div class="row" style='padding-bottom:1em;'>
+    <div class='row row-with-padding'>
+        <?php echo $form->labelEx($model,'files_order'); ?>
+        <?php echo $form->radioButtonList($model,'files_order',
+            Playlists::$filesOrder, [
+                'class'=>'order-control',
+                'separator'=>' &nbsp; ',
+                'labelOptions'=> ['class'=>'radiobutton-label'],
+                'disabled' => $isView
+            ]
+        ); ?>
+        <?php echo $form->error($model,'files_order'); ?>
+    </div>
+
+    <div class='row row-with-padding'>
         <?php echo $form->labelEx($model,'type'); ?>
         <?php echo $form->radioButtonList($model,'type',
-            Playlists::$types,
-            array('class'=>"type-control",
+            Playlists::$types, [
+                'class'=>'type-control',
                 'separator'=>' &nbsp; ',
-                'labelOptions'=>array('style'=>'display:inline;'),
+                'labelOptions'=>['class'=>'radiobutton-label'],
                 'disabled' => $isView
-            )
+            ]
         ); ?>
         <?php echo $form->error($model,'type'); ?>
     </div>
@@ -88,9 +101,11 @@
                 <td><?php echo $form->labelEx($model,'every'); ?></td>
             </tr>
             <tr>
-                <td>    <?php echo $form->textField($model,'every',array('class'=>"form-control timepicker",
-                            'value'=>$model->isNewRecord ? "00:30:00" : $model->every,
-                            'readonly' => $isView)); ?>
+                <td>
+                    <?php echo $form->textField($model,'every',array('class'=>"form-control timepicker",
+                        'value'=>$model->isNewRecord ? "00:30:00" : $model->every,
+                        'readonly' => $isView));
+                    ?>
                 </td>
             </tr>
             <tr>

@@ -12,14 +12,22 @@ class ContentManager extends CApplicationComponent
         $pointDateStr = date_format ( $pointDate, "Y-m-d" );
 
         $rows = Yii::app()->db->createCommand()
-            ->select('playlists.id, files, type, fromDatetime, toDatetime, fromTime, toTime, id_playlist, user.id id-author')
+            ->select('type, '
+                . 'fromDatetime, '
+                . 'toDatetime, '
+                . 'fromTime, '
+                . 'toTime, '
+                . 'id_playlist, '
+                . 'files_order, '
+                . 'id_user'
+            )
             ->from('playlist_to_point')
             ->join('playlists', '')
             ->join('user', '')
             ->where([
                 'and',
                 'playlist_to_point.id_playlist = playlists.id',
-                'playlists.author = user.username',
+                'playlists.id_user = user.id',
                 'playlist_to_point.id_point = :pointId',
                 'playlists.fromDatetime <= :pointDatetimeStr',
                 'playlists.toDatetime >= :pointDatetimeStr',
@@ -41,14 +49,22 @@ class ContentManager extends CApplicationComponent
             $fromTime = $row['fromTime'];
             $toTime = $row['toTime'];
 
+            $filesOrder = $row['files_order'];
             $type = $row['type'];
             $playlistId = intval($row['id_playlist']);
-            $authorId = $row['id-author'];
+            $authorId = $row['id_user'];
 
             $files = [];
             $playlistInstance = Playlists::model()->findByPk($playlistId);
-            if ($playlistInstance && $playlistInstance->relatedFiles) {
-                $files = $playlistInstance->relatedFiles;
+
+            if ($playlistInstance && $filesToPlaylist = $playlistInstance->filesToPlaylist) {
+                $filesToPlaylist = $this->sortFiles($filesToPlaylist);
+
+                foreach ($filesToPlaylist as $filesToPlaylistInstance) {
+                    $files[] = $filesToPlaylistInstance->file;
+                }
+
+                $files = $this->orderArray($files, $filesOrder);
             }
 
             /* if today starts showing check broadcasting is later showing begin */
@@ -123,14 +139,22 @@ class ContentManager extends CApplicationComponent
         $connection = Yii::app()->db;
 
         $rows = Yii::app()->db->createCommand()
-            ->select('files, fromDatetime, toDatetime, fromTime, toTime, every, id_playlist, user.id id-author')
+            ->select('fromDatetime, '
+                . 'toDatetime, '
+                . 'fromTime, '
+                . 'toTime, '
+                . 'every, '
+                . 'id_playlist, '
+                . 'files_order, '
+                . 'id_user'
+            )
             ->from('playlist_to_point')
             ->join('playlists', '')
             ->join('user', '')
             ->where([
                 'and',
                 'playlist_to_point.id_playlist = playlists.id',
-                'playlists.author = user.username',
+                'playlists.id_user = user.id',
                 'playlist_to_point.id_point = :pointId',
                 'playlists.fromDatetime <= :pointDatetimeStr',
                 'playlists.toDatetime >= :pointDatetimeStr',
@@ -149,11 +173,19 @@ class ContentManager extends CApplicationComponent
             $fromDatetime = date_create ( $row['fromDatetime']);
             $toDatetime = date_create ( $row['toDatetime']);
             $playlistId = intval($row['id_playlist']);
+            $filesOrder = $row['files_order'];
 
             $files = [];
             $playlistInstance = Playlists::model()->findByPk($playlistId);
-            if ($playlistInstance && $playlistInstance->relatedFiles) {
-                $files = $playlistInstance->relatedFiles;
+
+            if ($playlistInstance && $filesToPlaylist = $playlistInstance->filesToPlaylist) {
+                $filesToPlaylist = $this->sortFiles($filesToPlaylist);
+
+                foreach ($filesToPlaylist as $filesToPlaylistInstance) {
+                    $files[] = $filesToPlaylistInstance->file;
+                }
+
+                $files = $this->orderArray($files, $filesOrder);
             }
 
             $every = $row['every'];
@@ -169,7 +201,7 @@ class ContentManager extends CApplicationComponent
                         . "duration:" . $file->duration . ";"
                         . "file:" . $file->id . ";"
                         . "pl:" . $row['id_playlist'] . ";"
-                        . "author:" . $row['id-author'] . ""
+                        . "author:" . $row['id_user'] . ""
                         . $this->eol /*ready to output str*/
                 );
             }
@@ -293,5 +325,41 @@ class ContentManager extends CApplicationComponent
         }
         $array = array_merge($array);
         return $array;
+    }
+
+    private function sortFiles($filesToPlaylist)
+    {
+        function compareOrder($a, $b) {
+            if ($a['order'] === $b['order']) { return 0; }
+
+            return ($a['order'] < $b['order']) ? -1 : 1;
+        }
+
+        usort($filesToPlaylist, "compareOrder");
+
+        return $filesToPlaylist;
+    }
+
+
+    private function orderArray($unorderedFiles, $order='ASC')
+    {
+
+
+        $files = [];
+
+        if ($order === 'ASC') {
+            $files = $unorderedFiles;
+        }
+
+        if ($order === 'DESC') {
+            $files = array_reverse($unorderedFiles);
+        }
+
+        if ($order === 'RANDOM') {
+            $files = $unorderedFiles;
+            shuffle($files);
+        }
+
+        return $files;
     }
 }

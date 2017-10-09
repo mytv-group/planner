@@ -60,7 +60,7 @@
             echo '<span class="is-waiting-sync status-glyph glyphicon glyphicon-refresh" aria-hidden="true"></span>';
         }
 
-        if (Yii::app()->pointService->checkIpOnline($data->ip)) {
+        if (Yii::app()->pointsRepository->checkIpOnline($data->ip)) {
             echo '<span class="is-online status-glyph glyphicon glyphicon-globe" aria-hidden="true"></span>';
         } else {
             echo '<span class="is-offline status-glyph glyphicon glyphicon-off" aria-hidden="true"></span>';

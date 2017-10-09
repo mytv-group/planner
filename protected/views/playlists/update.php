@@ -2,12 +2,6 @@
 /* @var $this PlaylistsController */
 /* @var $model Playlists */
 
-$this->breadcrumbs=array(
-    'Playlists'=>array('index'),
-    $model->name=>array('view','id'=>$model->id),
-    'Update',
-);
-
 $this->menu=array(
     array('label'=>'List', 'url'=>array('index')),
     array('label'=>'Create', 'url'=>array('create')),
@@ -50,15 +44,18 @@ $this->menu=array(
 
     </div>
 
-    <div id='filesPreviewContainer' style='display:block;'>
+    <div class='shuffle-controls'>
+        <button id='shuffle-btn' class='btn btn-info'>Shuffle</button>
+    </div>
+
+    <div id='filesPreviewContainer'>
     <?php
         $filesToPreview = $model->relatedFiles;
 
         printf("<ul id='sortable' class='unstyled list-unstyled'>");
 
         $ii = 0;
-        foreach($filesToPreview as $key => $val)
-        {
+        foreach ($filesToPreview as $key => $val) {
             $ii++;
             $fileid = $val['id'];
             $mime = $val['mime'];

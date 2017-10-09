@@ -4,24 +4,6 @@
 $(document).ready(function () {
     'use strict';
 
-    var origin = document.location.origin;
-
-    var url =  origin + '/uploader/';
-    var moveFileSrc = origin + '/playlists/upload/';
-    var deleteFileSrc = origin + '/playlists/deletefilefrompl/';
-    var addfilefromheapSrc = origin + '/playlists/addfilefromheap/';
-    var folderSrc = origin + '/heap/getfoldercontent/';
-    var viewSrc = origin + '/heap/view/';
-    var Playlist_name = $("#Playlist_name");
-    var playlistIdTag = $("#playlistId");
-    var filesBlock = $("#filesBlock");
-    var selectedjsTreeNode = 0;
-
-    $(".datepicker").datetimepicker({
-        format: 'Y-m-d',
-        timepicker: false
-    });
-
     $(".from-datepicker").datetimepicker({
         format: 'Y-m-d',
         timepicker: false

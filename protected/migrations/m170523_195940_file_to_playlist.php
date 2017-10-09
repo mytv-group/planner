@@ -7,7 +7,7 @@ class m170523_195940_file_to_playlist extends CDbMigration
     $ii = 0;
 
     $fileToPlaylistTable = Yii::app()->db->schema->getTable('file');
-    if (!isset($fileToPlaylistTable)) {
+    if (isset($fileToPlaylistTable)) {
         $this->execute('ALTER TABLE `file` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT;');
         $ii++;
         echo $ii;

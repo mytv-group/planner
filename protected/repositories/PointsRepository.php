@@ -2,7 +2,7 @@
 
 Yii::import('ext.EHttpClient.*');
 
-class PointService extends CApplicationComponent
+class PointsRepository extends BaseRepository
 {
     public $user;
     public $tvSchedule;
@@ -29,7 +29,7 @@ class PointService extends CApplicationComponent
         return $this->playlistToPoint->__invoke();
     }
 
-    public function addPointTVschedule($id, $tvScheduleFrom, $tvScheduleTo)
+    public function addPointTvSchedule($id, $tvScheduleFrom, $tvScheduleTo)
     {
         if (!is_int($id)) {
             throw new Exception("Incorrect PointId passed. Integer is required. Passed: "
@@ -67,7 +67,7 @@ class PointService extends CApplicationComponent
             [':id_point' => $id]
         );
 
-        $this->addPointTVschedule($id, $tvScheduleFrom, $tvScheduleTo);
+        $this->addPointTvSchedule($id, $tvScheduleFrom, $tvScheduleTo);
     }
 
     private function organizeTvArray ($fromArray, $toArray)

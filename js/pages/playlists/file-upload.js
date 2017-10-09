@@ -8,7 +8,6 @@ $(document).ready(function(e){
         url: url,
         dataType: 'json',
         //acceptFileTypes: /(\.|\/)(gif|jpe?g|png|mov|mkv|avi|swf|mp4|mp3')$/i,
-        //
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png|webm|ogg|wav|avi|mov|mkv|mp3|mp4|swf)$/i,
         maxFileSize: 4096*1000*1000,
         dropZone: $('#dropzone'),

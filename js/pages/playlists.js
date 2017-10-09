@@ -22,6 +22,17 @@ $(document).ready(function () {
         timepicker: false
     });
 
+    $(".fromDatepicker").datetimepicker({
+        format: 'Y-m-d',
+        timepicker: false
+    });
+
+    $(".toDatepicker").datetimepicker({
+        format: 'Y-m-d',
+        timepicker: false
+
+    });
+
     $(".timepicker").datetimepicker({
         format: 'H:i:s',
         datepicker: false

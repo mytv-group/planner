@@ -42,8 +42,8 @@
             <td><?php echo $form->labelEx($model,'toDatetime'); ?></td>
         </tr>
         <tr>
-            <td><?php echo $form->textField($model,'fromDatetime', array('class'=>"form-control datepicker", 'disabled' => $isView)); ?></td>
-            <td><?php echo $form->textField($model,'toDatetime', array('class'=>"form-control datepicker", 'disabled' => $isView)); ?></td>
+            <td><?php echo $form->textField($model,'fromDatetime', array('class'=>"form-control fromDatepicker", 'disabled' => $isView)); ?></td>
+            <td><?php echo $form->textField($model,'toDatetime', array('class'=>"form-control toDatepicker", 'disabled' => $isView)); ?></td>
         </tr>
         <tr>
             <td><?php echo $form->error($model,'fromDatetime'); ?></td>

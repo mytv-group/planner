@@ -22,15 +22,14 @@ $(document).ready(function () {
         timepicker: false
     });
 
-    $(".fromDatepicker").datetimepicker({
+    $(".from-datepicker").datetimepicker({
         format: 'Y-m-d',
         timepicker: false
     });
 
-    $(".toDatepicker").datetimepicker({
+    $(".to-datepicker").datetimepicker({
         format: 'Y-m-d',
         timepicker: false
-
     });
 
     $(".timepicker").datetimepicker({

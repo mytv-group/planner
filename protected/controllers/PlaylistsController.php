@@ -32,19 +32,19 @@ class PlaylistsController extends Controller
         return [
             [
                 'allow',
-                'actions'=>['index','view'],
+                'actions'=>['index', 'view'],
                 'users'=>['@'],
                 'roles'=>['playlistViewUser'],
             ],
             [
                 'allow',
-                'actions'=>['create','upload','addfilefromheap','setFileOrder', 'update'],
+                'actions'=>['create', 'update', 'upload', 'addFileFromHeap', 'setFileOrder'],
                 'users'=>['@'],
                 'roles'=>['playlistEditUser'],
             ],
             [
                 'allow',
-                'actions'=>['delete','deletefilefrompl'],
+                'actions'=>['delete', 'removeFile'],
                 'users'=>['@'],
                 'roles'=>['playlistUser'],
             ],
@@ -293,7 +293,7 @@ class PlaylistsController extends Controller
     /**
      * Deletes file from playlist and from heap if nessesary
      */
-    public function actionDeletefilefrompl()
+    public function actionRemoveFile()
     {
         $answ["status"] = 'err';
         if (isset($_POST["data"])
@@ -340,12 +340,11 @@ class PlaylistsController extends Controller
         echo(json_encode($answ));
     }
 
-    public function actionAddfilefromheap()
+    public function actionAddFileFromHeap()
     {
         $answ = [];
         $answ['status'] = 'err';
-        if(isset($_POST['id']) && isset($_POST['playlistId']))
-        {
+        if (isset($_POST['id']) && isset($_POST['playlistId'])) {
             $playlistId = $_POST['playlistId'];
             $heapItemId = $_POST['id'];
 
@@ -373,7 +372,7 @@ class PlaylistsController extends Controller
                 error_log($answ['error']);
             }
         }
-        echo(json_encode($answ));
+        echo (json_encode($answ));
     }
 
     public function actionSetFileOrder()
@@ -390,7 +389,7 @@ class PlaylistsController extends Controller
         $criteria->addInCondition('id_file', $files);
         FileToPlaylist::model()->deleteAll($criteria);
 
-        for($ii = 0; $ii < count($files); $ii++) {
+        for ($ii = 0; $ii < count($files); $ii++) {
             $fileToPlaylist = new FileToPlaylist;
             $fileToPlaylist->attributes = [
                 'id_file' => $files[$ii],
@@ -401,11 +400,11 @@ class PlaylistsController extends Controller
             if ($fileToPlaylist->validate()) {
                  $fileToPlaylist->save();
             } else {
-                return json_encode(CHtml::errorSummary($model));
+                echo json_encode(CHtml::errorSummary($model));
             }
         }
 
-        return json_encode(['status' => 'ok']);
+        echo json_encode(['status' => 'ok']);
     }
 
     /**
@@ -442,17 +441,19 @@ class PlaylistsController extends Controller
             return false;
         }
 
-        Yii::app()->assets->registerPackage('bootstrap-switch');
-        Yii::app()->assets->registerPackage('datetimepicker');
-        Yii::app()->assets->registerPackage('fileuploader');
-        Yii::app()->assets->registerPackage('j-player');
-        Yii::app()->assets->registerPackage('js-tree');
+        $assets = Yii::app()->assets;
 
-        Yii::app()->assets->register('/js/pages/playlists/playlistOrder.js' );
-        Yii::app()->assets->register('/js/pages/playlists/playlistFileUpload.js' );
-        Yii::app()->assets->register('/js/pages/playlists/playlistHeapAndPreview.js' );
+        $assets->registerPackage('bootstrap-switch');
+        $assets->registerPackage('datetimepicker');
+        $assets->registerPackage('fileuploader');
+        $assets->registerPackage('j-player');
+        $assets->registerPackage('js-tree');
 
-        Yii::app()->assets->register('/css/common/playlists-list.css');
+        $assets->register('/js/pages/playlists/order.js' );
+        $assets->register('/js/pages/playlists/file-upload.js' );
+        $assets->register('/js/pages/playlists/heap-and-preview.js' );
+
+        $assets->register('/css/common/playlists-list.css');
 
         return true;
     }

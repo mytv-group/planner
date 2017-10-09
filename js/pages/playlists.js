@@ -4,20 +4,12 @@
 $(document).ready(function () {
     'use strict';
 
-    var origin = document.location.origin;
+    $(".from-datepicker").datetimepicker({
+        format: 'Y-m-d',
+        timepicker: false
+    });
 
-    var url =  origin + '/uploader/';
-    var moveFileSrc = origin + '/playlists/upload/';
-    var deleteFileSrc = origin + '/playlists/deletefilefrompl/';
-    var addfilefromheapSrc = origin + '/playlists/addfilefromheap/';
-    var folderSrc = origin + '/heap/get-folder-content/';
-    var viewSrc = origin + '/heap/view/';
-    var Playlist_name = $("#Playlist_name");
-    var playlistIdTag = $("#playlistId");
-    var filesBlock = $("#filesBlock");
-    var selectedjsTreeNode = 0;
-
-    $(".datepicker").datetimepicker({
+    $(".to-datepicker").datetimepicker({
         format: 'Y-m-d',
         timepicker: false
     });

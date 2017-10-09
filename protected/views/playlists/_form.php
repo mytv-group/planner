@@ -42,8 +42,8 @@
             <td><?php echo $form->labelEx($model,'toDatetime'); ?></td>
         </tr>
         <tr>
-            <td><?php echo $form->textField($model,'fromDatetime', array('class'=>"form-control datepicker", 'disabled' => $isView)); ?></td>
-            <td><?php echo $form->textField($model,'toDatetime', array('class'=>"form-control datepicker", 'disabled' => $isView)); ?></td>
+            <td><?php echo $form->textField($model,'fromDatetime', array('class'=>"form-control from-datepicker", 'disabled' => $isView)); ?></td>
+            <td><?php echo $form->textField($model,'toDatetime', array('class'=>"form-control to-datepicker", 'disabled' => $isView)); ?></td>
         </tr>
         <tr>
             <td><?php echo $form->error($model,'fromDatetime'); ?></td>
@@ -73,7 +73,7 @@
         <?php echo $form->labelEx($model,'files_order'); ?>
         <?php echo $form->radioButtonList($model,'files_order',
             Playlists::$filesOrder, [
-                'class'=>'type-control',
+                'class'=>'order-control',
                 'separator'=>' &nbsp; ',
                 'labelOptions'=> ['class'=>'radiobutton-label'],
                 'disabled' => $isView
@@ -101,9 +101,11 @@
                 <td><?php echo $form->labelEx($model,'every'); ?></td>
             </tr>
             <tr>
-                <td>    <?php echo $form->textField($model,'every',array('class'=>"form-control timepicker",
-                            'value'=>$model->isNewRecord ? "00:30:00" : $model->every,
-                            'readonly' => $isView)); ?>
+                <td>
+                    <?php echo $form->textField($model,'every',array('class'=>"form-control timepicker",
+                        'value'=>$model->isNewRecord ? "00:30:00" : $model->every,
+                        'readonly' => $isView));
+                    ?>
                 </td>
             </tr>
             <tr>

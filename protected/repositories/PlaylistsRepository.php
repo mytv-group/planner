@@ -11,7 +11,7 @@ class PlaylistsRepository extends BaseRepository
 
     public function deletePlaylistFiles($playlistId)
     {
-        $playlistModel = $this->getModel();
+        $playlistModel = $this->model();
         $playlist = $playlistModel->findByPk($playlistId);
 
         if ($playlist && $playlist->filesToPlaylist) {
@@ -44,9 +44,9 @@ class PlaylistsRepository extends BaseRepository
         return;
     }
 
-    public static function getUserPlaylists()
+    public function getUserPlaylists()
     {
-        $playlistModel = $this->getModel();
+        $playlistModel = $this->model();
         $user = $this->getUser();
 
         if ($user->isAdmin()) {

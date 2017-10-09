@@ -4,11 +4,7 @@
 $(document).ready(function () {
     'use strict';
 
-    var deleteFileSrc = document.location.origin + '/playlists/deletefilefrompl/',
-        addfilefromheapSrc = document.location.origin + '/playlists/addFileFromHeap/',
-        folderSrc = document.location.origin + '/heap/get-folder-content/',
-        viewSrc = document.location.origin + '/heap/view/',
-        Playlist_name = $("#Playlist_name"),
+    var Playlist_name = $("#Playlist_name"),
         playlistIdTag = $("#playlistId"),
         filesBlock = $("#filesBlock"),
         selectedjsTreeNode = 0;
@@ -227,7 +223,7 @@ $(document).ready(function () {
                 };
 
             $.ajax({
-              url: deleteFileSrc,
+              url: document.location.origin + '/playlists/remove-file/',
               type: "POST",
               data: pV,
               dataType: "json",
@@ -379,7 +375,7 @@ $(document).ready(function () {
             },
             'core' : {
                 'data' : {
-                    "url" : folderSrc,
+                    "url" : document.location.origin + '/heap/get-folder-content/',
                     "dataType" : "json",
                     "data" : function (node) {
                         var type = 'treePrivate';
@@ -417,7 +413,7 @@ $(document).ready(function () {
         },
         'core' : {
             'data' : {
-                "url" : folderSrc,
+                "url" : document.location.origin + '/heap/get-folder-content/',
                 "dataType" : "json",
                 "data" : function (node) {
                     var type = 'treeGeneral';
@@ -441,11 +437,10 @@ $(document).ready(function () {
         };
 
         $.ajax({
-          url: viewSrc,
+          url: document.location.origin + '/heap/view/',
           type: "POST",
           data: pV,
           dataType: "json",
-          async: false,
         }).done(function(e){
             if(e['status'] == 'ok'){
                 var dropzoneHeap = $("div#dropzoneHeap"),
@@ -533,7 +528,7 @@ $(document).ready(function () {
             var itemId = $(item).data("id");
 
             $.ajax({
-              url: addfilefromheapSrc,
+              url: document.location.origin + '/playlists/add-file-from-heap/',
               type: "POST",
               data: {
                   id: itemId,

@@ -329,10 +329,12 @@ class ContentManager extends CApplicationComponent
 
     private function sortFiles($filesToPlaylist)
     {
-        function compareOrder($a, $b) {
-            if ($a['order'] === $b['order']) { return 0; }
+        if (!function_exists ('compareOrder')) {
+            function compareOrder($a, $b) {
+                if ($a['order'] === $b['order']) { return 0; }
 
-            return ($a['order'] < $b['order']) ? -1 : 1;
+                return ($a['order'] < $b['order']) ? -1 : 1;
+            }
         }
 
         usort($filesToPlaylist, "compareOrder");
@@ -343,8 +345,6 @@ class ContentManager extends CApplicationComponent
 
     private function orderArray($unorderedFiles, $order='ASC')
     {
-
-
         $files = [];
 
         if ($order === 'ASC') {

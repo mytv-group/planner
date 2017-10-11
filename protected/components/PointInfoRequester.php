@@ -1,8 +1,8 @@
 <?php
 
-class PointInfoRequester extends CApplicationComponent
+class PointInfoRequester extends BaseComponent
 {
-  private $status = null;
+    private $status = null;
 
     private function getStats($ip)
     {

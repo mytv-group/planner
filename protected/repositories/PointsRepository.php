@@ -2,32 +2,12 @@
 
 Yii::import('ext.EHttpClient.*');
 
-class PointsRepository extends BaseRepository
+class PointsRepository extends BaseComponent
 {
     public $user;
     public $tvSchedule;
     public $showcase;
     public $playlistToPoint;
-
-    private function getUser()
-    {
-        return $this->user->__invoke();
-    }
-
-    private function getTvSchedule()
-    {
-        return $this->tvSchedule->__invoke();
-    }
-
-    private function getShowcase()
-    {
-        return $this->showcase->__invoke();
-    }
-
-    private function getPlaylistToPoint()
-    {
-        return $this->playlistToPoint->__invoke();
-    }
 
     public function addPointTvSchedule($id, $tvScheduleFrom, $tvScheduleTo)
     {

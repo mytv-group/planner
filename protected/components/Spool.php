@@ -2,54 +2,19 @@
 
 Yii::import('ext.EHttpClient.*');
 
-class Spool extends CApplicationComponent
+class Spool extends BaseComponent
 {
     public $file;
     public $playlistToPoint;
-    public $spoolPointsPath;
-    public $spoolAudioPath;
-    public $spoolVideoPath;
-    public $spoolImagesPath;
-    public $spoolOtherPath;
 
-    private function getFile()
+    private function getPath($type)
     {
-        return $this->file->__invoke();
-    }
-
-    private function getPlaylistToPoint()
-    {
-        return $this->playlistToPoint->__invoke();
-    }
-
-    private function getPointsPath()
-    {
-        return $this->spoolPointsPath;
-    }
-
-    private function getAudioPath()
-    {
-        return $this->spoolAudioPath;
-    }
-
-    private function getVideoPath()
-    {
-        return $this->spoolVideoPath;
-    }
-
-    private function getImagesPath()
-    {
-        return $this->spoolImagesPath;
-    }
-
-    private function getOtherPath()
-    {
-        return $this->spoolOtherPath;
+        return 'spool'. DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR;
     }
 
     public function removeSpoolPath($id)
     {
-        $pointDir = $this->getPointsPath() . $id;
+        $pointDir = $this->getPath('points') . $id;
         if (file_exists($pointDir)) {
             try {
                 $this->deleteDir($pointDir);
@@ -82,7 +47,7 @@ class Spool extends CApplicationComponent
     public function prepareFilesForSync($id)
     {
         $fileModel = $this->getFile();
-        $pointDir = $this->getPointsPath() . $id;
+        $pointDir = $this->getPath('points') . $id;
 
         //remove dir if exist
         if(file_exists($pointDir)) {
@@ -141,13 +106,13 @@ class Spool extends CApplicationComponent
 
     public function putUploadedFile($type, $uploadFilePath, $uploadFileName)
     {
-        $path = $this->getOtherPath();
+        $path = $this->getPath('other');
         if ($type == "audio") {
-          $path = $this->getAudioPath();
+          $path = $this->getPath('audio');
         } else if ($type == "video") {
-          $path = $this->getVideoPath();
+          $path = $this->getPath('video');
         }  else if ($type == "image") {
-          $path = $this->getImagesPath();
+          $path = $this->getPath('images');
         }
 
         $contentPath = $this->PrepareSpoolPath($path);
@@ -168,7 +133,7 @@ class Spool extends CApplicationComponent
 
     public function putScreenshot($pointId, $tmpPath, $name)
     {
-        $pointDir = $this->getPointsPath() . $pointId;
+        $pointDir = $this->getPath('points') . $pointId;
         $path = $this->prepareSpoolPath($pointDir) . DIRECTORY_SEPARATOR . $name;
 
         move_uploaded_file($tmpPath, $path);
@@ -178,7 +143,7 @@ class Spool extends CApplicationComponent
 
     public function removeScreenshots($pointId, $name = 'screenshot.png')
     {
-        $pointDir = $this->getPointsPath() . $pointId;
+        $pointDir = $this->getPath('points') . $pointId;
         $path = $this->prepareSpoolPath($pointDir) . DIRECTORY_SEPARATOR . $name;
 
         try {
@@ -192,7 +157,7 @@ class Spool extends CApplicationComponent
 
     public function getScreenshotUrl($pointId, $name = 'screenshot.png')
     {
-        $pointDir = $this->getPointsPath() . $pointId;
+        $pointDir = $this->getPath('points') . $pointId;
         $path = INDEX_PATH .'/'.$pointDir.'/'.$name;
 
         if (!file_exists ($path)) {

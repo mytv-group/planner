@@ -1,13 +1,8 @@
 <?php
 
-class PlaylistsRepository extends BaseRepository
+class PlaylistsRepository extends BaseComponent
 {
     public $user;
-
-    private function getUser()
-    {
-        return $this->user->__invoke();
-    }
 
     public function deletePlaylistFiles($playlistId)
     {

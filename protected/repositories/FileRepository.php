@@ -1,13 +1,8 @@
 <?php
 
-class FileRepository extends BaseRepository
+class FileRepository extends BaseComponent
 {
     public $fileToFolder;
-
-    private function getFileToFolder()
-    {
-        return $this->fileToFolder->__invoke();
-    }
 
     public function deleteFile($fileId, $user)
     {

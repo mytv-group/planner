@@ -1,6 +1,6 @@
 <?php
 
-class ContentManager extends CApplicationComponent
+class ContentManager extends BaseComponent
 {
     private $eol = YII_DEBUG ? '<br>' : PHP_EOL;
 

@@ -1,25 +1,10 @@
 <?php
 
-class Heap extends CApplicationComponent
+class Heap extends BaseComponent
 {
     public $file;
     public $folder;
     public $fileToFolder;
-
-    private function getFile()
-    {
-        return $this->file->__invoke();
-    }
-
-    private function getFolder()
-    {
-        return $this->folder->__invoke();
-    }
-
-    private function getFileToFolder()
-    {
-        return $this->fileToFolder->__invoke();
-    }
 
     public function getHeapContent($user)
     {

@@ -1,18 +1,9 @@
 <?php
 
-class FolderRepository extends BaseRepository
+class FolderRepository extends BaseComponent
 {
-    public $fileToFolder;
     public $heap;
-
-    private function getFileToFolder()
-    {
-        return $this->fileToFolder->__invoke();
-    }
-
-    private function getHeapComponent() {
-        return $this->heap->__invoke();
-    }
+    public $fileToFolder;
 
     public function getFolderContent($folderId, $user)
     {
@@ -58,7 +49,7 @@ class FolderRepository extends BaseRepository
 
     public function deleteFolder($folderId, $user)
     {
-        $heap = $this->getHeapComponent();
+        $heap = $this->getHeap();
 
         $content = $heap->getHeapContent($user->username);
         $tree = $heap->buildTree($content);

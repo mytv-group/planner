@@ -87,7 +87,11 @@ class PlaylistsController extends Controller
         if (isset($_POST['Playlists'])
             && ($_POST['Playlists']['type'] != 3)
         ) {
-            $model->attributes = $_POST['Playlists'];
+            $model->attributes = array_merge(
+                $_POST['Playlists'],
+                ['id_user' => Yii::app()->user->id]
+            );
+            
             if ($model->save()) {
                 $this->redirect(['update','id'=>$model->id]);
             }
@@ -96,7 +100,11 @@ class PlaylistsController extends Controller
         if (isset($_POST['Playlists'])
             && ($_POST['Playlists']['type'] == 3)
         ) {
-            $model->attributes = $_POST['Playlists'];
+            $model->attributes = array_merge(
+                $_POST['Playlists'],
+                ['id_user' => Yii::app()->user->id]
+            );
+
             $stream->attributes = [
                 'playlist_id' => 0, // stub because $model->id unexist until $model->save()
                 'url' => $_POST['Stream']['url'],

@@ -367,7 +367,7 @@ class PointsRepository extends BaseRepository
     public function getPointScreen($pointId, $pointIp)
     {
         //$url = 'http://DOMAIN_NAME/images/screenshot.jpg';
-        $url = 'http://'.$pointIp.'/screenshot.jpg';
+        $url = 'http://'.$pointIp.'/screenshot.jpg?pid='.$pointId;
         $appendPath = '/spool/points/'.$pointId;
         $contentPath = YiiBase::getPathOfAlias('webroot');
         $imgPath = $contentPath.$appendPath;

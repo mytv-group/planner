@@ -17,10 +17,7 @@ class m171003_225940_playlist_files_order extends CDbMigration
             echo PHP_EOL.PHP_EOL;
         }
 
-        if (isset($playlistsTable)
-          && isset($playlistsTable->columns['id_user'])
-          && isset($userTable)
-        ) {
+        if (isset($playlistsTable) && isset($userTable)) {
             try {
                 $this->execute('UPDATE `playlists`
                     JOIN `user` ON `playlists`.`author`= `user`.`username` COLLATE utf8_unicode_ci
@@ -46,15 +43,6 @@ class m171003_225940_playlist_files_order extends CDbMigration
             && isset($playlistsTable->columns['files'])
         ) {
             $this->dropColumn('playlists', 'files');
-            $ii++;
-            echo $ii;
-            echo PHP_EOL.PHP_EOL;
-        }
-
-        if (isset($playlistsTable)
-            && isset($playlistsTable->columns['author'])
-        ) {
-            $this->dropColumn('playlists', 'author');
             $ii++;
             echo $ii;
             echo PHP_EOL.PHP_EOL;

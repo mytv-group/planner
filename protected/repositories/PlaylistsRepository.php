@@ -56,9 +56,11 @@ class PlaylistsRepository extends BaseComponent
         $user = $this->getUser();
 
         $criteria=new CDbCriteria;
-        if ($user->isAdmin()) {
+
+        if (!$user->isAdmin()) {
             $criteria->compare('id_user', $user->id);
         }
+
         $expirationToExpression = new CDbExpression($expirationTo);
         $criteria->addCondition('`toDatetime` < '.$expirationToExpression);
         if ($expirationFrom !== null) {

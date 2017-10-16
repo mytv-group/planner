@@ -33,7 +33,7 @@ class FolderRepository extends BaseComponent
                 $file = $item->file;
                 $items[] = [
                     'id' => intval($file->id),
-                    'text' => substr($file->name, 13, strlen($file->name) - 13),
+                    'text' => $file->name,
                     'type' => 'file',
                     'mime' => $file->mime,
                     'link' => $file->link,

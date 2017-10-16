@@ -71,19 +71,6 @@ return [
         ],
         'depends' => ['jq'],
     ],
-    'fileuploader' => [
-        'pathFromRoot' => '/protected/extensions/packages/fileuploader/',
-        'js' => [
-            'vendor/jquery.ui.widget.js',
-            'jquery.fileupload.js',
-            'jquery.iframe-transport.js'
-        ],
-        'css' => [
-            'jquery.fileupload.bootstrap.css',
-            'jquery.fileupload.css'
-        ],
-        'depends' => ['jq', 'bootstrap'],
-    ],
     'bootstrap-switch' => [
         'pathFromRoot' => '/protected/extensions/packages/bootstrap-switch/',
         'js' => ['bootstrap-switch.min.js'],

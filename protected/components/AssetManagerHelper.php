@@ -84,23 +84,26 @@ class AssetManagerHelper extends BaseComponent
             $cssFile = $item['published'];
             $filePath = $this->getBasePath() . $cssFile;
 
-            $offset = 0;
-            $maxlen = 1000; //just 1000B
-            $allStr = '';
+            if ($handler = fopen($filePath, 'r+')) {
+                if (flock($handler, LOCK_SH)) {
+                    $str = file_get_contents($filePath);
 
-            while ($str = file_get_contents($filePath, false, null, $offset, $maxlen)) {
-                $allStr .= $str;
-                $offset += $maxlen;
-            }
+                    foreach ($publishedFiles as $file) {
+                        if (!$item['exists']) {
+                            $str = str_replace('../' . $file['origin'], $file['published'], $str);
+                            $str = str_replace($file['origin'], $file['published'], $str);
+                        }
+                    }
 
-            foreach ($publishedFiles as $file) {
-                if (!$item['exists']) {
-                    $allStr = str_replace('../' . $file['origin'], $file['published'], $allStr);
-                    $allStr = str_replace($file['origin'], $file['published'], $allStr);
+                    if (flock($handler, LOCK_EX)) {
+                        file_put_contents($filePath, $str);
+                    }
+
+                    flock($handler, LOCK_UN);
                 }
-            }
 
-            file_put_contents($filePath, $allStr);
+                fclose($handler);
+            }
         }
     }
 }

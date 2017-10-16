@@ -7,6 +7,11 @@ class Spool extends BaseComponent
     public $file;
     public $playlistToPoint;
 
+    public function getSpoolPath()
+    {
+        return INDEX_PATH . DIRECTORY_SEPARATOR . 'spool';
+    }
+
     private function getPath($type)
     {
         return 'spool'. DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR;
@@ -26,7 +31,7 @@ class Spool extends BaseComponent
         }
     }
 
-    private function deleteDir($dir)
+    public function deleteDir($dir)
     {
         if (is_dir($dir)) {
             $objects = scandir($dir);
@@ -83,14 +88,10 @@ class Spool extends BaseComponent
         }
     }
 
-    private function getSpoolPath($pathAppendix)
-    {
-        return $_SERVER["DOCUMENT_ROOT"] + $pathAppendix;
-    }
-
     private function prepareSpoolPath($pathAppendix)
     {
         $pathAppendix = explode(DIRECTORY_SEPARATOR, $pathAppendix);
+        $pathAppendix = array_filter($pathAppendix, function($value) { return $value !== ''; });
         $contentPath = rtrim($_SERVER["DOCUMENT_ROOT"], '/');
 
         foreach ($pathAppendix as $folder) {
@@ -104,7 +105,7 @@ class Spool extends BaseComponent
         return $contentPath;
     }
 
-    public function putUploadedFile($type, $uploadFilePath, $uploadFileName)
+    public function putUploadedFile($type, $uploadFilePath)
     {
         $path = $this->getPath('other');
         if ($type == "audio") {
@@ -115,9 +116,12 @@ class Spool extends BaseComponent
           $path = $this->getPath('images');
         }
 
+        $uploadFileName = basename($uploadFilePath);
         $contentPath = $this->PrepareSpoolPath($path);
+
         $uploadFileName = str_replace(" ", "", $uploadFileName);
         $uploadFileName = uniqid() . $this->CyrillicToTransLite($uploadFileName);
+
         try {
             rename($uploadFilePath, $contentPath . $uploadFileName);
         } catch(Exception $e) {
@@ -196,14 +200,19 @@ class Spool extends BaseComponent
 
         $translit = preg_replace('/[^\p{L}\p{N}\s\.]/u', '', $translit);
 
-        $cyr  = array('а','б','в','г','д','e','ж','з','и','й','к','л','м','н','о','п','р','с','т','у',
-                'ф','х','ц','ч','ш','щ','ъ','ь', 'ю','я','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У',
-                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ю','Я' );
+        $cyr  = array('а','б','в','г','д','e','ж','з','и','й','к','л','м','н',
+            'о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ь','ю','я',
+            'ы','ї','ё',
+            'А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О',
+            'П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь','Ю',
+            'Я','Ы','Ї','Ё');
 
-        $lat = array( 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u',
-                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y' ,'yu' ,'ya','A','B','V','G','D','E','Zh',
-                'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' );
+        $lat = array( 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n',
+            'o','p','r','s','t','u','f','h','ts','ch','sh','sht','a','y','yu','ya',
+            'y','yi','yo',
+            'A','B','V','G','D','E','Zh','Z','I','Y','K','L','M','N','O',
+            'P','R','S','T','U','F','H','Ts','Ch','Sh','Sht','A','Y','Yu','Ya',
+            'Y','YI','YO');
 
         $translit = str_replace($cyr, $lat, $translit);
 

@@ -10,7 +10,7 @@ class File extends CActiveRecord
     public function rules()
     {
         return [
-            ['name, duration, mime, path, link, visibility, id_user', 'required'],
+            ['name, duration, size, mime, path, link, visibility, id_user', 'required'],
             ['visibility, id_user', 'numerical', 'integerOnly'=>true],
             ['duration', 'length', 'max'=>20],
             ['date_created', 'default', 'value' => date('Y-m-d H:i:s')],

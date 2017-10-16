@@ -17,6 +17,8 @@ class BaseInternalWidget extends CWidget
                 Yii::app()->assets->register($file);
             }
         }
+
+        parent::init();
     }
 
     private function uncamelize($camel, $splitter = "_")

@@ -1,22 +1,24 @@
 <h1>Content Heap</h1>
 
-<div class="Options">
+<?php
+    $form = $this->beginWidget('CActiveForm', [
+        'id' => 'heap-form',
+        'enableAjaxValidation' => false,
+        'htmlOptions' => ['enctype' => 'multipart/form-data'],
+    ]);
+?>
 
-        <span class="btn btn-default fileinput-button" style="width:120px">
-        <span>Upload files</span>
-            <!-- The file input field used as target for the file upload widget -->
-            <input id="fileupload" type="file" name="files[]" multiple>
-        </span>
+<?php $this->widget('AjaxUploadWidget', [
+    'config' => [
+        'action' => Yii::app()->createUrl('heap/upload'),
+        'multiple' => true,
+        'allowedExtensions' => Yii::app()->params['fileUploadAllowedExtensions'],//array("jpg","jpeg","gif","exe","mov" and etc...
+        'sizeLimit' => Yii::app()->params['fileUploadMaxSize'],// maximum file size in bytes
+    ]
+]);
+?>
 
-        <!-- The global progress bar -->
-    <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-default"></div>
-    </div>
-    <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
-    <br>
-
-</div>
+<?php $this->endWidget(); ?>
 
 <div class='heap__tree-container'>
     <div id="tree" class="Tree">

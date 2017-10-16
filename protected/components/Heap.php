@@ -23,7 +23,7 @@ class Heap extends BaseComponent
             foreach ($files as $file) {
                 $d[] = [
                     'id' => intval($file->id),
-                    'text' => substr($file->name, 13, strlen($file->name) - 13),
+                    'text' => $file->name,
                     'type' => 'file',
                     'mime' => $file->mime,
                     'link' => $file->link,
@@ -43,7 +43,7 @@ class Heap extends BaseComponent
             $file = $item->file;
             $d[] = [
                 'id' => intval($file->id),
-                'text' => substr($file->name, 13, strlen($file->name) - 13),
+                'text' => $file->name,
                 'type' => 'file',
                 'mime' => $file->mime,
                 'link' => $file->link,

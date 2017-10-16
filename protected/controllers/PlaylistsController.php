@@ -1,8 +1,5 @@
 <?php
 
-Yii::import('application.vendor.*');
-require_once('getid3/getid3.php');
-
 class PlaylistsController extends Controller
 {
     /**
@@ -91,7 +88,7 @@ class PlaylistsController extends Controller
                 $_POST['Playlists'],
                 ['id_user' => Yii::app()->user->id]
             );
-            
+
             if ($model->save()) {
                 $this->redirect(['update','id'=>$model->id]);
             }
@@ -453,7 +450,6 @@ class PlaylistsController extends Controller
 
         $assets->registerPackage('bootstrap-switch');
         $assets->registerPackage('datetimepicker');
-        $assets->registerPackage('fileuploader');
         $assets->registerPackage('j-player');
         $assets->registerPackage('js-tree');
 

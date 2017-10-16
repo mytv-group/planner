@@ -8,15 +8,17 @@ return [
         'application.models.*',
         'application.components.*',
         'application.repositories.*',
-        'application.modules.rbac.controllers.RbacController',
         'application.widgets.*',
-        'application.widgets-internal.*',
+        'application.widgets-internal.ajax-upload.*',
         'application.widgets-internal.tv-schedule.*',
         'application.widgets-internal.point-channels.*',
         'application.widgets-internal.screen-selector.*',
         'application.widgets-internal.choose-widget-dialog.*',
         'application.widgets-internal.choose-playlist-dialog.*',
     ],
+    'aliases' => array(
+        'getid3' => 'ext.vendor.james-heinrich.getid3.getid3'
+    ),
     'theme'=>'basic',
     'modules'=>[
         'gii'=>[
@@ -36,6 +38,11 @@ return [
     'params'=>[
         'adminEmail'=>'webmaster@example.com',
         'weatherApiKey'=>'1be0ed3547cbc0a415058b881eac9494',
-        'interactionUrl' => 'http://127.0.0.1:1337'
+        'interactionUrl' => 'http://127.0.0.1:1337',
+        'fileUploadMaxSize' => 4 * 1024 * 1024 * 1024,
+        'fileUploadAllowedExtensions' => [
+            'gif', 'jpg', 'jpeg', 'png', 'webm', 'ogg',
+            'wav', 'avi', 'mov', 'mkv', 'mp3', 'mp4', 'swf'
+        ]
     ],
 ];

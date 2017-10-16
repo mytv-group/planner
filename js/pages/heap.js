@@ -1,6 +1,5 @@
 $(document).ready(function(e){
-    var url = document.location.origin + '/uploader/',
-        folderSrc = document.location.origin + '/heap/getFolderContent/',
+    var folderSrc = document.location.origin + '/heap/getFolderContent/',
         viewSrc = document.location.origin + '/heap/view/',
         createFolderSrc = document.location.origin + '/heap/createNewFolder/',
         moveFileSrc = document.location.origin + '/heap/upload/',
@@ -8,97 +7,6 @@ $(document).ready(function(e){
         renameNodeSrc = document.location.origin + '/heap/rename/',
         moveNodeNodeSrc = document.location.origin + '/heap/move/',
         selectedjsTreeNode = 0;
-
-    var dfdArr = [];
-    var filesCount = 0;
-
-    $("#fileupload").fileupload({
-        url: url,
-        dataType: 'json',
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png|webm|ogg|wav|avi|mov|mkv|mp3|mp4|swf)$/i,
-        maxFileSize: 4096*1000*1000,
-        dropZone: $('#dropzoneHeap'),
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                var pV = {
-                    data:{
-                        file: file,
-                        folderId: selectedjsTreeNode
-                    }
-                };
-
-                dfdArr.push($.ajax({
-                  url: moveFileSrc,
-                  type: "POST",
-                  data: pV,
-                  dataType: "json",
-                }).done(function(e){
-                    if(e['status'] == 'ok'){
-                        $('<p/>').text(file.name).appendTo('#files');
-                    } else if(e['status'] == 'err') {
-                        $('<p/>').text(e["error"]).css("color", "darkred").appendTo('#files');
-                        $('#progress .progress-bar').css(
-                            'width',
-                            0 + '%'
-                        );
-                    }
-                }).fail(function(e){
-                    console.log(e);
-                    $('<p/>').text(e["responseText"]).css("color", "darkred").appendTo('#files');
-                    $('#progress .progress-bar').css(
-                        'width',
-                        0 + '%'
-                    );
-                }));
-            });
-
-            if (dfdArr.length === data.originalFiles.length) {
-                $.when.apply($, dfdArr).then(function() {
-                    location.reload();
-                });
-            }
-        },
-        progressall: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#progress .progress-bar').css(
-                'width',
-                progress + '%'
-            );
-        },
-        stop: function (e, data) {
-            dfdArr = [];
-            filesCount = 0;
-        }
-    }).prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-    $(document).on('dragover', function (e) {
-        var dropZone = $('#dropzoneHeap'),
-            timeout = window.dropZoneTimeout;
-        if (!timeout) {
-            dropZone.addClass('in');
-        } else {
-            clearTimeout(timeout);
-        }
-        var found = false,
-            node = e.target;
-        do {
-            if (node === dropZone[0]) {
-                found = true;
-                break;
-            }
-            node = node.parentNode;
-        } while (node != null);
-        if (found) {
-            dropZone.addClass('hover');
-        } else {
-            dropZone.removeClass('hover');
-        }
-        window.dropZoneTimeout = setTimeout(function () {
-            window.dropZoneTimeout = null;
-            dropZone.removeClass('in hover');
-        }, 100);
-    });
 
     /*=======================================================================
      * private tree

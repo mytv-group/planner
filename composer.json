@@ -1,0 +1,24 @@
+{
+    "name": "rtv/planner",
+    "description": "Media content management system",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AlexanderKosianchuk",
+            "email": "dedanaan00@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-0": {
+            "config": "./"
+        }
+    },
+    "config": {
+        "vendor-dir": "protected/extensions/vendor"
+    },
+    "require": {
+        "james-heinrich/getid3": "^1.9"
+    }
+}

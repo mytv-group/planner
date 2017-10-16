@@ -1,8 +1,5 @@
 <?php
 
-Yii::import('application.vendor.*');
-require_once('getid3/getid3.php');
-
 class HeapController extends Controller
 {
 
@@ -42,11 +39,11 @@ class HeapController extends Controller
 
     public function actionIndex()
     {
-        $this->render("index");
+        $this->render('index');
     }
 
-   public function actionGetFolderContent()
-   {
+    public function actionGetFolderContent()
+    {
         if (!isset($_GET['id']) || !isset($_GET['type'])) {
             http_response_code(400);
             header("Status: 400 Bad Request");
@@ -270,116 +267,143 @@ class HeapController extends Controller
         echo json_encode(['status' => 'ok']);
     }
 
-    /**
-     * Proccessing uploaded file
-     */
     public function actionUpload()
     {
-        $answ = [];
-        $answ['status'] = 'err';
+        var_dump(Yii::app()->request->getParam('p')); exit;
+        $uid = uniqid();
+        $tempFolder = Yii::app()->spool->getSpoolPath()
+            . DIRECTORY_SEPARATOR
+            . $uid;
+        $chunksFolder = $tempFolder
+            . DIRECTORY_SEPARATOR
+            . 'chunks';
 
-        if (!isset($_POST['data'])) {
-            echo json_encode($answ);
-            Yii::app()->end();
-        }
+        mkdir($tempFolder, 0777, TRUE);
+        mkdir($tempFolder.DIRECTORY_SEPARATOR.'chunks', 0777, TRUE);
 
-        $folderId = intval($_POST['data']['folderId']) * -1;
-        $uploadInfo = $_POST['data']['file'];
-        $uploadFileUrl = $uploadInfo['url'];
-        $uploadFileName = $uploadInfo['name'];
-        $siteUrl = $this->CurrUrl();
-        $siteDir = $_SERVER["DOCUMENT_ROOT"];
-        $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
+        Yii::import("ext.EAjaxUpload.qqFileUploader");
 
-        $mime = urldecode($uploadInfo['type']);
-        $mimeArr = explode("/", $mime);
+        $uploader = new qqFileUploader(
+            Yii::app()->params['fileUploadAllowedExtensions'],
+            Yii::app()->params['fileUploadMaxSize'] //maximum file size in bytes
+        );
+
+        $uploader->chunksFolder = $chunksFolder;
+        $result = $uploader->handleUpload($tempFolder);
+
+        Yii::app()->spool->deleteDir($tempFolder);
+
+        /*extention works in that way - appends chunk folder name to file name*/
+        $uploadFilePath = Yii::app()->spool->getSpoolPath()
+            . DIRECTORY_SEPARATOR
+            .$uid . $result['filename'];
+
+        Yii::import('getid3.getid3', true);
+        $getID3 = new getID3();
+
+        $fileInfo = $getID3->analyze($uploadFilePath);
+        unset($getID3);
+
+        $mimeArr = explode("/", $fileInfo['mime_type']);
         $type = $mimeArr[0];
 
-        $userId = Yii::app()->user->id;
-        $duration = 0;
+        $filesize = filesize($uploadFilePath);
 
-        $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
-
-        if (($type === "audio") || ($type == "video")) {
-            $getID3 = new getID3;
-            $fileInfo = $getID3->analyze($movedFileInfo['path']);
-            unset($getID3);
-
-            $duration = $fileInfo['playtime_seconds'];
-        } else if($type == "image") {
-            $duration = 10;
-        }
+        $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath);
 
         $fileInstance = new File();
         $fileInstance->attributes = [
-          'name' => $movedFileInfo['name'],
-          'duration' => $duration,
-          'mime' => $mime,
+          'name' => $result['filename'],
+          'duration' => $fileInfo['playtime_seconds'],
+          'mime' => $fileInfo['mime_type'],
+          'size' => $filesize,
           'path' => $movedFileInfo['path'],
           'link' => $movedFileInfo['link'],
           'visibility' => 1,
-          'id_user' => $userId
+          'id_user' => Yii::app()->user->id
         ];
         $fileInstance->save();
 
         $fileToFolderInstance = new FileToFolder;
         $fileToFolderInstance->attributes = [
             'id_file' => $fileInstance->id,
-            'id_folder' => $folderId,
+            'id_folder' => 0,
             'id_author' => Yii::app()->user->username
         ];
         $fileToFolderInstance->save();
 
-        $answ['status'] = 'ok';
-
-        echo json_encode($answ);
+        header("Content-Type: text/plain");
+        $result = htmlspecialchars(json_encode($result), ENT_NOQUOTES);
+        echo $result;
         Yii::app()->end();
     }
 
-    private function CurrUrl()
-    {
-        return sprintf(
-                "%s://%s",
-                isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-                $_SERVER['SERVER_NAME']
-        );
-    }
-
-    private function CyrillicToTransLite($textcyr)
-    {
-        iconv("utf-8", "ISO-8859-1//TRANSLIT", $text);
-
-        $cyr  = ['Р°','Р±','РІ','Рі','Рґ','e','Рµ','С”','Р¶','Р·','Рё','С–','С—','Р№','Рє','Р»','Рј','РЅ','Рѕ','Рї','СЂ','СЃ','С‚','Сѓ',
-                'С„','С…','С†','С‡','С€','С‰','СЉ','СЊ', 'СЋ','СЏ','Рђ','Р‘','Р’','Р“','Р”','Р•','Р–','Р—','Р�','Р™','Рљ','Р›','Рњ','Рќ','Рћ','Рџ','Р ','РЎ','Рў','РЈ',
-                'Р¤','РҐ','Р¦','Р§','РЁ','Р©','РЄ','Р¬', 'Р®','РЇ' ];
-        $lat = [ 'a','b','v','g','d','e','e','e','zh','z','i','i','i','y','k','l','m','n','o','p','r','s','t','u',
-                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y' ,'yu' ,'ya','A','B','V','G','D','E','Zh',
-                'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y' ,'Yu' ,'Ya' ];
-        $translit = str_replace($cyr, $lat, $textcyr);
-
-        $unwanted_array = ['Е '=>'S', 'ЕЎ'=>'s', 'ЕЅ'=>'Z', 'Еѕ'=>'z', 'ГЂ'=>'A', 'ГЃ'=>'A', 'Г‚'=>'A', 'Гѓ'=>'A', 'Г„'=>'A', 'Г…'=>'A', 'Г†'=>'A', 'Г‡'=>'C', 'Г€'=>'E', 'Г‰'=>'E',
-                'ГЉ'=>'E', 'Г‹'=>'E', 'ГЊ'=>'I', 'ГЌ'=>'I', 'ГЋ'=>'I', 'ГЏ'=>'I', 'Г‘'=>'N', 'Г’'=>'O', 'Г“'=>'O', 'Г”'=>'O', 'Г•'=>'O', 'Г–'=>'O', 'Г�'=>'O', 'Г™'=>'U',
-                'Гљ'=>'U', 'Г›'=>'U', 'Гњ'=>'U', 'Гќ'=>'Y', 'Гћ'=>'B', 'Гџ'=>'Ss', 'Г '=>'a', 'ГЎ'=>'a', 'Гў'=>'a', 'ГЈ'=>'a', 'Г¤'=>'a', 'ГҐ'=>'a', 'Г¦'=>'a', 'Г§'=>'c',
-                'ГЁ'=>'e', 'Г©'=>'e', 'ГЄ'=>'e', 'Г«'=>'e', 'Г¬'=>'i', 'Г­'=>'i', 'Г®'=>'i', 'ГЇ'=>'i', 'Г°'=>'o', 'Г±'=>'n', 'ГІ'=>'o', 'Гі'=>'o', 'Гґ'=>'o', 'Гµ'=>'o',
-                'Г¶'=>'o', 'Гё'=>'o', 'Г№'=>'u', 'Гє'=>'u', 'Г»'=>'u', 'ГЅ'=>'y', 'ГЅ'=>'y', 'Гѕ'=>'b', 'Гї'=>'y' ];
-        $translit = strtr($translit, $unwanted_array);
-
-        $translit = preg_replace('/[^\p{L}\p{N}\s\.]/u', '', $translit);
-
-        $cyr  = ['а','б','в','г','д','e','ж','з','и','й','к','л','м','н','о','п','р','с','т','у',
-                'ф','х','ц','ч','ш','щ','ъ','ь', 'ы', 'ю','я','А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У',
-                'Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ь', 'Ы', 'Ю','Я' ];
-
-        $lat = [ 'a','b','v','g','d','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u',
-                'f' ,'h' ,'ts' ,'ch','sh' ,'sht' ,'a' ,'y', 'u', 'yu' ,'ya','A','B','V','G','D','E','Zh',
-                'Z','I','Y','K','L','M','N','O','P','R','S','T','U',
-                'F' ,'H' ,'Ts' ,'Ch','Sh' ,'Sht' ,'A' ,'Y', 'U', 'Yu' ,'Ya' ];
-
-        $translit = str_replace($cyr, $lat, $translit);
-
-        return $translit;
-    }
+    //
+    // /**
+    //  * Proccessing uploaded file
+    //  */
+    // public function actionUpload()
+    // {
+    //     $answ = [];
+    //     $answ['status'] = 'err';
+    //
+    //     if (!isset($_POST['data'])) {
+    //         echo json_encode($answ);
+    //         Yii::app()->end();
+    //     }
+    //
+    //     $folderId = intval($_POST['data']['folderId']) * -1;
+    //     $uploadInfo = $_POST['data']['file'];
+    //     $uploadFileUrl = $uploadInfo['url'];
+    //     $uploadFileName = $uploadInfo['name'];
+    //     $siteUrl = $this->CurrUrl();
+    //     $siteDir = $_SERVER["DOCUMENT_ROOT"];
+    //     $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
+    //
+    //     $mime = urldecode($uploadInfo['type']);
+    //     $mimeArr = explode("/", $mime);
+    //     $type = $mimeArr[0];
+    //
+    //     $userId = Yii::app()->user->id;
+    //     $duration = 0;
+    //
+    //     $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
+    //
+    //     if (($type === "audio") || ($type == "video")) {
+    //         $getID3 = new getID3;
+    //         $fileInfo = $getID3->analyze($movedFileInfo['path']);
+    //         unset($getID3);
+    //
+    //         $duration = $fileInfo['playtime_seconds'];
+    //     } else if($type == "image") {
+    //         $duration = 10;
+    //     }
+    //
+    //     $fileInstance = new File();
+    //     $fileInstance->attributes = [
+    //       'name' => $movedFileInfo['name'],
+    //       'duration' => $duration,
+    //       'mime' => $mime,
+    //       'path' => $movedFileInfo['path'],
+    //       'link' => $movedFileInfo['link'],
+    //       'visibility' => 1,
+    //       'id_user' => $userId
+    //     ];
+    //     $fileInstance->save();
+    //
+    //     $fileToFolderInstance = new FileToFolder;
+    //     $fileToFolderInstance->attributes = [
+    //         'id_file' => $fileInstance->id,
+    //         'id_folder' => $folderId,
+    //         'id_author' => Yii::app()->user->username
+    //     ];
+    //     $fileToFolderInstance->save();
+    //
+    //     $answ['status'] = 'ok';
+    //
+    //     echo json_encode($answ);
+    //     Yii::app()->end();
+    // }
 
     public function beforeAction($action)
     {
@@ -389,7 +413,6 @@ class HeapController extends Controller
 
         Yii::app()->assets->registerPackage('js-tree');
         Yii::app()->assets->registerPackage('j-player');
-        Yii::app()->assets->registerPackage('fileuploader');
 
         return true;
     }

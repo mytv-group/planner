@@ -47,6 +47,18 @@ class m171003_225940_playlist_files_order extends CDbMigration
             echo $ii;
             echo PHP_EOL.PHP_EOL;
         }
+
+        if (isset($playlistsTable)
+            && isset($playlistsTable->columns['author'])
+        ) {
+            $this->execute('ALTER TABLE `playlists` CHANGE `author` '
+                . ' `author` VARCHAR(255) CHARACTER SET utf8 '
+                . 'COLLATE utf8_general_ci NULL DEFAULT NULL');
+            $ii++;
+            echo $ii;
+            echo PHP_EOL.PHP_EOL;
+        }
+
     }
 
     public function down()

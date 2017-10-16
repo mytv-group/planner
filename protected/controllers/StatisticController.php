@@ -80,7 +80,7 @@ class StatisticController extends Controller
                 $output .= ''.',';
             }
 
-            $output .= substr($model->file_name, 13, strlen($model->file_name)).',';
+            $output .= $model->file_name.',';
 
             if (isset($model->point->name)) {
                 $output .= $model->point->name.',';

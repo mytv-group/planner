@@ -8,15 +8,23 @@
     ]);
 ?>
 
-<?php $this->widget('AjaxUploadWidget', [
-    'config' => [
-        'action' => Yii::app()->createUrl('heap/upload'),
-        'multiple' => true,
-        'allowedExtensions' => Yii::app()->params['fileUploadAllowedExtensions'],//array("jpg","jpeg","gif","exe","mov" and etc...
-        'sizeLimit' => Yii::app()->params['fileUploadMaxSize'],// maximum file size in bytes
-    ]
-]);
-?>
+    <div class='row-file-upload'>
+        <div class='col-ajax-upload-widget'>
+            <?php $this->widget('AjaxUploadWidget', [
+                'config' => [
+                    'action' => Yii::app()->createUrl('heap/upload'),
+                    'multiple' => true,
+                    'allowedExtensions' => Yii::app()->params['fileUploadAllowedExtensions'],//array("jpg","jpeg","gif","exe","mov" and etc...
+                    'sizeLimit' => Yii::app()->params['fileUploadMaxSize'],// maximum file size in bytes
+                ]
+            ]);
+            ?>
+        </div>
+
+        <div class='col-hashtags-input-widget'>
+            <?php $this->widget('HashtagsInputWidget', []); ?>
+        </div>
+    </div>
 
 <?php $this->endWidget(); ?>
 

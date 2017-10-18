@@ -4,18 +4,14 @@ return [
     'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
     'name'=>'RTV Web-server 2.0',
     'preload'=>['log'],
-    'import'=>[
-        'application.models.*',
-        'application.components.*',
-        'application.repositories.*',
-        'application.widgets.*',
-        'application.widgets-internal.ajax-upload.*',
-        'application.widgets-internal.tv-schedule.*',
-        'application.widgets-internal.point-channels.*',
-        'application.widgets-internal.screen-selector.*',
-        'application.widgets-internal.choose-widget-dialog.*',
-        'application.widgets-internal.choose-playlist-dialog.*',
-    ],
+    'import'=>array_merge([
+            'application.models.*',
+            'application.components.*',
+            'application.repositories.*',
+            'application.widgets.*'
+        ],
+        include('import-widgets.php')
+    ),
     'aliases' => array(
         'getid3' => 'ext.vendor.james-heinrich.getid3.getid3'
     ),

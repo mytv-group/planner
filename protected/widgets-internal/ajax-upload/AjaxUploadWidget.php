@@ -88,15 +88,15 @@ class AjaxUploadWidget extends EAjaxUpload {
             'debug' => false,
             'element' => 'js:document.getElementById("'.$this->id.'")',
             'minSizeLimit' => 1 * 1024,// minimum file size in bytes
-            'onComplete' => "js:onComplete",
+            'onComplete' => 'js:onComplete',
             'messages' => [
-                'typeError' => "{file} has invalid extension. Only {extensions} are allowed.",
-                'sizeError' => "{file} is too large, maximum file size is {sizeLimit}.",
-                'minSizeError' => "{file} is too small, minimum file size is {minSizeLimit}.",
-                'emptyError' => "{file} is empty, please select files again without it.",
-                'onLeave' => "The files are being uploaded, if you leave now the upload will be cancelled."
+                'typeError' => '{file} has invalid extension. Only {extensions} are allowed.',
+                'sizeError' => '{file} is too large, maximum file size is {sizeLimit}.',
+                'minSizeError' => '{file} is too small, minimum file size is {minSizeLimit}.',
+                'emptyError' => '{file} is empty, please select files again without it.',
+                'onLeave' => 'The files are being uploaded, if you leave now the upload will be cancelled.'
             ],
-            'showMessage' => "js:function(message){ alert(message); }"
+            'showMessage' => 'js:function(message){ alert(message); }'
         ];
 
         $config = array_merge($config, $this->config);

@@ -7,7 +7,11 @@ class DatabaseCommand extends CConsoleCommand
             ->createCommand('EXPLAIN SELECT * FROM `statistic` WHERE 1')
             ->queryAll();
 
-        $partitions = $list[0]['partitions'];
+        $partitions = null;
+
+        if (isset($list[0]['partitions'])) {
+            $partitions = $list[0]['partitions'];
+        }
 
         $existPartitions = [];
 

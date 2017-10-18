@@ -269,7 +269,13 @@ class HeapController extends Controller
 
     public function actionUpload()
     {
-        var_dump(Yii::app()->request->getParam('p')); exit;
+        $tags = Yii::app()->request->getParam('tags') ?? '';
+        $folderId = Yii::app()->request->getParam('folderId') ?? 0;
+
+        $tags = preg_replace("/[^ \w]+/", "", $tags);
+        $tags = explode(' ', $tags);
+        $tags = array_filter($tags, function($value) { return $value !== ''; });
+
         $uid = uniqid();
         $tempFolder = Yii::app()->spool->getSpoolPath()
             . DIRECTORY_SEPARATOR
@@ -327,83 +333,38 @@ class HeapController extends Controller
         $fileToFolderInstance = new FileToFolder;
         $fileToFolderInstance->attributes = [
             'id_file' => $fileInstance->id,
-            'id_folder' => 0,
+            'id_folder' => $folderId,
             'id_author' => Yii::app()->user->username
         ];
         $fileToFolderInstance->save();
+
+        foreach ($tags as $tagName) {
+            $tag = Tag::model()->findByAttributes([
+                'name' => $tagName
+            ]);
+
+            if (!isset($tag)) {
+                $tag = new Tag;
+                $tag->attributes = [
+                    'name' => $tagName,
+                    'id_user' => Yii::app()->user->id
+                ];
+                $tag->save();
+            }
+
+            $tagToFile = new TagToFile;
+            $tagToFile->attributes = [
+                'id_tag' => $tag->id,
+                'id_file' => $fileInstance->id,
+            ];
+            $tagToFile->save();
+        }
 
         header("Content-Type: text/plain");
         $result = htmlspecialchars(json_encode($result), ENT_NOQUOTES);
         echo $result;
         Yii::app()->end();
     }
-
-    //
-    // /**
-    //  * Proccessing uploaded file
-    //  */
-    // public function actionUpload()
-    // {
-    //     $answ = [];
-    //     $answ['status'] = 'err';
-    //
-    //     if (!isset($_POST['data'])) {
-    //         echo json_encode($answ);
-    //         Yii::app()->end();
-    //     }
-    //
-    //     $folderId = intval($_POST['data']['folderId']) * -1;
-    //     $uploadInfo = $_POST['data']['file'];
-    //     $uploadFileUrl = $uploadInfo['url'];
-    //     $uploadFileName = $uploadInfo['name'];
-    //     $siteUrl = $this->CurrUrl();
-    //     $siteDir = $_SERVER["DOCUMENT_ROOT"];
-    //     $uploadFilePath = urldecode(str_replace($siteUrl, $siteDir, $uploadFileUrl));
-    //
-    //     $mime = urldecode($uploadInfo['type']);
-    //     $mimeArr = explode("/", $mime);
-    //     $type = $mimeArr[0];
-    //
-    //     $userId = Yii::app()->user->id;
-    //     $duration = 0;
-    //
-    //     $movedFileInfo = Yii::app()->spool->putUploadedFile($type, $uploadFilePath, $uploadFileName);
-    //
-    //     if (($type === "audio") || ($type == "video")) {
-    //         $getID3 = new getID3;
-    //         $fileInfo = $getID3->analyze($movedFileInfo['path']);
-    //         unset($getID3);
-    //
-    //         $duration = $fileInfo['playtime_seconds'];
-    //     } else if($type == "image") {
-    //         $duration = 10;
-    //     }
-    //
-    //     $fileInstance = new File();
-    //     $fileInstance->attributes = [
-    //       'name' => $movedFileInfo['name'],
-    //       'duration' => $duration,
-    //       'mime' => $mime,
-    //       'path' => $movedFileInfo['path'],
-    //       'link' => $movedFileInfo['link'],
-    //       'visibility' => 1,
-    //       'id_user' => $userId
-    //     ];
-    //     $fileInstance->save();
-    //
-    //     $fileToFolderInstance = new FileToFolder;
-    //     $fileToFolderInstance->attributes = [
-    //         'id_file' => $fileInstance->id,
-    //         'id_folder' => $folderId,
-    //         'id_author' => Yii::app()->user->username
-    //     ];
-    //     $fileToFolderInstance->save();
-    //
-    //     $answ['status'] = 'ok';
-    //
-    //     echo json_encode($answ);
-    //     Yii::app()->end();
-    // }
 
     public function beforeAction($action)
     {

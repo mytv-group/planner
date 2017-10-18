@@ -1,7 +1,7 @@
 <?
 class ChooseWidgetDialogWidget extends BaseInternalWidget
 {
-    public $widgets= null;
+    public $widgets = null;
 
     public function run()
     {

@@ -13,9 +13,13 @@ $(document).ready(function(e){
      * */
 
     var treePrivate = $('#treePrivate').on("select_node.jstree", function(e, data){
-        if(data.node.type == 'file'){
+        if (data.node.type == 'file') {
             selectedjsTreeNode = data.node.parent;
         } else {
+            $(document).trigger('media-tree:change-folder', {
+                folderId: data.node.id
+            });
+
             selectedjsTreeNode = data.node.id;
         }
         RefreshDropZone(selectedjsTreeNode, 'treePrivate');
@@ -217,7 +221,7 @@ $(document).ready(function(e){
      * general tree
      * */
 
-    var tree = $('#treeGeneral').on("select_node.jstree", function(e, data){
+    var tree = $('#treeGeneral').on("select_node.jstree", function(e, data) {
         var treeGeneralSelectedjsTreeNode = "";
         if(data.node.type == 'file'){
             treeGeneralSelectedjsTreeNode = data.node.parent;
@@ -307,8 +311,6 @@ $(document).ready(function(e){
                             type = mimeArr[0];
 
                         mime = mimeArr[1];
-
-                        console.log();
 
                         if(type == 'video'){
                             dialogVideoPreview.data('link', link);

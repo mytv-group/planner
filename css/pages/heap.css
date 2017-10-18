@@ -1,11 +1,30 @@
-.heap__tree-container {
-    display: flex;
+.row-file-upload {
+    position: relative;
+    padding: 5px 0px;
+    min-height: 90px;
 }
 
-#progress{
-    width:465px;
-    margin-top:15px;
-    margin-bottom:15px;
+.col-ajax-upload-widget {
+    padding: 31px 5px 0px 0px;
+}
+
+.col-hashtags-input-widget {
+    position: absolute;
+    top: 0px;
+    left: 130px;
+    padding: 15px;
+    width: calc(100% - 130px);
+}
+
+.row-file-upload .qq-upload-button {
+    border-radius: 3px;
+    line-height: 19px;
+}
+
+
+/*TODO refactor styles*/
+.heap__tree-container {
+    display: flex;
 }
 
 .Options {

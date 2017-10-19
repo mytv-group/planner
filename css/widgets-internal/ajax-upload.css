@@ -1,0 +1,8 @@
+.qq-upload-button {
+    border-radius: 3px;
+    line-height: 20px;
+}
+
+.qq-upload-drop-area {
+    display: none !important;
+}

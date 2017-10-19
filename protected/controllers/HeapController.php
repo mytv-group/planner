@@ -2,7 +2,6 @@
 
 class HeapController extends Controller
 {
-
     public $layout='//layouts/column1';
 
     public function filters()
@@ -104,7 +103,10 @@ class HeapController extends Controller
 
     public function actionView()
     {
-        if (!isset($_POST['id']) || !isset($_POST['type'])) {
+        $folderId = Yii::app()->request->getParam('id');
+        $type = Yii::app()->request->getParam('type');
+
+        if (($folderId === null) || ($type === null)) {
             http_response_code(400);
             header("Status: 400 Bad Request");
             $answ = "Not all nessesary params sent. $_POST: ".json_encode($_GET) . ".";
@@ -112,12 +114,11 @@ class HeapController extends Controller
             exit;
         }
 
-        $folderId = intval($_POST['id']);
-        $type = $_POST['type'];
-
-        if ($folderId == '#') {
+        if ($folderId === '#') {
             $folderId = 0;
         }
+
+        $folderId = intval($folderId);
 
         $author = 'admin';
         if ($type == 'treePrivate') {
@@ -372,6 +373,7 @@ class HeapController extends Controller
             return false;
         }
 
+        Yii::app()->assets->registerPackage('lodash');
         Yii::app()->assets->registerPackage('js-tree');
         Yii::app()->assets->registerPackage('j-player');
 

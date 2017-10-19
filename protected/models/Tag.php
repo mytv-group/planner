@@ -44,7 +44,7 @@ class Tag extends CActiveRecord
     {
         return [
             'user' => [self::BELONGS_TO, 'User', 'id_user'],
-            'tagToFiles' => [self::HAS_MANY, 'TagToFile', 'id_tag'],
+            'tagsToFiles' => [self::HAS_MANY, 'TagToFile', 'id_tag'],
         ];
     }
 

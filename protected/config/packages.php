@@ -27,6 +27,11 @@ return [
         ],
         'depends' => ['jq'],
     ],
+    'lodash' => [
+        'pathFromRoot' => '/protected/extensions/packages/lodash/',
+        'js' => ['lodash.min.js'],
+        'depends' => ['jq'],
+    ],
     'bootstrap' => [
         'pathFromRoot' => '/protected/extensions/packages/bootstrap/',
         'js' => ['bootstrap.min.js'],

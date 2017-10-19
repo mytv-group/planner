@@ -28,16 +28,16 @@
 
 <?php $this->endWidget(); ?>
 
-<div class='heap__tree-container'>
-    <div id="tree" class="Tree">
-        <div id="treeGeneral" class="SubTree">
+<div class='heap-tree-container'>
+    <div id="tree" class="tree">
+        <div id="treeGeneral" class="sub-tree">
         </div>
 
-        <div id="treePrivate" class="SubTree">
+        <div id="treePrivate" class="sub-tree">
         </div>
     </div>
 
-    <div id='dropzoneHeap' class="Heap">
+    <div id='dropzoneHeap' class="heap">
     </div>
 </div>
 
@@ -49,3 +49,6 @@
 
 <div id="dialogImagePreview" title="Dialog image preview" style="display:none">
 <p></p></div>
+
+<?php Yii::app()->templateEngine->put('file-list-item'); ?>
+<?php Yii::app()->templateEngine->put('folder-list-item'); ?>

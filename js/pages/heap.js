@@ -1,6 +1,9 @@
-$(document).ready(function(e){
+/*jslint browser: true*/
+/*global $, _, qq*/
+
+$(document).ready(function (e) {
+    'use strict';
     var folderSrc = document.location.origin + '/heap/getFolderContent/',
-        viewSrc = document.location.origin + '/heap/view/',
         createFolderSrc = document.location.origin + '/heap/createNewFolder/',
         moveFileSrc = document.location.origin + '/heap/upload/',
         deleteNodeSrc = document.location.origin + '/heap/delete/',
@@ -264,7 +267,7 @@ $(document).ready(function(e){
         };
 
         $.ajax({
-          url: viewSrc,
+          url: '/heap/view/',
           type: "POST",
           data: pV,
           dataType: "json",
@@ -278,22 +281,32 @@ $(document).ready(function(e){
                     dropzoneHeap.append("<div style='margin:10px'>No content<div>");
                 } else {
                     for(var i = 0; i < data.length; i++){
-                        if(data[i]['type'] == 'folder'){
-                            dropzoneHeap.append("<div class='HeapItemFolder'" +
-                                    "data-path='"+data[i]['id']+"' " +
-                                    "data-type='"+data[i]['type']+"' >" + (i+1) + '. ' +
-                                    data[i]['text'] + "<div>");
-                        } else if(data[i]['type'] == 'file'){
-                            dropzoneHeap.append("<div class='HeapItem'" +
-                                    "data-mime='"+data[i]['mime']+"' " +
-                                    "data-link='"+data[i]['link']+"' " +
-                                    "data-type='"+data[i]['type']+"' >" + (i+1) + '. ' +
-                                    data[i]['text'] + "<div>");
+                        if (data[i]['type'] == 'folder') {
+                            var t = _.template(document.getElementById('heap__folder-list-item').innerHTML);
+                            dropzoneHeap.append(t({
+                                index: (i+1),
+                                path: data[i]['id'],
+                                type: data[i]['type'],
+                                text: data[i]['text'],
+                            }));
+                        } else if(data[i]['type'] === 'file') {
+                             var t = _.template(document.getElementById('heap__file-list-item').innerHTML);
+                             dropzoneHeap.append(t({
+                                 index: (i+1),
+                                 mime: data[i]['mime'],
+                                 link: data[i]['link'],
+                                 type: data[i]['type'],
+                                 tags: data[i]['tags'],
+                                 size: data[i]['size'],
+                                 text: data[i]['text'],
+                                 duration: data[i]['duration'],
+                                 tags: data[i]['tags']
+                             }));
                         }
                     }
                 }
 
-                $("div.HeapItemFolder").on('dblclick', function(e){
+                $("div.heap-item-folder").on('dblclick', function(e){
                     var el = $(e.target);
                     if(el.data('type') == 'folder') {
                         RefreshDropZone(el.data('path'), type);
@@ -302,8 +315,8 @@ $(document).ready(function(e){
                     }
                 });
 
-                $("div.HeapItem").on('dblclick', function(e){
-                    var el = $(e.target);
+                $("div.heap__file-list-item").on('dblclick', function(e){
+                    var el = $(this);
                     if(el.data('type') == 'file') {
                         var link = el.data("link"),
                             mime = el.data("mime"),

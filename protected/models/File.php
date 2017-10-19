@@ -22,7 +22,10 @@ class File extends CActiveRecord
 
     public function relations()
     {
-        return [];
+        return [
+            'tagsToFiles' => [self::HAS_MANY, 'TagToFile', 'id_file'],
+            'tags'=>[self::HAS_MANY, 'Tag', ['id_tag'=>'id'],'through'=>'tagsToFiles'],
+        ];
     }
 
     public function attributeLabels()

@@ -29,15 +29,27 @@ class FolderRepository extends BaseComponent
         ]);
 
         foreach ($filesToFolder as $item) {
-            if(isset($item->file)) {
+            if (isset($item->file)) {
                 $file = $item->file;
+                $tags = $file->tags;
+
+                $tagsArray = [];
+                if (is_array($tags)) {
+                    foreach ($tags as $tag) {
+                        $tagsArray[] = $tag->name;
+                    }
+                }
+
                 $items[] = [
                     'id' => intval($file->id),
                     'text' => $file->name,
+                    'duration' => $file->duration,
+                    'size' => $file->size,
                     'type' => 'file',
                     'mime' => $file->mime,
                     'link' => $file->link,
                     'parent' => 0,
+                    'tags' => $tagsArray
                 ];
             } else {
                 $item->delete();

@@ -6,33 +6,62 @@
 body {
     margin: 0;
     padding: 0;
-    margin-top: -10px !important;
     color: #000 !important;
     font: normal 10pt RalewayRegular,Helvetica,sans-serif !important;
-    background: #EFEFEF;
     overflow-x: hidden;
 }
 
-#header {
-    margin: 0;
-    padding: 0;
-    border-top: 3px solid #C9E0ED;
+.logo-strip {
+    padding: 1px;
+    line-height: 45px;
+    text-align: center;
+
+    border: 1px solid #ddd;
+    background: #fff;
+
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+    background: linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
 }
 
-#content {
-    padding: 20px;
+.container {
+    width: 100%;
+    padding: 1px;
 }
 
-#sidebar {
-    padding: 20px 20px 20px 0;
+.content-wraper {
+    position: relative;
+    background-color: #FFF;
+    padding: 0 0 10px 0;
 }
 
-#footer {
-    margin: 10px auto !important;
-    font-size:12px;
+@media only all and (min-width: 768px){
+    .content-wraper {
+        padding: 0 0 0 5px;
+    }
 }
 
-#footer > div {
+.content {
+    border: 1px solid #DDD;
+    border-radius: 5px;
+    padding: 0 15px 15px 15px;
+}
+
+.logo-app-name {
+    font-size: 18px;
+}
+
+.footer {
+    margin: 5px auto !important;
+    font-size: 12px;
+}
+
+.footer > div {
     margin: 0px auto;
     color: #666;
     padding: 5px;
@@ -42,15 +71,25 @@ body {
     background: transparent linear-gradient(#F6F6F6 0px, #FFF 50px) repeat scroll 0% 0%;
 }
 
-#logo
-{
-    /*padding: 10px 20px;*/
-    font-size: 2em;
+.jumbotron {
+    margin: 0px auto 10px auto !important;
+    padding: 0 !important;
 }
 
-div.form .rememberMe label
-{
-    display: inline;
+.logo-block {
+    display: none;
+    background-image:url('/images/Logo_RTV_small.png');
+    background-repeat:no-repeat;
+    background-position: center;
+    max-width: 75px;
+    height: 48px;
+    margin-left: 0;
+}
+
+@media only all and (min-width: 768px){
+    .logo-block {
+        display: block;
+    }
 }
 
 div.view
@@ -89,82 +128,6 @@ td {
     min-width: 80px;
 }
 
-.Jumbotron {
-    margin: 0px auto 10px auto !important;
+.lodash-template {
+    display: none;
 }
-
-.LogoStrip{
-    margin-top:10px;
-    line-height: 45px;
-    text-align: center;
-
-    border: 1px solid #ddd;
-    background: #fff;
-
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-
-    background: linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
-    background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
-}
-
-.LogoBlock {
-    background-image:url('../images/Logo_RTV_small.png');
-    background-repeat:no-repeat;
-    background-position: center;
-    max-width: 75px;
-    height: 48px;
-    margin-left: 0;
-}
-
-@media only all and (max-width: 767px){
-    .LogoBlock {
-        display: none;
-    }
-}
-
-.LogoAppName {
-    font-size: 18px;
-}
-
-.MainContent {
-    margin-left: -15px;
-    position: relative;
-    display: block;
-    padding: 10px 35px !important;
-    margin-bottom: -1px;
-    background-color: #FFF;
-    border: 1px solid #DDD;
-    border-radius: 5px;
-}
-
-.ui-button
-.ui-widget
-.ui-state-default
-.ui-corner-all
-.ui-button-icon-only
-.ui-dialog-titlebar-close :hover {
-    background-color:#000;
-}
-
-
-
-/*=================================================*/
-
-/*add period butt*/
-
-/* css for timepicker */
-.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-.ui-timepicker-div dl { text-align: left; }
-.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
-.ui-timepicker-div dl dd { margin: 0 10px 10px 45%; }
-.ui-timepicker-div td { font-size: 90%; }
-.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-
-.ui-timepicker-rtl{ direction: rtl; }
-.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
-.ui-timepicker-rtl dl dt{ float: right; clear: right; }
-.ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }

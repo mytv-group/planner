@@ -5,7 +5,7 @@
 }
 
 .col-ajax-upload-widget {
-    padding: 31px 5px 0px 0px;
+    padding: 34px 5px 0px 0px;
 }
 
 .col-hashtags-input-widget {
@@ -16,36 +16,29 @@
     width: calc(100% - 130px);
 }
 
-.row-file-upload .qq-upload-button {
+.row-file-upload {
     border-radius: 3px;
     line-height: 19px;
 }
 
-
-/*TODO refactor styles*/
-.heap__tree-container {
+.heap-tree-container {
     display: flex;
 }
 
-.Options {
-    border:none;
-    width: 100%;
-}
-
-.Tree {
+.tree {
     flex: 1;
     overflow:auto;
     min-height:470px;
 }
 
-.SubTree {
+.sub-tree {
     width:100%;
     overflow:auto;
     border:1px solid silver;
     height:234px;
 }
 
-.Heap {
+.heap {
     overflow:auto;
     border:none;
     flex: 2;
@@ -55,7 +48,7 @@
 }
 
 #dropzoneHeap {
-    padding:10px;
+    padding: 0 1px;
     background: rgb(255, 255, 255);
 }
 #dropzoneHeap.in {
@@ -71,24 +64,4 @@
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
     opacity: 1;
-}
-
-.HeapItem {
-    padding:5px;
-    width: 100%;
-    border-bottom:solid 1px darkgrey;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.HeapItemFolder {
-    padding:5px;
-    width: 100%;
-    border-bottom:solid 1px darkgrey;
-    background-color:#fce667;
-}
-
-.HeapItem:hover, .HeapItemFolder:hover  {
-    background-color:#b7e4ff;
 }

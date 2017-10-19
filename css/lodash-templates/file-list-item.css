@@ -1,0 +1,40 @@
+.heap__file-list-item {
+    padding:5px;
+    width: 100%;
+    border-bottom:solid 1px darkgrey;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.heap__file-list-item:hover {
+    background-color:#b7e4ff;
+}
+
+.heap__file-list-item__num {
+    flex: 1;
+}
+
+.heap__file-list-item__tags {
+    flex: 5;
+}
+
+.heap__file-list-item__duration,
+.heap__file-list-item__size {
+    flex: 2;
+}
+
+.heap__file-list-item__text {
+    flex: 10;
+}
+
+.heap__file-list-item__num,
+.heap__file-list-item__tags,
+.heap__file-list-item__duration,
+.heap__file-list-item__text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
